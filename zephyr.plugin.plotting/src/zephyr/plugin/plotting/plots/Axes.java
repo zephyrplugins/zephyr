@@ -1,0 +1,155 @@
+package zephyr.plugin.plotting.plots;
+
+import java.awt.geom.Point2D;
+
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
+
+public class Axes {
+  static final private int Padding = 2;
+
+  class Axe {
+    final double margins;
+
+    private double minValue = Double.MAX_VALUE;
+    private double maxValue = -Double.MAX_VALUE;
+
+    double minDisplayed;
+    double maxDisplayed;
+
+    double translation = 0.0;
+    double scale = 0.0;
+
+    protected Axe(double margins) {
+      this.margins = margins;
+    }
+
+    public Axe(double translation, double scale) {
+      margins = -Double.MAX_VALUE;
+      this.translation = translation;
+      this.scale = scale;
+    }
+
+    protected double toD(int x) {
+      return (x / scale) - translation;
+    }
+
+    double toG(double v) {
+      return (v + translation) * scale;
+    }
+
+    public void updateTransformation(int drawingLength) {
+      minDisplayed = minValue - Math.abs(minValue * margins);
+      maxDisplayed = maxValue + Math.abs(maxValue * margins);
+      double length = Math.max(maxDisplayed - minDisplayed, 1e-5);
+      scale = drawingLength / length;
+      translation = -(minDisplayed + maxDisplayed) / 2.0;
+    }
+
+    public void update(double d) {
+      minValue = Math.min(minValue, d);
+      maxValue = Math.max(maxValue, d);
+    }
+
+    public void reset() {
+      maxValue = -Double.MAX_VALUE;
+      minValue = Double.MAX_VALUE;
+    }
+  }
+
+  private final Axe x;
+  private final Axe y;
+  private int drawingTranslationX = 0;
+  private int drawingTranslationY = 0;
+  private final Rectangle drawingZone;
+
+  public Axes() {
+    x = new Axe(0);
+    y = new Axe(0.001);
+    drawingZone = new Rectangle(0, 0, 0, 0);
+  }
+
+  public Axes(Axe x, Axe y, int drawingTranslationX, int drawingTranslationY, Rectangle drawingZone) {
+    this.x = x;
+    this.y = y;
+    this.drawingTranslationX = drawingTranslationX;
+    this.drawingTranslationY = drawingTranslationY;
+    this.drawingZone = drawingZone;
+  }
+
+  public void updateScaling(Rectangle canvasZone) {
+    updatePadding(canvasZone);
+    drawingTranslationX = drawingZone.x + drawingZone.width / 2;
+    drawingTranslationY = drawingZone.y + drawingZone.height / 2;
+    x.updateTransformation(drawingZone.width);
+    y.updateTransformation(drawingZone.height);
+  }
+
+  private void updatePadding(Rectangle canvasZone) {
+    drawingZone.x = Padding;
+    drawingZone.y = Padding;
+    drawingZone.width = canvasZone.width - (2 * Padding);
+    drawingZone.height = canvasZone.height - (2 * Padding);
+  }
+
+  public Rectangle drawingZone() {
+    return drawingZone;
+  }
+
+
+  protected double toDX(int gx) {
+    return x.toD(gx - drawingTranslationX);
+  }
+
+  protected double toDY(int gy) {
+    return y.toD(-(gy - drawingTranslationY));
+  }
+
+  protected int toGX(double dx) {
+    return ((int) x.toG(dx)) + drawingTranslationX;
+  }
+
+  protected int toGY(double dy) {
+    return ((int) -y.toG(dy)) + drawingTranslationY;
+  }
+
+  public void update(double dx, double dy) {
+    x.update(dx);
+    y.update(dy);
+  }
+
+  public double scaleToDY(int gy) {
+    return gy / y.scale;
+  }
+
+  public Point toG(int x, double y) {
+    Point result = new Point(toGX(x), toGY(y));
+    if (!drawingZone.contains(result))
+      return null;
+    return result;
+  }
+
+  public Point2D.Double toD(Point point) {
+    return new Point2D.Double(toDX(point.x), toDY(point.y));
+  }
+
+  public boolean isInDrawingZone(Point position) {
+    return drawingZone.contains(position);
+  }
+
+  @Override
+  protected Axes clone() {
+    return new Axes(new Axe(x.translation, x.scale), new Axe(y.translation, y.scale),
+                    drawingTranslationX, drawingTranslationY,
+                    new Rectangle(drawingZone.x, drawingZone.y,
+                                  drawingZone.width, drawingZone.height));
+  }
+
+  public Axe xAxe() {
+    return x;
+  }
+
+  public Axe yAxe() {
+    return y;
+  }
+}

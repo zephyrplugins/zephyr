@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="zephyr.plugin.filehandling.filehandler" name="File handler" schema="schema/zephyr.filehandler.exsd"/>
+
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="zephyr.plugin.filehandling.OpenFile"
+            description="Open a file"
+            id="zephyr.plugin.filehandling.openfile"
+            name="Open">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="menu:menu.file?before=quit">
+            <command
+                  commandId="zephyr.plugin.filehandling.openfile"
+                  id="open"
+                  label="Open File..."
+                  mnemonic="O"
+                  style="push">
+            </command>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.bindings">
+      <key
+            commandId="zephyr.plugin.filehandling.openfile"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="zephyr.plugin.common.scheme"
+            sequence="M1+O">
+      </key>
+   </extension>
+   <extension
+         point="zephyr.plugin.common.startup">
+      <client
+            class="zephyr.plugin.filehandling.StartupJob">
+      </client>
+   </extension>
+</plugin>

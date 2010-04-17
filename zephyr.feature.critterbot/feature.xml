@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="zephyr.feature.critterbot"
+      label="Zephyr Critterbot"
+      version="1.0.0.qualifier"
+      provider-name="Thomas">
+
+   <description url="http://www.example.com/description">
+      [Enter Feature Description here.]
+   </description>
+
+   <copyright url="http://www.example.com/copyright">
+      [Enter Copyright Description here.]
+   </copyright>
+
+   <license url="http://www.example.com/license">
+      [Enter License Description here.]
+   </license>
+
+   <includes
+         id="zephyr.feature.critterbot.source"
+         version="0.0.0"/>
+
+   <requires>
+      <import feature="zephyr.feature.plotting" version="1.0.0.qualifier"/>
+   </requires>
+
+   <plugin
+         id="zephyr.plugin.critterview"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="zephyr.plugin.filehandling"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="rlpark.plugin.critterbot"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+   <plugin
+         id="rlpark.plugin.rltoys"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>
