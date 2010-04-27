@@ -1,11 +1,14 @@
 package zephyr.plugin.jarhandler;
 
 import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.jar.Attributes;
 import java.util.jar.Manifest;
+import java.util.jar.Attributes.Name;
 
 import zephyr.plugin.common.ZephyrPluginCommon;
 
@@ -15,6 +18,7 @@ public class JarClassLoader extends ClassLoader {
   private final List<JarClassLoader> libraries = new ArrayList<JarClassLoader>();
   private char classNameReplacementChar;
   final private JarResources jarResources;
+  private final Manifest manifest;
 
   public JarClassLoader(String jarName) {
     this(new File(jarName));
@@ -22,11 +26,11 @@ public class JarClassLoader extends ClassLoader {
 
   public JarClassLoader(File jarFile) {
     jarResources = new JarResources(jarFile);
+    manifest = jarResources.getManifest();
     loadJarLibraries();
   }
 
   private void loadJarLibraries() {
-    Manifest manifest = jarResources.getManifest();
     if (manifest == null)
       return;
     String librariesPath = manifest.getMainAttributes().getValue("Class-Path");
@@ -76,6 +80,45 @@ public class JarClassLoader extends ClassLoader {
     return null;
   }
 
+  protected Package definePackage(String name)
+      throws IllegalArgumentException {
+    String path = name.replace('.', '/').concat("/");
+    String specTitle = null, specVersion = null, specVendor = null;
+    String implTitle = null, implVersion = null, implVendor = null;
+    String sealed = null;
+    URL sealBase = null;
+
+    Attributes attributes = manifest != null ? manifest.getAttributes(path) : null;
+    if (attributes != null) {
+      specTitle = attributes.getValue(Name.SPECIFICATION_TITLE);
+      specVersion = attributes.getValue(Name.SPECIFICATION_VERSION);
+      specVendor = attributes.getValue(Name.SPECIFICATION_VENDOR);
+      implTitle = attributes.getValue(Name.IMPLEMENTATION_TITLE);
+      implVersion = attributes.getValue(Name.IMPLEMENTATION_VERSION);
+      implVendor = attributes.getValue(Name.IMPLEMENTATION_VENDOR);
+      sealed = attributes.getValue(Name.SEALED);
+    }
+    attributes = manifest != null ? manifest.getMainAttributes() : null;
+    if (attributes != null) {
+      if (specTitle == null)
+        specTitle = attributes.getValue(Name.SPECIFICATION_TITLE);
+      if (specVersion == null)
+        specVersion = attributes.getValue(Name.SPECIFICATION_VERSION);
+      if (specVendor == null)
+        specVendor = attributes.getValue(Name.SPECIFICATION_VENDOR);
+      if (implTitle == null)
+        implTitle = attributes.getValue(Name.IMPLEMENTATION_TITLE);
+      if (implVersion == null)
+        implVersion = attributes.getValue(Name.IMPLEMENTATION_VERSION);
+      if (implVendor == null)
+        implVendor = attributes.getValue(Name.IMPLEMENTATION_VENDOR);
+      if (sealed == null)
+        sealed = attributes.getValue(Name.SEALED);
+    }
+    return definePackage(name, specTitle, specVersion, specVendor,
+                         implTitle, implVersion, implVendor, sealBase);
+  }
+
   @Override
   public synchronized Class<? extends Object> loadClass(String className,
         boolean resolveIt) throws ClassNotFoundException {
@@ -106,6 +149,13 @@ public class JarClassLoader extends ClassLoader {
     if (resolveIt)
       resolveClass(result);
 
+    int lastDotIndex = className.lastIndexOf('.');
+    if (lastDotIndex != -1) {
+      String packageName = className.substring(0, lastDotIndex);
+      Package pack = getPackage(packageName);
+      if (pack == null)
+        definePackage(packageName);
+    }
     classes.put(className, result);
     return result;
   }
