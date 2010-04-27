@@ -86,6 +86,7 @@ University of Alberta
       <plugin id="zephyr.plugin.common"/>
       <plugin id="zephyr.plugin.critterview"/>
       <plugin id="zephyr.plugin.filehandling"/>
+      <plugin id="zephyr.plugin.jarhandler"/>
       <plugin id="zephyr.plugin.plotting"/>
    </plugins>
 
