@@ -11,7 +11,7 @@
             id="zephyr.plugin.common.commands.synchronous"
             name="Synchronous">
          <state id="org.eclipse.ui.commands.toggleState"
-               class="org.eclipse.ui.handlers.RegistryToggleState:true">
+               class="org.eclipse.ui.handlers.RegistryToggleState:false">
          </state>
       </command>
       <command
