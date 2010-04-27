@@ -1,6 +1,7 @@
 package zephyr.plugin.jarhandler;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -8,23 +9,38 @@ import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.jar.Manifest;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
 public final class JarResources {
-  public final String jarFileName;
+  public final File jarFile;
 
   private final Map<String, Integer> fileToSize = new Hashtable<String, Integer>();
   private final Map<String, byte[]> fileToContent = new Hashtable<String, byte[]>();
 
-  public JarResources(String jarFileName) {
-    this.jarFileName = jarFileName;
+  public JarResources(File jarFile) {
+    this.jarFile = jarFile;
     buildJarDictionary();
   }
 
+  public Manifest getManifest() {
+    InputStream resource = getResourceAsStream("META-INF/MANIFEST.MF");
+    if (resource == null)
+      return null;
+    try {
+      return new Manifest(resource);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
   public InputStream getResourceAsStream(String name) {
-    return new ByteArrayInputStream(getResource(name));
+    byte[] resource = getResource(name);
+    if (resource == null)
+      return null;
+    return new ByteArrayInputStream(resource);
   }
 
   public byte[] getResource(String name) {
@@ -33,7 +49,7 @@ public final class JarResources {
 
   private void buildJarDictionary() {
     try {
-      ZipFile zipFile = new ZipFile(jarFileName);
+      ZipFile zipFile = new ZipFile(jarFile);
       Enumeration<? extends Object> e = zipFile.entries();
       while (e.hasMoreElements()) {
         ZipEntry ze = (ZipEntry) e.nextElement();
@@ -41,7 +57,7 @@ public final class JarResources {
       }
       zipFile.close();
 
-      FileInputStream fis = new FileInputStream(jarFileName);
+      FileInputStream fis = new FileInputStream(jarFile);
       ZipInputStream zis = new ZipInputStream(fis);
       ZipEntry ze = null;
       while ((ze = zis.getNextEntry()) != null) {
