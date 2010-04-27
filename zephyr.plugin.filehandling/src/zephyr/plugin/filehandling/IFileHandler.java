@@ -6,7 +6,7 @@ import java.util.List;
 public interface IFileHandler {
   public static final String ID = "zephyr.plugin.filehandling.filehandler";
 
-  void handle(String filepath) throws IOException;
+  void handle(String filepath, String[] fileargs) throws IOException;
 
   List<String> extensions();
 }

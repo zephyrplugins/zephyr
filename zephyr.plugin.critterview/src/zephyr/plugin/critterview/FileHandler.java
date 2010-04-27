@@ -17,7 +17,7 @@ public class FileHandler implements IFileHandler {
   }
 
   @Override
-  public void handle(String filepath) throws IOException {
+  public void handle(String filepath, String[] fileargs) throws IOException {
     LogFile logfile = LogFile.load(filepath);
     Logger logger = ZephyrPlotting.createLogger(Utils.label(logfile), logfile.clock);
     logger.add(logfile);

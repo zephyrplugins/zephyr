@@ -1,6 +1,7 @@
 package zephyr.plugin.filehandling;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.swt.dnd.DND;
@@ -25,13 +26,13 @@ public class StartupJob implements zephyr.plugin.common.startup.StartupJob {
     PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable() {
       @Override
       public void run() {
-        registerDnDTarget();
+        registerDragAndDropTarget();
       }
     });
     parseCommandLine();
   }
 
-  protected void registerDnDTarget() {
+  protected void registerDragAndDropTarget() {
     for (Shell shell : PlatformUI.getWorkbench().getDisplay().getShells()) {
       DropTarget dt = new DropTarget(shell, DND.DROP_DEFAULT | DND.DROP_MOVE);
       dt.setTransfer(new Transfer[] { FileTransfer.getInstance() });
@@ -44,20 +45,21 @@ public class StartupJob implements zephyr.plugin.common.startup.StartupJob {
             fileList = (String[]) event.data;
           }
           for (String filepath : fileList)
-            openFileCatched(filepath);
+            ZephyrPluginFileHandling.fileLoader().openFile(filepath);
         }
       });
     }
   }
 
-  protected void openFileCatched(String filepath) {
-    ZephyrPluginFileHandling.fileLoader().openFile(filepath);
-  }
-
   protected void parseCommandLine() {
     List<String> args = ZephyrPluginCommon.getArgsFiltered();
-    for (String arg : args)
-      if (new File(arg).canRead())
-        openFileCatched(arg);
+    for (String zephyrArg : args) {
+      String[] splited = zephyrArg.split(":");
+      final String filepath = splited[0];
+      if (new File(filepath).canRead()) {
+        String[] fileArgs = Arrays.copyOfRange(splited, 1, splited.length);
+        ZephyrPluginFileHandling.fileLoader().openFile(filepath, fileArgs);
+      }
+    }
   }
 }

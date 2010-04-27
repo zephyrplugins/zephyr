@@ -40,6 +40,10 @@ public class FileLoader {
   }
 
   public void openFile(String filepath) {
+    openFile(filepath, new String[0]);
+  }
+
+  public void openFile(String filepath, String[] fileargs) {
     loadFileHandlersIFN();
     if (!new File(filepath).canRead()) {
       displayFileNotFoundMessage(filepath);
@@ -48,17 +52,17 @@ public class FileLoader {
     for (IFileHandler fileHandler : fileHandlers)
       for (String extension : fileHandler.extensions())
         if (filepath.endsWith(extension)) {
-          handleFile(filepath, fileHandler);
+          handleFile(fileHandler, filepath, fileargs);
           return;
         }
   }
 
-  private void handleFile(final String filepath, final IFileHandler fileHandler) {
+  private void handleFile(final IFileHandler fileHandler, final String filepath, final String[] fileargs) {
     Zephyr.start(new Runnable() {
       @Override
       public void run() {
         try {
-          fileHandler.handle(filepath);
+          fileHandler.handle(filepath, fileargs);
         } catch (IOException e) {
           e.printStackTrace();
         }

@@ -70,4 +70,9 @@ public class ZephyrPluginCommon extends AbstractUIPlugin {
   public static ZephyrPluginCommon getDefault() {
     return plugin;
   }
+
+  @SuppressWarnings("unchecked")
+  public Class<? extends Object> loadClass(String className) throws ClassNotFoundException {
+    return plugin.getBundle().loadClass(className);
+  }
 }
