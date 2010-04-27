@@ -7,5 +7,5 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: zephyr.plugin.plotting;bundle-version="1.0.0",
  zephyr.plugin.common;bundle-version="1.0.0",
  zephyr.plugin.filehandling;bundle-version="1.0.0",
- org.eclipse.ui;bundle-version="3.5.2",
+ org.eclipse.ui;bundle-version="3.5.1",
  org.eclipse.core.runtime;bundle-version="3.5.0"
