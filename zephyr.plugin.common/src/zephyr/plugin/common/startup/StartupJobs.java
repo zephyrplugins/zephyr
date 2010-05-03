@@ -24,7 +24,11 @@ public class StartupJobs extends Job {
     List<StartupJob> jobs = buildJobList();
     monitor.beginTask(getName(), jobs.size());
     for (StartupJob job : jobs) {
-      job.run();
+      try {
+        job.run();
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
       monitor.worked(1);
     }
     monitor.done();

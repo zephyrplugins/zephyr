@@ -73,6 +73,7 @@
             </command>
          </menu>
          <menu
+               id="menu.run"
                label="&amp;Run">
             <command
                   commandId="zephyr.plugin.common.commands.startsuspended"
@@ -112,6 +113,10 @@
                   mnemonic="o"
                   style="toggle">
             </command>
+         </menu>
+         <menu
+               id="menu.window"
+               label="Window">
          </menu>
       </menuContribution>
       <menuContribution

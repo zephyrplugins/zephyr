@@ -8,7 +8,7 @@ import critterbot.environment.CritterbotSimulator;
 public class StartupJob implements zephyr.plugin.common.startup.StartupJob {
   @Override
   public int level() {
-    return 0;
+    return 100;
   }
 
   @Override

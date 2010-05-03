@@ -10,7 +10,7 @@ public class SavedSettings implements StartupJob {
 
   @Override
   public int level() {
-    return 0;
+    return 10;
   }
 
   @Override

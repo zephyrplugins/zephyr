@@ -14,7 +14,7 @@ public class StartZephyrMain implements StartupJob {
 
   @Override
   public int level() {
-    return 200;
+    return 1000;
   }
 
   @Override

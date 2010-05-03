@@ -15,7 +15,7 @@ public class RegisterRunnableStarted implements StartupJob, Listener<Runnable> {
 
   @Override
   public int level() {
-    return 0;
+    return 10;
   }
 
   @Override

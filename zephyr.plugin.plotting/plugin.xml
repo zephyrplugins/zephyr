@@ -58,20 +58,11 @@
    <extension
          point="org.eclipse.ui.menus">
       <menuContribution
-            locationURI="menu:org.eclipse.ui.main.menu?before=help">
+            locationURI="menu:org.eclipse.ui.main.menu?before=menu.window">
          <menu
+               id="zephyr.plugin.console.menus.plotting"
                label="Plotting"
                mnemonic="P">
-            <command
-                  commandId="zephyr.plugin.plotting.commands.newplotview"
-                  label="New Window"
-                  mnemonic="N"
-                  style="push">
-            </command>
-            <separator
-                  name="zephyr.plugin.plotting.separator1"
-                  visible="true">
-            </separator>
             <command
                   commandId="zephyr.plugin.plotting.addtraces"
                   label="Add Traces..."
@@ -134,6 +125,15 @@
                visible="false">
          </separator>
       </menuContribution>
+      <menuContribution
+            locationURI="menu:menu.window?before=zephyr.plugin.console.menus.showconsole">
+         <command
+               commandId="zephyr.plugin.plotting.commands.newplotview"
+               label="New Graphs"
+               mnemonic="G"
+               style="push">
+         </command>
+      </menuContribution>
    </extension>
    <extension
          point="org.eclipse.ui.perspectiveExtensions">
@@ -163,7 +163,7 @@
          point="org.eclipse.ui.commandImages">
       <image
             commandId="zephyr.plugin.plotting.commands.newplotview"
-            icon="icons/command_newplot.gif">
+            icon="icons/command_newplot.png">
       </image>
       <image
             commandId="zephyr.plugin.plotting.selecttrace"
@@ -258,7 +258,7 @@
             commandId="zephyr.plugin.plotting.commands.newplotview"
             contextId="org.eclipse.ui.contexts.window"
             schemeId="zephyr.plugin.common.scheme"
-            sequence="G">
+            sequence="M1+T">
       </key>
    </extension>
 </plugin>

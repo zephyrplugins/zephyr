@@ -18,7 +18,7 @@ import zephyr.plugin.common.ZephyrPluginCommon;
 public class StartupJob implements zephyr.plugin.common.startup.StartupJob {
   @Override
   public int level() {
-    return 100;
+    return 20;
   }
 
   @Override
