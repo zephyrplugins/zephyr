@@ -5,8 +5,8 @@ import zephyr.plugin.common.startup.StartupJob;
 import zephyr.plugin.common.utils.Helper;
 
 public class SavedSettings implements StartupJob {
+  public static final String STARTSUSPENDED = "zephyr.plugin.common.commands.startsuspended";
   private static final String SYNCHRONOUS = "zephyr.plugin.common.commands.synchronous";
-  private static final String STARTSUSPENDED = "zephyr.plugin.common.commands.startsuspended";
 
   @Override
   public int level() {
@@ -16,8 +16,6 @@ public class SavedSettings implements StartupJob {
   @Override
   public void run() {
     ZephyrPluginCommon.synchronous = Helper.booleanState(SYNCHRONOUS, false);
-    if (Helper.booleanState(STARTSUSPENDED, false))
-      ZephyrPluginCommon.control().connectSuspendOnJobStarting();
+    ZephyrPluginCommon.control().connectSuspendOnJobStarting();
   }
-
 }

@@ -9,24 +9,26 @@ import rlpark.plugin.utils.events.Listener;
 import rlpark.plugin.utils.events.Signal;
 import rlpark.plugin.utils.time.Clock;
 import zephyr.plugin.common.ZephyrPluginCommon;
+import zephyr.plugin.common.internal.SavedSettings;
+import zephyr.plugin.common.utils.Helper;
 
 public class Control implements Listener<Clock> {
   public Signal<Control> onModeChange = new Signal<Control>();
-  protected Listener<Clock> addedClockListener = null;
   private final Map<Clock, Integer> suspended = new LinkedHashMap<Clock, Integer>();
 
   public Control() {
   }
 
   public void connectSuspendOnJobStarting() {
-    addedClockListener = new Listener<Clock>() {
+    ZephyrPluginCommon.viewBinder().onClockAdded.connect(new Listener<Clock>() {
       @Override
       public void listen(Clock clock) {
+        if (!Helper.booleanState(SavedSettings.STARTSUSPENDED, false))
+          return;
         suspendClock(clock);
         onModeChange.fire(Control.this);
       }
-    };
-    ZephyrPluginCommon.viewBinder().onClockAdded.connect(addedClockListener);
+    });
   }
 
   public void step() {
@@ -51,20 +53,12 @@ public class Control implements Listener<Clock> {
 
   public void resume() {
     assert isSuspended();
-    disconnectOnJobStartingIFN();
     List<Clock> toWakeUp = getToWakeUp();
     for (Clock clock : toWakeUp)
       clock.onTick.disconnect(this);
     suspended.clear();
     notifyAll(toWakeUp);
     onModeChange.fire(this);
-  }
-
-  private void disconnectOnJobStartingIFN() {
-    if (addedClockListener == null)
-      return;
-    ZephyrPluginCommon.viewBinder().onClockAdded.disconnect(addedClockListener);
-    addedClockListener = null;
   }
 
   private List<Clock> getToWakeUp() {
