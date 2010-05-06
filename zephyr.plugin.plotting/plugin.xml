@@ -100,11 +100,6 @@
       <menuContribution
             locationURI="toolbar:zephyr.plugin.plotting.view.plot?before=zephyr.plugin.plotting.action.togglesynchronized">
          <command
-               commandId="zephyr.plugin.plotting.commands.newplotview"
-               label="New Window"
-               style="push">
-         </command>
-         <command
                commandId="zephyr.plugin.plotting.toolbar.centerplot"
                label="Center plot"
                style="push">
@@ -131,6 +126,14 @@
                commandId="zephyr.plugin.plotting.commands.newplotview"
                label="New Graphs"
                mnemonic="G"
+               style="push">
+         </command>
+      </menuContribution>
+      <menuContribution
+            locationURI="toolbar:toolbar.window?before=zephyr.plugin.console.toolbar.showconsole">
+         <command
+               commandId="zephyr.plugin.plotting.commands.newplotview"
+               label="New Graphs"
                style="push">
          </command>
       </menuContribution>

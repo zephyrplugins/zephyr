@@ -122,7 +122,7 @@
       <menuContribution
             locationURI="toolbar:org.eclipse.ui.main.toolbar">
          <toolbar
-               id="zephyr.plugin.common.control">
+               id="toolbar.control">
             <command
                   commandId="zephyr.plugin.common.commands.suspend"
                   icon="icons/action_suspend.gif"
@@ -141,6 +141,9 @@
                   label="Resume"
                   style="push">
             </command>
+         </toolbar>
+         <toolbar
+               id="toolbar.window">
          </toolbar>
       </menuContribution>
    </extension>
