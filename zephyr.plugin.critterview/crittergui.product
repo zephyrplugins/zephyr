@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="Crittergui" uid="crittergui.product" id="zephyr.plugin.critterview.crittergui" application="zephyr.application.application" version="1.0.0.qualifier" useFeatures="false" includeLaunchers="true">
+<product name="Crittergui" uid="crittergui.product" id="zephyr.plugin.critterview.crittergui" application="zephyr.application.application" version="1.0.0.qualifier" useFeatures="true" includeLaunchers="true">
 
    <aboutInfo>
       <image path="images/critterbot128.png"/>
@@ -96,6 +96,13 @@ University of Alberta
       <plugin id="zephyr.plugin.jarhandler"/>
       <plugin id="zephyr.plugin.plotting"/>
    </plugins>
+
+   <features>
+      <feature id="org.eclipse.rcp" version="3.5.2.R35x_v20100119-9SA0FxwFnoCU5XxWItFdXXb27BA6"/>
+      <feature id="zephyr.feature.platform" version="1.0.0.qualifier"/>
+      <feature id="zephyr.feature.plotting" version="1.0.0.qualifier"/>
+      <feature id="zephyr.feature.critterbot" version="1.0.0.qualifier"/>
+   </features>
 
 
 </product>

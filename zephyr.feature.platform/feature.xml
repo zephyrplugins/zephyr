@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="zephyr.feature.critterbot"
-      label="Zephyr Critterbot"
-      version="1.0.0.qualifier"
-      provider-name="Thomas">
+      id="zephyr.feature.platform"
+      label="zephyr.feature.platform"
+      version="1.0.0.qualifier">
 
    <description url="http://www.example.com/description">
       [Enter Feature Description here.]
@@ -17,40 +16,50 @@
       [Enter License Description here.]
    </license>
 
-   <includes
-         id="zephyr.feature.critterbot.source"
-         version="0.0.0"/>
-
-   <includes
-         id="org.eclipse.draw2d"
-         version="0.0.0"/>
-
-   <requires>
-      <import feature="zephyr.feature.plotting" version="1.0.0.qualifier"/>
-   </requires>
-
    <plugin
-         id="zephyr.plugin.critterview"
+         id="org.eclipse.ui.console"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="zephyr.plugin.filehandling"
+         id="org.eclipse.core.variables"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="rlpark.plugin.critterbot"
+         id="org.eclipse.jface"
          download-size="0"
          install-size="0"
-         version="0.0.0"/>
+         version="0.0.0"
+         unpack="false"/>
 
    <plugin
-         id="rlpark.plugin.rltoys"
+         id="org.eclipse.jface.text"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.text"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.ui.workbench.texteditor"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.compare.core"
          download-size="0"
          install-size="0"
          version="0.0.0"
