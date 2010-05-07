@@ -27,7 +27,7 @@
    <extension
          point="org.eclipse.ui.menus">
       <menuContribution
-            locationURI="menu:menu.window">
+            locationURI="menu:window">
             <command
                   commandId="zephyr.plugin.console.commands.showconsole"
                   id="zephyr.plugin.console.menus.showconsole"

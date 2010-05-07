@@ -51,7 +51,7 @@
    <extension
          point="org.eclipse.ui.menus">
       <menuContribution
-            locationURI="menu:org.eclipse.ui.main.menu?before=help">
+            locationURI="menu:org.eclipse.ui.main.menu?before=zephyr.mainmenu.end">
          <menu
                id="menu.file"
                label="File"
@@ -113,10 +113,6 @@
                   mnemonic="o"
                   style="toggle">
             </command>
-         </menu>
-         <menu
-               id="menu.window"
-               label="Window">
          </menu>
       </menuContribution>
       <menuContribution

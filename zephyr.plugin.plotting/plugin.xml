@@ -58,7 +58,7 @@
    <extension
          point="org.eclipse.ui.menus">
       <menuContribution
-            locationURI="menu:org.eclipse.ui.main.menu?before=menu.window">
+            locationURI="menu:org.eclipse.ui.main.menu?before=window">
          <menu
                id="zephyr.plugin.console.menus.plotting"
                label="Plotting"
@@ -121,7 +121,7 @@
          </separator>
       </menuContribution>
       <menuContribution
-            locationURI="menu:menu.window?before=zephyr.plugin.console.menus.showconsole">
+            locationURI="menu:window?before=zephyr.plugin.console.menus.showconsole">
          <command
                commandId="zephyr.plugin.plotting.commands.newplotview"
                label="New Graphs"
