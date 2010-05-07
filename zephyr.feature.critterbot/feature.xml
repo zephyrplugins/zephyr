@@ -25,18 +25,6 @@
          id="org.eclipse.draw2d"
          version="0.0.0"/>
 
-   <requires>
-      <import plugin="org.eclipse.ui" version="3.5.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.core.runtime" version="3.5.0" match="greaterOrEqual"/>
-      <import plugin="zephyr.plugin.filehandling" version="1.0.0" match="greaterOrEqual"/>
-      <import plugin="rlpark.plugin.critterbot" version="1.0.0" match="greaterOrEqual"/>
-      <import plugin="zephyr.plugin.common" version="1.0.0" match="greaterOrEqual"/>
-      <import plugin="zephyr.plugin.plotting" version="1.0.0" match="greaterOrEqual"/>
-      <import plugin="rlpark.plugin.utils" version="1.0.0" match="greaterOrEqual"/>
-      <import plugin="rlpark.plugin.rltoys" version="1.0.0" match="greaterOrEqual"/>
-      <import feature="zephyr.feature.plotting" version="1.0.0.201004291505"/>
-   </requires>
-
    <plugin
          id="zephyr.plugin.critterview"
          download-size="0"

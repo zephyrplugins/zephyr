@@ -21,20 +21,6 @@
          id="zephyr.feature.plotting.source"
          version="0.0.0"/>
 
-   <requires>
-      <import plugin="org.eclipse.core.runtime" version="3.5.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.draw2d" version="3.5.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.ui" version="3.5.0" match="greaterOrEqual"/>
-      <import plugin="rlpark.plugin.utils" version="1.0.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.core.expressions" version="3.4.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.ui" version="3.5.1" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.ui.console" version="3.4.0" match="greaterOrEqual"/>
-      <import feature="zephyr.feature.platform" version="1.0.0.qualifier"/>
-      <import plugin="zephyr.plugin.common" version="1.0.0" match="greaterOrEqual"/>
-      <import plugin="zephyr.plugin.plotting" version="1.0.0" match="greaterOrEqual"/>
-      <import plugin="zephyr.plugin.filehandling" version="1.0.0" match="greaterOrEqual"/>
-   </requires>
-
    <plugin
          id="zephyr.application"
          download-size="0"
