@@ -1,0 +1,3 @@
+instructions.configure=\
+  addRepository(name:Default,type:0,location:http${#58}//webdocs.cs.ualberta.ca/~degris/zephyr);\
+  addRepository(name:Default,type:1,location:http${#58}//webdocs.cs.ualberta.ca/~degris/zephyr);
