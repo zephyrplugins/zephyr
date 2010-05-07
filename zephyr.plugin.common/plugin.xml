@@ -47,6 +47,12 @@
             id="zephyr.plugin.common.killclock"
             name="Stop">
       </command>
+      <command
+            defaultHandler="zephyr.plugin.common.commands.ClosePart"
+            description="Close"
+            id="zephyr.plugin.common.close"
+            name="Close">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -142,6 +148,18 @@
                id="toolbar.window">
          </toolbar>
       </menuContribution>
+      <menuContribution
+            locationURI="menu:window">
+         <separator
+               name="zephyr.plugin.common.separator.closeview"
+               visible="true">
+         </separator>
+         <command
+               commandId="zephyr.plugin.common.close"
+               label="Close View"
+               style="push">
+         </command>
+      </menuContribution>
    </extension>
    <extension
          point="org.eclipse.ui.perspectives">
@@ -191,6 +209,12 @@
             contextId="org.eclipse.ui.contexts.window"
             schemeId="zephyr.plugin.common.scheme"
             sequence="F8">
+      </key>
+      <key
+            commandId="zephyr.plugin.common.close"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="zephyr.plugin.common.scheme"
+            sequence="M1+W">
       </key>
    </extension>
    <extension

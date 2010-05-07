@@ -27,7 +27,7 @@
    <extension
          point="org.eclipse.ui.menus">
       <menuContribution
-            locationURI="menu:window">
+            locationURI="menu:window?before=zephyr.plugin.common.separator.closeview">
             <command
                   commandId="zephyr.plugin.console.commands.showconsole"
                   id="zephyr.plugin.console.menus.showconsole"
