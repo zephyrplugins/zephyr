@@ -9,7 +9,7 @@ import zephyr.plugin.plotting.traces.TracesSelection.TraceSelector;
 
 public class TraceData {
   static public final int HistoryLength = 1000;
-  static public final double MaxTimeLength = 100000000;
+  static public final double MaxTimeLength = 10e8;
   static private final int baseHistoryIndex = toHistoryIndex(HistoryLength - 1);
 
   final public Trace trace;

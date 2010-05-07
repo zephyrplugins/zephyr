@@ -39,7 +39,7 @@ class HistoryLength {
       historyLength.setSelection(previousHistoryLength);
     } else
       setHistoryLengthValue(PlotData.MinimumTimeLength);
-    historyLength.setLayoutData(new RowData((int) (historyLength.getSize().x / 5.0 * nbLetters),
+    historyLength.setLayoutData(new RowData((int) (historyLength.getSize().x / 9.0 * nbLetters),
                                             historyLength.getSize().y));
     historyLength.addSelectionListener(new SelectionListener() {
       private void setHistoryLength() {
