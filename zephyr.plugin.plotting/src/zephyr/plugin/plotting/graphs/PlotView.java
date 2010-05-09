@@ -38,7 +38,6 @@ public class PlotView extends AbstractCanvasView implements TraceSelector {
   private final ClockTracesManager traces;
   private BackgroundCanvas backgroundCanvas;
   private final SynchronizeAction synchronizeAction;
-  private boolean newDataAvailable = false;
 
   public PlotView() {
     traces = ZephyrPluginPlotting.clockTracesManager();
@@ -109,9 +108,7 @@ public class PlotView extends AbstractCanvasView implements TraceSelector {
 
   @Override
   public void repaint() {
-    if (newDataAvailable)
-      backgroundCanvas.repaint(ZephyrPluginCommon.synchronous);
-    newDataAvailable = false;
+    backgroundCanvas.repaint(ZephyrPluginCommon.synchronous);
   }
 
   @Override
@@ -124,11 +121,8 @@ public class PlotView extends AbstractCanvasView implements TraceSelector {
   public void synchronize() {
     if (synchronizeData &&
         backgroundCanvas != null &&
-        !backgroundCanvas.isDrawing() &&
-        !plotdata.searchRunning) {
-      newDataAvailable = true;
+        !backgroundCanvas.isDrawing())
       plotdata.synchronize();
-    }
   }
 
   @Override

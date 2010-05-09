@@ -33,7 +33,6 @@ public class MouseSearch extends Job {
 
   public MouseSearch(PlotView plotView) {
     super(PlotView.ID + ".mouse.search");
-    setPriority(SHORT);
     this.plotView = plotView;
     plotOverTime = plotView.plotOverTime;
     plotData = plotView.plotdata;
