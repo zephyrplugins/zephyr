@@ -47,6 +47,7 @@ public class PlotData {
   };
   final PlotSelection selection;
   final List<HistoryCached> histories = new ArrayList<HistoryCached>();
+  public boolean searchRunning = false;
   int currentHistoryLength = MaximumTimeLength;
   private int historyArrayLength = 0;
 
@@ -60,30 +61,30 @@ public class PlotData {
   }
 
   synchronized public void synchronize() {
-    if (selection.isEmpty())
+    TraceData[] traceDatas = selection.getCurrentTraceDatasSelection();
+    if (traceDatas.length == 0)
       return;
     if (histories.isEmpty())
       prepareHistories();
     for (int i = 0; i < selection.size(); i++) {
-      TraceData traceData = selection.get(i);
+      TraceData traceData = traceDatas[i];
       HistoryCached history = histories.get(i);
       history.time = traceData.history(currentHistoryLength, history.values);
     }
   }
 
-  private void prepareHistories() {
+  synchronized private void prepareHistories() {
     historyArrayLength = TraceData.computeArrayLength(currentHistoryLength);
     for (int i = 0; i < selection.size(); i++)
       histories.add(new HistoryCached(historyArrayLength));
   }
 
-  public List<HistoryCached> getHistories() {
-    if (histories.isEmpty())
-      synchronize();
+  synchronized public List<HistoryCached> getHistories() {
     return new ArrayList<HistoryCached>(histories);
   }
 
   synchronized public RequestResult search(Point2D.Double dataPoint) {
+    searchRunning = true;
     if (histories.isEmpty())
       return null;
     int closestTraceIndex = -1;
@@ -105,6 +106,7 @@ public class PlotData {
         }
       }
     }
+    searchRunning = false;
     if (closestTraceIndex < 0)
       return null;
     return new RequestResult(closestTraceIndex, bestX);

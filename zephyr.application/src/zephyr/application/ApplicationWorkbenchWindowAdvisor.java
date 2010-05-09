@@ -24,8 +24,8 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
     IWorkbenchWindowConfigurer configurer = getWindowConfigurer();
     configurer.setInitialSize(new Point(800, 600));
     configurer.setShowCoolBar(true);
-    configurer.setShowStatusLine(true);
-    configurer.setShowProgressIndicator(true);
+    configurer.setShowStatusLine(false);
+    configurer.setShowProgressIndicator(false);
     configurer.setTitle("Zephyr");
   }
 

@@ -2,6 +2,7 @@ package zephyr.plugin.plotting.plots;
 
 import java.util.List;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.RGB;
@@ -54,22 +55,23 @@ public class PlotOverTime implements Painter {
     }
   }
 
-  public void paint(GC gc) {
+  public void paint(GC gc, IProgressMonitor monitor) {
     preparePainting();
     gc.setAntialias(SWT.OFF);
     gc.setBackground(colors.color(gc, Colors.COLOR_WHITE));
     gc.fillRectangle(gc.getClipping());
-    if (plotdata.selection().isEmpty())
+    List<HistoryCached> histories = plotdata.getHistories();
+    if (histories.size() == 0)
       return;
     if (axesNeedReset != ResetMode.NoReset)
-      updateAxes();
+      updateAxes(histories);
     axes.updateScaling(gc.getClipping());
     drawDrawingZone(gc);
-    drawTraces(gc);
+    drawTraces(gc, histories);
   }
 
-  private void updateAxes() {
-    for (HistoryCached history : plotdata.getHistories()) {
+  private void updateAxes(List<HistoryCached> histories) {
+    for (HistoryCached history : histories) {
       final float[] values = history.values;
       for (int t = 0; t < values.length; t++)
         axes.update(t, values[t]);
@@ -82,10 +84,10 @@ public class PlotOverTime implements Painter {
     gc.fillRectangle(axes.drawingZone());
   }
 
-  private void drawTraces(GC gc) {
+  private void drawTraces(GC gc, List<HistoryCached> histories) {
     int colorIndex = 0;
     gc.setLineWidth(1);
-    for (HistoryCached history : plotdata.getHistories()) {
+    for (HistoryCached history : histories) {
       gc.setForeground(colors.color(gc, colorsOrder[colorIndex % colorsOrder.length]));
       drawTrace(gc, history.values);
       colorIndex += 1;

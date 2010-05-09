@@ -88,7 +88,7 @@ public class PlotSelection implements TraceSelector {
     setCurrentSelection(currentSelection);
   }
 
-  public void setCurrentSelection(Set<Trace> newSelection) {
+  synchronized public void setCurrentSelection(Set<Trace> newSelection) {
     Map<ClockTraces, Set<Trace>> orderedNewTraces = Traces.orderTraces(newSelection);
     Map<ClockTraces, Set<Trace>> orderedOldTraces = Traces.orderTraces(selected);
     selected.clear();
@@ -110,10 +110,21 @@ public class PlotSelection implements TraceSelector {
     onSelectionChanged.fire(selected);
   }
 
-  public Set<Trace> getCurrentTracesSelection() {
+  synchronized public Set<Trace> getCurrentTracesSelection() {
     Set<Trace> traceSelected = new LinkedHashSet<Trace>();
     for (TraceData traceData : selected)
       traceSelected.add(traceData.trace);
     return traceSelected;
+  }
+
+  synchronized public TraceData[] getCurrentTraceDatasSelection() {
+    TraceData[] result = new TraceData[selected.size()];
+    selected.toArray(result);
+    return result;
+  }
+
+  @Override
+  public String toString() {
+    return selected.toString();
   }
 }

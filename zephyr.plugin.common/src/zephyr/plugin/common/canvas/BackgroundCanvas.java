@@ -3,11 +3,11 @@ package zephyr.plugin.common.canvas;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.progress.UIJob;
 
 import rlpark.plugin.utils.events.Listener;
 import rlpark.plugin.utils.time.Chrono;
@@ -15,7 +15,7 @@ import rlpark.plugin.utils.time.Chrono;
 public class BackgroundCanvas {
   static final boolean drawFPS = false;
 
-  protected class PaintJob extends UIJob {
+  protected class PaintJob extends Job {
     protected double drawingTime = 0;
     protected final Chrono chrono = new Chrono();
     private final Runnable syncDrawImage = new Runnable() {
@@ -30,27 +30,32 @@ public class BackgroundCanvas {
     };
 
     public PaintJob() {
-      super("Canvas Painter");
+      super("BackgroundCanvas.PaintJob");
       setPriority(DECORATE);
     }
 
     @Override
-    public IStatus runInUIThread(IProgressMonitor monitor) {
+    public IStatus run(IProgressMonitor monitor) {
       monitor.beginTask(getName(), IProgressMonitor.UNKNOWN);
       chrono.start();
-      doPainting();
-      Display.getDefault().asyncExec(syncDrawImage);
+      try {
+        doPainting(monitor);
+        Display.getDefault().asyncExec(syncDrawImage);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+      monitor.done();
       return Status.OK_STATUS;
     }
 
-    protected void doPainting() {
+    protected void doPainting(IProgressMonitor monitor) {
       drawing = true;
       synchronized (imageBuffer) {
         Image canvasPainted = imageBuffer.canvasPainted();
         if (canvasPainted != null) {
           GC gc = new GC(canvasPainted);
           gc.setClipping(canvasPainted.getBounds());
-          painter.paint(gc);
+          painter.paint(gc, monitor);
           gc.dispose();
         }
         imageBuffer.flipImages();
@@ -102,7 +107,7 @@ public class BackgroundCanvas {
       paintJob.schedule();
       return;
     }
-    paintJob.doPainting();
+    paintJob.doPainting(null);
     canvas.redraw();
     canvas.update();
   }
