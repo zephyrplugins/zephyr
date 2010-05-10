@@ -25,6 +25,8 @@ public class Helper {
   static public boolean booleanState(String id, boolean defaultValue) {
     ICommandService service = (ICommandService) PlatformUI.getWorkbench().getService(ICommandService.class);
     Command command = service.getCommand(id);
+    if (command == null)
+      return defaultValue;
     State state = command.getState(RegistryToggleState.STATE_ID);
     if (state == null)
       return defaultValue;
