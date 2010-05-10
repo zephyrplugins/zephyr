@@ -45,6 +45,12 @@ public class PlotData {
       selectionChanged();
     }
   };
+  private final Listener<Integer> historyListener = new Listener<Integer>() {
+    @Override
+    public void listen(Integer history) {
+      selectionChanged();
+    }
+  };
   final PlotSelection selection;
   final List<HistoryCached> histories = new ArrayList<HistoryCached>();
   int currentHistoryLength = MaximumTimeLength;
@@ -52,7 +58,8 @@ public class PlotData {
 
   public PlotData(PlotSelection selection) {
     this.selection = selection;
-    selection.onSelectionChanged.connect(selectionListener);
+    selection.onSelectedTracesChanged.connect(selectionListener);
+    selection.onHistoryChanged.connect(historyListener);
   }
 
   protected void selectionChanged() {
@@ -78,8 +85,6 @@ public class PlotData {
   }
 
   public List<HistoryCached> getHistories() {
-    if (histories.isEmpty())
-      synchronize();
     return new ArrayList<HistoryCached>(histories);
   }
 
@@ -116,7 +121,7 @@ public class PlotData {
         historyLength <= 0)
       return false;
     currentHistoryLength = historyLength;
-    selection.fireSelectionChanged();
+    selection.onHistoryChanged.fire(currentHistoryLength);
     return true;
   }
 

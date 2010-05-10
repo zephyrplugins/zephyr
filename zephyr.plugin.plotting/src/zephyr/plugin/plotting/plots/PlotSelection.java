@@ -17,7 +17,8 @@ import zephyr.plugin.plotting.traces.TracesSelection;
 import zephyr.plugin.plotting.traces.TracesSelection.TraceSelector;
 
 public class PlotSelection implements TraceSelector {
-  public Signal<List<TraceData>> onSelectionChanged = new Signal<List<TraceData>>();
+  public Signal<List<TraceData>> onSelectedTracesChanged = new Signal<List<TraceData>>();
+  public Signal<Integer> onHistoryChanged = new Signal<Integer>();
   private final List<TraceData> selected = new ArrayList<TraceData>();
   private final Set<String> persistentSelection = new LinkedHashSet<String>();
   private final Set<String> currentSelection = new LinkedHashSet<String>();
@@ -103,11 +104,11 @@ public class PlotSelection implements TraceSelector {
         currentSelection.add(traceData.trace.label);
       selected.addAll(selectedTraceData);
     }
-    fireSelectionChanged();
+    fireSelectedTracesChanged();
   }
 
-  protected void fireSelectionChanged() {
-    onSelectionChanged.fire(selected);
+  protected void fireSelectedTracesChanged() {
+    onSelectedTracesChanged.fire(selected);
   }
 
   public Set<Trace> getCurrentTracesSelection() {

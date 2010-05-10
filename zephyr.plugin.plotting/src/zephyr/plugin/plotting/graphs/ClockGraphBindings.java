@@ -34,7 +34,7 @@ public class ClockGraphBindings {
 
   public ClockGraphBindings(PlotView plotView) {
     this.plotView = plotView;
-    plotView.plotSelection.onSelectionChanged.connect(selectionChangedListener);
+    plotView.plotSelection.onSelectedTracesChanged.connect(selectionChangedListener);
   }
 
   private void bind(Clock clock) {
@@ -74,7 +74,7 @@ public class ClockGraphBindings {
   }
 
   public void dispose() {
-    plotView.plotSelection.onSelectionChanged.disconnect(selectionChangedListener);
+    plotView.plotSelection.onSelectedTracesChanged.disconnect(selectionChangedListener);
   }
 
   public boolean isEmpty() {

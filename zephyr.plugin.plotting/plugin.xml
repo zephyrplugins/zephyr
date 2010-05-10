@@ -121,7 +121,7 @@
          </separator>
       </menuContribution>
       <menuContribution
-            locationURI="menu:window?before=zephyr.plugin.console.menus.showconsole">
+            locationURI="menu:window?before=zephyr.plugin.common.separator.closeview">
          <command
                commandId="zephyr.plugin.plotting.commands.newplotview"
                label="New Graphs"

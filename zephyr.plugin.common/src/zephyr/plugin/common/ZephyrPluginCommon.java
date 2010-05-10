@@ -39,7 +39,11 @@ public class ZephyrPluginCommon extends AbstractUIPlugin {
         if (runnable == null)
           return;
         onRunnableStarted.fire(runnable);
-        runnable.run();
+        try {
+          runnable.run();
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
       }
     }).start();
   }

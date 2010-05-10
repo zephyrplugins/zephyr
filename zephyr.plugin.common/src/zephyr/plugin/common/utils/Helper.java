@@ -24,6 +24,8 @@ public class Helper {
 
   static public boolean booleanState(String id, boolean defaultValue) {
     ICommandService service = (ICommandService) PlatformUI.getWorkbench().getService(ICommandService.class);
+    if (service == null)
+      return defaultValue;
     Command command = service.getCommand(id);
     if (command == null)
       return defaultValue;

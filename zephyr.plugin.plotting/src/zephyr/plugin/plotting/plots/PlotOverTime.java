@@ -30,6 +30,12 @@ public class PlotOverTime implements Painter {
       resetAxes(false);
     }
   };
+  private final Listener<Integer> historyListener = new Listener<Integer>() {
+    @Override
+    public void listen(Integer history) {
+      resetAxes(false);
+    }
+  };
   private final Axes axes = new Axes();
   private final PlotData plotdata;
   private final Colors colors = new Colors();
@@ -37,7 +43,8 @@ public class PlotOverTime implements Painter {
 
   public PlotOverTime(PlotData plotdata) {
     this.plotdata = plotdata;
-    plotdata.selection().onSelectionChanged.connect(selectionListener);
+    plotdata.selection().onSelectedTracesChanged.connect(selectionListener);
+    plotdata.selection().onHistoryChanged.connect(historyListener);
   }
 
   public void preparePainting() {
@@ -59,17 +66,18 @@ public class PlotOverTime implements Painter {
     gc.setAntialias(SWT.OFF);
     gc.setBackground(colors.color(gc, Colors.COLOR_WHITE));
     gc.fillRectangle(gc.getClipping());
-    if (plotdata.selection().isEmpty())
+    List<HistoryCached> histories = plotdata.getHistories();
+    if (histories.isEmpty())
       return;
     if (axesNeedReset != ResetMode.NoReset)
-      updateAxes();
+      updateAxes(histories);
     axes.updateScaling(gc.getClipping());
     drawDrawingZone(gc);
-    drawTraces(gc);
+    drawTraces(gc, histories);
   }
 
-  private void updateAxes() {
-    for (HistoryCached history : plotdata.getHistories()) {
+  private void updateAxes(List<HistoryCached> histories) {
+    for (HistoryCached history : histories) {
       final float[] values = history.values;
       for (int t = 0; t < values.length; t++)
         axes.update(t, values[t]);
@@ -82,10 +90,10 @@ public class PlotOverTime implements Painter {
     gc.fillRectangle(axes.drawingZone());
   }
 
-  private void drawTraces(GC gc) {
+  private void drawTraces(GC gc, List<HistoryCached> histories) {
     int colorIndex = 0;
     gc.setLineWidth(1);
-    for (HistoryCached history : plotdata.getHistories()) {
+    for (HistoryCached history : histories) {
       gc.setForeground(colors.color(gc, colorsOrder[colorIndex % colorsOrder.length]));
       drawTrace(gc, history.values);
       colorIndex += 1;
