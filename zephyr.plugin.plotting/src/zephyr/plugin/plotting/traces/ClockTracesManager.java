@@ -15,8 +15,8 @@ public class ClockTracesManager {
   static final int TraceTime = 300; // Seconds
   static protected boolean forceEnabled = false;
 
-  public final Signal<Trace> onTraceAdded = new Signal<Trace>();
-  public final Signal<Trace> onTraceRemoved = new Signal<Trace>();
+  public final Signal<List<Trace>> onTraceAdded = new Signal<List<Trace>>();
+  public final Signal<List<Trace>> onTraceRemoved = new Signal<List<Trace>>();
   private final Map<Clock, ClockTraces> clocks = new LinkedHashMap<Clock, ClockTraces>();
   private final Listener<Clock> onKillClockListener = new Listener<Clock>() {
     @Override
@@ -36,16 +36,16 @@ public class ClockTracesManager {
     clocks.put(clock, clockTraces);
     if (clock instanceof ClockKillable)
       ((ClockKillable) clock).onKill.connect(onKillClockListener);
-    clockTraces.onTraceAdded.connect(new Listener<Trace>() {
+    clockTraces.onTraceAdded.connect(new Listener<List<Trace>>() {
       @Override
-      public void listen(Trace trace) {
-        onTraceAdded.fire(trace);
+      public void listen(List<Trace> traces) {
+        onTraceAdded.fire(traces);
       }
     });
-    clockTraces.onTraceRemoved.connect(new Listener<Trace>() {
+    clockTraces.onTraceRemoved.connect(new Listener<List<Trace>>() {
       @Override
-      public void listen(Trace trace) {
-        onTraceRemoved.fire(trace);
+      public void listen(List<Trace> traces) {
+        onTraceRemoved.fire(traces);
       }
     });
     return clockTraces;

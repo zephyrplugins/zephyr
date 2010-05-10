@@ -22,16 +22,16 @@ public class PlotSelection implements TraceSelector {
   private final List<TraceData> selected = new ArrayList<TraceData>();
   private final Set<String> persistentSelection = new LinkedHashSet<String>();
   private final Set<String> currentSelection = new LinkedHashSet<String>();
-  private final Listener<Trace> addedTraceListener = new Listener<Trace>() {
+  private final Listener<List<Trace>> addedTraceListener = new Listener<List<Trace>>() {
     @Override
-    public void listen(Trace trace) {
-      checkNewTrace(trace);
+    public void listen(List<Trace> traces) {
+      checkNewTrace(traces);
     }
   };
-  private final Listener<Trace> removedTraceListener = new Listener<Trace>() {
+  private final Listener<List<Trace>> removedTraceListener = new Listener<List<Trace>>() {
     @Override
-    public void listen(Trace trace) {
-      checkRemovedTrace(trace);
+    public void listen(List<Trace> traces) {
+      checkRemovedTrace(traces);
     }
   };
   private final ClockTracesManager tracesManager;
@@ -62,31 +62,39 @@ public class PlotSelection implements TraceSelector {
   public void init(Set<String> initialSelection) {
     if (initialSelection != null)
       this.persistentSelection.addAll(initialSelection);
-    for (Trace trace : Traces.getAllTraces(tracesManager))
-      checkNewTrace(trace);
+    checkNewTrace(Traces.getAllTraces(tracesManager));
     tracesManager.onTraceAdded.connect(addedTraceListener);
     tracesManager.onTraceRemoved.connect(removedTraceListener);
   }
 
-  void checkNewTrace(Trace trace) {
-    if (persistentSelection.contains(trace.label)) {
+  void checkNewTrace(List<Trace> traces) {
+    List<Trace> tracesAdded = new ArrayList<Trace>();
+    for (Trace trace : traces) {
+      if (!persistentSelection.contains(trace.label))
+        continue;
       persistentSelection.remove(trace.label);
       currentSelection.add(trace.label);
+      tracesAdded.add(trace);
     }
-    if (!currentSelection.contains(trace.label))
+    if (tracesAdded.isEmpty())
       return;
     Set<Trace> selectedTraces = getCurrentTracesSelection();
-    selectedTraces.add(trace);
+    selectedTraces.addAll(tracesAdded);
     setCurrentSelection(selectedTraces);
   }
 
-  protected void checkRemovedTrace(Trace trace) {
+  protected void checkRemovedTrace(List<Trace> traces) {
     Set<Trace> currentSelection = getCurrentTracesSelection();
-    boolean removed = currentSelection.remove(trace);
-    if (!removed)
-      return;
-    persistentSelection.add(trace.label);
-    setCurrentSelection(currentSelection);
+    boolean oneTraceRemoved = false;
+    for (Trace trace : traces) {
+      boolean removed = currentSelection.remove(trace);
+      if (removed) {
+        oneTraceRemoved = true;
+        persistentSelection.add(trace.label);
+      }
+    }
+    if (oneTraceRemoved)
+      setCurrentSelection(currentSelection);
   }
 
   public void setCurrentSelection(Set<Trace> newSelection) {

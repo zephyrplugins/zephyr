@@ -15,16 +15,16 @@ public class TracesSelection {
   public static interface TraceSelector {
   }
 
-  private final Listener<Trace> traceAddedListener = new Listener<Trace>() {
+  private final Listener<List<Trace>> traceAddedListener = new Listener<List<Trace>>() {
     @Override
-    public void listen(Trace trace) {
-      addTrace(trace);
+    public void listen(List<Trace> traces) {
+      addTraces(traces);
     }
   };
-  private final Listener<Trace> traceRemovedListener = new Listener<Trace>() {
+  private final Listener<List<Trace>> traceRemovedListener = new Listener<List<Trace>>() {
     @Override
-    public void listen(Trace trace) {
-      removeTrace(trace);
+    public void listen(List<Trace> traces) {
+      removeTraces(traces);
     }
   };
 
@@ -39,6 +39,7 @@ public class TracesSelection {
   }
 
   private TraceData enableTrace(Trace trace) {
+    assert !enabledTrace.containsKey(trace);
     TraceData traceData = enabledTrace.get(trace);
     if (traceData != null)
       return traceData;
@@ -77,15 +78,16 @@ public class TracesSelection {
       enableTrace(trace);
   }
 
-  synchronized protected void addTrace(Trace trace) {
-    assert !enabledTrace.containsKey(trace);
+  synchronized protected void addTraces(List<Trace> traces) {
     if (!forceEnabled)
       return;
-    enableTrace(trace);
+    for (Trace trace : traces)
+      enableTrace(trace);
   }
 
-  synchronized protected void removeTrace(Trace trace) {
-    enabledTrace.remove(trace);
+  synchronized protected void removeTraces(List<Trace> traces) {
+    for (Trace trace : traces)
+      enabledTrace.remove(trace);
   }
 
   synchronized public List<TraceData> selectTraces(TraceSelector selector, Set<Trace> oldSelection,

@@ -85,6 +85,8 @@ public class PlotData {
   }
 
   public List<HistoryCached> getHistories() {
+    if (histories.isEmpty())
+      synchronize();
     return new ArrayList<HistoryCached>(histories);
   }
 

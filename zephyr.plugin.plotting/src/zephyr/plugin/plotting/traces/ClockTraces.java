@@ -16,8 +16,8 @@ import rlpark.plugin.utils.time.Clock;
 import zephyr.plugin.plotting.ZephyrPluginPlotting;
 
 public class ClockTraces implements Logger {
-  public final Signal<Trace> onTraceAdded = new Signal<Trace>();
-  public final Signal<Trace> onTraceRemoved = new Signal<Trace>();
+  public final Signal<List<Trace>> onTraceAdded = new Signal<List<Trace>>();
+  public final Signal<List<Trace>> onTraceRemoved = new Signal<List<Trace>>();
   public final Clock clock;
 
   protected final TracesSelection selection;
@@ -31,6 +31,8 @@ public class ClockTraces implements Logger {
   };
   private final Thread modelThread = Thread.currentThread();
   private final String clockLabel;
+  private int nbProcessAddingTrace = 0;
+  private final List<Trace> pendingTraces = new ArrayList<Trace>();
 
   protected ClockTraces(String clockLabel, Clock clock) {
     this.clock = clock;
@@ -40,12 +42,30 @@ public class ClockTraces implements Logger {
     clock.onTick.connect(onTickClockListener);
   }
 
+  private void startAddingTrace() {
+    nbProcessAddingTrace++;
+  }
+
+  private void endAddingTrace() {
+    assert nbProcessAddingTrace > 0;
+    nbProcessAddingTrace--;
+    if (nbProcessAddingTrace > 0)
+      return;
+    if (pendingTraces.isEmpty())
+      return;
+    onTraceAdded.fire(pendingTraces);
+    pendingTraces.clear();
+  }
+
   @Override
   synchronized public void add(String label, Logged logged) {
     assert checkThread();
     Trace trace = new Trace(this, labelBuilder.buildLabel(label), logged);
     traces.add(trace);
-    onTraceAdded.fire(trace);
+    if (nbProcessAddingTrace == 0)
+      onTraceAdded.fire(Utils.asList(trace));
+    else
+      pendingTraces.add(trace);
   }
 
   protected boolean checkThread() {
@@ -54,11 +74,13 @@ public class ClockTraces implements Logger {
 
   @Override
   public void add(Object toAdd) {
+    startAddingTrace();
     if (toAdd instanceof Logged)
       add(Utils.label(toAdd), (Logged) toAdd);
     if (toAdd instanceof LoggedContainer)
       ((LoggedContainer) toAdd).setLogger(this);
     Parser.findAnnotations(this, toAdd);
+    endAddingTrace();
   }
 
   @Override
@@ -79,10 +101,8 @@ public class ClockTraces implements Logger {
   }
 
   synchronized public void dispose() {
-    for (Trace trace : getTraces()) {
-      traces.remove(trace);
-      onTraceRemoved.fire(trace);
-    }
+    onTraceRemoved.fire(traces);
+    traces.clear();
   }
 
   public String clockLabel() {
