@@ -14,7 +14,6 @@ import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 
-import zephyr.plugin.common.ZephyrPluginCommon;
 import zephyr.plugin.common.canvas.AbstractCanvasView;
 import zephyr.plugin.common.canvas.BackgroundCanvas;
 import zephyr.plugin.plotting.ZephyrPluginPlotting;
@@ -108,7 +107,7 @@ public class PlotView extends AbstractCanvasView implements TraceSelector {
 
   @Override
   public void repaint() {
-    backgroundCanvas.repaint(ZephyrPluginCommon.synchronous);
+    backgroundCanvas.drawNewData();
   }
 
   @Override
@@ -118,15 +117,19 @@ public class PlotView extends AbstractCanvasView implements TraceSelector {
   }
 
   @Override
-  public void synchronize() {
+  public boolean synchronize() {
     if (synchronizeData &&
         backgroundCanvas != null &&
-        !backgroundCanvas.isDrawing())
+        !backgroundCanvas.isDrawing()) {
       plotdata.synchronize();
+      return true;
+    }
+    return false;
   }
 
   @Override
   public void dispose() {
+    backgroundCanvas.dispose();
     super.dispose();
     clockGraphBindings.unBindAll();
   }

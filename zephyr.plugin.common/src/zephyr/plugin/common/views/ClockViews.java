@@ -15,6 +15,7 @@ import zephyr.plugin.common.ZephyrPluginCommon;
 
 public class ClockViews {
   protected final List<SyncView> views = new ArrayList<SyncView>();
+  protected List<SyncView> synchronizedViews = new ArrayList<SyncView>();
   protected Set<SyncView> pendingViews = Collections.synchronizedSet(new HashSet<SyncView>());
   private final Listener<Clock> tickListener = new Listener<Clock>() {
     @Override
@@ -34,7 +35,7 @@ public class ClockViews {
   private final Runnable syncRunnable = new Runnable() {
     @Override
     public void run() {
-      for (SyncView view : getViews())
+      for (SyncView view : synchronizedViews)
         view.repaint();
     }
   };
@@ -57,12 +58,14 @@ public class ClockViews {
     List<SyncView> readyViews = getReadyView();
     if (readyViews.isEmpty())
       return;
+    synchronizedViews.clear();
     for (SyncView view : readyViews)
-      view.synchronize();
+      if (view.synchronize())
+        synchronizedViews.add(view);
     if (ZephyrPluginCommon.synchronous)
       syncRedraw();
     else
-      asyncRedraw(readyViews);
+      asyncRedraw();
   }
 
   synchronized private List<SyncView> getReadyView() {
@@ -71,8 +74,8 @@ public class ClockViews {
     return readyView;
   }
 
-  private void asyncRedraw(List<SyncView> readyViews) {
-    for (SyncView view : readyViews) {
+  private void asyncRedraw() {
+    for (SyncView view : synchronizedViews) {
       pendingViews.add(view);
       view.onDispose().connect(asyncViewListener);
       view.onPaintDone().connect(asyncViewListener);

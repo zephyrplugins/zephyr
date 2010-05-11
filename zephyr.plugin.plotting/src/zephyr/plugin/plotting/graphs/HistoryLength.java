@@ -10,7 +10,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.ui.IMemento;
 
-import zephyr.plugin.common.views.SyncView;
 import zephyr.plugin.plotting.plots.PlotData;
 
 class HistoryLength {
@@ -18,13 +17,13 @@ class HistoryLength {
   Spinner historyLength;
   private Integer previousHistoryLength;
   private final PlotData plotdata;
-  private SyncView syncView;
+  private PlotView syncView;
 
   protected HistoryLength(PlotData plotdata) {
     this.plotdata = plotdata;
   }
 
-  protected void createPartControl(Composite composite, SyncView syncView) {
+  protected void createPartControl(Composite composite, PlotView syncView) {
     Label historyLengthLabel = new Label(composite, SWT.NONE);
     this.syncView = syncView;
     historyLengthLabel.setText("History length: ");

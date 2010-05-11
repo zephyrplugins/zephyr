@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.RGB;
 
 import rlpark.plugin.utils.events.Listener;
@@ -61,19 +62,20 @@ public class PlotOverTime implements Painter {
     }
   }
 
-  public void paint(GC gc) {
+  public boolean paint(Image image, GC gc) {
     preparePainting();
     gc.setAntialias(SWT.OFF);
     gc.setBackground(colors.color(gc, Colors.COLOR_WHITE));
     gc.fillRectangle(gc.getClipping());
     List<HistoryCached> histories = plotdata.getHistories();
     if (histories.isEmpty())
-      return;
+      return true;
     if (axesNeedReset != ResetMode.NoReset)
       updateAxes(histories);
     axes.updateScaling(gc.getClipping());
     drawDrawingZone(gc);
     drawTraces(gc, histories);
+    return true;
   }
 
   private void updateAxes(List<HistoryCached> histories) {

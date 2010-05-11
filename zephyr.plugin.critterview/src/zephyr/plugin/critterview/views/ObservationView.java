@@ -64,8 +64,9 @@ public class ObservationView extends ViewPart implements TimedView {
   }
 
   @Override
-  public void synchronize() {
+  public boolean synchronize() {
     currentObservation = environment.currentStep().o_tp1;
+    return true;
   }
 
   @Override

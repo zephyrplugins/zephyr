@@ -3,7 +3,7 @@ package zephyr.plugin.common.views;
 import rlpark.plugin.utils.events.Signal;
 
 public interface SyncView {
-  void synchronize();
+  boolean synchronize();
 
   void repaint();
 
