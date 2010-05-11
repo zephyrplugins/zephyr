@@ -55,7 +55,7 @@ public class PlotData {
   };
   final PlotSelection selection;
   final List<HistoryCached> histories = new ArrayList<HistoryCached>();
-  int currentHistoryLength = MaximumTimeLength;
+  int currentHistoryLength = 10;
   private int historyArrayLength = 0;
 
   public PlotData(PlotSelection selection) {
