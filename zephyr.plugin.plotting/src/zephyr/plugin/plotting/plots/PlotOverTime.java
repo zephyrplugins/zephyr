@@ -41,6 +41,8 @@ public class PlotOverTime implements Painter {
   private final PlotData plotdata;
   private final Colors colors = new Colors();
   private ResetMode axesNeedReset = ResetMode.NoReset;
+  private Image lastImage = null;
+  private int timeIndex = -1;
 
   public PlotOverTime(PlotData plotdata) {
     this.plotdata = plotdata;
@@ -53,68 +55,72 @@ public class PlotOverTime implements Painter {
     case NoReset:
       return;
     case AxeXOnly:
-      axes.xAxe().reset();
+      resetTimeIndex();
+      axes.x.reset();
       break;
     case BothAxes:
-      axes.xAxe().reset();
-      axes.yAxe().reset();
+      resetTimeIndex();
+      axes.x.reset();
+      axes.y.reset();
       break;
     }
   }
 
+  private void resetTimeIndex() {
+    timeIndex = -1;
+  }
+
   public boolean paint(Image image, GC gc) {
-    preparePainting();
+    if (lastImage != image) {
+      resetTimeIndex();
+      resetAxes(true);
+      lastImage = image;
+    }
     gc.setAntialias(SWT.OFF);
-    gc.setBackground(colors.color(gc, Colors.COLOR_WHITE));
-    gc.fillRectangle(gc.getClipping());
+    preparePainting();
     List<HistoryCached> histories = plotdata.getHistories();
     if (histories.isEmpty())
       return true;
     if (axesNeedReset != ResetMode.NoReset)
       updateAxes(histories);
-    axes.updateScaling(gc.getClipping());
-    drawDrawingZone(gc);
+    if (timeIndex == -1)
+      prepareDrawingZone(gc);
     drawTraces(gc, histories);
-    return true;
+    return (timeIndex == -1 && !axes.y.scalingRequired());
   }
 
   private void updateAxes(List<HistoryCached> histories) {
-    for (HistoryCached history : histories) {
-      final float[] values = history.values;
-      for (int t = 0; t < values.length; t++)
-        axes.update(t, values[t]);
-    }
+    final int timeLength = histories.get(0).values.length - 1;
+    axes.x.update(0);
+    axes.x.update(timeLength);
+    for (HistoryCached history : histories)
+      for (double value : history.values)
+        axes.y.update(value);
     axesNeedReset = ResetMode.NoReset;
   }
 
-  private void drawDrawingZone(GC gc) {
+  private void prepareDrawingZone(GC gc) {
+    axes.updateScaling(gc.getClipping());
     gc.setBackground(colors.color(gc, Colors.COLOR_WHITE));
-    gc.fillRectangle(axes.drawingZone());
+    gc.fillRectangle(gc.getClipping());
+    gc.setLineWidth(1);
   }
 
   private void drawTraces(GC gc, List<HistoryCached> histories) {
     int colorIndex = 0;
-    gc.setLineWidth(1);
+    if (timeIndex == -1)
+      timeIndex = histories.get(0).values.length - 1;
+    int t0 = timeIndex - 1, t1 = timeIndex;
+    int x0 = axes.toGX(t0), x1 = axes.toGX(t1);
     for (HistoryCached history : histories) {
       gc.setForeground(colors.color(gc, colorsOrder[colorIndex % colorsOrder.length]));
-      drawTrace(gc, history.values);
+      double v0 = history.values[t0], v1 = history.values[t1];
+      axes.y.update(v1);
+      int y0 = axes.toGY(v0), y1 = axes.toGY(v1);
+      gc.drawLine(x0, y0, x1, y1);
       colorIndex += 1;
     }
-  }
-
-  private void drawTrace(GC gc, float[] data) {
-    int px = 0, py = 0;
-    for (int t = 0; t < data.length; t++) {
-      double value = data[t];
-      axes.update(t, value);
-      int x = axes.toGX(t), y = axes.toGY(value);
-      if (t > 0)
-        gc.drawLine(px, py, x, y);
-      else
-        gc.drawPoint(x, y);
-      px = x;
-      py = y;
-    }
+    timeIndex = timeIndex > 1 ? timeIndex - 1 : -1;
   }
 
   public void resetAxes(boolean resetYAxe) {

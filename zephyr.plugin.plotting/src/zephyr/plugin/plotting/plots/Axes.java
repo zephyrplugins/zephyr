@@ -14,8 +14,8 @@ public class Axes {
     private double minValue = Double.MAX_VALUE;
     private double maxValue = -Double.MAX_VALUE;
 
-    double minDisplayed;
-    double maxDisplayed;
+    double cachedMinValue, minDisplayed;
+    double cachedMaxValue, maxDisplayed;
 
     double translation = 0.0;
     double scale = 0.0;
@@ -39,7 +39,9 @@ public class Axes {
     }
 
     public void updateTransformation(int drawingLength) {
+      cachedMinValue = minValue;
       minDisplayed = minValue - Math.abs(minValue * margins);
+      cachedMaxValue = maxValue;
       maxDisplayed = maxValue + Math.abs(maxValue * margins);
       double length = Math.max(maxDisplayed - minDisplayed, 1e-5);
       scale = drawingLength / length;
@@ -55,10 +57,14 @@ public class Axes {
       maxValue = -Double.MAX_VALUE;
       minValue = Double.MAX_VALUE;
     }
+
+    public boolean scalingRequired() {
+      return cachedMinValue != minValue || cachedMaxValue != maxValue;
+    }
   }
 
-  private final Axe x;
-  private final Axe y;
+  protected final Axe x;
+  protected final Axe y;
   private int drawingTranslationX = 0;
   private int drawingTranslationY = 0;
   private final Rectangle drawingZone;
@@ -113,11 +119,6 @@ public class Axes {
     return ((int) -y.toG(dy)) + drawingTranslationY;
   }
 
-  public void update(double dx, double dy) {
-    x.update(dx);
-    y.update(dy);
-  }
-
   public double scaleToDY(int gy) {
     return gy / y.scale;
   }
@@ -143,13 +144,5 @@ public class Axes {
                     drawingTranslationX, drawingTranslationY,
                     new Rectangle(drawingZone.x, drawingZone.y,
                                   drawingZone.width, drawingZone.height));
-  }
-
-  public Axe xAxe() {
-    return x;
-  }
-
-  public Axe yAxe() {
-    return y;
   }
 }

@@ -34,8 +34,8 @@ public class PlotView extends AbstractCanvasView implements TraceSelector {
   protected MouseSearch mouseSearch;
   protected ClockGraphBindings clockGraphBindings;
   protected boolean synchronizeData = true;
-  private final ClockTracesManager traces;
   private BackgroundCanvas backgroundCanvas;
+  private final ClockTracesManager traces;
   private final SynchronizeAction synchronizeAction;
 
   public PlotView() {
@@ -120,7 +120,8 @@ public class PlotView extends AbstractCanvasView implements TraceSelector {
   public boolean synchronize() {
     if (synchronizeData &&
         backgroundCanvas != null &&
-        !backgroundCanvas.isDrawing()) {
+        !backgroundCanvas.isDrawing() &&
+        mouseSearch.lastResultTime() > 5000) {
       plotdata.synchronize();
       return true;
     }
@@ -129,7 +130,6 @@ public class PlotView extends AbstractCanvasView implements TraceSelector {
 
   @Override
   public void dispose() {
-    backgroundCanvas.dispose();
     super.dispose();
     clockGraphBindings.unBindAll();
   }
@@ -140,5 +140,9 @@ public class PlotView extends AbstractCanvasView implements TraceSelector {
 
   public PlotOverTime plotOverTime() {
     return plotOverTime;
+  }
+
+  public void showDrawingProgress() {
+    backgroundCanvas.showProgress();
   }
 }

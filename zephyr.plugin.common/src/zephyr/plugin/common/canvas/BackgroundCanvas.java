@@ -8,6 +8,8 @@ import java.util.concurrent.ThreadFactory;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.widgets.Canvas;
 
+import rlpark.plugin.utils.time.Chrono;
+
 public class BackgroundCanvas {
   static private ExecutorService executor = Executors.newFixedThreadPool(4, new ThreadFactory() {
     @Override
@@ -22,6 +24,8 @@ public class BackgroundCanvas {
     @Override
     public void run() {
       try {
+        if (canvas.isDisposed())
+          return;
         runPainter();
       } catch (Exception e) {
         e.printStackTrace();
@@ -35,6 +39,8 @@ public class BackgroundCanvas {
   private final BackgroundImage canvasImage = new BackgroundImage();
   private final PainterRunnable painterRunnable = new PainterRunnable();
   private Future<?> future = null;
+  private final Chrono chrono = new Chrono();
+  private long lastDrawingTime = 0;
   private final Runnable refreshCanvas = new Runnable() {
     @Override
     public void run() {
@@ -63,7 +69,13 @@ public class BackgroundCanvas {
       if (!paintingImage.canvasSizeEquals())
         canvas.getDisplay().syncExec(allocatePainting);
       GC gc = new GC(paintingImage.image());
-      drawing = !painter.paint(paintingImage.image(), gc);
+      chrono.start();
+      long drawingTime = 0;
+      while (drawing && (drawingTime < 500 || drawingTime <= lastDrawingTime * 1.5)) {
+        drawing = !painter.paint(paintingImage.image(), gc);
+        drawingTime = chrono.getCurrentMillis();
+      }
+      lastDrawingTime = Math.max(drawingTime, lastDrawingTime);
       gc.dispose();
       if (paintingImage.canvasSizeEquals()) {
         imageToCanvas();
@@ -98,6 +110,7 @@ public class BackgroundCanvas {
     if (!canvasImage.canvasSizeEquals())
       synchronized (canvasImage) {
         canvasImage.adjustImage(canvas);
+        showProgress();
         drawNewData();
       }
   }
@@ -108,7 +121,7 @@ public class BackgroundCanvas {
     gc.drawImage(canvasImage.image(), 0, 0);
   }
 
-  public void dispose() {
-    executor.shutdown();
+  public void showProgress() {
+    lastDrawingTime = 0;
   }
 }

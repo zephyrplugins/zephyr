@@ -64,8 +64,10 @@ class HistoryLength {
   void setHistoryLengthValue(int value) {
     int increment = (int) (Math.pow(10, Math.floor(Math.log10(value))) / 2);
     historyLength.setIncrement(increment);
-    if (plotdata.setHistoryLengthIFN(value))
+    if (plotdata.setHistoryLengthIFN(value)) {
+      syncView.showDrawingProgress();
       syncView.repaint();
+    }
   }
 
   public void init(IMemento memento) {

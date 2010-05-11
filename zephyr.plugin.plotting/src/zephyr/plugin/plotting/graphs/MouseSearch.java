@@ -24,6 +24,7 @@ public class MouseSearch extends Job {
 
   protected final PlotView plotView;
   protected Label valueLabel;
+  protected boolean searchRunning = false;
   private final Point mousePosition = new Point(-1, -1);
   private final Colors colors = new Colors();
   private final PlotOverTime plotOverTime;
@@ -39,6 +40,7 @@ public class MouseSearch extends Job {
   }
 
   protected void scheduleIFN(int mousePositionX, int mousePositionY) {
+    searchRunning = true;
     displayedAxes = plotOverTime.getAxes();
     if (displayedAxes == null)
       return;
@@ -69,6 +71,8 @@ public class MouseSearch extends Job {
         valueLabel.getParent().pack(true);
         plotView.canvas().setToolTipText(tooltipLabel());
         plotView.canvas().redraw();
+        plotView.showDrawingProgress();
+        searchRunning = false;
       }
     });
   }
@@ -113,5 +117,13 @@ public class MouseSearch extends Job {
     gc.drawRectangle(stickyMousePosition.x - halfSize,
                      stickyMousePosition.y - halfSize,
                      halfSize * 2, halfSize * 2);
+  }
+
+  public long lastResultTime() {
+    if (searchRunning)
+      return 0;
+    if (requestResult == null)
+      return Long.MAX_VALUE;
+    return requestResult.resultTime.getCurrentMillis();
   }
 }

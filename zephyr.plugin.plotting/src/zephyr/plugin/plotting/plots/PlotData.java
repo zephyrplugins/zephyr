@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import rlpark.plugin.utils.events.Listener;
+import rlpark.plugin.utils.time.Chrono;
 import zephyr.plugin.plotting.traces.TraceData;
 
 public class PlotData {
@@ -24,6 +25,7 @@ public class PlotData {
     public final int timeShift;
     public final String label;
     public final int time;
+    public final Chrono resultTime = new Chrono();
 
     protected RequestResult(int traceIndex, int x) {
       this.history = histories.get(traceIndex);
@@ -95,26 +97,16 @@ public class PlotData {
       return null;
     int closestTraceIndex = -1;
     double closestDistance = 0;
-    int bestX = 0;
-    final int toleranceX = 5;
-    int minX = Math.max(0, (int) dataPoint.x - toleranceX);
-    int maxX = Math.min(historyArrayLength, (int) dataPoint.x + toleranceX);
-    for (int currentDx = minX; currentDx < maxX; currentDx++) {
-      double squaredDistanceX = (currentDx - dataPoint.x) * (currentDx - dataPoint.x);
-      for (int traceIndex = 0; traceIndex < selection.size(); traceIndex++) {
-        double value = histories.get(traceIndex).values[currentDx];
-        double squaredDistanceY = (dataPoint.y - value) * (dataPoint.y - value);
-        double squaredDistance = squaredDistanceX + squaredDistanceY;
-        if ((closestTraceIndex < 0) || (squaredDistance < closestDistance)) {
-          closestTraceIndex = traceIndex;
-          closestDistance = squaredDistance;
-          bestX = currentDx;
-        }
+    int x = (int) Math.round(dataPoint.x);
+    for (int traceIndex = 0; traceIndex < selection.size(); traceIndex++) {
+      double value = histories.get(traceIndex).values[x];
+      double distance = Math.abs(dataPoint.y - value);
+      if (closestTraceIndex < 0 || distance < closestDistance) {
+        closestTraceIndex = traceIndex;
+        closestDistance = distance;
       }
     }
-    if (closestTraceIndex < 0)
-      return null;
-    return new RequestResult(closestTraceIndex, bestX);
+    return new RequestResult(closestTraceIndex, x);
   }
 
   synchronized public boolean setHistoryLengthIFN(int historyLength) {
