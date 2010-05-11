@@ -1,5 +1,6 @@
 package zephyr.plugin.plotting.plots;
 
+import java.util.HashSet;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
@@ -43,6 +44,7 @@ public class PlotOverTime implements Painter {
   private ResetMode axesNeedReset = ResetMode.NoReset;
   private Image lastImage = null;
   private int timeIndex = -1;
+  private final HashSet<Integer> hashedLines = new HashSet<Integer>();
 
   public PlotOverTime(PlotData plotdata) {
     this.plotdata = plotdata;
@@ -107,17 +109,21 @@ public class PlotOverTime implements Painter {
   }
 
   private void drawTraces(GC gc, List<HistoryCached> histories) {
+    hashedLines.clear();
     int colorIndex = 0;
     if (timeIndex == -1)
       timeIndex = histories.get(0).values.length - 1;
-    int t0 = timeIndex - 1, t1 = timeIndex;
-    int x0 = axes.toGX(t0), x1 = axes.toGX(t1);
+    final int t0 = timeIndex - 1, t1 = timeIndex;
+    final int x0 = axes.toGX(t0), x1 = axes.toGX(t1);
+    final int dy = gc.getClipping().height;
     for (HistoryCached history : histories) {
       gc.setForeground(colors.color(gc, colorsOrder[colorIndex % colorsOrder.length]));
       double v0 = history.values[t0], v1 = history.values[t1];
       axes.y.update(v1);
       int y0 = axes.toGY(v0), y1 = axes.toGY(v1);
-      gc.drawLine(x0, y0, x1, y1);
+      boolean contained = hashedLines.add(y0 * dy + y1);
+      if (contained)
+        gc.drawLine(x0, y0, x1, y1);
       colorIndex += 1;
     }
     timeIndex = timeIndex > 1 ? timeIndex - 1 : -1;

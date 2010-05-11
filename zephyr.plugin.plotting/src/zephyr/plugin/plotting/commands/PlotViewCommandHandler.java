@@ -17,6 +17,7 @@ public abstract class PlotViewCommandHandler extends AbstractHandler {
     IWorkbenchPart activePart = activePage.getActivePart();
     PlotView plotView = (PlotView) activePart;
     execute(plotView);
+    plotView.showDrawingProgress();
     plotView.repaint();
     return null;
   }
