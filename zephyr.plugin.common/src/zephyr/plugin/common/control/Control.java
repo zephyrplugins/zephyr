@@ -47,8 +47,9 @@ public class Control implements Listener<Clock> {
   protected void suspendClock(Clock clock) {
     if (!clock.isSuspendable)
       return;
-    suspended.put(clock, 0);
-    clock.onTick.connect(this);
+    Integer previous = suspended.put(clock, 0);
+    if (previous == null)
+      clock.onTick.connect(this);
   }
 
   public void resume() {
