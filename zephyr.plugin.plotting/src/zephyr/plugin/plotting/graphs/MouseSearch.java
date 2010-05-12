@@ -90,7 +90,11 @@ public class MouseSearch extends Job {
   protected String tooltipLabel() {
     if (requestResult == null)
       return "";
-    return String.format("%s: %f", requestResult.label, requestResult.y);
+    String label = requestResult.label;
+    int lastPrefix = label.lastIndexOf(LabelBuilder.DefaultSeparator);
+    if (lastPrefix > 0 && lastPrefix < label.length() - 1)
+      label = label.substring(lastPrefix + 1);
+    return String.format("%s: %f\nT: %d", label, requestResult.y, requestResult.time);
   }
 
   public void createLabelControl(Composite composite) {
