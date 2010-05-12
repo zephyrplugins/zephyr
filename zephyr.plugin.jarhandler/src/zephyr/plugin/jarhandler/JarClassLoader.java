@@ -13,19 +13,20 @@ import java.util.jar.Attributes.Name;
 import zephyr.plugin.common.ZephyrPluginCommon;
 
 public class JarClassLoader extends ClassLoader {
-
   private final Map<String, Class<? extends Object>> classes = new Hashtable<String, Class<? extends Object>>();
   private final List<JarClassLoader> libraries = new ArrayList<JarClassLoader>();
   private char classNameReplacementChar;
   final private JarResources jarResources;
   private final Manifest manifest;
+  private final JarClassLoader root;
 
   public JarClassLoader(String jarName) {
-    this(new File(jarName));
+    this(null, new File(jarName));
   }
 
-  public JarClassLoader(File jarFile) {
+  public JarClassLoader(JarClassLoader root, File jarFile) {
     jarResources = new JarResources(jarFile);
+    this.root = root;
     manifest = jarResources.getManifest();
     loadJarLibraries();
   }
@@ -38,7 +39,7 @@ public class JarClassLoader extends ClassLoader {
       return;
     for (File file : extractFiles(librariesPath))
       if (file.canRead() && file.isFile())
-        libraries.add(new JarClassLoader(file));
+        libraries.add(new JarClassLoader(root == null ? this : root, file));
   }
 
   private List<File> extractFiles(String librariesPath) {
@@ -52,7 +53,7 @@ public class JarClassLoader extends ClassLoader {
 
   @Override
   public Class<? extends Object> loadClass(String className) throws ClassNotFoundException {
-    return (loadClass(className, true));
+    return loadClass(className, false);
   }
 
   private Class<? extends Object> loadSystemClass(String className) {
@@ -71,12 +72,16 @@ public class JarClassLoader extends ClassLoader {
     return null;
   }
 
-  private Class<? extends Object> loadLibraryClass(String className, boolean resolveIt) {
-    for (JarClassLoader classLoader : libraries)
+  private Class<? extends Object> loadLibraryClass(String className) {
+    for (JarClassLoader classLoader : libraries) {
       try {
-        return classLoader.loadClass(className, resolveIt);
+        if (classLoader == this)
+          continue;
+        return classLoader.loadClassInternal(className, true);
       } catch (ClassNotFoundException e) {
+      } catch (NoClassDefFoundError e) {
       }
+    }
     return null;
   }
 
@@ -120,8 +125,16 @@ public class JarClassLoader extends ClassLoader {
   }
 
   @Override
-  public synchronized Class<? extends Object> loadClass(String className,
-        boolean resolveIt) throws ClassNotFoundException {
+  public synchronized Class<? extends Object> loadClass(String className, boolean resolveIt)
+      throws ClassNotFoundException {
+    if (root != null)
+      return root.loadClassInternal(className, resolveIt);
+    return loadClassInternal(className, resolveIt);
+  }
+
+  public synchronized Class<? extends Object> loadClassInternal(String className, boolean resolveIt)
+      throws ClassNotFoundException {
+
     Class<? extends Object> result = classes.get(className);
     if (result != null)
       return result;
@@ -134,20 +147,20 @@ public class JarClassLoader extends ClassLoader {
     if (result != null)
       return result;
 
-    result = loadLibraryClass(className, resolveIt);
+    result = loadClassFromSelf(className, resolveIt);
     if (result != null)
       return result;
 
-    byte[] classBytes = loadClassBytes(className);
-    if (classBytes == null)
-      throw new ClassNotFoundException();
+    result = loadLibraryClass(className);
+    if (result != null)
+      return result;
 
-    result = defineClass(className, classBytes, 0, classBytes.length);
-    if (result == null)
-      throw new ClassFormatError();
+    throw new ClassNotFoundException();
+  }
 
-    if (resolveIt)
-      resolveClass(result);
+  private Class<? extends Object> linkClass(String className, Class<? extends Object> result, boolean resolveIt) {
+    if (!resolveIt)
+      return result;
 
     int lastDotIndex = className.lastIndexOf('.');
     if (lastDotIndex != -1) {
@@ -156,8 +169,23 @@ public class JarClassLoader extends ClassLoader {
       if (pack == null)
         definePackage(packageName);
     }
+
+    resolveClass(result);
+
+    assert result.getPackage() != null;
     classes.put(className, result);
     return result;
+  }
+
+  private Class<? extends Object> loadClassFromSelf(String className, boolean resolveIt) throws ClassFormatError {
+    Class<? extends Object> result;
+    byte[] classBytes = loadClassBytes(className);
+    if (classBytes == null)
+      return null;
+    result = defineClass(className, classBytes, 0, classBytes.length);
+    if (result == null)
+      throw new ClassFormatError();
+    return linkClass(className, result, resolveIt);
   }
 
   public void setClassNameReplacementChar(char replacement) {
@@ -175,5 +203,10 @@ public class JarClassLoader extends ClassLoader {
 
   public JarResources jar() {
     return jarResources;
+  }
+
+  @Override
+  public String toString() {
+    return String.format("jarloader<%s>", jarResources.jarFile.getAbsolutePath());
   }
 }
