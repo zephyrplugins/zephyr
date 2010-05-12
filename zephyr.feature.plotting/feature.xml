@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="zephyr.feature.plotting"
-      label="Zephyr Plotting"
+      label="zephyr.feature.plotting"
       version="1.0.0.qualifier"
       provider-name="Thomas">
 
