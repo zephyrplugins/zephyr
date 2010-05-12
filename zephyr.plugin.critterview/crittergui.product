@@ -99,8 +99,6 @@ University of Alberta
 
    <features>
       <feature id="zephyr.feature.platform" version="1.0.0.qualifier"/>
-      <feature id="zephyr.feature.plotting" version="1.0.0.qualifier"/>
-      <feature id="zephyr.feature.critterbot" version="1.0.0.qualifier"/>
    </features>
 
 

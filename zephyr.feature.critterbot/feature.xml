@@ -17,6 +17,10 @@
       [Enter License Description here.]
    </license>
 
+   <url>
+      <update label="Zephyr" url="http://webdocs.cs.ualberta.ca/~degris/zephyr"/>
+   </url>
+
    <includes
          id="zephyr.feature.critterbot.source"
          version="0.0.0"/>
