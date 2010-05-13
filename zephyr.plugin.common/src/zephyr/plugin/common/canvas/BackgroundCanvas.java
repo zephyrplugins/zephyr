@@ -63,23 +63,29 @@ public class BackgroundCanvas {
     this.painter = painter;
   }
 
+  private void runFromUIThread(Runnable runnable) {
+    if (canvas.isDisposed())
+      return;
+    canvas.getDisplay().syncExec(runnable);
+  }
+
   protected void runPainter() {
     do {
       boolean drawing = true;
       while (drawing || !paintingImage.canvasSizeEquals()) {
         if (!paintingImage.canvasSizeEquals())
-          canvas.getDisplay().syncExec(allocatePainting);
+          runFromUIThread(allocatePainting);
         GC gc = new GC(paintingImage.image());
         chrono.start();
         long drawingTime = 0;
-        while (drawing && (drawingTime < 500 || !showProgress)) {
+        while (!canvas.isDisposed() && drawing && (drawingTime < 500 || !showProgress)) {
           drawing = !painter.paint(paintingImage.image(), gc);
           drawingTime = chrono.getCurrentMillis();
         }
         gc.dispose();
         if (paintingImage.canvasSizeEquals()) {
           imageToCanvas();
-          canvas.getDisplay().syncExec(refreshCanvas);
+          runFromUIThread(refreshCanvas);
         }
       }
       showProgress = false;
