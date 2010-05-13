@@ -88,7 +88,12 @@ public class PlotOverTime implements Painter {
     if (timeIndex == -1)
       prepareDrawingZone(gc);
     drawTraces(gc, histories);
-    return (timeIndex == -1 && !axes.y.scalingRequired());
+    return (timeIndex == -1);
+  }
+
+  @Override
+  public boolean newPaintingRequired() {
+    return axes.y.scalingRequired();
   }
 
   private void updateAxes(List<HistoryCached> histories) {

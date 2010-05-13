@@ -54,6 +54,11 @@
             id="zephyr.plugin.plotting.centerplot"
             name="Center Plot">
       </command>
+      <command
+            defaultHandler="zephyr.plugin.plotting.commands.SynchronizeAll"
+            id="zephyr.plugin.plotting.synchronizedplot"
+            name="Synchronize Plots">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -89,6 +94,11 @@
                   name="zephyr.plugin.plotting.separator3"
                   visible="true">
             </separator>
+            <command
+                  commandId="zephyr.plugin.plotting.synchronizedplot"
+                  label="Synchronize Plots"
+                  style="push">
+            </command>
             <command
                   commandId="zephyr.plugin.plotting.commands.enablealltraces"
                   label="Enable All Traces"
@@ -191,6 +201,10 @@
       <image
             commandId="zephyr.plugin.plotting.toolbar.centerplot"
             icon="icons/command_centerplot.png">
+      </image>
+      <image
+            commandId="zephyr.plugin.plotting.synchronizedplot"
+            icon="icons/command_synchronize.gif">
       </image>
    </extension>
    <extension

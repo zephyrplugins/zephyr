@@ -151,6 +151,10 @@ public class ViewBinder {
     return clockToView.isEmpty();
   }
 
+  synchronized public ClockViews getViews(Clock clock) {
+    return clockToView.get(clock);
+  }
+
   synchronized public Collection<Clock> getClocks() {
     return new ArrayList<Clock>(clockToView.keySet());
   }

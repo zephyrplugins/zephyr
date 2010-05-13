@@ -71,7 +71,6 @@ public class MouseSearch extends Job {
         valueLabel.getParent().pack(true);
         plotView.canvas().setToolTipText(tooltipLabel());
         plotView.canvas().redraw();
-        plotView.showDrawingProgress();
         searchRunning = false;
       }
     });

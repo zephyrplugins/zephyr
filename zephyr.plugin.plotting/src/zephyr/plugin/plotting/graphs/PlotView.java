@@ -121,7 +121,7 @@ public class PlotView extends AbstractCanvasView implements TraceSelector {
     if (synchronizeData &&
         backgroundCanvas != null &&
         !backgroundCanvas.isDrawing() &&
-        mouseSearch.lastResultTime() > 5000) {
+        mouseSearch.lastResultTime() >= 0) {
       plotdata.synchronize();
       return true;
     }

@@ -87,7 +87,7 @@ public class ClockViews {
     Display.getDefault().syncExec(syncRunnable);
   }
 
-  synchronized protected List<SyncView> getViews() {
+  public synchronized List<SyncView> getViews() {
     return new LinkedList<SyncView>(views);
   }
 

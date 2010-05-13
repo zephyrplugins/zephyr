@@ -40,7 +40,7 @@ public class BackgroundCanvas {
   private final PainterRunnable painterRunnable = new PainterRunnable();
   private Future<?> future = null;
   private final Chrono chrono = new Chrono();
-  private long lastDrawingTime = 0;
+  private boolean showProgress = true;
   private final Runnable refreshCanvas = new Runnable() {
     @Override
     public void run() {
@@ -64,24 +64,26 @@ public class BackgroundCanvas {
   }
 
   protected void runPainter() {
-    boolean drawing = true;
-    while (drawing || !paintingImage.canvasSizeEquals()) {
-      if (!paintingImage.canvasSizeEquals())
-        canvas.getDisplay().syncExec(allocatePainting);
-      GC gc = new GC(paintingImage.image());
-      chrono.start();
-      long drawingTime = 0;
-      while (drawing && (drawingTime < 500 || drawingTime <= lastDrawingTime * 1.5)) {
-        drawing = !painter.paint(paintingImage.image(), gc);
-        drawingTime = chrono.getCurrentMillis();
+    do {
+      boolean drawing = true;
+      while (drawing || !paintingImage.canvasSizeEquals()) {
+        if (!paintingImage.canvasSizeEquals())
+          canvas.getDisplay().syncExec(allocatePainting);
+        GC gc = new GC(paintingImage.image());
+        chrono.start();
+        long drawingTime = 0;
+        while (drawing && (drawingTime < 500 || !showProgress)) {
+          drawing = !painter.paint(paintingImage.image(), gc);
+          drawingTime = chrono.getCurrentMillis();
+        }
+        gc.dispose();
+        if (paintingImage.canvasSizeEquals()) {
+          imageToCanvas();
+          canvas.getDisplay().syncExec(refreshCanvas);
+        }
       }
-      lastDrawingTime = Math.max(drawingTime, lastDrawingTime);
-      gc.dispose();
-      if (paintingImage.canvasSizeEquals()) {
-        imageToCanvas();
-        canvas.getDisplay().syncExec(refreshCanvas);
-      }
-    }
+      showProgress = false;
+    } while (painter.newPaintingRequired());
   }
 
   private void imageToCanvas() {
@@ -122,6 +124,6 @@ public class BackgroundCanvas {
   }
 
   public void showProgress() {
-    lastDrawingTime = 0;
+    showProgress = true;
   }
 }

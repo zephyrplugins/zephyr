@@ -64,9 +64,6 @@ public class ZephyrPluginCommon extends AbstractUIPlugin {
     return getDefault().viewBinder;
   }
 
-  /**
-   * @noreference This method is not intended to be referenced by clients.
-   */
   static public Control control() {
     return getDefault().control;
   }

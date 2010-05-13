@@ -98,6 +98,8 @@ public class PlotData {
     int closestTraceIndex = -1;
     double closestDistance = 0;
     int x = (int) Math.round(dataPoint.x);
+    x = Math.max(0, x);
+    x = Math.min(histories.get(0).values.length - 1, x);
     for (int traceIndex = 0; traceIndex < selection.size(); traceIndex++) {
       double value = histories.get(traceIndex).values[x];
       double distance = Math.abs(dataPoint.y - value);
