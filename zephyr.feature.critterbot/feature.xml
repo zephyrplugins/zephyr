@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="zephyr.feature.critterbot"
-      label="Zephyr Critterbot"
+      label="zephyr.feature.critterbot"
       version="1.0.0.qualifier"
       provider-name="Thomas">
 
@@ -16,6 +16,10 @@
    <license url="http://www.example.com/license">
       [Enter License Description here.]
    </license>
+
+   <url>
+      <update label="Zephyr" url="http://webdocs.cs.ualberta.ca/~degris/zephyr"/>
+   </url>
 
    <includes
          id="zephyr.feature.critterbot.source"

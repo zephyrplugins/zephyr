@@ -16,6 +16,10 @@
       [Enter License Description here.]
    </license>
 
+   <url>
+      <update label="Zephyr" url="http://webdocs.cs.ualberta.ca/~degris/zephyr"/>
+   </url>
+
    <includes
          id="org.eclipse.rcp"
          version="0.0.0"/>
@@ -23,6 +27,18 @@
    <includes
          id="org.eclipse.equinox.p2.user.ui"
          version="0.0.0"/>
+
+   <includes
+         id="zephyr.feature.critterbot"
+         version="0.0.0"
+         optional="true"
+         search-location="both"/>
+
+   <includes
+         id="zephyr.feature.plotting"
+         version="0.0.0"
+         optional="true"
+         search-location="both"/>
 
    <requires>
       <import plugin="org.eclipse.ui" version="3.5.0" match="compatible"/>

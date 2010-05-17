@@ -26,7 +26,7 @@ public class ReDirectSystemToConsole implements StartupJob {
 
   private PrintStream createConsolePipe(final PrintStream defaultOut, int color) {
     MessageConsoleStream messageConsoleStream = ZephyrConsolePlugin.getDefault().systemConsole().newMessageStream();
-    messageConsoleStream.setActivateOnWrite(true);
+    messageConsoleStream.setActivateOnWrite(false);
     setColor(messageConsoleStream, color);
     PipeStream pipe = new PipeStream(defaultOut, messageConsoleStream);
     PrintStream print = new PrintStream(pipe);

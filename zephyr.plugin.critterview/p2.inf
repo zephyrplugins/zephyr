@@ -1,3 +1,11 @@
+requires.1.namespace = org.eclipse.equinox.p2.iu
+requires.1.name = zephyr.feature.plotting.feature.group
+requires.1.range = [1.0.0, 1.2.0)
+
+requires.2.namespace = org.eclipse.equinox.p2.iu
+requires.2.name = zephyr.feature.critterbot.feature.group
+requires.2.range = [1.0.0, 1.2.0)
+
 instructions.configure=\
-  addRepository(name:Default,type:0,location:http${#58}//webdocs.cs.ualberta.ca/~degris/zephyr);\
-  addRepository(name:Default,type:1,location:http${#58}//webdocs.cs.ualberta.ca/~degris/zephyr);
+  addRepository(name:Zephyr,type:0,location:http${#58}//webdocs.cs.ualberta.ca/~degris/zephyr);\
+  addRepository(name:Zephyr,type:1,location:http${#58}//webdocs.cs.ualberta.ca/~degris/zephyr);
