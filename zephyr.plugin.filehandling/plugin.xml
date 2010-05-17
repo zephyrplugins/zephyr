@@ -15,7 +15,7 @@
    <extension
          point="org.eclipse.ui.menus">
       <menuContribution
-            locationURI="menu:menu.file?before=quit">
+            locationURI="menu:menu.file?before=zephyr.plugin.common.endstd">
             <command
                   commandId="zephyr.plugin.filehandling.openfile"
                   id="open"

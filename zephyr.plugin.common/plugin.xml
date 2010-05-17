@@ -53,6 +53,11 @@
             id="zephyr.plugin.common.close"
             name="Close">
       </command>
+      <command
+            defaultHandler="zephyr.plugin.common.commands.ExtractZephyrJar"
+            id="zephyr.plugin.common.extractzephyrjar"
+            name="Extract Zephyr Jar">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -62,6 +67,18 @@
                id="menu.file"
                label="File"
                mnemonic="F">
+            <separator
+                  name="zephyr.plugin.common.endstd">
+            </separator>
+            <separator
+                  name="zephyr.plugin.common.separator.zephyrcommon"
+                  visible="true">
+            </separator>
+            <command
+                  commandId="zephyr.plugin.common.extractzephyrjar"
+                  label="Extract Zephyr Jar..."
+                  style="push">
+            </command>
             <command
                   commandId="org.eclipse.ui.file.exit"
                   id="quit"

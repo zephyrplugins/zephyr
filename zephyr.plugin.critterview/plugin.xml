@@ -49,7 +49,7 @@
    <extension
          point="org.eclipse.ui.menus">
       <menuContribution
-            locationURI="menu:menu.file?after=open">
+            locationURI="menu:menu.file?after=zephyr.plugin.common.endstd">
          <command
                commandId="zephyr.plugin.critterview.startsimulator"
                label="Start a Simulator"
