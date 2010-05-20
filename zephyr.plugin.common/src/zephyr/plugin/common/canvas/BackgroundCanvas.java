@@ -6,6 +6,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.ThreadFactory;
 
 import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Canvas;
 
 import rlpark.plugin.utils.time.Chrono;
@@ -75,11 +76,14 @@ public class BackgroundCanvas {
       while (drawing || !paintingImage.canvasSizeEquals()) {
         if (!paintingImage.canvasSizeEquals())
           runFromUIThread(allocatePainting);
-        GC gc = new GC(paintingImage.image());
+        Image image = paintingImage.image();
+        if (image == null)
+          return;
+        GC gc = new GC(image);
         chrono.start();
         long drawingTime = 0;
         while (!canvas.isDisposed() && drawing && (drawingTime < 500 || !showProgress)) {
-          drawing = !painter.paint(paintingImage.image(), gc);
+          drawing = !painter.paint(image, gc);
           drawingTime = chrono.getCurrentMillis();
         }
         gc.dispose();
