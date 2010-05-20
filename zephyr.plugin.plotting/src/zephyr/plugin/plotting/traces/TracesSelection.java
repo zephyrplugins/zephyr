@@ -39,7 +39,6 @@ public class TracesSelection {
   }
 
   private TraceData enableTrace(Trace trace) {
-    assert !enabledTrace.containsKey(trace);
     TraceData traceData = enabledTrace.get(trace);
     if (traceData != null)
       return traceData;

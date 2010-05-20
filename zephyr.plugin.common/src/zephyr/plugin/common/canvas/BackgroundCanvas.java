@@ -11,7 +11,7 @@ import org.eclipse.swt.widgets.Canvas;
 import rlpark.plugin.utils.time.Chrono;
 
 public class BackgroundCanvas {
-  static private ExecutorService executor = Executors.newFixedThreadPool(4, new ThreadFactory() {
+  static private ExecutorService executor = Executors.newFixedThreadPool(3, new ThreadFactory() {
     @Override
     public Thread newThread(Runnable runnable) {
       Thread result = Executors.defaultThreadFactory().newThread(runnable);
