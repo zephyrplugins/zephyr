@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/zephyr.feature.critterbot_1.0.0.201005131126.jar" id="zephyr.feature.critterbot" version="1.0.0.201005131126">
+   <feature url="features/zephyr.feature.critterbot_1.0.0.qualifier.jar" id="zephyr.feature.critterbot" version="1.0.0.qualifier">
       <category name="zephyr.site.rlai"/>
    </feature>
-   <feature url="features/zephyr.feature.plotting_1.0.0.201005131126.jar" id="zephyr.feature.plotting" version="1.0.0.201005131126">
+   <feature url="features/zephyr.feature.eclipse_1.0.0.qualifier.jar" id="zephyr.feature.eclipse" version="1.0.0.qualifier">
       <category name="zephyr.site.rlai"/>
    </feature>
-   <feature url="features/zephyr.feature.eclipse_1.0.0.201005131126.jar" id="zephyr.feature.eclipse" version="1.0.0.201005131126">
+   <feature url="features/zephyr.feature.plotting_1.0.0.qualifier.jar" id="zephyr.feature.plotting" version="1.0.0.qualifier">
       <category name="zephyr.site.rlai"/>
    </feature>
    <category-def name="zephyr.site.rlai" label="RLAI"/>
