@@ -55,7 +55,7 @@ public class MouseSearch extends Job {
   protected IStatus run(IProgressMonitor monitor) {
     monitor.beginTask(getName(), IProgressMonitor.UNKNOWN);
     Point2D.Double dataMousePosition = displayedAxes.toD(mousePosition);
-    requestResult = plotData.search(dataMousePosition);
+    requestResult = plotData.search(dataMousePosition, displayedAxes.scaleToDY(1));
     refreshDisplay();
     monitor.done();
     return Status.OK_STATUS;
@@ -89,7 +89,13 @@ public class MouseSearch extends Job {
   protected String tooltipLabel() {
     if (requestResult == null)
       return "";
-    return String.format("%s: %f\nT: %d", requestResult.label, requestResult.y, requestResult.time);
+    StringBuilder tooltipLabel = new StringBuilder(String.format("T: %d\n%s: %f", requestResult.time,
+                                                                 requestResult.label, requestResult.y));
+    for (String secondaryLabel : requestResult.secondaryLabels) {
+      tooltipLabel.append("\n");
+      tooltipLabel.append(secondaryLabel);
+    }
+    return tooltipLabel.toString();
   }
 
   public void createLabelControl(Composite composite) {

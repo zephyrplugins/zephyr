@@ -24,10 +24,11 @@ public class PlotData {
     public final double y;
     public final int timeShift;
     public final String label;
+    public final List<String> secondaryLabels;
     public final int time;
     public final Chrono resultTime = new Chrono();
 
-    protected RequestResult(int traceIndex, int x) {
+    protected RequestResult(int traceIndex, int x, List<Integer> secondaryResults) {
       this.history = histories.get(traceIndex);
       this.x = x;
       TraceData traceData = selection.get(traceIndex);
@@ -35,6 +36,9 @@ public class PlotData {
       y = history.values[x];
       timeShift = history.time;
       time = traceData.onTimeAveraged(currentHistoryLength) * (timeShift + x);
+      secondaryLabels = new ArrayList<String>();
+      for (Integer index : secondaryResults)
+        secondaryLabels.add(selection.get(index).trace.label);
     }
   }
 
@@ -92,11 +96,12 @@ public class PlotData {
     return new ArrayList<HistoryCached>(histories);
   }
 
-  synchronized public RequestResult search(Point2D.Double dataPoint) {
+  synchronized public RequestResult search(Point2D.Double dataPoint, double yRes) {
     if (histories.isEmpty())
       return null;
     int closestTraceIndex = -1;
     double closestDistance = 0;
+    double closestValue = 0;
     int x = (int) Math.round(dataPoint.x);
     x = Math.max(0, x);
     x = Math.min(histories.get(0).values.length - 1, x);
@@ -106,9 +111,18 @@ public class PlotData {
       if (closestTraceIndex < 0 || distance < closestDistance) {
         closestTraceIndex = traceIndex;
         closestDistance = distance;
+        closestValue = value;
       }
     }
-    return new RequestResult(closestTraceIndex, x);
+    List<Integer> secondaryResults = new ArrayList<Integer>();
+    for (int traceIndex = 0; traceIndex < selection.size(); traceIndex++) {
+      if (traceIndex == closestTraceIndex)
+        continue;
+      double value = histories.get(traceIndex).values[x];
+      if (Math.abs(closestValue - value) < yRes)
+        secondaryResults.add(traceIndex);
+    }
+    return new RequestResult(closestTraceIndex, x, secondaryResults);
   }
 
   synchronized public boolean setHistoryLengthIFN(int historyLength) {
