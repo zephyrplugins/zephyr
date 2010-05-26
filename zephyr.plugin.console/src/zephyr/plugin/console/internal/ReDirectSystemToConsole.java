@@ -24,9 +24,9 @@ public class ReDirectSystemToConsole implements StartupJob {
     });
   }
 
-  private PrintStream createConsolePipe(final PrintStream defaultOut, int color) {
+  private PrintStream createConsolePipe(final PrintStream defaultOut, int color, boolean activateOnWrite) {
     MessageConsoleStream messageConsoleStream = ZephyrConsolePlugin.getDefault().systemConsole().newMessageStream();
-    messageConsoleStream.setActivateOnWrite(false);
+    messageConsoleStream.setActivateOnWrite(activateOnWrite);
     setColor(messageConsoleStream, color);
     PipeStream pipe = new PipeStream(defaultOut, messageConsoleStream);
     PrintStream print = new PrintStream(pipe);
@@ -35,7 +35,7 @@ public class ReDirectSystemToConsole implements StartupJob {
 
   @Override
   public void run() {
-    System.setOut(createConsolePipe(System.out, SWT.COLOR_DARK_BLUE));
-    System.setErr(createConsolePipe(System.err, SWT.COLOR_DARK_RED));
+    System.setOut(createConsolePipe(System.out, SWT.COLOR_DARK_BLUE, false));
+    System.setErr(createConsolePipe(System.err, SWT.COLOR_DARK_RED, true));
   }
 }
