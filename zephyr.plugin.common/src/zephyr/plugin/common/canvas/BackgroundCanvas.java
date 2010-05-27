@@ -82,7 +82,7 @@ public class BackgroundCanvas {
           drawing = !painter.paint(paintingImage.image(), gc);
           drawingTime = chrono.getCurrentMillis();
         }
-        gc.dispose();
+        paintingImage.disposeGC(gc);
         if (paintingImage.canvasSizeEquals()) {
           imageToCanvas();
           runFromUIThread(refreshCanvas);
@@ -95,9 +95,10 @@ public class BackgroundCanvas {
 
   private void imageToCanvas() {
     synchronized (canvasImage) {
-      GC gc = new GC(canvasImage.image());
-      gc.drawImage(paintingImage.image(), 0, 0);
-      gc.dispose();
+      GC gc = canvasImage.getGC();
+      if (gc != null)
+        gc.drawImage(paintingImage.image(), 0, 0);
+      canvasImage.disposeGC(gc);
     }
   }
 

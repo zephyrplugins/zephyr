@@ -7,6 +7,8 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Display;
 
+import zephyr.plugin.common.ZephyrPluginCommon;
+
 public class BackgroundImage {
   protected Image backgroundImage = null;
   private Point canvasSize = null;
@@ -34,8 +36,13 @@ public class BackgroundImage {
   }
 
   synchronized public GC getGC() {
-    if (backgroundImage == null || Display.getCurrent() != null)
+    if (ZephyrPluginCommon.shuttingDown || backgroundImage == null || Display.getCurrent() != null)
       return null;
     return new GC(backgroundImage);
+  }
+
+  public void disposeGC(GC gc) {
+    if (gc != null)
+      gc.dispose();
   }
 }
