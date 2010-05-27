@@ -80,10 +80,10 @@ public class PlotOverTime implements Painter {
     gc.setAntialias(SWT.OFF);
     preparePainting();
     List<HistoryCached> histories = plotdata.getHistories();
-    if (histories.isEmpty())
-      return true;
     if (axesNeedReset != ResetMode.NoReset)
       updateAxes(histories);
+    if (histories.isEmpty())
+      return true;
     if (timeIndex == -1)
       prepareDrawingZone(gc);
     drawTraces(gc, histories);
@@ -96,6 +96,11 @@ public class PlotOverTime implements Painter {
   }
 
   private void updateAxes(List<HistoryCached> histories) {
+    if (histories.isEmpty()) {
+      axes.x.update(0);
+      axes.y.update(0);
+      return;
+    }
     final int timeLength = histories.get(0).values.length - 1;
     axes.x.update(0);
     axes.x.update(timeLength);
