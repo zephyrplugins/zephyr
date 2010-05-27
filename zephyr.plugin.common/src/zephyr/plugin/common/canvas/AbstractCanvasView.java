@@ -16,7 +16,6 @@ import zephyr.plugin.common.views.SyncView;
 
 public abstract class AbstractCanvasView extends ViewPart implements SyncView {
   protected Canvas canvas;
-  protected final Signal<SyncView> onPaintDone = new Signal<SyncView>();
   protected final Signal<SyncView> onDispose = new Signal<SyncView>();
 
   public AbstractCanvasView() {
@@ -32,7 +31,6 @@ public abstract class AbstractCanvasView extends ViewPart implements SyncView {
       @Override
       public void paintControl(PaintEvent e) {
         paint(e.gc);
-        onPaintDone.fire(AbstractCanvasView.this);
       }
     });
     setToolbar(getViewSite().getActionBars().getToolBarManager());
@@ -62,11 +60,6 @@ public abstract class AbstractCanvasView extends ViewPart implements SyncView {
   public void dispose() {
     onDispose.fire(this);
     super.dispose();
-  }
-
-  @Override
-  public Signal<SyncView> onPaintDone() {
-    return onPaintDone;
   }
 
   @Override

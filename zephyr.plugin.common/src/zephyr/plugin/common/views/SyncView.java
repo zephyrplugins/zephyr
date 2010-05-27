@@ -7,7 +7,5 @@ public interface SyncView {
 
   void repaint();
 
-  Signal<SyncView> onPaintDone();
-
   Signal<SyncView> onDispose();
 }

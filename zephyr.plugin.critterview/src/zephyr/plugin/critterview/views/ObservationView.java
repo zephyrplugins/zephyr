@@ -26,7 +26,6 @@ public class ObservationView extends ViewPart implements TimedView {
   private CritterViz critterViz;
   private Frame awtFrame;
   private Composite swtAwtComponent;
-  private final Signal<SyncView> onPaintDone = new Signal<SyncView>();
   private final Signal<SyncView> onDispose = new Signal<SyncView>();
   private final rlpark.plugin.utils.events.Listener<Clock> clockKilled = new rlpark.plugin.utils.events.Listener<Clock>() {
     @Override
@@ -109,7 +108,6 @@ public class ObservationView extends ViewPart implements TimedView {
       critterViz.repaint();
     } else
       awtFrame.repaint();
-    onPaintDone.fire(this);
   }
 
   @Override
@@ -121,11 +119,6 @@ public class ObservationView extends ViewPart implements TimedView {
   @Override
   public String viewID() {
     return ID;
-  }
-
-  @Override
-  public Signal<SyncView> onPaintDone() {
-    return onPaintDone;
   }
 
   @Override

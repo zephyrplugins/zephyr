@@ -30,6 +30,7 @@ public class ClockViews {
         return;
       for (SyncView view : new ArrayList<SyncView>(pendingViews))
         view.repaint();
+      pendingViews.clear();
     }
   };
   private final Runnable syncRunnable = new Runnable() {
@@ -37,14 +38,6 @@ public class ClockViews {
     public void run() {
       for (SyncView view : synchronizedViews)
         view.repaint();
-    }
-  };
-  private final Listener<SyncView> asyncViewListener = new Listener<SyncView>() {
-    @Override
-    public void listen(SyncView view) {
-      view.onDispose().disconnect(this);
-      view.onPaintDone().disconnect(this);
-      pendingViews.remove(view);
     }
   };
 
@@ -55,9 +48,9 @@ public class ClockViews {
   protected void synchronize() {
     if (ZephyrPluginCommon.shuttingDown)
       return;
-    List<SyncView> readyViews = getReadyView();
-    if (readyViews.isEmpty())
+    if (!pendingViews.isEmpty())
       return;
+    List<SyncView> readyViews = getViews();
     synchronizedViews.clear();
     for (SyncView view : readyViews)
       if (view.synchronize())
@@ -68,18 +61,8 @@ public class ClockViews {
       asyncRedraw();
   }
 
-  synchronized private List<SyncView> getReadyView() {
-    List<SyncView> readyView = getViews();
-    readyView.removeAll(pendingViews);
-    return readyView;
-  }
-
   private void asyncRedraw() {
-    for (SyncView view : synchronizedViews) {
-      pendingViews.add(view);
-      view.onDispose().connect(asyncViewListener);
-      view.onPaintDone().connect(asyncViewListener);
-    }
+    pendingViews.addAll(synchronizedViews);
     Display.getDefault().asyncExec(asyncRunnable);
   }
 

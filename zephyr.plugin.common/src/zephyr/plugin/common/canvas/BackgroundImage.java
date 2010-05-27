@@ -1,9 +1,11 @@
 package zephyr.plugin.common.canvas;
 
+import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Canvas;
+import org.eclipse.swt.widgets.Display;
 
 public class BackgroundImage {
   protected Image backgroundImage = null;
@@ -29,5 +31,11 @@ public class BackgroundImage {
     if (backgroundImage != null)
       backgroundImage.dispose();
     backgroundImage = new Image(canvas.getDisplay(), canvasSize.x, canvasSize.y);
+  }
+
+  synchronized public GC getGC() {
+    if (backgroundImage == null || Display.getCurrent() != null)
+      return null;
+    return new GC(backgroundImage);
   }
 }
