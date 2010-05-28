@@ -29,6 +29,8 @@ public class ViewBinder {
     @Override
     public void listen(Clock clock) {
       ClockViews clockViews = clockToView.get(clock);
+      if (clockViews == null)
+        return;
       for (SyncView view : clockViews.getViews())
         unbind(clock, view);
     }
