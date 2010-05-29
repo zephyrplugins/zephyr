@@ -13,6 +13,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IViewReference;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 
@@ -20,6 +21,7 @@ import rlpark.plugin.utils.events.Listener;
 import rlpark.plugin.utils.events.Signal;
 import rlpark.plugin.utils.time.Clock;
 import rlpark.plugin.utils.time.ClockKillable;
+import zephyr.plugin.common.ZephyrPluginCommon;
 
 public class ViewBinder {
   public Signal<Clock> onClockAdded = new Signal<Clock>();
@@ -80,7 +82,10 @@ public class ViewBinder {
   }
 
   protected TimedView displayView(String viewID) {
-    IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+    IWorkbenchWindow activeWorkbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+    if (activeWorkbenchWindow == null)
+      return null;
+    IWorkbenchPage activePage = activeWorkbenchWindow.getActivePage();
     String secondaryID = findSecondaryID(activePage, viewID);
     IViewPart view = null;
     try {
@@ -92,6 +97,8 @@ public class ViewBinder {
   }
 
   private void displayAndBindView(final Clock clock, final Object drawn, final TimedView prototype) {
+    if (ZephyrPluginCommon.shuttingDown)
+      return;
     final TimedView[] view = new TimedView[1];
     Display.getDefault().syncExec(new Runnable() {
       @Override
