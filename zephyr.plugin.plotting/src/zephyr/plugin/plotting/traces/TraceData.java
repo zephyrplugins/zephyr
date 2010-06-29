@@ -8,6 +8,12 @@ import rlpark.plugin.utils.histories.History;
 import zephyr.plugin.plotting.traces.TracesSelection.TraceSelector;
 
 public class TraceData {
+  static public class DataTimeInfo {
+    public int period;
+    public int synchronizationTime;
+    public int bufferedData;
+  }
+
   static public final int HistoryLength = 1000;
   static public final double MaxTimeLength = 10e8;
   static private final int baseHistoryIndex = toHistoryIndex(HistoryLength - 1);
@@ -60,17 +66,22 @@ public class TraceData {
     return histories[toHistoryIndex(historyTimeLength)];
   }
 
-  public int onTimeAveraged(int currentHistoryLength) {
-    History history = history(currentHistoryLength);
-    if (history instanceof AveragedHistory)
-      return ((AveragedHistory) history).period;
-    return 1;
+  public int dataAge(DataTimeInfo timeInfo, int dataIndex) {
+    return (timeInfo.synchronizationTime - timeInfo.bufferedData) - (dataIndex * timeInfo.period);
   }
 
-  public int history(double historyTimeLength, float[] values) {
+  public void history(double historyTimeLength, float[] values, DataTimeInfo timeInfo) {
     final History history = histories[toHistoryIndex(historyTimeLength)];
     history.toArray(values);
-    return history.shift();
+    timeInfo.synchronizationTime = trace.clockTraces.clock.time();
+    if (history instanceof AveragedHistory) {
+      AveragedHistory averageHistory = (AveragedHistory) history;
+      timeInfo.bufferedData = averageHistory.nbBufferedData() - 1;
+      timeInfo.period = averageHistory.period;
+    } else {
+      timeInfo.bufferedData = 0;
+      timeInfo.period = 1;
+    }
   }
 
   static private int toHistoryIndex(double historyTimeLength) {

@@ -124,10 +124,7 @@ public class Axes {
   }
 
   public Point toG(int x, double y) {
-    Point result = new Point(toGX(x), toGY(y));
-    if (!drawingZone.contains(result))
-      return null;
-    return result;
+    return new Point(toGX(x), toGY(y));
   }
 
   public Point2D.Double toD(Point point) {

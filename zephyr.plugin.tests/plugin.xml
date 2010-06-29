@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="zephyr.plugin.common.synchronization.zephyrmain">
+      <client
+            autostart="true"
+            class="zephyr.plugin.tests.TimeStepsRunnable"
+            id="zephyr.plugin.tests.time">
+      </client>
+   </extension>
+
+</plugin>

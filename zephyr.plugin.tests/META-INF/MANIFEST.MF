@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: zephyr.plugin.tests
+Bundle-SymbolicName: zephyr.plugin.tests;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: Thomas
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Require-Bundle: zephyr.plugin.common;bundle-version="1.0.0",
+ zephyr.plugin.plotting;bundle-version="1.0.0"

@@ -7,11 +7,12 @@ import java.util.List;
 import rlpark.plugin.utils.events.Listener;
 import rlpark.plugin.utils.time.Chrono;
 import zephyr.plugin.plotting.traces.TraceData;
+import zephyr.plugin.plotting.traces.TraceData.DataTimeInfo;
 
 public class PlotData {
   public class HistoryCached {
     final float[] values;
-    public int time;
+    final public DataTimeInfo timeInfo = new DataTimeInfo();
 
     HistoryCached(int size) {
       values = new float[size];
@@ -22,20 +23,21 @@ public class PlotData {
     public final HistoryCached history;
     public final int x;
     public final double y;
-    public final int timeShift;
     public final String label;
     public final List<String> secondaryLabels;
-    public final int time;
+    public final int synchronizationTime;
+    public final int dataAge;
     public final Chrono resultTime = new Chrono();
+    private final TraceData traceData;
 
     protected RequestResult(int traceIndex, int x, List<Integer> secondaryResults) {
-      this.history = histories.get(traceIndex);
+      history = histories.get(traceIndex);
       this.x = x;
-      TraceData traceData = selection.get(traceIndex);
+      traceData = selection.get(traceIndex);
       this.label = traceData.trace.label;
       y = history.values[x];
-      timeShift = history.time;
-      time = traceData.onTimeAveraged(currentHistoryLength) * (timeShift + x);
+      dataAge = traceData.dataAge(history.timeInfo, history.values.length - x - 1);
+      synchronizationTime = history.timeInfo.synchronizationTime;
       secondaryLabels = new ArrayList<String>();
       for (Integer index : secondaryResults)
         secondaryLabels.add(selection.get(index).trace.label);
@@ -80,7 +82,7 @@ public class PlotData {
     for (int i = 0; i < selection.size(); i++) {
       TraceData traceData = selection.get(i);
       HistoryCached history = histories.get(i);
-      history.time = traceData.history(currentHistoryLength, history.values);
+      traceData.history(currentHistoryLength, history.values, history.timeInfo);
     }
   }
 

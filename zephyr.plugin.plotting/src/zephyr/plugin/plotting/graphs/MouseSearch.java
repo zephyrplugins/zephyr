@@ -83,14 +83,14 @@ public class MouseSearch extends Job {
     int lastPrefix = label.lastIndexOf(LabelBuilder.DefaultSeparator);
     if (lastPrefix > 0 && lastPrefix < label.length() - 1)
       label = label.substring(lastPrefix + 1);
-    return String.format("%s: %f [T: %d]", label, requestResult.y, requestResult.time);
+    return String.format("%s: %f [T: %d]", label, requestResult.y, requestResult.dataAge);
   }
 
   protected String tooltipLabel() {
     if (requestResult == null)
       return "";
-    StringBuilder tooltipLabel = new StringBuilder(String.format("T: %d\n%s: %f", requestResult.time,
-                                                                 requestResult.label, requestResult.y));
+    StringBuilder tooltipLabel = new StringBuilder(String.format("T: %d Val: %f\n%s", requestResult.dataAge,
+                                                                 requestResult.y, requestResult.label));
     for (String secondaryLabel : requestResult.secondaryLabels) {
       tooltipLabel.append("\n");
       tooltipLabel.append(secondaryLabel);
@@ -111,14 +111,10 @@ public class MouseSearch extends Job {
     gc.setForeground(colors.color(gc, Colors.COLOR_RED));
     final int halfSize = 2;
     displayedAxes = plotOverTime.getAxes();
-    int searchShift = requestResult.history.time - requestResult.timeShift;
-    assert (searchShift >= 0);
-    Point stickyMousePosition = displayedAxes.toG(requestResult.x - searchShift, requestResult.y);
-    if (stickyMousePosition == null) {
-      requestResult = null;
-      refreshDisplay();
-      return;
-    }
+    int timeOffset = requestResult.history.timeInfo.synchronizationTime - requestResult.synchronizationTime;
+    assert timeOffset >= 0;
+    int currentPositionX = requestResult.x - (timeOffset / requestResult.history.timeInfo.period);
+    Point stickyMousePosition = displayedAxes.toG(currentPositionX, requestResult.y);
     gc.drawRectangle(stickyMousePosition.x - halfSize,
                      stickyMousePosition.y - halfSize,
                      halfSize * 2, halfSize * 2);
