@@ -51,20 +51,23 @@ public class Sleak {
     shell.setText("S-Leak");
     list = new List(shell, SWT.BORDER | SWT.V_SCROLL);
     list.addListener(SWT.Selection, new Listener() {
-                     public void handleEvent(Event event) {
+                     @Override
+                    public void handleEvent(Event event) {
                      refreshObject();
                      }
                          });
     text = new Text(shell, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
     canvas = new Canvas(shell, SWT.BORDER);
     canvas.addListener(SWT.Paint, new Listener() {
-                       public void handleEvent(Event event) {
+                       @Override
+                      public void handleEvent(Event event) {
                        paintCanvas(event);
                        }
                            });
     check = new Button(shell, SWT.CHECK);
     check.setText("Stack");
     check.addListener(SWT.Selection, new Listener() {
+                      @Override
                       public void handleEvent(Event e) {
                       toggleStackTrace();
                       }
@@ -72,6 +75,7 @@ public class Sleak {
     start = new Button(shell, SWT.PUSH);
     start.setText("Snap");
     start.addListener(SWT.Selection, new Listener() {
+                      @Override
                       public void handleEvent(Event event) {
                       refreshAll();
                       }
@@ -79,13 +83,15 @@ public class Sleak {
     stop = new Button(shell, SWT.PUSH);
     stop.setText("Diff");
     stop.addListener(SWT.Selection, new Listener() {
-                     public void handleEvent(Event event) {
+                     @Override
+                    public void handleEvent(Event event) {
                      refreshDifference();
                      }
                          });
     label = new Label(shell, SWT.BORDER);
     label.setText("0 object(s)");
     shell.addListener(SWT.Resize, new Listener() {
+                      @Override
                       public void handleEvent(Event e) {
                       layout();
                       }

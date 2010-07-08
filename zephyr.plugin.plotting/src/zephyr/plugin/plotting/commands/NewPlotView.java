@@ -13,6 +13,7 @@ import zephyr.plugin.plotting.graphs.PlotView;
 
 public class NewPlotView extends AbstractHandler {
 
+  @Override
   public Object execute(ExecutionEvent event) throws ExecutionException {
     IWorkbenchPage activePage = HandlerUtil.getActiveWorkbenchWindowChecked(event).getActivePage();
     IViewReference referenceView = null;

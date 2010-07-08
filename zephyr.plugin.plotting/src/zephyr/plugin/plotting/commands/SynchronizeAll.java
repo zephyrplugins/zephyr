@@ -26,6 +26,7 @@ public class SynchronizeAll extends AbstractHandler implements Listener<Control>
     ZephyrPluginCommon.control().onModeChange.connect(this);
   }
 
+  @Override
   public Object execute(ExecutionEvent event) throws ExecutionException {
     final ViewBinder viewBinder = ZephyrPluginCommon.viewBinder();
     Collection<Clock> clocks = viewBinder.getClocks();
@@ -41,6 +42,7 @@ public class SynchronizeAll extends AbstractHandler implements Listener<Control>
     return null;
   }
 
+  @Override
   public void listen(Control control) {
     command.setHandler(isEnabled() ? this : null);
   }

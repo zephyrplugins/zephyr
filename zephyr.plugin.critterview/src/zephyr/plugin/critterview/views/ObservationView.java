@@ -73,11 +73,13 @@ public class ObservationView extends ViewPart implements TimedView {
     swtAwtComponent = new Composite(parent, SWT.EMBEDDED | SWT.DOUBLE_BUFFERED);
     awtFrame = SWT_AWT.new_Frame(swtAwtComponent);
     Listener listener = new Listener() {
+      @Override
       public void handleEvent(Event e) {
         switch (e.type) {
         case SWT.Dispose:
                   parent.setVisible(false);
                   EventQueue.invokeLater(new Runnable() {
+                    @Override
                     @SuppressWarnings("synthetic-access")
                     public void run() {
                       awtFrame.dispose();
@@ -102,6 +104,7 @@ public class ObservationView extends ViewPart implements TimedView {
     super.dispose();
   }
 
+  @Override
   synchronized public void repaint() {
     if (currentObservation != null && environment != null) {
       critterViz.updateDisplay(environment.clock().period(), currentObservation);

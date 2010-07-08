@@ -11,6 +11,7 @@ import zephyr.plugin.plotting.ZephyrPluginPlotting;
 public class EnableAllTraces extends AbstractHandler {
   public static String ID = "zephyr.plugin.plotting.commands.enablealltraces";
 
+  @Override
   public Object execute(ExecutionEvent event) throws ExecutionException {
     Command command = event.getCommand();
     boolean oldValue = HandlerUtil.toggleCommandState(command);

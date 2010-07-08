@@ -24,6 +24,7 @@ public class OpenFile extends AbstractHandler {
     return instanceScope.get(key, null);
   }
 
+  @Override
   public Object execute(ExecutionEvent event) throws ExecutionException {
     FileDialog fd = new FileDialog(HandlerUtil.getActiveShell(event), SWT.OPEN);
     fd.setText("Open");

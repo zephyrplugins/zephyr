@@ -146,6 +146,7 @@ public class SelectDataDialog extends FilteredItemsSelectionDialog {
   @Override
   protected Comparator<Trace> getItemsComparator() {
     return new Comparator<Trace>() {
+      @Override
       public int compare(Trace trace1, Trace trace2) {
         return Collator.getInstance().compare(trace1.label, trace2.label);
       }

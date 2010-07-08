@@ -73,6 +73,7 @@ public class FileLoader {
   private void displayFileNotFoundMessage(String filepath) {
     final String message = String.format("Cannot open %s", filepath);
     Display.getDefault().asyncExec(new Runnable() {
+      @Override
       public void run() {
         MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Loading", message);
       }

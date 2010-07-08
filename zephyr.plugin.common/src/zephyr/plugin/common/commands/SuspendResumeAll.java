@@ -9,6 +9,7 @@ import zephyr.plugin.common.ZephyrPluginCommon;
 import zephyr.plugin.common.control.Control;
 
 public class SuspendResumeAll extends AbstractHandler {
+  @Override
   public Object execute(ExecutionEvent event) throws ExecutionException {
     Control control = ZephyrPluginCommon.control();
     if (control.isSuspended())

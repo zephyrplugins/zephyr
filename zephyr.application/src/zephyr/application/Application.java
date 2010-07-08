@@ -15,6 +15,7 @@ import org.eclipse.ui.internal.misc.Policy;
 @SuppressWarnings("restriction")
 public class Application implements IApplication {
 
+  @Override
   public Object start(IApplicationContext context) {
     Display.setAppName("Zephyr");
     // I guess this line should not exist
@@ -34,12 +35,14 @@ public class Application implements IApplication {
     }
   }
 
+  @Override
   public void stop() {
     final IWorkbench workbench = PlatformUI.getWorkbench();
     if (workbench == null)
       return;
     final Display display = workbench.getDisplay();
     display.syncExec(new Runnable() {
+      @Override
       public void run() {
         if (!display.isDisposed())
           workbench.close();

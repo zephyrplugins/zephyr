@@ -7,6 +7,7 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 public class StartSuspended extends AbstractHandler {
+  @Override
   public Object execute(ExecutionEvent event) throws ExecutionException {
     Command command = event.getCommand();
     HandlerUtil.toggleCommandState(command);

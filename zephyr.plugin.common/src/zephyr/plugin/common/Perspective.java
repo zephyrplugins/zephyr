@@ -6,6 +6,7 @@ import org.eclipse.ui.IPerspectiveFactory;
 public class Perspective implements IPerspectiveFactory {
   public static final String PERSPECTIVE_ID = "zephyr.plugin.common.perspective.initial";
 
+  @Override
   public void createInitialLayout(IPageLayout layout) {
     // String editorArea = layout.getEditorArea();
     layout.setEditorAreaVisible(false);

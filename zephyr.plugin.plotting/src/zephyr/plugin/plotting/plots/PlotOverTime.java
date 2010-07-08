@@ -71,6 +71,7 @@ public class PlotOverTime implements Painter {
     timeIndex = -1;
   }
 
+  @Override
   public boolean paint(Image image, GC gc) {
     if (lastImage != image) {
       resetTimeIndex();
