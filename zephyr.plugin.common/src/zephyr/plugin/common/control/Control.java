@@ -67,11 +67,10 @@ public class Control implements Listener<Clock> {
   }
 
   private void notifyAll(List<Clock> toWakeUp) {
-    for (Clock clock : toWakeUp) {
+    for (Clock clock : toWakeUp)
       synchronized (clock) {
         clock.notifyAll();
       }
-    }
   }
 
   public boolean isSuspended() {

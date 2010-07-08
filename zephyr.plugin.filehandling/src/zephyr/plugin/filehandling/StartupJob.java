@@ -41,9 +41,8 @@ public class StartupJob implements zephyr.plugin.common.startup.StartupJob {
         public void drop(DropTargetEvent event) {
           String fileList[] = null;
           FileTransfer ft = FileTransfer.getInstance();
-          if (ft.isSupportedType(event.currentDataType)) {
+          if (ft.isSupportedType(event.currentDataType))
             fileList = (String[]) event.data;
-          }
           for (String filepath : fileList)
             ZephyrPluginFileHandling.fileLoader().openFile(filepath);
         }

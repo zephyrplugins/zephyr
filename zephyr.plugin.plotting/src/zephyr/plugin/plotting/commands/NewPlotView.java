@@ -19,7 +19,7 @@ public class NewPlotView extends AbstractHandler {
     IViewReference referenceView = null;
     String secondaryID = null;
     int secondaryIndex = 0;
-    while ((secondaryID == null) || (referenceView != null)) {
+    while (secondaryID == null || referenceView != null) {
       secondaryIndex++;
       secondaryID = String.valueOf(secondaryIndex);
       referenceView = activePage.findViewReference(PlotView.ID, secondaryID);

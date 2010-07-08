@@ -7,8 +7,8 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.jar.Attributes;
-import java.util.jar.Manifest;
 import java.util.jar.Attributes.Name;
+import java.util.jar.Manifest;
 
 import zephyr.plugin.common.ZephyrPluginCommon;
 
@@ -73,7 +73,7 @@ public class JarClassLoader extends ClassLoader {
   }
 
   private Class<? extends Object> loadLibraryClass(String className) {
-    for (JarClassLoader classLoader : libraries) {
+    for (JarClassLoader classLoader : libraries)
       try {
         if (classLoader == this)
           continue;
@@ -81,7 +81,6 @@ public class JarClassLoader extends ClassLoader {
       } catch (ClassNotFoundException e) {
       } catch (NoClassDefFoundError e) {
       }
-    }
     return null;
   }
 
@@ -198,7 +197,7 @@ public class JarClassLoader extends ClassLoader {
       formattedClassName = className.replace('.', '/');
     else
       formattedClassName = className.replace('.', classNameReplacementChar);
-    return (jarResources.getResource(formattedClassName + ".class"));
+    return jarResources.getResource(formattedClassName + ".class");
   }
 
   public JarResources jar() {

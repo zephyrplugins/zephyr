@@ -88,7 +88,7 @@ public class PlotOverTime implements Painter {
     if (timeIndex == -1)
       prepareDrawingZone(gc);
     drawTraces(gc, histories);
-    return (timeIndex == -1);
+    return timeIndex == -1;
   }
 
   @Override

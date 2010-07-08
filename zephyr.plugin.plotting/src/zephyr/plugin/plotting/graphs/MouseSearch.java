@@ -17,8 +17,8 @@ import rlpark.plugin.utils.logger.LabelBuilder;
 import zephyr.plugin.common.utils.Colors;
 import zephyr.plugin.plotting.plots.Axes;
 import zephyr.plugin.plotting.plots.PlotData;
-import zephyr.plugin.plotting.plots.PlotOverTime;
 import zephyr.plugin.plotting.plots.PlotData.RequestResult;
+import zephyr.plugin.plotting.plots.PlotOverTime;
 
 public class MouseSearch extends Job {
 
@@ -113,7 +113,7 @@ public class MouseSearch extends Job {
     displayedAxes = plotOverTime.getAxes();
     int timeOffset = requestResult.history.timeInfo.synchronizationTime - requestResult.synchronizationTime;
     assert timeOffset >= 0;
-    int currentPositionX = requestResult.x - (timeOffset / requestResult.history.timeInfo.period);
+    int currentPositionX = requestResult.x - timeOffset / requestResult.history.timeInfo.period;
     Point stickyMousePosition = displayedAxes.toG(currentPositionX, requestResult.y);
     gc.drawRectangle(stickyMousePosition.x - halfSize,
                      stickyMousePosition.y - halfSize,

@@ -31,7 +31,7 @@ public class Axes {
     }
 
     protected double toD(int x) {
-      return (x / scale) - translation;
+      return x / scale - translation;
     }
 
     double toG(double v) {
@@ -94,8 +94,8 @@ public class Axes {
   private void updatePadding(Rectangle canvasZone) {
     drawingZone.x = Padding;
     drawingZone.y = Padding;
-    drawingZone.width = canvasZone.width - (2 * Padding);
-    drawingZone.height = canvasZone.height - (2 * Padding);
+    drawingZone.width = canvasZone.width - 2 * Padding;
+    drawingZone.height = canvasZone.height - 2 * Padding;
   }
 
   public Rectangle drawingZone() {
@@ -112,11 +112,11 @@ public class Axes {
   }
 
   protected int toGX(double dx) {
-    return ((int) x.toG(dx)) + drawingTranslationX;
+    return (int) x.toG(dx) + drawingTranslationX;
   }
 
   protected int toGY(double dy) {
-    return ((int) -y.toG(dy)) + drawingTranslationY;
+    return (int) -y.toG(dy) + drawingTranslationY;
   }
 
   public double scaleToDY(int gy) {

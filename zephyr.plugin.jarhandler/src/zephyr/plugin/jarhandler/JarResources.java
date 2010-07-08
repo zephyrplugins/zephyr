@@ -69,7 +69,7 @@ public final class JarResources {
         byte[] b = new byte[size];
         int rb = 0;
         int chunk = 0;
-        while ((size - rb) > 0) {
+        while (size - rb > 0) {
           chunk = zis.read(b, rb, size - rb);
           if (chunk == -1)
             break;

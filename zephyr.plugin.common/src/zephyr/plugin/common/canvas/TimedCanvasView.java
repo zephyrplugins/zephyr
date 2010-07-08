@@ -10,7 +10,7 @@ public abstract class TimedCanvasView extends AbstractCanvasView implements Time
   private final Class<?> drawnClass;
 
   public TimedCanvasView(Class<?> drawed) {
-    this.drawnClass = drawed;
+    drawnClass = drawed;
     drawn = null;
   }
 

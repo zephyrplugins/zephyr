@@ -34,10 +34,9 @@ public class SynchronizeAll extends AbstractHandler implements Listener<Control>
       ClockViews views = viewBinder.getViews(clock);
       if (views == null)
         continue;
-      for (SyncView view : views.getViews()) {
+      for (SyncView view : views.getViews())
         if (view instanceof PlotView && view.synchronize())
           view.repaint();
-      }
     }
     return null;
   }

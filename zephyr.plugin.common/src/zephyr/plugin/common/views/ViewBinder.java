@@ -62,7 +62,7 @@ public class ViewBinder {
     IViewReference referenceView = null;
     String secondaryID = null;
     int secondaryIndex = 0;
-    while ((secondaryID == null) || (referenceView != null)) {
+    while (secondaryID == null || referenceView != null) {
       secondaryIndex++;
       secondaryID = String.valueOf(secondaryIndex);
       referenceView = activePage.findViewReference(viewID, secondaryID);

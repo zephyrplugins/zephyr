@@ -21,7 +21,7 @@ public class BackgroundImage {
     if (backgroundImage == null)
       return false;
     Rectangle bounds = backgroundImage.getBounds();
-    return (bounds.width == canvasSize.x && bounds.height == canvasSize.y);
+    return bounds.width == canvasSize.x && bounds.height == canvasSize.y;
   }
 
   public Image image() {

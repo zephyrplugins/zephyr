@@ -41,7 +41,7 @@ public class PlotSelection implements TraceSelector {
   }
 
   public boolean isEmpty() {
-    return (selected == null || selected.isEmpty());
+    return selected == null || selected.isEmpty();
   }
 
   public Set<String> getLabelsToSave() {
@@ -61,7 +61,7 @@ public class PlotSelection implements TraceSelector {
 
   public void init(Set<String> initialSelection) {
     if (initialSelection != null)
-      this.persistentSelection.addAll(initialSelection);
+      persistentSelection.addAll(initialSelection);
     checkNewTrace(Traces.getAllTraces(tracesManager));
     tracesManager.onTraceAdded.connect(addedTraceListener);
     tracesManager.onTraceRemoved.connect(removedTraceListener);

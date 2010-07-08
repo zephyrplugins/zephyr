@@ -30,13 +30,12 @@ public class TraceData {
   private History[] createHistories() {
     History[] histories = new History[toHistoryIndex(MaxTimeLength)];
     History shortTimeHistory = new History(HistoryLength);
-    for (int timeScale = 0; timeScale < histories.length; timeScale++) {
+    for (int timeScale = 0; timeScale < histories.length; timeScale++)
       if (timeScale <= baseHistoryIndex)
         histories[timeScale] = shortTimeHistory;
       else
         histories[timeScale] = new AveragedHistory((int) Math.pow(10, timeScale) / HistoryLength,
                                                    HistoryLength);
-    }
     return histories;
   }
 
@@ -67,7 +66,7 @@ public class TraceData {
   }
 
   public int dataAge(DataTimeInfo timeInfo, int dataIndex) {
-    return (timeInfo.synchronizationTime - timeInfo.bufferedData) - (dataIndex * timeInfo.period);
+    return timeInfo.synchronizationTime - timeInfo.bufferedData - dataIndex * timeInfo.period;
   }
 
   public void history(double historyTimeLength, float[] values, DataTimeInfo timeInfo) {

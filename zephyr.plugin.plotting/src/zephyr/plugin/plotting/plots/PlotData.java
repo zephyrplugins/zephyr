@@ -34,7 +34,7 @@ public class PlotData {
       history = histories.get(traceIndex);
       this.x = x;
       traceData = selection.get(traceIndex);
-      this.label = traceData.trace.label;
+      label = traceData.trace.label;
       y = history.values[x];
       dataAge = traceData.dataAge(history.timeInfo, history.values.length - x - 1);
       synchronizationTime = history.timeInfo.synchronizationTime;
