@@ -21,14 +21,6 @@
       <update label="Zephyr" url="http://webdocs.cs.ualberta.ca/~degris/zephyr"/>
    </url>
 
-   <includes
-         id="zephyr.feature.critterbot.source"
-         version="0.0.0"/>
-
-   <includes
-         id="org.eclipse.draw2d"
-         version="0.0.0"/>
-
    <plugin
          id="zephyr.plugin.critterview"
          download-size="0"

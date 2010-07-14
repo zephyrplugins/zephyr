@@ -12,9 +12,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.part.ViewPart;
 
-import rlpark.plugin.utils.events.Signal;
 import rlpark.plugin.utils.time.Clock;
-import zephyr.plugin.common.views.SyncView;
 import zephyr.plugin.common.views.TimedView;
 import critterbot.CritterbotProblem;
 
@@ -26,25 +24,15 @@ public class ObservationView extends ViewPart implements TimedView {
   private CritterViz critterViz;
   private Frame awtFrame;
   private Composite swtAwtComponent;
-  private final Signal<SyncView> onDispose = new Signal<SyncView>();
   private final rlpark.plugin.utils.events.Listener<Clock> clockKilled = new rlpark.plugin.utils.events.Listener<Clock>() {
     @Override
     public void listen(Clock clock) {
-      setTimed(null);
+      addTimed(null);
     }
   };
 
-  public ObservationView() {
-  }
-
   @Override
-  public boolean canDraw(Object drawn) {
-    return drawn instanceof CritterbotProblem;
-  }
-
-
-  @Override
-  synchronized public void setTimed(Object drawn) {
+  synchronized public void addTimed(Object drawn) {
     if (environment != null)
       environment.clock().onKill.disconnect(clockKilled);
     if (critterViz != null) {
@@ -100,7 +88,6 @@ public class ObservationView extends ViewPart implements TimedView {
   synchronized public void dispose() {
     if (environment != null)
       environment.clock().kill();
-    onDispose.fire(this);
     super.dispose();
   }
 
@@ -114,18 +101,12 @@ public class ObservationView extends ViewPart implements TimedView {
   }
 
   @Override
-  public Object drawn() {
-    return environment;
-  }
-
-
-  @Override
-  public String viewID() {
-    return ID;
+  public boolean canTimedAdded() {
+    return environment == null;
   }
 
   @Override
-  public Signal<SyncView> onDispose() {
-    return onDispose;
+  public boolean isDisposed() {
+    return swtAwtComponent.isDisposed();
   }
 }

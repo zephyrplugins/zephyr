@@ -6,9 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IViewReference;
@@ -25,7 +22,6 @@ import zephyr.plugin.common.ZephyrPluginCommon;
 
 public class ViewBinder {
   public Signal<Clock> onClockAdded = new Signal<Clock>();
-  private List<TimedView> views = null;
   protected final Map<Clock, ClockViews> clockToView = new HashMap<Clock, ClockViews>();
   private final Listener<Clock> onClockKilledListener = new Listener<Clock>() {
     @Override
@@ -37,26 +33,7 @@ public class ViewBinder {
         unbind(clock, view);
     }
   };
-
-  public ViewBinder() {
-  }
-
-  protected List<TimedView> createViews() {
-    List<TimedView> listeners = new ArrayList<TimedView>();
-    IConfigurationElement[] config = Platform.getExtensionRegistry()
-        .getConfigurationElementsFor("zephyr.plugin.common.views.timedview");
-    for (IConfigurationElement element : config) {
-      Object o;
-      try {
-        o = element.createExecutableExtension("class");
-        if (o instanceof TimedView)
-          listeners.add((TimedView) o);
-      } catch (CoreException e) {
-        e.printStackTrace();
-      }
-    }
-    return listeners;
-  }
+  private final ViewProviders viewProviders = new ViewProviders();
 
   private String findSecondaryID(IWorkbenchPage activePage, String viewID) {
     IViewReference referenceView = null;
@@ -78,7 +55,9 @@ public class ViewBinder {
     if (referenceView.getView(false) == null)
       return true;
     IViewPart view = referenceView.getView(true);
-    return ((TimedView) view).drawn() == null;
+    if (!(view instanceof TimedView))
+      return false;
+    return ((TimedView) view).canTimedAdded();
   }
 
   protected TimedView displayView(String viewID) {
@@ -93,27 +72,24 @@ public class ViewBinder {
     } catch (PartInitException e) {
       e.printStackTrace();
     }
+    if (!(view instanceof TimedView))
+      return null;
     return (TimedView) view;
   }
 
-  private void displayAndBindView(final Clock clock, final Object drawn, final TimedView prototype) {
+  private void displayAndBindView(final Clock clock, final Object drawn, final String viewID) {
     if (ZephyrPluginCommon.shuttingDown)
       return;
     final TimedView[] view = new TimedView[1];
     Display.getDefault().syncExec(new Runnable() {
       @Override
       public void run() {
-        view[0] = displayView(prototype.viewID());
-        view[0].setTimed(drawn);
+        view[0] = displayView(viewID);
       }
     });
-    view[0].onDispose().connect(new Listener<SyncView>() {
-      @Override
-      public void listen(SyncView view) {
-        view.onDispose().disconnect(this);
-        unbind(clock, view);
-      }
-    });
+    if (view[0] == null)
+      return;
+    view[0].addTimed(drawn);
     bind(clock, view[0]);
   }
 
@@ -140,11 +116,9 @@ public class ViewBinder {
   }
 
   synchronized public void bindViews(Clock clock, Object drawn) {
-    if (views == null)
-      views = createViews();
-    for (TimedView view : views)
-      if (view.canDraw(drawn))
-        displayAndBindView(clock, drawn, view);
+    List<String> viewIDs = viewProviders.findViews(drawn);
+    for (String viewID : viewIDs)
+      displayAndBindView(clock, drawn, viewID);
   }
 
   synchronized public void unbind(Clock clock, SyncView view) {

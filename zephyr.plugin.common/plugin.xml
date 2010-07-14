@@ -2,7 +2,7 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension-point id="zephyr.plugin.common.synchronization.zephyrmain" name="Zephyr Main" schema="schema/zephyr.plugin.common.synchronization.zephyrmain.exsd"/>
-   <extension-point id="zephyr.plugin.common.views.timedview" name="Timed Listener" schema="schema/zephyr.plugin.common.views.timedview.exsd"/>
+   <extension-point id="zephyr.viewprovider" name="View Provider" schema="schema/zephyr.viewprovider.exsd"/>
    <extension-point id="zephyr.plugin.common.startup" name="Zephyr Startup" schema="schema/zephyr.plugin.common.startup.exsd"/>
    <extension
          point="org.eclipse.ui.commands">

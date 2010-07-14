@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="zephyr.plugin.common.synchronization.zephyrmain">
+      <client
+            autostart="true"
+            class="zephyr.plugin.opengl.examples.Model"
+            id="zephyr.plugin.opengl.model">
+      </client>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            allowMultiple="true"
+            class="zephyr.plugin.opengl.examples.View"
+            id="zephyr.plugin.opengl.example.view"
+            name="OpenGL"
+            restorable="true">
+      </view>
+   </extension>
+   <extension
+         point="zephyr.viewprovider">
+      <client
+            class="zephyr.plugin.opengl.examples.View$Provider">
+      </client>
+   </extension>
+
+</plugin>

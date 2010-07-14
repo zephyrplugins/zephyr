@@ -1,12 +1,7 @@
 package zephyr.plugin.common.views;
 
-
 public interface TimedView extends SyncView {
-  String viewID();
+  void addTimed(Object drawn);
 
-  boolean canDraw(Object drawn);
-
-  void setTimed(Object drawn);
-
-  Object drawn();
+  boolean canTimedAdded();
 }

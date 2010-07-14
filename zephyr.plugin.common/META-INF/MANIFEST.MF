@@ -6,8 +6,8 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: zephyr.plugin.common.ZephyrPluginCommon
 Bundle-Vendor: Thomas
 Require-Bundle: org.eclipse.core.runtime,
- rlpark.plugin.utils;bundle-version="1.0.0";visibility:=reexport,
- org.eclipse.ui;bundle-version="3.5.0"
+ rlpark.plugin.utils;visibility:=reexport,
+ org.eclipse.ui
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Export-Package: zephyr,
@@ -19,6 +19,7 @@ Export-Package: zephyr,
    org.osgi.framework",
  zephyr.plugin.common.canvas,
  zephyr.plugin.common.control,
+ zephyr.plugin.common.helpers,
  zephyr.plugin.common.startup,
  zephyr.plugin.common.utils;uses:="org.eclipse.jface.resource,org.eclipse.ui.plugin,org.eclipse.swt.graphics",
  zephyr.plugin.common.views

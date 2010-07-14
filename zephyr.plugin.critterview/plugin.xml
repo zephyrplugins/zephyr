@@ -20,12 +20,6 @@
       </client>
    </extension>
    <extension
-         point="zephyr.plugin.common.views.timedview">
-      <client
-            class="zephyr.plugin.critterview.views.ObservationView">
-      </client>
-   </extension>
-   <extension
          point="org.eclipse.ui.commands">
       <command
             defaultHandler="zephyr.plugin.critterview.commands.StartSimulator"
@@ -117,6 +111,12 @@
             autostart="false"
             class="zephyr.plugin.critterview.runnable.RobotRunnable"
             id="critterbot">
+      </client>
+   </extension>
+   <extension
+         point="zephyr.viewprovider">
+      <client
+            class="zephyr.plugin.critterview.views.ObservationViewProvider">
       </client>
    </extension>
 </plugin>

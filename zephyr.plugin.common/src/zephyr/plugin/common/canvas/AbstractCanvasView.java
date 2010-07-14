@@ -11,12 +11,10 @@ import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 
-import rlpark.plugin.utils.events.Signal;
 import zephyr.plugin.common.views.SyncView;
 
 public abstract class AbstractCanvasView extends ViewPart implements SyncView {
   protected Canvas canvas;
-  protected final Signal<SyncView> onDispose = new Signal<SyncView>();
 
   public AbstractCanvasView() {
   }
@@ -57,13 +55,7 @@ public abstract class AbstractCanvasView extends ViewPart implements SyncView {
   }
 
   @Override
-  public void dispose() {
-    onDispose.fire(this);
-    super.dispose();
-  }
-
-  @Override
-  public Signal<SyncView> onDispose() {
-    return onDispose;
+  public boolean isDisposed() {
+    return canvas.isDisposed();
   }
 }
