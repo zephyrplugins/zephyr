@@ -37,7 +37,10 @@ public class ClockViews {
     @Override
     public void run() {
       for (SyncView view : synchronizedViews)
-        view.repaint();
+        if (view.isDisposed())
+          removeView(view);
+        else
+          view.repaint();
     }
   };
 

@@ -34,8 +34,8 @@ public class Axes {
       return x / scale - translation;
     }
 
-    double toG(double v) {
-      return (v + translation) * scale;
+    int toG(double v) {
+      return (int) ((v + translation) * scale);
     }
 
     public void updateTransformation(int drawingLength) {
@@ -112,11 +112,11 @@ public class Axes {
   }
 
   protected int toGX(double dx) {
-    return (int) x.toG(dx) + drawingTranslationX;
+    return x.toG(dx) + drawingTranslationX;
   }
 
   protected int toGY(double dy) {
-    return (int) -y.toG(dy) + drawingTranslationY;
+    return -y.toG(dy) + drawingTranslationY;
   }
 
   public double scaleToDY(int gy) {

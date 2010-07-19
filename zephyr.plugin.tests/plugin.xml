@@ -4,10 +4,31 @@
    <extension
          point="zephyr.plugin.common.synchronization.zephyrmain">
       <client
-            autostart="true"
+            autostart="false"
             class="zephyr.plugin.tests.TimeStepsRunnable"
             id="zephyr.plugin.tests.time">
       </client>
+      <client
+            autostart="true"
+            class="zephyr.plugin.tests.plot2d.RandomData2D"
+            id="zephyr.plugin.tests.plot2d.randomdata2d">
+      </client>
+   </extension>
+   <extension
+         point="zephyr.viewprovider">
+      <client
+            class="zephyr.plugin.tests.plot2d.PlotRandomData2D$Provider">
+      </client>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            allowMultiple="true"
+            class="zephyr.plugin.tests.plot2d.PlotRandomData2D"
+            id="zephyr.plugin.tests.plot2d.plotrandomplot2d"
+            name="Random2D"
+            restorable="true">
+      </view>
    </extension>
 
 </plugin>
