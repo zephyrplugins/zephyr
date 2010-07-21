@@ -5,6 +5,8 @@ import java.awt.geom.Point2D;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 
+import rlpark.plugin.utils.Utils;
+
 public class Axes {
   static final private int Padding = 2;
 
@@ -49,6 +51,7 @@ public class Axes {
     }
 
     public void update(double d) {
+      assert Utils.checkValue(d);
       minValue = Math.min(minValue, d);
       maxValue = Math.max(maxValue, d);
     }

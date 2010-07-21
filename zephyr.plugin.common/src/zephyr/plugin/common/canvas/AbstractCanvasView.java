@@ -14,7 +14,7 @@ import org.eclipse.ui.part.ViewPart;
 import zephyr.plugin.common.views.SyncView;
 
 public abstract class AbstractCanvasView extends ViewPart implements SyncView {
-  protected Canvas canvas;
+  protected Canvas canvas = null;
 
   public AbstractCanvasView() {
   }

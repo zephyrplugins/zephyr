@@ -23,8 +23,8 @@ public class PlotRandomData2D extends AbstractCanvasView implements TimedView {
 
   private final Plot2D plot;
   private RandomData2D drawn = null;
-  private double[] xdata = null;
-  private double[] ydata = null;
+  private float[] xdata = null;
+  private float[] ydata = null;
 
   public PlotRandomData2D() {
     this.plot = new Plot2D();
@@ -42,6 +42,7 @@ public class PlotRandomData2D extends AbstractCanvasView implements TimedView {
   protected void paint(GC gc) {
     if (drawn == null)
       return;
+    plot.clear(gc);
     plot.draw(gc, xdata, ydata);
   }
 
@@ -50,10 +51,10 @@ public class PlotRandomData2D extends AbstractCanvasView implements TimedView {
     this.drawn = (RandomData2D) drawn;
     if (drawn == null)
       return;
-    xdata = new double[this.drawn.data.length];
+    xdata = new float[this.drawn.data.length];
     for (int i = 0; i < xdata.length; i++)
       xdata[i] = i;
-    ydata = new double[this.drawn.data.length];
+    ydata = new float[this.drawn.data.length];
   }
 
   @Override

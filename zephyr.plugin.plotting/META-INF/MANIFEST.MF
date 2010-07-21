@@ -15,6 +15,7 @@ Bundle-ActivationPolicy: lazy
 Export-Package: zephyr,
  zephyr.plugin.plotting,
  zephyr.plugin.plotting.plots,
+ zephyr.plugin.plotting.plots.drawer2d,
  zephyr.plugin.plotting.traces;
   uses:="rlpark.plugin.utils.logger,
    rlpark.plugin.utils.events,
