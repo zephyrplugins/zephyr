@@ -8,6 +8,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.part.ViewPart;
@@ -20,10 +21,10 @@ public class ObservationView extends ViewPart implements TimedView {
 
   public static final String ID = "zephyr.plugin.critterview.view.observation";
   protected double[] currentObservation;
-  private CritterbotProblem environment;
-  private CritterViz critterViz;
-  private Frame awtFrame;
-  private Composite swtAwtComponent;
+  CritterbotProblem environment;
+  CritterViz critterViz;
+  Frame awtFrame;
+  Composite swtAwtComponent;
   private final rlpark.plugin.utils.events.Listener<Clock> clockKilled = new rlpark.plugin.utils.events.Listener<Clock>() {
     @Override
     public void listen(Clock clock) {
@@ -43,11 +44,20 @@ public class ObservationView extends ViewPart implements TimedView {
     if (environment == null)
       return;
     environment.clock().onKill.connect(clockKilled);
-    critterViz = new CritterViz(awtFrame, environment);
-    Point point = swtAwtComponent.getSize();
-    critterViz.setSize(point.x, point.y);
-    critterViz.setPreferredSize(new Dimension(point.x, point.y));
-    awtFrame.pack();
+    createVizualizer();
+  }
+
+  private void createVizualizer() {
+    Display.getDefault().syncExec(new Runnable() {
+      @Override
+      public void run() {
+        critterViz = new CritterViz(awtFrame, environment);
+        Point point = swtAwtComponent.getSize();
+        critterViz.setSize(point.x, point.y);
+        critterViz.setPreferredSize(new Dimension(point.x, point.y));
+        awtFrame.pack();
+      }
+    });
   }
 
   @Override
@@ -68,7 +78,6 @@ public class ObservationView extends ViewPart implements TimedView {
                   parent.setVisible(false);
                   EventQueue.invokeLater(new Runnable() {
                     @Override
-                    @SuppressWarnings("synthetic-access")
                     public void run() {
                       awtFrame.dispose();
                     }
