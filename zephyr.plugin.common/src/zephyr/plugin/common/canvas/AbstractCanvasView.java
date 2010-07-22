@@ -9,18 +9,21 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.part.ViewPart;
 
 import zephyr.plugin.common.views.SyncView;
 
 public abstract class AbstractCanvasView extends ViewPart implements SyncView {
   protected Canvas canvas = null;
+  protected Composite parent = null;
 
   public AbstractCanvasView() {
   }
 
   @Override
   public void createPartControl(final Composite parent) {
+    this.parent = parent;
     GridLayout gridLayout = new GridLayout(1, false);
     parent.setLayout(gridLayout);
     canvas = new Canvas(parent, SWT.DOUBLE_BUFFERED);
@@ -52,6 +55,19 @@ public abstract class AbstractCanvasView extends ViewPart implements SyncView {
   public void repaint() {
     canvas.redraw();
     canvas.update();
+  }
+
+  protected void setViewName(final String viewName) {
+    setPartName(viewName);
+    Display.getDefault().syncExec(new Runnable() {
+      @SuppressWarnings("synthetic-access")
+      @Override
+      public void run() {
+        firePropertyChange(org.eclipse.ui.IWorkbenchPart.PROP_TITLE);
+        parent.redraw();
+        parent.update();
+      }
+    });
   }
 
   @Override
