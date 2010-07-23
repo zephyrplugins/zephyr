@@ -24,6 +24,7 @@ public class Colors {
   static final public RGB COLOR_DARK_CYAN = new RGB(0, 128, 128);
   public static final RGB COLOR_GRAY = new RGB(128, 128, 128);
   public static final RGB COLOR_DARK_GRAY = new RGB(64, 64, 64);
+  public static final RGB COLOR_LIGHT_GRAY = new RGB(192, 192, 192);
 
   final protected Map<RGB, Color> colors = new LinkedHashMap<RGB, Color>();
 

@@ -28,11 +28,16 @@ public class BackgroundImage {
     return backgroundImage;
   }
 
-  public void adjustImage(Canvas canvas) {
-    Point canvasSize = canvas.getSize();
-    if (backgroundImage != null)
+  public boolean adjustImage(Canvas canvas) {
+    if (backgroundImage != null) {
       backgroundImage.dispose();
+      backgroundImage = null;
+    }
+    Point canvasSize = canvas.getSize();
+    if (canvasSize.x == 0 || canvasSize.y == 0)
+      return false;
     backgroundImage = new Image(canvas.getDisplay(), canvasSize.x, canvasSize.y);
+    return true;
   }
 
   synchronized public GC getGC() {

@@ -75,6 +75,8 @@ public class BackgroundCanvas {
       while (drawing || !paintingImage.canvasSizeEquals()) {
         if (!paintingImage.canvasSizeEquals())
           runFromUIThread(allocatePainting);
+        if (paintingImage.image() == null)
+          return;
         GC gc = paintingImage.getGC();
         chrono.start();
         long drawingTime = 0;
@@ -119,7 +121,8 @@ public class BackgroundCanvas {
   private void updateCanvasImage() {
     if (!canvasImage.canvasSizeEquals())
       synchronized (canvasImage) {
-        canvasImage.adjustImage(canvas);
+        if (!canvasImage.adjustImage(canvas))
+          return;
         showProgress();
         drawNewData();
       }
