@@ -21,3 +21,4 @@ Export-Package: zephyr,
    rlpark.plugin.utils.events,
    rlpark.plugin.utils.histories,
    rlpark.plugin.utils.time"
+Import-Package: zephyr.plugin.core.api.monitoring

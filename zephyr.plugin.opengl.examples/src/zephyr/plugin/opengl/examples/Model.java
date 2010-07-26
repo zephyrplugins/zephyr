@@ -1,10 +1,10 @@
 package zephyr.plugin.opengl.examples;
 
-import rlpark.plugin.utils.logger.helpers.DataLogged;
 import rlpark.plugin.utils.time.Clock;
 import rlpark.plugin.utils.time.Timed;
 import zephyr.Zephyr;
 import zephyr.ZephyrPlotting;
+import zephyr.plugin.core.api.monitoring.DataLogged;
 
 public class Model implements Runnable, Timed {
 

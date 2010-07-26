@@ -3,11 +3,11 @@ package zephyr.plugin.plotting.internal;
 import rlpark.plugin.utils.Utils;
 import rlpark.plugin.utils.events.Listener;
 import rlpark.plugin.utils.logger.abstracts.Logger;
-import rlpark.plugin.utils.logger.helpers.DataLogged;
 import rlpark.plugin.utils.time.Clock;
 import rlpark.plugin.utils.time.Timed;
 import zephyr.ZephyrPlotting;
 import zephyr.plugin.core.ZephyrPluginCommon;
+import zephyr.plugin.core.api.monitoring.DataLogged;
 import zephyr.plugin.core.startup.StartupJob;
 
 public class RegisterRunnableStarted implements StartupJob, Listener<Runnable> {
