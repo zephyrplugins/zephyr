@@ -7,9 +7,9 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-import rlpark.plugin.utils.time.Clock;
-import rlpark.plugin.utils.time.ClockKillable;
 import zephyr.plugin.core.ZephyrPluginCommon;
+import zephyr.plugin.core.api.synchronization.Clock;
+import zephyr.plugin.core.api.synchronization.ClockKillable;
 import zephyr.plugin.core.views.SyncView;
 
 public class KillClock extends AbstractHandler {

@@ -6,19 +6,14 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: zephyr.plugin.plotting.ZephyrPluginPlotting
 Bundle-Vendor: Thomas
 Require-Bundle: zephyr.plugin.core;bundle-version="1.0.0",
- rlpark.plugin.utils;bundle-version="1.0.0",
  org.eclipse.ui;bundle-version="3.5.0",
  org.eclipse.core.runtime;bundle-version="3.5.0",
- org.eclipse.core.expressions;bundle-version="3.4.0"
+ org.eclipse.core.expressions;bundle-version="3.4.0",
+ zephyr.plugin.core.api;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Export-Package: zephyr,
  zephyr.plugin.plotting,
- zephyr.plugin.plotting.plots,
- zephyr.plugin.plotting.plots.drawer2d,
- zephyr.plugin.plotting.traces;
-  uses:="rlpark.plugin.utils.logger,
-   rlpark.plugin.utils.events,
-   rlpark.plugin.utils.histories,
-   rlpark.plugin.utils.time"
+ zephyr.plugin.plotting.plot2d,
+ zephyr.plugin.plotting.plot2d.drawer2d
 Import-Package: zephyr.plugin.core.api.monitoring

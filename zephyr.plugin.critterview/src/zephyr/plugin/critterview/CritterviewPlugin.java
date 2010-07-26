@@ -3,8 +3,8 @@ package zephyr.plugin.critterview;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
-import rlpark.plugin.utils.events.Listener;
 import zephyr.Zephyr;
+import zephyr.plugin.core.api.signals.Listener;
 import critterbot.CritterbotProblem;
 
 public class CritterviewPlugin extends AbstractUIPlugin {

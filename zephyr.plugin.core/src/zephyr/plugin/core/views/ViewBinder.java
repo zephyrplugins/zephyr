@@ -14,11 +14,11 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 
-import rlpark.plugin.utils.events.Listener;
-import rlpark.plugin.utils.events.Signal;
-import rlpark.plugin.utils.time.Clock;
-import rlpark.plugin.utils.time.ClockKillable;
 import zephyr.plugin.core.ZephyrPluginCommon;
+import zephyr.plugin.core.api.signals.Listener;
+import zephyr.plugin.core.api.signals.Signal;
+import zephyr.plugin.core.api.synchronization.Clock;
+import zephyr.plugin.core.api.synchronization.ClockKillable;
 
 public class ViewBinder {
   public Signal<Clock> onClockAdded = new Signal<Clock>();

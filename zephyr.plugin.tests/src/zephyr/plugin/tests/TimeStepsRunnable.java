@@ -1,8 +1,8 @@
 package zephyr.plugin.tests;
 
-import rlpark.plugin.utils.logger.abstracts.Logged;
-import rlpark.plugin.utils.time.Clock;
 import zephyr.ZephyrPlotting;
+import zephyr.plugin.core.api.logging.abstracts.Logged;
+import zephyr.plugin.core.api.synchronization.Clock;
 
 public class TimeStepsRunnable implements Runnable {
 

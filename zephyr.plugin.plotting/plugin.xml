@@ -5,7 +5,7 @@
          point="org.eclipse.ui.views">
       <view
             allowMultiple="true"
-            class="zephyr.plugin.plotting.graphs.PlotView"
+            class="zephyr.plugin.plotting.internal.graphs.PlotView"
             icon="icons/view_plotting.png"
             id="zephyr.plugin.plotting.view.plot"
             name="Graphs"
@@ -15,12 +15,12 @@
    <extension
          point="org.eclipse.ui.commands">
       <command
-            defaultHandler="zephyr.plugin.plotting.commands.NewPlotView"
+            defaultHandler="zephyr.plugin.plotting.internal.commands.NewPlotView"
             id="zephyr.plugin.plotting.commands.newplotview"
             name="New Window">
       </command>
       <command
-            defaultHandler="zephyr.plugin.plotting.commands.EnableAllTraces"
+            defaultHandler="zephyr.plugin.plotting.internal.commands.EnableAllTraces"
             id="zephyr.plugin.plotting.commands.enablealltraces"
             name="Enable all traces">
          <state id="org.eclipse.ui.commands.toggleState"
@@ -32,12 +32,12 @@
             name="Select Traces...">
       </command>
       <command
-            defaultHandler="zephyr.plugin.plotting.commands.SelectTraces"
+            defaultHandler="zephyr.plugin.plotting.internal.commands.SelectTraces"
             id="zephyr.plugin.plotting.toolbar.selecttrace"
             name="Select Traces...">
       </command>
       <command
-            defaultHandler="zephyr.plugin.plotting.commands.AddTraces"
+            defaultHandler="zephyr.plugin.plotting.internal.commands.AddTraces"
             id="zephyr.plugin.plotting.toolbar.addtraces"
             name="Add Traces...">
       </command>
@@ -46,7 +46,7 @@
             name="Add Traces...">
       </command>
       <command
-            defaultHandler="zephyr.plugin.plotting.commands.CenterPlot"
+            defaultHandler="zephyr.plugin.plotting.internal.commands.CenterPlot"
             id="zephyr.plugin.plotting.toolbar.centerplot"
             name="Center Plot">
       </command>
@@ -55,7 +55,7 @@
             name="Center Plot">
       </command>
       <command
-            defaultHandler="zephyr.plugin.plotting.commands.SynchronizeAll"
+            defaultHandler="zephyr.plugin.plotting.internal.commands.SynchronizeAll"
             id="zephyr.plugin.plotting.synchronizedplot"
             name="Synchronize Plots">
       </command>
@@ -210,7 +210,7 @@
    <extension
          point="org.eclipse.ui.handlers">
       <handler
-            class="zephyr.plugin.plotting.commands.SelectTraces"
+            class="zephyr.plugin.plotting.internal.commands.SelectTraces"
             commandId="zephyr.plugin.plotting.selecttrace">
          <activeWhen>
             <reference
@@ -219,7 +219,7 @@
          </activeWhen>
       </handler>
       <handler
-            class="zephyr.plugin.plotting.commands.AddTraces"
+            class="zephyr.plugin.plotting.internal.commands.AddTraces"
             commandId="zephyr.plugin.plotting.addtraces">
          <activeWhen>
             <reference
@@ -228,7 +228,7 @@
          </activeWhen>
       </handler>
       <handler
-            class="zephyr.plugin.plotting.commands.CenterPlot"
+            class="zephyr.plugin.plotting.internal.commands.CenterPlot"
             commandId="zephyr.plugin.plotting.centerplot">
          <activeWhen>
             <reference

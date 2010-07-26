@@ -5,8 +5,8 @@ import org.eclipse.core.commands.Command;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 
-import rlpark.plugin.utils.events.Listener;
 import zephyr.plugin.core.ZephyrPluginCommon;
+import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.control.Control;
 import zephyr.plugin.core.utils.Helper;
 

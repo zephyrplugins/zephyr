@@ -1,8 +1,8 @@
 package zephyr;
 
-import rlpark.plugin.utils.time.Clock;
 import zephyr.plugin.core.RunnableFactory;
 import zephyr.plugin.core.ZephyrPluginCommon;
+import zephyr.plugin.core.api.synchronization.Clock;
 
 public class Zephyr {
   static public void advertize(Clock clock, Object drawn) {

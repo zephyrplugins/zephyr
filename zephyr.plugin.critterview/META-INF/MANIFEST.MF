@@ -9,7 +9,9 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.5.0",
  zephyr.plugin.filehandling;bundle-version="1.0.0",
  rlpark.plugin.critterbot;bundle-version="1.0.0";visibility:=reexport,
  zephyr.plugin.core;bundle-version="1.0.0",
- zephyr.plugin.plotting;bundle-version="1.0.0"
+ zephyr.plugin.plotting;bundle-version="1.0.0",
+ zephyr.plugin.core.api;bundle-version="1.0.0",
+ rlpark.plugin.rltoys;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Vendor: Thomas

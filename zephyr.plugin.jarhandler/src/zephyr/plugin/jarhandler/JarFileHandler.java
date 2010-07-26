@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.jar.Manifest;
 
-import rlpark.plugin.utils.Utils;
-import rlpark.plugin.utils.time.Timed;
 import zephyr.ZephyrPlotting;
+import zephyr.plugin.core.Utils;
+import zephyr.plugin.core.api.synchronization.Timed;
 import zephyr.plugin.filehandling.IFileHandler;
 
 public class JarFileHandler implements IFileHandler {

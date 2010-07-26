@@ -4,8 +4,8 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 import zephyr.plugin.core.utils.Helper;
-import zephyr.plugin.plotting.commands.EnableAllTraces;
-import zephyr.plugin.plotting.traces.ClockTracesManager;
+import zephyr.plugin.plotting.internal.commands.EnableAllTraces;
+import zephyr.plugin.plotting.internal.traces.ClockTracesManager;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -23,21 +23,18 @@ public class ZephyrPluginPlotting extends AbstractUIPlugin {
   @Override
   public void start(BundleContext context) throws Exception {
     super.start(context);
+    ClockTracesManager.setManager(traces);
     plugin = this;
   }
 
   @Override
   public void stop(BundleContext context) throws Exception {
     plugin = null;
+    ClockTracesManager.setManager(null);
     super.stop(context);
   }
 
   public static ZephyrPluginPlotting getDefault() {
     return plugin;
-  }
-
-
-  static public ClockTracesManager clockTracesManager() {
-    return getDefault().traces;
   }
 }

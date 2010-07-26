@@ -8,7 +8,7 @@ import java.util.concurrent.ThreadFactory;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.widgets.Canvas;
 
-import rlpark.plugin.utils.time.Chrono;
+import zephyr.plugin.core.api.synchronization.Chrono;
 
 public class BackgroundCanvas {
   static private ExecutorService executor = Executors.newFixedThreadPool(3, new ThreadFactory() {

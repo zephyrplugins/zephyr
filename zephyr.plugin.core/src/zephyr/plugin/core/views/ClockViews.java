@@ -9,9 +9,9 @@ import java.util.Set;
 
 import org.eclipse.swt.widgets.Display;
 
-import rlpark.plugin.utils.events.Listener;
-import rlpark.plugin.utils.time.Clock;
 import zephyr.plugin.core.ZephyrPluginCommon;
+import zephyr.plugin.core.api.signals.Listener;
+import zephyr.plugin.core.api.synchronization.Clock;
 
 public class ClockViews {
   protected final List<SyncView> views = new ArrayList<SyncView>();

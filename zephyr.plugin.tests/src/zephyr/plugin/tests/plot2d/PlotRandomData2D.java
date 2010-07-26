@@ -5,7 +5,7 @@ import org.eclipse.swt.graphics.GC;
 import zephyr.plugin.core.canvas.AbstractCanvasView;
 import zephyr.plugin.core.views.TimedView;
 import zephyr.plugin.core.views.ViewProvider;
-import zephyr.plugin.plotting.plots.Plot2D;
+import zephyr.plugin.plotting.plot2d.Plot2D;
 
 
 public class PlotRandomData2D extends AbstractCanvasView implements TimedView {

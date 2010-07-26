@@ -13,7 +13,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.part.ViewPart;
 
-import rlpark.plugin.utils.time.Clock;
+import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.views.TimedView;
 import critterbot.CritterbotProblem;
 
@@ -25,7 +25,7 @@ public class ObservationView extends ViewPart implements TimedView {
   CritterViz critterViz;
   Frame awtFrame;
   Composite swtAwtComponent;
-  private final rlpark.plugin.utils.events.Listener<Clock> clockKilled = new rlpark.plugin.utils.events.Listener<Clock>() {
+  private final zephyr.plugin.core.api.signals.Listener<Clock> clockKilled = new zephyr.plugin.core.api.signals.Listener<Clock>() {
     @Override
     public void listen(Clock clock) {
       addTimed(null);

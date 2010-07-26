@@ -20,6 +20,7 @@
    <url>
       <update label="Zephyr" url="http://webdocs.cs.ualberta.ca/~degris/zephyr"/>
    </url>
+
    <plugin
          id="zephyr.application"
          download-size="0"
@@ -36,13 +37,6 @@
 
    <plugin
          id="zephyr.plugin.core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="rlpark.plugin.utils"
          download-size="0"
          install-size="0"
          version="0.0.0"

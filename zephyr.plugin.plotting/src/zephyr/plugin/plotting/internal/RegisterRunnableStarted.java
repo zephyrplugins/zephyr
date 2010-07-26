@@ -1,13 +1,13 @@
 package zephyr.plugin.plotting.internal;
 
-import rlpark.plugin.utils.Utils;
-import rlpark.plugin.utils.events.Listener;
-import rlpark.plugin.utils.logger.abstracts.Logger;
-import rlpark.plugin.utils.time.Clock;
-import rlpark.plugin.utils.time.Timed;
 import zephyr.ZephyrPlotting;
 import zephyr.plugin.core.ZephyrPluginCommon;
+import zephyr.plugin.core.api.labels.Labels;
+import zephyr.plugin.core.api.logging.abstracts.Logger;
 import zephyr.plugin.core.api.monitoring.DataLogged;
+import zephyr.plugin.core.api.signals.Listener;
+import zephyr.plugin.core.api.synchronization.Clock;
+import zephyr.plugin.core.api.synchronization.Timed;
 import zephyr.plugin.core.startup.StartupJob;
 
 public class RegisterRunnableStarted implements StartupJob, Listener<Runnable> {
@@ -34,7 +34,7 @@ public class RegisterRunnableStarted implements StartupJob, Listener<Runnable> {
       return;
     }
     Clock clock = ((Timed) runnable).clock();
-    String label = Utils.classLabel(runnable);
+    String label = Labels.classLabel(runnable);
     Logger logger = ZephyrPlotting.createLogger(label, clock);
     logger.add(runnable);
   }

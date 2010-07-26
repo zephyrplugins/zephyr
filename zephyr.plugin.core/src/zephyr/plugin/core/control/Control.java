@@ -5,10 +5,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import rlpark.plugin.utils.events.Listener;
-import rlpark.plugin.utils.events.Signal;
-import rlpark.plugin.utils.time.Clock;
 import zephyr.plugin.core.ZephyrPluginCommon;
+import zephyr.plugin.core.api.signals.Listener;
+import zephyr.plugin.core.api.signals.Signal;
+import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.internal.SavedSettings;
 import zephyr.plugin.core.utils.Helper;
 

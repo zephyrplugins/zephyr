@@ -7,7 +7,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
-import rlpark.plugin.utils.events.Signal;
+import zephyr.plugin.core.api.signals.Signal;
 import zephyr.plugin.core.control.Control;
 import zephyr.plugin.core.views.ViewBinder;
 

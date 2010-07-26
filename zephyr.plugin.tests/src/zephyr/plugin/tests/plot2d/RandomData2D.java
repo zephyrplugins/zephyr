@@ -2,8 +2,8 @@ package zephyr.plugin.tests.plot2d;
 
 import java.util.Random;
 
-import rlpark.plugin.utils.time.Clock;
 import zephyr.Zephyr;
+import zephyr.plugin.core.api.synchronization.Clock;
 
 public class RandomData2D implements Runnable {
   protected final double[] data = new double[3];

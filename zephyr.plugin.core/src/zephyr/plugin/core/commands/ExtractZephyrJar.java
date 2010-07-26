@@ -31,7 +31,7 @@ public class ExtractZephyrJar extends AbstractHandler {
   private File extractJarFile() {
     File path = null;
     try {
-      path = FileLocator.getBundleFile(Platform.getBundle("rlpark.plugin.utils"));
+      path = FileLocator.getBundleFile(Platform.getBundle("zephyr.plugin.core.api"));
     } catch (IOException e) {
       e.printStackTrace();
     }
