@@ -4,8 +4,8 @@ import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GL2GL3;
 
-import zephyr.plugin.common.helpers.ClassViewProvider;
-import zephyr.plugin.common.views.TimedView;
+import zephyr.plugin.core.helpers.ClassViewProvider;
+import zephyr.plugin.core.views.TimedView;
 import zephyr.plugin.opengl.OpenGLView;
 
 /*

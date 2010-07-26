@@ -6,8 +6,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.console.MessageConsoleStream;
 
-import zephyr.plugin.common.startup.StartupJob;
 import zephyr.plugin.console.ZephyrConsolePlugin;
+import zephyr.plugin.core.startup.StartupJob;
 
 public class ReDirectSystemToConsole implements StartupJob {
   @Override

@@ -43,7 +43,7 @@
    <extension
          point="org.eclipse.ui.menus">
       <menuContribution
-            locationURI="menu:menu.file?after=zephyr.plugin.common.endstd">
+            locationURI="menu:menu.file?after=zephyr.plugin.core.endstd">
          <command
                commandId="zephyr.plugin.critterview.startsimulator"
                label="Start a Simulator"
@@ -66,7 +66,7 @@
       <menuContribution
             locationURI="toolbar:zephyr.plugin.critterview.view.observation">
          <command
-               commandId="zephyr.plugin.common.killclock"
+               commandId="zephyr.plugin.core.killclock"
                style="push">
          </command>
       </menuContribution>
@@ -100,13 +100,13 @@
       </product>
    </extension>
    <extension
-         point="zephyr.plugin.common.startup">
+         point="zephyr.startup">
       <client
             class="zephyr.plugin.critterview.StartupJob">
       </client>
    </extension>
    <extension
-         point="zephyr.plugin.common.synchronization.zephyrmain">
+         point="zephyr.runnable">
       <client
             autostart="false"
             class="zephyr.plugin.critterview.runnable.RobotRunnable"

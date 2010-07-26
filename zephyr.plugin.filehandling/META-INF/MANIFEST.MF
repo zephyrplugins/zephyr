@@ -6,7 +6,7 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: zephyr.plugin.filehandling.ZephyrPluginFileHandling
 Bundle-Vendor: Thomas
 Require-Bundle: org.eclipse.core.runtime,
- zephyr.plugin.common;bundle-version="1.0.0",
+ zephyr.plugin.core;bundle-version="1.0.0",
  org.eclipse.ui;bundle-version="3.5.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: zephyr.plugin.filehandling

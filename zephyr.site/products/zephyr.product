@@ -91,7 +91,7 @@ University of Alberta
       <plugin id="rlpark.plugin.rltoys"/>
       <plugin id="rlpark.plugin.utils"/>
       <plugin id="zephyr.application"/>
-      <plugin id="zephyr.plugin.common"/>
+      <plugin id="zephyr.plugin.core"/>
       <plugin id="zephyr.plugin.console"/>
       <plugin id="zephyr.plugin.critterview"/>
       <plugin id="zephyr.plugin.filehandling"/>

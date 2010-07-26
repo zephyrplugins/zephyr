@@ -2,10 +2,10 @@ package zephyr.plugin.critterview;
 
 import java.io.File;
 
-import zephyr.plugin.common.utils.Helper;
+import zephyr.plugin.core.utils.Helper;
 import critterbot.environment.CritterbotSimulator;
 
-public class StartupJob implements zephyr.plugin.common.startup.StartupJob {
+public class StartupJob implements zephyr.plugin.core.startup.StartupJob {
   @Override
   public int level() {
     return 100;

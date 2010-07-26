@@ -8,6 +8,6 @@ Bundle-Vendor: Thomas
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.ui.console;bundle-version="3.4.0",
- zephyr.plugin.common;bundle-version="1.0.0"
+ zephyr.plugin.core;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy

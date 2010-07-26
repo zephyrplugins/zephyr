@@ -9,8 +9,8 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.RGB;
 
 import rlpark.plugin.utils.events.Listener;
-import zephyr.plugin.common.canvas.Painter;
-import zephyr.plugin.common.utils.Colors;
+import zephyr.plugin.core.canvas.Painter;
+import zephyr.plugin.core.utils.Colors;
 import zephyr.plugin.plotting.plots.PlotData.HistoryCached;
 import zephyr.plugin.plotting.traces.TraceData;
 

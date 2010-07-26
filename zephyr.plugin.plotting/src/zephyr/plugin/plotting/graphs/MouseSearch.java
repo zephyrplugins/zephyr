@@ -14,7 +14,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 
 import rlpark.plugin.utils.logger.LabelBuilder;
-import zephyr.plugin.common.utils.Colors;
+import zephyr.plugin.core.utils.Colors;
 import zephyr.plugin.plotting.plots.Axes;
 import zephyr.plugin.plotting.plots.PlotData;
 import zephyr.plugin.plotting.plots.PlotData.RequestResult;

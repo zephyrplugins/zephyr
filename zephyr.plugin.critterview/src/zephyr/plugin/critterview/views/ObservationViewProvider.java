@@ -1,6 +1,6 @@
 package zephyr.plugin.critterview.views;
 
-import zephyr.plugin.common.helpers.ClassViewProvider;
+import zephyr.plugin.core.helpers.ClassViewProvider;
 import critterbot.CritterbotProblem;
 
 public class ObservationViewProvider extends ClassViewProvider {

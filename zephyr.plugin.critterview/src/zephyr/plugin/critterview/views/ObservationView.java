@@ -14,7 +14,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.part.ViewPart;
 
 import rlpark.plugin.utils.time.Clock;
-import zephyr.plugin.common.views.TimedView;
+import zephyr.plugin.core.views.TimedView;
 import critterbot.CritterbotProblem;
 
 public class ObservationView extends ViewPart implements TimedView {

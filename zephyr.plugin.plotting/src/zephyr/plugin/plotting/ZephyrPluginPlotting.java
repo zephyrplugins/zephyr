@@ -3,7 +3,7 @@ package zephyr.plugin.plotting;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
-import zephyr.plugin.common.utils.Helper;
+import zephyr.plugin.core.utils.Helper;
 import zephyr.plugin.plotting.commands.EnableAllTraces;
 import zephyr.plugin.plotting.traces.ClockTracesManager;
 

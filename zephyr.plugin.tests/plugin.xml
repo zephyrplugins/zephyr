@@ -2,7 +2,7 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
-         point="zephyr.plugin.common.synchronization.zephyrmain">
+         point="zephyr.runnable">
       <client
             autostart="false"
             class="zephyr.plugin.tests.TimeStepsRunnable"

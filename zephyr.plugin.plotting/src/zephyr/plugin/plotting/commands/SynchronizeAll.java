@@ -9,12 +9,12 @@ import org.eclipse.core.commands.ExecutionException;
 
 import rlpark.plugin.utils.events.Listener;
 import rlpark.plugin.utils.time.Clock;
-import zephyr.plugin.common.ZephyrPluginCommon;
-import zephyr.plugin.common.control.Control;
-import zephyr.plugin.common.utils.Helper;
-import zephyr.plugin.common.views.ClockViews;
-import zephyr.plugin.common.views.SyncView;
-import zephyr.plugin.common.views.ViewBinder;
+import zephyr.plugin.core.ZephyrPluginCommon;
+import zephyr.plugin.core.control.Control;
+import zephyr.plugin.core.utils.Helper;
+import zephyr.plugin.core.views.ClockViews;
+import zephyr.plugin.core.views.SyncView;
+import zephyr.plugin.core.views.ViewBinder;
 import zephyr.plugin.plotting.graphs.PlotView;
 
 public class SynchronizeAll extends AbstractHandler implements Listener<Control> {

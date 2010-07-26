@@ -9,8 +9,8 @@ import java.util.Set;
 import rlpark.plugin.utils.events.Listener;
 import rlpark.plugin.utils.time.Clock;
 import rlpark.plugin.utils.time.ClockKillable;
-import zephyr.plugin.common.ZephyrPluginCommon;
-import zephyr.plugin.common.views.ViewBinder;
+import zephyr.plugin.core.ZephyrPluginCommon;
+import zephyr.plugin.core.views.ViewBinder;
 import zephyr.plugin.plotting.traces.ClockTraces;
 import zephyr.plugin.plotting.traces.TraceData;
 

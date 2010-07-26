@@ -15,7 +15,7 @@
    <extension
          point="org.eclipse.ui.menus">
       <menuContribution
-            locationURI="menu:menu.file?before=zephyr.plugin.common.endstd">
+            locationURI="menu:menu.file?before=zephyr.plugin.core.endstd">
             <command
                   commandId="zephyr.plugin.filehandling.openfile"
                   id="open"
@@ -30,12 +30,12 @@
       <key
             commandId="zephyr.plugin.filehandling.openfile"
             contextId="org.eclipse.ui.contexts.window"
-            schemeId="zephyr.plugin.common.scheme"
+            schemeId="zephyr.plugin.core.scheme"
             sequence="M1+O">
       </key>
    </extension>
    <extension
-         point="zephyr.plugin.common.startup">
+         point="zephyr.startup">
       <client
             class="zephyr.plugin.filehandling.StartupJob">
       </client>

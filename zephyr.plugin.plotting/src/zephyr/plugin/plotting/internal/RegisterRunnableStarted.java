@@ -7,8 +7,8 @@ import rlpark.plugin.utils.logger.helpers.DataLogged;
 import rlpark.plugin.utils.time.Clock;
 import rlpark.plugin.utils.time.Timed;
 import zephyr.ZephyrPlotting;
-import zephyr.plugin.common.ZephyrPluginCommon;
-import zephyr.plugin.common.startup.StartupJob;
+import zephyr.plugin.core.ZephyrPluginCommon;
+import zephyr.plugin.core.startup.StartupJob;
 
 public class RegisterRunnableStarted implements StartupJob, Listener<Runnable> {
   final static private String TimedError = "Warning: %s is annotated %s but does not implement %s to provide a clock.";

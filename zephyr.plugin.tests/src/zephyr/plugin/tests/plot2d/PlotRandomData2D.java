@@ -2,9 +2,9 @@ package zephyr.plugin.tests.plot2d;
 
 import org.eclipse.swt.graphics.GC;
 
-import zephyr.plugin.common.canvas.AbstractCanvasView;
-import zephyr.plugin.common.views.TimedView;
-import zephyr.plugin.common.views.ViewProvider;
+import zephyr.plugin.core.canvas.AbstractCanvasView;
+import zephyr.plugin.core.views.TimedView;
+import zephyr.plugin.core.views.ViewProvider;
 import zephyr.plugin.plotting.plots.Plot2D;
 
 

@@ -14,8 +14,8 @@ import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 
-import zephyr.plugin.common.canvas.AbstractCanvasView;
-import zephyr.plugin.common.canvas.BackgroundCanvas;
+import zephyr.plugin.core.canvas.AbstractCanvasView;
+import zephyr.plugin.core.canvas.BackgroundCanvas;
 import zephyr.plugin.plotting.ZephyrPluginPlotting;
 import zephyr.plugin.plotting.plots.PlotData;
 import zephyr.plugin.plotting.plots.PlotOverTime;

@@ -8,7 +8,7 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 
-import zephyr.plugin.common.utils.Helper;
+import zephyr.plugin.core.utils.Helper;
 import zephyr.plugin.plotting.ZephyrPluginPlotting;
 
 final class SynchronizeAction extends Action {

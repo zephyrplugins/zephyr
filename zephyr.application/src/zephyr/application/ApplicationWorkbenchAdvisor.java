@@ -11,8 +11,8 @@ import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchAdvisor;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 
-import zephyr.plugin.common.Perspective;
-import zephyr.plugin.common.ZephyrPluginCommon;
+import zephyr.plugin.core.Perspective;
+import zephyr.plugin.core.ZephyrPluginCommon;
 
 public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 
@@ -38,7 +38,7 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
     IWorkbenchActivitySupport activitySupport = PlatformUI.getWorkbench().getActivitySupport();
     IActivityManager activityManager = activitySupport.getActivityManager();
     Set<String> enabledActivities = new HashSet<String>();
-    String id = "zephyr.plugin.common.activity";
+    String id = "zephyr.plugin.core.activity";
     if (activityManager.getActivity(id).isDefined())
       enabledActivities.add(id);
     activitySupport.setEnabledActivityIds(enabledActivities);

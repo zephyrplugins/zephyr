@@ -21,7 +21,7 @@ import org.eclipse.swt.opengl.GLData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 
-import zephyr.plugin.common.views.SyncView;
+import zephyr.plugin.core.views.SyncView;
 
 abstract public class OpenGLView extends ViewPart implements SyncView {
   protected GLCanvas canvas;

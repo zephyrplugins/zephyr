@@ -3,7 +3,7 @@ package zephyr.plugin.plotting.plots;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.GC;
 
-import zephyr.plugin.common.utils.Colors;
+import zephyr.plugin.core.utils.Colors;
 import zephyr.plugin.plotting.plots.drawer2d.Drawer2D;
 import zephyr.plugin.plotting.plots.drawer2d.Lines;
 

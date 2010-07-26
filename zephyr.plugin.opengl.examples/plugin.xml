@@ -2,7 +2,7 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
-         point="zephyr.plugin.common.synchronization.zephyrmain">
+         point="zephyr.runnable">
       <client
             autostart="true"
             class="zephyr.plugin.opengl.examples.Model"
