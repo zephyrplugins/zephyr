@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="zephyr.feature.plotting"
-      label="zephyr.feature.plotting"
+      id="zephyr.feature.main"
+      label="Zephyr"
       version="1.0.0.qualifier"
       provider-name="Thomas">
 
@@ -18,7 +18,7 @@
    </license>
 
    <url>
-      <update label="Zephyr" url="http://webdocs.cs.ualberta.ca/~degris/zephyr"/>
+      <update label="Zephyr" url="http://www.ualberta.ca/~degris/zephyr"/>
    </url>
 
    <plugin
@@ -58,6 +58,13 @@
 
    <plugin
          id="zephyr.plugin.filehandling"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="zephyr.plugin.core.api"
          download-size="0"
          install-size="0"
          version="0.0.0"

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="zephyr.feature.critterbot"
-      label="zephyr.feature.critterbot"
+      label="Zephyr Critterbot"
       version="1.0.0.qualifier"
       provider-name="Thomas">
 
-   <description url="http://www.example.com/description">
-      [Enter Feature Description here.]
+   <description url="http://critterbot.rl-community.org/software/crittergui">
+      Critterbot extension of Zephyr
    </description>
 
    <copyright url="http://www.example.com/copyright">
@@ -18,18 +18,16 @@
    </license>
 
    <url>
-      <update label="Zephyr" url="http://webdocs.cs.ualberta.ca/~degris/zephyr"/>
+      <update label="Zephyr" url="http://www.ualberta.ca/~degris/zephyr"/>
    </url>
+
+   <requires>
+      <import feature="zephyr.feature.main" version="1.0.0.qualifier"/>
+      <import feature="zephyr.feature.rl" version="1.0.0.qualifier"/>
+   </requires>
 
    <plugin
          id="zephyr.plugin.critterview"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="zephyr.plugin.filehandling"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -40,12 +38,5 @@
          download-size="0"
          install-size="0"
          version="0.0.0"/>
-
-   <plugin
-         id="rlpark.plugin.rltoys"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
 
 </feature>

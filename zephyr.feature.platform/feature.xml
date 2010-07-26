@@ -17,7 +17,7 @@
    </license>
 
    <url>
-      <update label="Zephyr" url="http://webdocs.cs.ualberta.ca/~degris/zephyr"/>
+      <update label="Zephyr" url="http://ualberta.ca/~degris/zephyr"/>
    </url>
 
    <includes
@@ -30,15 +30,15 @@
 
    <includes
          id="zephyr.feature.critterbot"
-         version="0.0.0"
-         optional="true"
-         search-location="both"/>
+         version="0.0.0"/>
 
    <includes
-         id="zephyr.feature.plotting"
-         version="0.0.0"
-         optional="true"
-         search-location="both"/>
+         id="zephyr.feature.main"
+         version="0.0.0"/>
+
+   <includes
+         id="zephyr.feature.rl"
+         version="0.0.0"/>
 
    <requires>
       <import plugin="org.eclipse.ui" version="3.5.0" match="compatible"/>
