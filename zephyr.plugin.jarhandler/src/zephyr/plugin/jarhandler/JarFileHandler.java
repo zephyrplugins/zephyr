@@ -24,7 +24,7 @@ public class JarFileHandler implements IFileHandler {
     JarClassLoader jarLoader = new JarClassLoader(filepath);
     String className = fileargs.length == 1 ? fileargs[0] : retrieveClassName(jarLoader);
     if (className == null)
-      throw new RuntimeException("Cannot find class to load");
+      throw new RuntimeException("Cannot find the main class to load");
     Object mainObject;
     try {
       mainObject = jarLoader.loadClass(className, true).newInstance();

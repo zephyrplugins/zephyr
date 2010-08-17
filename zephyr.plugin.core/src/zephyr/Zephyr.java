@@ -6,7 +6,11 @@ import zephyr.plugin.core.api.synchronization.Clock;
 
 public class Zephyr {
   static public void advertize(Clock clock, Object drawn) {
-    ZephyrPluginCommon.viewBinder().bindViews(clock, drawn);
+    ZephyrPluginCommon.viewBinder().bindViews(clock, "", drawn);
+  }
+
+  static public void advertize(Clock clock, String info, Object drawn) {
+    ZephyrPluginCommon.viewBinder().bindViews(clock, info, drawn);
   }
 
   public static void start(RunnableFactory runnableFactory) {

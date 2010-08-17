@@ -74,7 +74,7 @@ public class View extends OpenGLView implements TimedView {
   }
 
   @Override
-  public void addTimed(Object drawn) {
+  public void addTimed(String info, Object drawn) {
     model = (Model) drawn;
   }
 

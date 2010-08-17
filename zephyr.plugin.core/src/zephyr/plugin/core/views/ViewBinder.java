@@ -77,7 +77,7 @@ public class ViewBinder {
     return (TimedView) view;
   }
 
-  private void displayAndBindView(final Clock clock, final Object drawn, final String viewID) {
+  private void displayAndBindView(final Clock clock, String info, final Object drawn, final String viewID) {
     if (ZephyrPluginCommon.shuttingDown)
       return;
     final TimedView[] view = new TimedView[1];
@@ -89,7 +89,7 @@ public class ViewBinder {
     });
     if (view[0] == null)
       return;
-    view[0].addTimed(drawn);
+    view[0].addTimed(info, drawn);
     bind(clock, view[0]);
   }
 
@@ -115,10 +115,10 @@ public class ViewBinder {
     clockViews.addView(view);
   }
 
-  synchronized public void bindViews(Clock clock, Object drawn) {
+  synchronized public void bindViews(Clock clock, String info, Object drawn) {
     List<String> viewIDs = viewProviders.findViews(drawn);
     for (String viewID : viewIDs)
-      displayAndBindView(clock, drawn, viewID);
+      displayAndBindView(clock, info, drawn, viewID);
   }
 
   synchronized public void unbind(Clock clock, SyncView view) {

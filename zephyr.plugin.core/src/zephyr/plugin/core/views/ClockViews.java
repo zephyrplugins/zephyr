@@ -82,8 +82,6 @@ public class ClockViews {
   }
 
   synchronized public void removeView(final SyncView view) {
-    if (view instanceof TimedView)
-      ((TimedView) view).addTimed(null);
     if (!ZephyrPluginCommon.shuttingDown)
       Display.getDefault().asyncExec(new Runnable() {
         @Override

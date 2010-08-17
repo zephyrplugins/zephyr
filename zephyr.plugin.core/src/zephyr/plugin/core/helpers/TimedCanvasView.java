@@ -15,7 +15,7 @@ public abstract class TimedCanvasView extends AbstractCanvasView implements Time
   }
 
   @Override
-  public void addTimed(Object drawn) {
+  public void addTimed(String info, Object drawn) {
     this.drawn = drawn;
   }
 

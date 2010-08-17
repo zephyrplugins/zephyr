@@ -28,12 +28,12 @@ public class ObservationView extends ViewPart implements TimedView {
   private final zephyr.plugin.core.api.signals.Listener<Clock> clockKilled = new zephyr.plugin.core.api.signals.Listener<Clock>() {
     @Override
     public void listen(Clock clock) {
-      addTimed(null);
+      addTimed("", null);
     }
   };
 
   @Override
-  synchronized public void addTimed(Object drawn) {
+  synchronized public void addTimed(String info, Object drawn) {
     if (environment != null)
       environment.clock().onKill.disconnect(clockKilled);
     if (critterViz != null) {
