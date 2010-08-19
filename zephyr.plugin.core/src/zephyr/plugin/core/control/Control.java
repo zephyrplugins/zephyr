@@ -31,10 +31,14 @@ public class Control implements Listener<Clock> {
     });
   }
 
-  public void step() {
+  public void step(int nbTimeSteps) {
     for (Map.Entry<Clock, Integer> entry : suspended.entrySet())
-      suspended.put(entry.getKey(), 1);
+      suspended.put(entry.getKey(), nbTimeSteps);
     notifyAll(getToWakeUp());
+  }
+
+  public void step() {
+    step(1);
   }
 
   public void suspend() {
