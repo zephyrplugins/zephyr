@@ -9,7 +9,7 @@
             id="zephyr.plugin.tests.time">
       </client>
       <client
-            autostart="true"
+            autostart="false"
             class="zephyr.plugin.tests.plot2d.RandomData2D"
             id="zephyr.plugin.tests.plot2d.randomdata2d">
       </client>
