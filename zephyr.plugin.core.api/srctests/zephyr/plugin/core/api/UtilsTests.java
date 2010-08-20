@@ -5,10 +5,11 @@ import org.junit.runners.Suite;
 
 import zephyr.plugin.core.api.logging.fileloggers.FileLoggerTest;
 import zephyr.plugin.core.api.logging.fileloggers.LoggerRowTest;
+import zephyr.plugin.core.api.logging.fileloggers.ParserArray2DTest;
+import zephyr.plugin.core.api.logging.fileloggers.ParserArrayLabelsTest;
+import zephyr.plugin.core.api.logging.fileloggers.ParserBooleanTest;
 import zephyr.plugin.core.api.logging.fileloggers.ParserTest01;
-import zephyr.plugin.core.api.logging.fileloggers.ParserTest02;
 import zephyr.plugin.core.api.logging.fileloggers.ParserTest03;
-import zephyr.plugin.core.api.logging.fileloggers.ParserTest04;
 import zephyr.plugin.core.api.logging.fileloggers.ParserWrappersTest;
 import zephyr.plugin.core.api.signals.SignalTest;
 import zephyr.plugin.core.api.synchronization.ChronoTest;
@@ -16,6 +17,7 @@ import zephyr.plugin.core.api.synchronization.ChronoTest;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({ SignalTest.class, ChronoTest.class, LoggerRowTest.class, FileLoggerTest.class,
-    ParserTest01.class, ParserTest02.class, ParserTest03.class, ParserTest04.class, ParserWrappersTest.class })
+    ParserTest01.class, ParserArrayLabelsTest.class, ParserArray2DTest.class, ParserTest03.class,
+    ParserBooleanTest.class, ParserWrappersTest.class })
 public class UtilsTests {
 }

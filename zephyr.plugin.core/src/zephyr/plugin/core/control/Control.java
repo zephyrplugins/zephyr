@@ -34,6 +34,7 @@ public class Control implements Listener<Clock> {
   public void step(int nbTimeSteps) {
     for (Map.Entry<Clock, Integer> entry : suspended.entrySet())
       suspended.put(entry.getKey(), nbTimeSteps);
+    onModeChange.fire(this);
     notifyAll(getToWakeUp());
   }
 
@@ -78,7 +79,11 @@ public class Control implements Listener<Clock> {
   }
 
   public boolean isSuspended() {
-    return !suspended.isEmpty();
+    List<Integer> remainingSteps = new ArrayList<Integer>(suspended.values());
+    for (Integer remainingStep : remainingSteps)
+      if (remainingStep != 0)
+        return false;
+    return !remainingSteps.isEmpty();
   }
 
   @Override

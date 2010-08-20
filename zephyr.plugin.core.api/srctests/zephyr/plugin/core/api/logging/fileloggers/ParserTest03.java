@@ -5,7 +5,6 @@ import java.io.StringWriter;
 import org.junit.Assert;
 import org.junit.Test;
 
-import zephyr.plugin.core.api.logging.fileloggers.FileLogger;
 import zephyr.plugin.core.api.monitoring.DataIgnored;
 import zephyr.plugin.core.api.monitoring.DataLogged;
 
@@ -14,7 +13,7 @@ public class ParserTest03 {
   static protected final String[] expectedLabels = new String[] { "data01", "ignoreLabel" };
 
   @DataLogged
-  static public class TestAddLog01 {
+  static public class TestObjectMonitored {
     protected double data01;
     @DataIgnored
     protected double data02;
@@ -29,7 +28,7 @@ public class ParserTest03 {
   @Test
   public void testAddLog() {
     FileLogger logger = new FileLogger(new StringWriter());
-    TestAddLog01 logged01 = new TestAddLog01();
+    TestObjectMonitored logged01 = new TestObjectMonitored();
     logger.add(logged01);
     Assert.assertArrayEquals(expectedLabels, logger.getLabels());
   }

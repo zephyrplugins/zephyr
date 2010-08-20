@@ -1,5 +1,6 @@
 package zephyr.plugin.core.api.logging.helpers;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -48,7 +49,7 @@ public class Parser {
     while (objectClass != null) {
       classIsLogged = classIsLogged || objectClass.isAnnotationPresent(DataLogged.class);
       if (objectClass.isArray())
-        addElements(logger, container, wrappers);
+        addElements(logger, container, wrappers, Loggers.isIndexIncluded(objectClass));
       else
         addFields(logger, container, objectClass, classIsLogged, handlers, wrappers);
       objectClass = objectClass.getSuperclass();
@@ -56,10 +57,12 @@ public class Parser {
     logger.labelBuilder().popLabelMaps();
   }
 
-  private static void addElements(Logger logger, Object container, List<MonitorWrapper> wrappers) {
+  private static void addElements(Logger logger, Object container, List<MonitorWrapper> wrappers, boolean includeIndex) {
     for (ArrayHandler arrayHandler : arrayHandlers)
       if (arrayHandler.canHandleArray(container)) {
-        arrayHandler.addArray(logger, container, "", "", wrappers);
+        CollectionLabelBuilder labelBuilder = new CollectionLabelBuilder(logger, Array.getLength(container), "", "",
+                                                                         includeIndex);
+        arrayHandler.addArray(logger, container, labelBuilder, wrappers);
         break;
       }
   }

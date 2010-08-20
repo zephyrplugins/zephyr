@@ -10,19 +10,23 @@ public class CollectionLabelBuilder {
   private final String collectionPattern;
   private final LabeledElement labeledElement;
   private final String elementLabelSeparator;
+  private final boolean includeIndex;
 
   protected CollectionLabelBuilder(Logger logger, Field field, int size) {
-    this(logger, size, Parser.labelOf(field), Parser.idOf(field));
+    this(logger, size, Parser.labelOf(field), Parser.idOf(field), Loggers.isIndexIncluded(field));
   }
 
-  protected CollectionLabelBuilder(Logger logger, int size, String label, String id) {
-    collectionPattern = Labels.collectionPattern(label, size);
+  protected CollectionLabelBuilder(Logger logger, int size, String label, String id, boolean includeIndex) {
+    collectionPattern = Labels.collectionPattern(label, size, includeIndex);
     labeledElement = logger.labelBuilder().getLabeledElement(id);
     elementLabelSeparator = logger.labelBuilder().elementLabelSeparator();
+    this.includeIndex = includeIndex;
   }
 
   protected String elementLabel(int index) {
-    return Labels.collectionLabel(collectionPattern, index,
-                                 labeledElement == null ? null : elementLabelSeparator + labeledElement.label(index));
+    String suffix = labeledElement == null ? null : labeledElement.label(index);
+    if (includeIndex && suffix != null)
+      suffix = elementLabelSeparator + suffix;
+    return Labels.collectionLabel(collectionPattern, index, suffix, includeIndex);
   }
 }

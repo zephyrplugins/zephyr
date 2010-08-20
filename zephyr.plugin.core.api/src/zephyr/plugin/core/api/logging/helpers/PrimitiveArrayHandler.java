@@ -25,16 +25,20 @@ public class PrimitiveArrayHandler implements FieldHandler, ArrayHandler {
   @Override
   public void addField(Logger logger, Object container, Field field, List<MonitorWrapper> wrappers) {
     List<MonitorWrapper> localWrappers = Wrappers.getWrappers(field, wrappers);
-    addArray(logger, array(field, container), Parser.labelOf(field), Parser.idOf(field),
-             Wrappers.getWrappers(field, localWrappers));
+    Object array = array(field, container);
+    String label = Parser.labelOf(field);
+    String id = Parser.idOf(field);
+    boolean includeIndex = Loggers.isIndexIncluded(field);
+    CollectionLabelBuilder labelBuilder = new CollectionLabelBuilder(logger, Array.getLength(array), label, id,
+                                                                     includeIndex);
+    addArray(logger, array, labelBuilder, Wrappers.getWrappers(field, localWrappers));
   }
 
   @Override
-  public void addArray(Logger logger, Object array, String label, String id, List<MonitorWrapper> wrappers) {
+  public void addArray(Logger logger, Object array, CollectionLabelBuilder labelBuilder, List<MonitorWrapper> wrappers) {
     String[] elementLabels = new String[Array.getLength(array)];
-    CollectionLabelBuilder arrayLabelBuilder = new CollectionLabelBuilder(logger, elementLabels.length, label, id);
     for (int i = 0; i < elementLabels.length; i++)
-      elementLabels[i] = arrayLabelBuilder.elementLabel(i);
+      elementLabels[i] = labelBuilder.elementLabel(i);
 
     if (array.getClass().getComponentType().equals(double.class))
       Loggers.add(logger, elementLabels, (double[]) array, wrappers);

@@ -17,4 +17,6 @@ public @interface DataLogged {
   int level() default 0;
 
   String[] wrappers() default {};
+
+  boolean arrayIndexLabeled() default true;
 }

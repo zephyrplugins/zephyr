@@ -9,11 +9,10 @@ import zephyr.plugin.core.api.logging.wrappers.MonitorWrapper;
 public class ObjectArrayHandler extends PrimitiveArrayHandler {
 
   @Override
-  public void addArray(Logger logger, Object array, String label, String id, List<MonitorWrapper> wrappers) {
+  public void addArray(Logger logger, Object array, CollectionLabelBuilder labelBuilder, List<MonitorWrapper> wrappers) {
     int arraySize = Array.getLength(array);
-    CollectionLabelBuilder arrayLabelBuilder = new CollectionLabelBuilder(logger, arraySize, label, id);
     for (int i = 0; i < arraySize; i++) {
-      logger.labelBuilder().push(arrayLabelBuilder.elementLabel(i));
+      logger.labelBuilder().push(labelBuilder.elementLabel(i));
       Parser.addChildObject(logger, Array.get(array, i), wrappers);
       logger.labelBuilder().pop();
     }

@@ -1,11 +1,13 @@
 package zephyr.plugin.core.api.logging.helpers;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 import zephyr.plugin.core.api.logging.abstracts.Logger;
 import zephyr.plugin.core.api.logging.abstracts.Monitored;
 import zephyr.plugin.core.api.logging.wrappers.MonitorWrapper;
 import zephyr.plugin.core.api.logging.wrappers.Wrappers;
+import zephyr.plugin.core.api.monitoring.DataLogged;
 
 public class Loggers {
   public static void add(Logger logger, String[] elementLabels, double[] data) {
@@ -57,5 +59,19 @@ public class Loggers {
       return;
     for (MonitorWrapper wrapper : wrappers)
       logger.add(label + Wrappers.wrapperLabel(wrapper), wrapper.createLogged(monitored));
+  }
+
+  public static boolean isIndexIncluded(Field field) {
+    return isIndexIncluded(field.getAnnotation(DataLogged.class));
+  }
+
+  public static boolean isIndexIncluded(Class<?> objectClass) {
+    return isIndexIncluded(objectClass.getAnnotation(DataLogged.class));
+  }
+
+  private static boolean isIndexIncluded(DataLogged dataLogged) {
+    if (dataLogged == null)
+      return true;
+    return dataLogged.arrayIndexLabeled();
   }
 }
