@@ -58,11 +58,11 @@ public abstract class AbstractCanvasView extends ViewPart implements SyncView {
   }
 
   protected void setViewName(final String viewName) {
-    setPartName(viewName);
     Display.getDefault().syncExec(new Runnable() {
       @SuppressWarnings("synthetic-access")
       @Override
       public void run() {
+        setPartName(viewName);
         firePropertyChange(org.eclipse.ui.IWorkbenchPart.PROP_TITLE);
         parent.redraw();
         parent.update();

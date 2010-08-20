@@ -28,8 +28,11 @@ public class ClockViews {
     public void run() {
       if (pendingViews == null)
         return;
-      for (SyncView view : new ArrayList<SyncView>(pendingViews))
+      for (SyncView view : new ArrayList<SyncView>(pendingViews)) {
+        if (view.isDisposed())
+          continue;
         view.repaint();
+      }
       pendingViews.clear();
     }
   };
