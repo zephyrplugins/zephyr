@@ -7,10 +7,11 @@ import java.util.List;
 import zephyr.plugin.core.Utils;
 import zephyr.plugin.core.api.labels.Labels;
 import zephyr.plugin.core.api.logging.LabelBuilder;
-import zephyr.plugin.core.api.logging.abstracts.Monitored;
 import zephyr.plugin.core.api.logging.abstracts.LoggedContainer;
 import zephyr.plugin.core.api.logging.abstracts.Logger;
+import zephyr.plugin.core.api.logging.abstracts.Monitored;
 import zephyr.plugin.core.api.logging.helpers.Parser;
+import zephyr.plugin.core.api.logging.wrappers.MonitorWrapper;
 import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.signals.Signal;
 import zephyr.plugin.core.api.synchronization.Clock;
@@ -79,7 +80,7 @@ public class ClockTraces implements Logger {
       add(Labels.label(toAdd), (Monitored) toAdd);
     if (toAdd instanceof LoggedContainer)
       ((LoggedContainer) toAdd).setLogger(this);
-    Parser.findAnnotations(this, toAdd);
+    Parser.findAnnotations(this, toAdd, new ArrayList<MonitorWrapper>());
     endAddingTrace();
   }
 
