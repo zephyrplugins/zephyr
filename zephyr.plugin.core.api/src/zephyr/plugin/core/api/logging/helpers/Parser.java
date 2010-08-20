@@ -15,6 +15,7 @@ import zephyr.plugin.core.api.labels.LabeledElement;
 import zephyr.plugin.core.api.logging.abstracts.FieldHandler;
 import zephyr.plugin.core.api.logging.abstracts.LoggedContainer;
 import zephyr.plugin.core.api.logging.abstracts.Logger;
+import zephyr.plugin.core.api.logging.wrappers.MonitorWrapper;
 import zephyr.plugin.core.api.monitoring.DataIgnored;
 import zephyr.plugin.core.api.monitoring.DataLogged;
 import zephyr.plugin.core.api.monitoring.LabelElementProvider;
@@ -37,7 +38,7 @@ public class Parser {
     fieldHandlers.add(fieldHandler);
   }
 
-  public static void findAnnotations(Logger logger, Object container) {
+  public static void findAnnotations(Logger logger, Object container, List<MonitorWrapper> wrappers) {
     Class<?> objectClass = container.getClass();
     List<FieldHandler> handlers = new ArrayList<FieldHandler>(fieldHandlers);
     Collections.reverse(handlers);
@@ -47,24 +48,24 @@ public class Parser {
     while (objectClass != null) {
       classIsLogged = classIsLogged || objectClass.isAnnotationPresent(DataLogged.class);
       if (objectClass.isArray())
-        addElements(logger, container);
+        addElements(logger, container, wrappers);
       else
-        addFields(logger, container, objectClass, classIsLogged, handlers);
+        addFields(logger, container, objectClass, classIsLogged, handlers, wrappers);
       objectClass = objectClass.getSuperclass();
     }
     logger.labelBuilder().popLabelMaps();
   }
 
-  private static void addElements(Logger logger, Object container) {
+  private static void addElements(Logger logger, Object container, List<MonitorWrapper> wrappers) {
     for (ArrayHandler arrayHandler : arrayHandlers)
       if (arrayHandler.canHandleArray(container)) {
-        arrayHandler.addArray(logger, container, "", "");
+        arrayHandler.addArray(logger, container, "", "", wrappers);
         break;
       }
   }
 
   private static void addFields(Logger logger, Object container, Class<?> objectClass, boolean classIsLogged,
-      List<FieldHandler> handlers) {
+      List<FieldHandler> handlers, List<MonitorWrapper> wrappers) {
     for (Field field : getFieldList(objectClass)) {
       if (field.isAnnotationPresent(DataIgnored.class))
         continue;
@@ -73,7 +74,7 @@ public class Parser {
       field.setAccessible(true);
       for (FieldHandler fieldHandler : handlers)
         if (fieldHandler.canHandle(field, container)) {
-          fieldHandler.addField(logger, container, field);
+          fieldHandler.addField(logger, container, field, wrappers);
           break;
         }
     }
@@ -127,12 +128,12 @@ public class Parser {
     return fields;
   }
 
-  static protected void addChildObject(Logger logger, Object child) {
+  static protected void addChildObject(Logger logger, Object child, List<MonitorWrapper> wrappers) {
     if (child == null)
       return;
     if (child instanceof LoggedContainer)
       ((LoggedContainer) child).setLogger(logger);
-    findAnnotations(logger, child);
+    findAnnotations(logger, child, wrappers);
   }
 
   protected static String labelOf(Field field) {

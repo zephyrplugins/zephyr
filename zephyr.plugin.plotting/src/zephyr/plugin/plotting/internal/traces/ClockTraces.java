@@ -7,7 +7,7 @@ import java.util.List;
 import zephyr.plugin.core.Utils;
 import zephyr.plugin.core.api.labels.Labels;
 import zephyr.plugin.core.api.logging.LabelBuilder;
-import zephyr.plugin.core.api.logging.abstracts.Logged;
+import zephyr.plugin.core.api.logging.abstracts.Monitored;
 import zephyr.plugin.core.api.logging.abstracts.LoggedContainer;
 import zephyr.plugin.core.api.logging.abstracts.Logger;
 import zephyr.plugin.core.api.logging.helpers.Parser;
@@ -58,7 +58,7 @@ public class ClockTraces implements Logger {
   }
 
   @Override
-  synchronized public void add(String label, Logged logged) {
+  synchronized public void add(String label, Monitored logged) {
     assert checkThread();
     Trace trace = new Trace(this, labelBuilder.buildLabel(label), logged);
     traces.add(trace);
@@ -75,8 +75,8 @@ public class ClockTraces implements Logger {
   @Override
   public void add(Object toAdd) {
     startAddingTrace();
-    if (toAdd instanceof Logged)
-      add(Labels.label(toAdd), (Logged) toAdd);
+    if (toAdd instanceof Monitored)
+      add(Labels.label(toAdd), (Monitored) toAdd);
     if (toAdd instanceof LoggedContainer)
       ((LoggedContainer) toAdd).setLogger(this);
     Parser.findAnnotations(this, toAdd);

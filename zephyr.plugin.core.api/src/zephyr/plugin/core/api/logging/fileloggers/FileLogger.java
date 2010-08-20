@@ -7,16 +7,17 @@ import java.util.List;
 
 import zephyr.plugin.core.api.labels.Labels;
 import zephyr.plugin.core.api.logging.LabelBuilder;
-import zephyr.plugin.core.api.logging.abstracts.Logged;
 import zephyr.plugin.core.api.logging.abstracts.LoggedContainer;
 import zephyr.plugin.core.api.logging.abstracts.Logger;
+import zephyr.plugin.core.api.logging.abstracts.Monitored;
 import zephyr.plugin.core.api.logging.helpers.Parser;
+import zephyr.plugin.core.api.logging.wrappers.MonitorWrapper;
 import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.synchronization.Clock;
 
 public class FileLogger extends AbstractFileLogger implements Logger {
   private final List<String> labels = new ArrayList<String>();
-  private final List<Logged> loggeds = new ArrayList<Logged>();
+  private final List<Monitored> loggeds = new ArrayList<Monitored>();
   private final List<Boolean> atLeastOneInfinite = new ArrayList<Boolean>();
   private final List<Boolean> atLeastOneNaN = new ArrayList<Boolean>();
   private final List<FileLogger> newclocks = new ArrayList<FileLogger>();
@@ -50,7 +51,7 @@ public class FileLogger extends AbstractFileLogger implements Logger {
   }
 
   @Override
-  public void add(String label, Logged logged) {
+  public void add(String label, Monitored logged) {
     String loggedLabel = labelBuilder.buildLabel(label);
     labels.add(loggedLabel);
     loggeds.add(logged);
@@ -60,11 +61,11 @@ public class FileLogger extends AbstractFileLogger implements Logger {
 
   @Override
   public void add(Object toAdd) {
-    if (toAdd instanceof Logged)
-      add(Labels.label(toAdd), (Logged) toAdd);
+    if (toAdd instanceof Monitored)
+      add(Labels.label(toAdd), (Monitored) toAdd);
     if (toAdd instanceof LoggedContainer)
       ((LoggedContainer) toAdd).setLogger(this);
-    Parser.findAnnotations(this, toAdd);
+    Parser.findAnnotations(this, toAdd, new ArrayList<MonitorWrapper>());
   }
 
   public void update(long stepTime) {

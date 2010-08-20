@@ -15,4 +15,6 @@ public @interface DataLogged {
   boolean skipLabel() default false;
 
   int level() default 0;
+
+  String[] wrappers() default {};
 }

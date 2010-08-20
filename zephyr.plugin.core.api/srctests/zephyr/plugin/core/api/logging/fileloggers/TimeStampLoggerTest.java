@@ -6,19 +6,19 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import zephyr.plugin.core.api.logging.abstracts.Logged;
+import zephyr.plugin.core.api.logging.abstracts.Monitored;
 import zephyr.plugin.core.api.logging.fileloggers.FileLogger;
 
 public class TimeStampLoggerTest {
   protected double a = 0.0;
-  protected Logged logA = new Logged() {
+  protected Monitored logA = new Monitored() {
     @Override
     public double loggedValue(long stepTime) {
       return a;
     }
   };
   protected double b = 0.0;
-  protected Logged logB = new Logged() {
+  protected Monitored logB = new Monitored() {
     @Override
     public double loggedValue(long stepTime) {
       return b;

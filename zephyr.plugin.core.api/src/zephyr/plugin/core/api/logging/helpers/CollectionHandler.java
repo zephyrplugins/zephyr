@@ -2,9 +2,12 @@ package zephyr.plugin.core.api.logging.helpers;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
+import java.util.List;
 
 import zephyr.plugin.core.api.logging.abstracts.FieldHandler;
 import zephyr.plugin.core.api.logging.abstracts.Logger;
+import zephyr.plugin.core.api.logging.wrappers.MonitorWrapper;
+import zephyr.plugin.core.api.logging.wrappers.Wrappers;
 
 public class CollectionHandler implements FieldHandler {
   @SuppressWarnings("unchecked")
@@ -22,14 +25,15 @@ public class CollectionHandler implements FieldHandler {
   }
 
   @Override
-  public void addField(Logger logger, Object container, Field field) {
+  public void addField(Logger logger, Object container, Field field, List<MonitorWrapper> wrappers) {
     Collection<Object> collection = collection(field, container);
     int arraySize = collection.size();
     CollectionLabelBuilder collectionLabelBuilder = new CollectionLabelBuilder(logger, field, arraySize);
     int index = 0;
+    List<MonitorWrapper> localWrappers = Wrappers.getWrappers(field, wrappers);
     for (Object o : collection) {
       logger.labelBuilder().push(collectionLabelBuilder.elementLabel(index));
-      Parser.addChildObject(logger, o);
+      Parser.addChildObject(logger, o, localWrappers);
       logger.labelBuilder().pop();
       index++;
     }

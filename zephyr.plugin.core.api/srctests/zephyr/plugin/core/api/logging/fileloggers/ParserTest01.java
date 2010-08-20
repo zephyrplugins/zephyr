@@ -7,10 +7,9 @@ import java.util.HashSet;
 import org.junit.Assert;
 import org.junit.Test;
 
-import zephyr.plugin.core.api.logging.abstracts.Logged;
 import zephyr.plugin.core.api.logging.abstracts.LoggedContainer;
 import zephyr.plugin.core.api.logging.abstracts.Logger;
-import zephyr.plugin.core.api.logging.fileloggers.FileLogger;
+import zephyr.plugin.core.api.logging.abstracts.Monitored;
 import zephyr.plugin.core.api.monitoring.DataLogged;
 import zephyr.plugin.core.api.monitoring.LabelElementProvider;
 
@@ -62,7 +61,7 @@ public class ParserTest01 {
 
     @Override
     public void setLogger(Logger logger) {
-      logger.add(logged01AddedFromInterface, new Logged() {
+      logger.add(logged01AddedFromInterface, new Monitored() {
         @Override
         public double loggedValue(long stepTime) {
           return 0;

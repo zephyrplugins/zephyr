@@ -11,6 +11,7 @@ Export-Package: zephyr.plugin.core.api,
  zephyr.plugin.core.api.logging.abstracts,
  zephyr.plugin.core.api.logging.fileloggers,
  zephyr.plugin.core.api.logging.helpers,
+ zephyr.plugin.core.api.logging.wrappers,
  zephyr.plugin.core.api.monitoring,
  zephyr.plugin.core.api.signals,
  zephyr.plugin.core.api.synchronization
