@@ -14,10 +14,16 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.part.ViewPart;
 
 import zephyr.plugin.core.api.synchronization.Clock;
+import zephyr.plugin.core.helpers.ClassViewProvider;
 import zephyr.plugin.core.views.TimedView;
 import critterbot.CritterbotProblem;
 
 public class ObservationView extends ViewPart implements TimedView {
+  static public class Provider extends ClassViewProvider {
+    public Provider() {
+      super(CritterbotProblem.class, ObservationView.ID);
+    }
+  }
 
   public static final String ID = "zephyr.plugin.critterview.view.observation";
   protected double[] currentObservation;

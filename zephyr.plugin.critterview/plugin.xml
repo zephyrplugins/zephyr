@@ -116,7 +116,7 @@
    <extension
          point="zephyr.viewprovider">
       <client
-            class="zephyr.plugin.critterview.views.ObservationViewProvider">
+            class="zephyr.plugin.critterview.views.ObservationView$Provider">
       </client>
    </extension>
 </plugin>
