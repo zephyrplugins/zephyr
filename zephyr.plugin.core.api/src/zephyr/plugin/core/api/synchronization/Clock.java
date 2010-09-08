@@ -49,4 +49,8 @@ public class Clock {
   public boolean hasStarted() {
     return time >= 0;
   }
+
+  public long lastUpdateTime() {
+    return lastUpdate;
+  }
 }
