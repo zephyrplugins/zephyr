@@ -6,18 +6,25 @@ import java.io.StringWriter;
 import zephyr.plugin.core.api.synchronization.Clock;
 
 public class TimedFileLogger extends FileLogger {
-  private final Clock clock = new Clock();
+  private final Clock clock;
 
   public TimedFileLogger(String filepath) throws FileNotFoundException {
-    super(filepath, false, false);
-  }
-
-  public TimedFileLogger(String filepath, boolean timeStamp, boolean temporaryFile) throws FileNotFoundException {
-    super(filepath, timeStamp, temporaryFile);
+    this(filepath, new Clock(), true, false);
   }
 
   public TimedFileLogger(StringWriter writer) {
     super(writer, false);
+    clock = new Clock();
+  }
+
+  public TimedFileLogger(String filepath, Clock clock) throws FileNotFoundException {
+    this(filepath, clock, true, false);
+  }
+
+  public TimedFileLogger(String filepath, Clock clock, boolean timeStamp, boolean temporaryFile)
+      throws FileNotFoundException {
+    super(filepath, timeStamp, temporaryFile);
+    this.clock = clock;
   }
 
   public void update() {
