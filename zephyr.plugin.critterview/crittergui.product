@@ -22,6 +22,7 @@ University of Alberta
 
    <windowImages i16="images/critterbot16.png" i32="images/critterbot32.png" i48="images/critterbot48.png" i64="images/critterbot64.png" i128="images/critterbot128.png"/>
 
+
    <launcher name="Crittergui">
       <linux icon="/zephyr.plugin.critterview/images/critterbot48.xpm"/>
       <macosx icon="/zephyr.plugin.critterview/images/critterbot128.icns"/>
@@ -31,14 +32,19 @@ University of Alberta
       </win>
    </launcher>
 
+
    <vm>
    </vm>
+
 
    <plugins>
    </plugins>
 
    <features>
-      <feature id="zephyr.feature.platform" version="1.0.0.qualifier"/>
+      <feature id="zephyr.feature.platform"/>
+      <feature id="zephyr.feature.critterbot"/>
+      <feature id="zephyr.feature.main"/>
+      <feature id="zephyr.feature.rl"/>
    </features>
 
 
