@@ -25,7 +25,6 @@
       <import feature="zephyr.feature.main" version="1.0.0.qualifier"/>
       <import feature="zephyr.feature.rl" version="1.0.0.qualifier"/>
    </requires>
-
    <plugin
          id="zephyr.plugin.critterview"
          download-size="0"
@@ -38,5 +37,5 @@
          download-size="0"
          install-size="0"
          version="0.0.0"/>
-
+   <includes id="zephyr.feature.critterbot.source" version="1.0.0.qualifier"/>
 </feature>

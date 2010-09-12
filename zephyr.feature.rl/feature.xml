@@ -23,5 +23,5 @@
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-
+   <includes id="zephyr.feature.rl.source" version="1.0.0.qualifier"/>
 </feature>

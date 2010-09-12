@@ -1,13 +1,16 @@
 package zephyr.plugin.core.api.logging.helpers;
 
+import java.io.FileNotFoundException;
 import java.lang.reflect.Field;
 import java.util.List;
 
 import zephyr.plugin.core.api.logging.abstracts.Logger;
 import zephyr.plugin.core.api.logging.abstracts.Monitored;
+import zephyr.plugin.core.api.logging.fileloggers.TimedFileLogger;
 import zephyr.plugin.core.api.logging.wrappers.MonitorWrapper;
 import zephyr.plugin.core.api.logging.wrappers.Wrappers;
 import zephyr.plugin.core.api.monitoring.DataLogged;
+import zephyr.plugin.core.api.synchronization.Clock;
 
 public class Loggers {
   public static void add(Logger logger, String[] elementLabels, double[] data) {
@@ -73,5 +76,14 @@ public class Loggers {
     if (dataLogged == null)
       return true;
     return dataLogged.arrayIndexLabeled();
+  }
+
+  static public TimedFileLogger newLogger(String filepath, Clock clock) {
+    try {
+      return new TimedFileLogger(filepath, clock);
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+    }
+    return null;
   }
 }
