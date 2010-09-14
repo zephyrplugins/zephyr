@@ -89,14 +89,6 @@ public class ClockTraces implements Logger {
     return labelBuilder;
   }
 
-  @Override
-  public Logger newClock(String clockLabel, Clock clock) {
-    assert checkThread();
-    Logger loggedManager = ClockTracesManager.manager().addClock(labelBuilder.prefixed(clockLabel),
-                                                                                     clock);
-    return loggedManager;
-  }
-
   synchronized public List<Trace> getTraces() {
     return new ArrayList<Trace>(traces);
   }

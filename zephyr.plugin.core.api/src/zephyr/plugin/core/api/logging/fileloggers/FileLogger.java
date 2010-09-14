@@ -12,8 +12,6 @@ import zephyr.plugin.core.api.logging.abstracts.Logger;
 import zephyr.plugin.core.api.logging.abstracts.Monitored;
 import zephyr.plugin.core.api.logging.helpers.Parser;
 import zephyr.plugin.core.api.logging.wrappers.MonitorWrapper;
-import zephyr.plugin.core.api.signals.Listener;
-import zephyr.plugin.core.api.synchronization.Clock;
 
 public class FileLogger extends AbstractFileLogger implements Logger {
   private final List<String> labels = new ArrayList<String>();
@@ -125,29 +123,6 @@ public class FileLogger extends AbstractFileLogger implements Logger {
     super.close();
     for (FileLogger logger : newclocks)
       logger.close();
-  }
-
-  @Override
-  public Logger newClock(String label, final Clock clock) {
-    char extensionSeparator = '.';
-    String extension = filepath.substring(filepath.lastIndexOf(extensionSeparator));
-    String newFilePath = filepath.substring(0, filepath.lastIndexOf(extensionSeparator)) +
-        extensionSeparator + label + extension;
-    final FileLogger logger;
-    try {
-      logger = new FileLogger(newFilePath, timeStamps, temporaryFile);
-    } catch (FileNotFoundException e) {
-      e.printStackTrace();
-      return null;
-    }
-    clock.onTick.connect(new Listener<Clock>() {
-      @Override
-      public void listen(Clock eventInfo) {
-        logger.update(clock.time());
-      }
-    });
-    newclocks.add(logger);
-    return logger;
   }
 
   public String[] getLabels() {

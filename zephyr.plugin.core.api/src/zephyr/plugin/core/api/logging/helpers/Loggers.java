@@ -10,7 +10,6 @@ import zephyr.plugin.core.api.logging.fileloggers.TimedFileLogger;
 import zephyr.plugin.core.api.logging.wrappers.MonitorWrapper;
 import zephyr.plugin.core.api.logging.wrappers.Wrappers;
 import zephyr.plugin.core.api.monitoring.DataLogged;
-import zephyr.plugin.core.api.synchronization.Clock;
 
 public class Loggers {
   public static void add(Logger logger, String[] elementLabels, double[] data) {
@@ -78,9 +77,9 @@ public class Loggers {
     return dataLogged.arrayIndexLabeled();
   }
 
-  static public TimedFileLogger newLogger(String filepath, Clock clock) {
+  static public TimedFileLogger newLoggerWithTime(String filepath) {
     try {
-      return new TimedFileLogger(filepath, clock);
+      return new TimedFileLogger(filepath);
     } catch (FileNotFoundException e) {
       e.printStackTrace();
     }
