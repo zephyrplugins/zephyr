@@ -11,6 +11,14 @@
             name="Observation"
             restorable="true">
       </view>
+      <view
+            allowMultiple="true"
+            class="zephyr.plugin.critterview.views.ObservationView2"
+            icon="icons/view_observation.png"
+            id="zephyr.plugin.critterview.view.observation2"
+            name="Observation 2"
+            restorable="true">
+      </view>
    </extension>
    <extension
          id="critterview.filehandler"
@@ -112,11 +120,19 @@
             class="zephyr.plugin.critterview.runnable.RobotRunnable"
             id="critterbot">
       </client>
+      <client
+            autostart="false"
+            class="zephyr.plugin.critterview.runnable.SimulatorRunnable"
+            id="simulator">
+      </client>
    </extension>
    <extension
          point="zephyr.viewprovider">
       <client
             class="zephyr.plugin.critterview.views.ObservationView$Provider">
+      </client>
+      <client
+            class="zephyr.plugin.critterview.views.ObservationView2$Provider">
       </client>
    </extension>
 </plugin>

@@ -152,17 +152,4 @@ public class RichDisplayBar extends JComponent {
     rangeMin = newMin;
     rangeMax = newMax;
   }
-
-  public void setMin(double newMin) {
-    if (newMin > max)
-      max = newMin;
-    min = newMin;
-  }
-
-  public void setmax(double newMax) {
-    if (newMax < min)
-      min = newMax;
-    max = newMax;
-  }
-
 }

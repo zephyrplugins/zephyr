@@ -20,6 +20,7 @@ Export-Package: zephyr,
  zephyr.plugin.core.canvas,
  zephyr.plugin.core.control,
  zephyr.plugin.core.helpers,
+ zephyr.plugin.core.observations,
  zephyr.plugin.core.startup,
  zephyr.plugin.core.utils;uses:="org.eclipse.jface.resource,org.eclipse.ui.plugin,org.eclipse.swt.graphics",
  zephyr.plugin.core.views
