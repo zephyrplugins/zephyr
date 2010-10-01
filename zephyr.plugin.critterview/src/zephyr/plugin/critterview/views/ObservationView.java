@@ -1,24 +1,31 @@
 package zephyr.plugin.critterview.views;
 
-import java.awt.Dimension;
-import java.awt.EventQueue;
-import java.awt.Frame;
+import static critterbot.environment.CritterbotDrops.Accel;
+import static critterbot.environment.CritterbotDrops.BusVoltage;
+import static critterbot.environment.CritterbotDrops.IRDistance;
+import static critterbot.environment.CritterbotDrops.Light;
+import static critterbot.environment.CritterbotDrops.Motor;
+import static critterbot.environment.CritterbotDrops.MotorCurrent;
+import static critterbot.environment.CritterbotDrops.MotorSpeed;
+import static critterbot.environment.CritterbotDrops.MotorTemperature;
+import static critterbot.environment.CritterbotDrops.RotationVel;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.awt.SWT_AWT;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
-import org.eclipse.ui.part.ViewPart;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
-import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.helpers.ClassViewProvider;
-import zephyr.plugin.core.views.TimedView;
+import zephyr.plugin.core.observations.EnvironmentView;
+import zephyr.plugin.core.observations.ObsLayout;
+import zephyr.plugin.core.observations.ObsWidget;
+import zephyr.plugin.core.observations.SensorCollection;
+import zephyr.plugin.core.observations.SensorGroup;
+import zephyr.plugin.core.observations.SensorTextGroup;
+import zephyr.plugin.core.observations.SensorTextGroup.TextClient;
 import critterbot.CritterbotProblem;
 
-public class ObservationView extends ViewPart implements TimedView {
+public class ObservationView extends EnvironmentView {
   static public class Provider extends ClassViewProvider {
     public Provider() {
       super(CritterbotProblem.class, ObservationView.ID);
@@ -26,102 +33,83 @@ public class ObservationView extends ViewPart implements TimedView {
   }
 
   public static final String ID = "zephyr.plugin.critterview.view.observation";
-  protected double[] currentObservation;
-  CritterbotProblem environment;
-  CritterViz critterViz;
-  Frame awtFrame;
-  Composite swtAwtComponent;
-  private final zephyr.plugin.core.api.signals.Listener<Clock> clockKilled = new zephyr.plugin.core.api.signals.Listener<Clock>() {
-    @Override
-    public void listen(Clock clock) {
-      addTimed("", null);
-    }
-  };
+  protected CritterbotProblem environment = null;
+  double[] currentObservation;
 
-  @Override
-  synchronized public void addTimed(String info, Object drawn) {
-    if (environment != null)
-      environment.clock().onKill.disconnect(clockKilled);
-    if (critterViz != null) {
-      critterViz.dispose();
-      critterViz = null;
-    }
-    environment = (CritterbotProblem) drawn;
-    if (environment == null)
-      return;
-    environment.clock().onKill.connect(clockKilled);
-    createVizualizer();
+  public ObservationView() {
   }
 
-  private void createVizualizer() {
-    Display.getDefault().syncExec(new Runnable() {
+  @Override
+  protected ObsLayout getObservationLayout() {
+    SensorGroup irDistanceGroup = new SensorGroup("IR Distance Sensors", startsWith(IRDistance), 0, 255);
+    SensorGroup lightGroup = new SensorGroup("Light Sensors", startsWith(Light), 0, 800);
+    SensorGroup motorSpeedGroup = new SensorGroup("Speed", patternWith(Motor, MotorSpeed), -35, 35);
+    SensorGroup motorCurrentGroup = new SensorGroup("Current", patternWith(Motor, MotorCurrent), 0, 90);
+    SensorGroup motorTemperatureGroup = new SensorGroup("Temperature", patternWith(Motor, MotorTemperature), 40, 175);
+    SensorCollection motorCollection = new SensorCollection("Motors", motorSpeedGroup, motorCurrentGroup,
+                                                            motorTemperatureGroup);
+    SensorGroup rotVelGroup = new SensorGroup("Gyroscope", startsWith(RotationVel), 0, 255);
+    SensorGroup accelGroup = new SensorGroup("Accelerometer", startsWith(Accel), -2048, 2048);
+    SensorCollection inertialCollection = new SensorCollection("Inertial Sensors", rotVelGroup, accelGroup);
+    SensorTextGroup infoGroup = createInfoGroup();
+    return new ObsLayout(new ObsWidget[][] { { infoGroup, irDistanceGroup, lightGroup },
+                                             { motorCollection, inertialCollection } });
+  }
+
+  private SensorTextGroup createInfoGroup() {
+    return new SensorTextGroup("Info", new TextClient("Voltage:") {
+      int busVoltageIndex = environment.legend().indexOf(BusVoltage);
+
       @Override
-      public void run() {
-        critterViz = new CritterViz(awtFrame, environment);
-        Point point = swtAwtComponent.getSize();
-        critterViz.setSize(point.x, point.y);
-        critterViz.setPreferredSize(new Dimension(point.x, point.y));
-        awtFrame.pack();
+      public String currentText() {
+        if (currentObservation == null)
+          return "00.0V";
+        return String.format("%.1fV", currentObservation[busVoltageIndex] / 10.0);
+      }
+    }, new TextClient("Loop Time:") {
+      @Override
+      public String currentText() {
+        if (environment == null)
+          return "00.0ms";
+        return String.valueOf(String.format("%.1fms", environment.clock().period()));
       }
     });
+  }
+
+  private List<Integer> patternWith(String prefix, String suffix) {
+    List<Integer> result = new ArrayList<Integer>();
+    for (Map.Entry<String, Integer> entry : environment.legend().legend().entrySet()) {
+      if (entry.getKey().startsWith(prefix) && entry.getKey().endsWith(suffix))
+        result.add(entry.getValue());
+    }
+    Collections.sort(result);
+    return result;
+  }
+
+  private List<Integer> startsWith(String prefix) {
+    List<Integer> result = new ArrayList<Integer>();
+    for (Map.Entry<String, Integer> entry : environment.legend().legend().entrySet()) {
+      if (entry.getKey().startsWith(prefix))
+        result.add(entry.getValue());
+    }
+    Collections.sort(result);
+    return result;
   }
 
   @Override
   public boolean synchronize() {
     currentObservation = environment.currentStep().o_tp1;
-    return true;
+    return synchronize(currentObservation);
   }
 
   @Override
-  public void createPartControl(final Composite parent) {
-    swtAwtComponent = new Composite(parent, SWT.EMBEDDED | SWT.DOUBLE_BUFFERED);
-    awtFrame = SWT_AWT.new_Frame(swtAwtComponent);
-    Listener listener = new Listener() {
-      @Override
-      public void handleEvent(Event e) {
-        switch (e.type) {
-        case SWT.Dispose:
-                  parent.setVisible(false);
-                  EventQueue.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                      awtFrame.dispose();
-                    }
-                  });
-                  break;
-                }
-              }
-    };
-    addListenerObject(listener);
-  }
-
-  @Override
-  public void setFocus() {
-  }
-
-  @Override
-  synchronized public void dispose() {
-    if (environment != null)
-      environment.clock().kill();
-    super.dispose();
-  }
-
-  @Override
-  synchronized public void repaint() {
-    if (currentObservation != null && environment != null) {
-      critterViz.updateDisplay(environment.clock().period(), currentObservation);
-      critterViz.repaint();
-    } else
-      awtFrame.repaint();
+  public void addTimed(String info, Object drawn) {
+    environment = (CritterbotProblem) drawn;
+    createLayout();
   }
 
   @Override
   public boolean canTimedAdded() {
     return environment == null;
-  }
-
-  @Override
-  public boolean isDisposed() {
-    return swtAwtComponent.isDisposed();
   }
 }

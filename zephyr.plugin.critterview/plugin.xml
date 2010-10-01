@@ -112,6 +112,11 @@
             class="zephyr.plugin.critterview.runnable.RobotRunnable"
             id="critterbot">
       </client>
+      <client
+            autostart="false"
+            class="zephyr.plugin.critterview.runnable.SimulatorRunnable"
+            id="simulator">
+      </client>
    </extension>
    <extension
          point="zephyr.viewprovider">
