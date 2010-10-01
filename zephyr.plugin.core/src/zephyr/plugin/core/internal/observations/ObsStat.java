@@ -1,5 +1,8 @@
 package zephyr.plugin.core.internal.observations;
 
+/*
+ * From Mike Sokolsky code 
+ */
 public class ObsStat {
   public final String label;
   final private double rangeMin;

@@ -12,7 +12,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 
 import zephyr.plugin.core.internal.observations.ObsStat;
-import zephyr.plugin.core.internal.observations.RichDisplayBar2;
+import zephyr.plugin.core.internal.observations.RichDisplayBar;
 
 public class SensorGroup implements ObsWidget {
   private final List<ObsStat> stats = new ArrayList<ObsStat>();
@@ -37,7 +37,7 @@ public class SensorGroup implements ObsWidget {
     for (int i = 0; i < indexes.size(); i++) {
       Canvas canvas = new Canvas(group, SWT.DOUBLE_BUFFERED);
       ObsStat obsState = new ObsStat(title + " " + i, indexes.get(i), min, max);
-      final RichDisplayBar2 displayBar = new RichDisplayBar2(obsState);
+      final RichDisplayBar displayBar = new RichDisplayBar(obsState);
       canvas.addPaintListener(new PaintListener() {
         @Override
         public void paintControl(PaintEvent event) {

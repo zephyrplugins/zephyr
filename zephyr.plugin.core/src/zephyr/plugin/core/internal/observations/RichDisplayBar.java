@@ -6,7 +6,10 @@ import org.eclipse.swt.graphics.Rectangle;
 
 import zephyr.plugin.core.utils.Colors;
 
-public class RichDisplayBar2 {
+/*
+ * From Mike Sokolsky code 
+ */
+public class RichDisplayBar {
   private static final int MaxWidth = 15;
   private static final int VerticalMargin = 2;
   private static final int HorizontalMargin = 2;
@@ -18,7 +21,7 @@ public class RichDisplayBar2 {
   private final Colors colors = new Colors();
   private final ObsStat obsStat;
 
-  public RichDisplayBar2(ObsStat obsStat) {
+  public RichDisplayBar(ObsStat obsStat) {
     this.obsStat = obsStat;
   }
 
