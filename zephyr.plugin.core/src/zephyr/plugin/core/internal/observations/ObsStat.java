@@ -12,8 +12,8 @@ public class ObsStat {
   double mean;
   double decayMax;
   double decayMin;
-  double max;
-  double min;
+  double max = -Double.MAX_VALUE;
+  double min = Double.MAX_VALUE;
   private double stdCalc;
   private double stdDev;
   double current;
