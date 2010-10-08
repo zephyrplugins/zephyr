@@ -23,7 +23,6 @@ public class SensorGroup implements ObsWidget {
   private final double max;
 
   public SensorGroup(String title, List<Integer> indexes, double min, double max) {
-    assert indexes.size() > 0;
     this.title = title;
     this.indexes = indexes;
     this.min = min;
@@ -51,18 +50,19 @@ public class SensorGroup implements ObsWidget {
 
 
   @Override
-  public Composite createWidgetComposite(Composite parent) {
+  synchronized public void createWidgetComposite(Composite parent) {
+    if (indexes.size() == 0)
+      return;
     Group group = new Group(parent, SWT.NONE);
     group.setText(title);
     FillLayout fillLayout = new FillLayout();
     fillLayout.type = SWT.HORIZONTAL;
     group.setLayout(fillLayout);
     layoutRichBar(group);
-    return group;
   }
 
   @Override
-  public void updateValue(double[] currentObservation) {
+  synchronized public void updateValue(double[] currentObservation) {
     for (ObsStat stat : stats)
       stat.updateValue(currentObservation);
   }
@@ -71,5 +71,10 @@ public class SensorGroup implements ObsWidget {
   public void repaint() {
     for (Canvas canvas : canvasList)
       canvas.redraw();
+  }
+
+  @Override
+  public boolean hasContent() {
+    return indexes.size() > 0;
   }
 }

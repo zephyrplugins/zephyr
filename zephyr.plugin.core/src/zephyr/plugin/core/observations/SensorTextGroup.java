@@ -36,7 +36,9 @@ public class SensorTextGroup implements ObsWidget {
   }
 
   @Override
-  public Composite createWidgetComposite(Composite parent) {
+  synchronized public void createWidgetComposite(Composite parent) {
+    if (!hasContent())
+      return;
     Group group = new Group(parent, SWT.NONE);
     group.setText(title);
     group.setLayoutData(new LineData(false));
@@ -47,7 +49,6 @@ public class SensorTextGroup implements ObsWidget {
       TextClient textClient = textClients[i];
       createLabels(group, textClient);
     }
-    return group;
   }
 
   private void createLabels(Group group, TextClient textClient) {
@@ -62,7 +63,7 @@ public class SensorTextGroup implements ObsWidget {
   }
 
   @Override
-  public void updateValue(double[] currentObservation) {
+  synchronized public void updateValue(double[] currentObservation) {
     for (int i = 0; i < textClients.length; i++)
       texts[i] = textClients[i].currentText();
   }
@@ -74,5 +75,10 @@ public class SensorTextGroup implements ObsWidget {
       label.setText(texts[i]);
       label.redraw();
     }
+  }
+
+  @Override
+  public boolean hasContent() {
+    return texts.length > 0;
   }
 }

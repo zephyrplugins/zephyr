@@ -34,12 +34,21 @@ public abstract class EnvironmentView extends ViewPart implements TimedView {
     FillLayout layout = new FillLayout(SWT.VERTICAL);
     parent.setLayout(layout);
     for (ObsWidget[] line : obsLayout.widgetArray()) {
+      if (!hasContent(line))
+        continue;
       Composite lineComposite = new Composite(parent, SWT.NONE);
       lineComposite.setLayout(new LineLayout());
       for (ObsWidget widget : line)
         widget.createWidgetComposite(lineComposite);
     }
     parent.layout(true, true);
+  }
+
+  static protected boolean hasContent(ObsWidget[] line) {
+    boolean result = false;
+    for (ObsWidget widget : line)
+      result = result || widget.hasContent();
+    return result;
   }
 
   protected boolean synchronize(double[] currentObservation) {

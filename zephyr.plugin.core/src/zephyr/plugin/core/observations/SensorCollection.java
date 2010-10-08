@@ -16,7 +16,9 @@ public class SensorCollection implements ObsWidget {
   }
 
   @Override
-  public Composite createWidgetComposite(Composite parent) {
+  synchronized public void createWidgetComposite(Composite parent) {
+    if (!hasContent())
+      return;
     Group group = new Group(parent, SWT.NONE);
     group.setText(collectionLabel);
     FillLayout fillLayout = new FillLayout();
@@ -24,11 +26,10 @@ public class SensorCollection implements ObsWidget {
     group.setLayout(fillLayout);
     for (ObsWidget widget : widgets)
       widget.createWidgetComposite(group);
-    return group;
   }
 
   @Override
-  public void updateValue(double[] currentObservation) {
+  synchronized public void updateValue(double[] currentObservation) {
     for (ObsWidget widget : widgets)
       widget.updateValue(currentObservation);
   }
@@ -37,5 +38,10 @@ public class SensorCollection implements ObsWidget {
   public void repaint() {
     for (ObsWidget widget : widgets)
       widget.repaint();
+  }
+
+  @Override
+  public boolean hasContent() {
+    return EnvironmentView.hasContent(widgets);
   }
 }
