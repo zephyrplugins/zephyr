@@ -2,7 +2,7 @@ package zephyr.plugin.tests.plot2d;
 
 import java.util.Random;
 
-import zephyr.Zephyr;
+import zephyr.ZephyrCore;
 import zephyr.plugin.core.api.synchronization.Clock;
 
 public class RandomData2D implements Runnable {
@@ -11,7 +11,7 @@ public class RandomData2D implements Runnable {
   private final Random random = new Random(0);
 
   public RandomData2D() {
-    Zephyr.advertize(clock, this);
+    ZephyrCore.advertize(clock, this);
   }
 
   @Override

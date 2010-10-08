@@ -4,13 +4,13 @@ import zephyr.plugin.core.RunnableFactory;
 import zephyr.plugin.core.ZephyrPluginCommon;
 import zephyr.plugin.core.api.synchronization.Clock;
 
-public class Zephyr {
+public class ZephyrCore {
   static public void advertize(Clock clock, Object drawn) {
-    ZephyrPluginCommon.viewBinder().bindViews(clock, "", drawn);
+    ZephyrPluginCommon.viewBinder().bindViews(clock, drawn, null);
   }
 
-  static public void advertize(Clock clock, String info, Object drawn) {
-    ZephyrPluginCommon.viewBinder().bindViews(clock, info, drawn);
+  static public void advertize(Clock clock, Object drawn, Object info) {
+    ZephyrPluginCommon.viewBinder().bindViews(clock, drawn, info);
   }
 
   public static void start(RunnableFactory runnableFactory) {

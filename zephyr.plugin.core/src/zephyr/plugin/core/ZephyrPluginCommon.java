@@ -7,6 +7,10 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
+import zephyr.ZephyrCore;
+import zephyr.plugin.core.api.Zephyr;
+import zephyr.plugin.core.api.Zephyr.Advertized;
+import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.signals.Signal;
 import zephyr.plugin.core.control.Control;
 import zephyr.plugin.core.views.ViewBinder;
@@ -52,6 +56,12 @@ public class ZephyrPluginCommon extends AbstractUIPlugin {
   public void start(BundleContext context) throws Exception {
     super.start(context);
     plugin = this;
+    Zephyr.onAdvertize.connect(new Listener<Zephyr.Advertized>() {
+      @Override
+      public void listen(Advertized eventInfo) {
+        ZephyrCore.advertize(eventInfo.clock, eventInfo.advertized, eventInfo.info);
+      }
+    });
   }
 
   @Override

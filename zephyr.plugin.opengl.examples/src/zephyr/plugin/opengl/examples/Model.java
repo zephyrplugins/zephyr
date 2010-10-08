@@ -1,6 +1,6 @@
 package zephyr.plugin.opengl.examples;
 
-import zephyr.Zephyr;
+import zephyr.ZephyrCore;
 import zephyr.ZephyrPlotting;
 import zephyr.plugin.core.api.monitoring.DataLogged;
 import zephyr.plugin.core.api.synchronization.Clock;
@@ -13,7 +13,7 @@ public class Model implements Runnable, Timed {
   float insideRadius;
 
   public Model() {
-    Zephyr.advertize(clock, this);
+    ZephyrCore.advertize(clock, this);
     ZephyrPlotting.createLogger("Model", clock).add(this);
   }
 

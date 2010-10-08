@@ -12,7 +12,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 
-import zephyr.Zephyr;
+import zephyr.ZephyrCore;
 
 
 public class FileLoader {
@@ -58,7 +58,7 @@ public class FileLoader {
   }
 
   private void handleFile(final IFileHandler fileHandler, final String filepath, final String[] fileargs) {
-    Zephyr.start(new Runnable() {
+    ZephyrCore.start(new Runnable() {
       @Override
       public void run() {
         try {

@@ -41,7 +41,7 @@ public class PlotRandomData2D extends AbstractCanvasView implements TimedView {
   }
 
   @Override
-  public void addTimed(String info, Object drawn) {
+  public void addTimed(Object drawn, Object info) {
     this.drawn = (RandomData2D) drawn;
     if (drawn == null)
       return;
