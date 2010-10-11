@@ -7,11 +7,12 @@ import java.util.HashSet;
 import org.junit.Assert;
 import org.junit.Test;
 
-import zephyr.plugin.core.api.logging.abstracts.LoggedContainer;
-import zephyr.plugin.core.api.logging.abstracts.Logger;
-import zephyr.plugin.core.api.logging.abstracts.Monitored;
-import zephyr.plugin.core.api.monitoring.Monitor;
-import zephyr.plugin.core.api.monitoring.LabelProvider;
+import zephyr.plugin.core.api.monitoring.abstracts.LoggedContainer;
+import zephyr.plugin.core.api.monitoring.abstracts.Logger;
+import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
+import zephyr.plugin.core.api.monitoring.annotations.LabelProvider;
+import zephyr.plugin.core.api.monitoring.annotations.Monitor;
+import zephyr.plugin.core.api.monitoring.fileloggers.FileLogger;
 
 
 public class ParserTest01 {

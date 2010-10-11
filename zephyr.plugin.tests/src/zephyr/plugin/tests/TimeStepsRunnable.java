@@ -1,7 +1,7 @@
 package zephyr.plugin.tests;
 
 import zephyr.ZephyrPlotting;
-import zephyr.plugin.core.api.logging.abstracts.Monitored;
+import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
 import zephyr.plugin.core.api.synchronization.Clock;
 
 public class TimeStepsRunnable implements Runnable {

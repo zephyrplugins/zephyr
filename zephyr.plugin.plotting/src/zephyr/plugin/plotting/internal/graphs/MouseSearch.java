@@ -13,7 +13,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 
-import zephyr.plugin.core.api.logging.LabelBuilder;
+import zephyr.plugin.core.api.monitoring.LabelBuilder;
 import zephyr.plugin.core.utils.Colors;
 import zephyr.plugin.plotting.internal.plots.PlotData;
 import zephyr.plugin.plotting.internal.plots.PlotOverTime;

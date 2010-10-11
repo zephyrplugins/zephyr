@@ -5,9 +5,10 @@ import java.io.StringWriter;
 import org.junit.Assert;
 import org.junit.Test;
 
-import zephyr.plugin.core.api.logging.wrappers.Abs;
-import zephyr.plugin.core.api.logging.wrappers.Squared;
-import zephyr.plugin.core.api.monitoring.Monitor;
+import zephyr.plugin.core.api.monitoring.annotations.Monitor;
+import zephyr.plugin.core.api.monitoring.fileloggers.FileLogger;
+import zephyr.plugin.core.api.monitoring.wrappers.Abs;
+import zephyr.plugin.core.api.monitoring.wrappers.Squared;
 
 
 public class ParserWrappersTest {

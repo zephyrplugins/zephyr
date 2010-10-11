@@ -5,8 +5,9 @@ import java.io.StringWriter;
 import org.junit.Assert;
 import org.junit.Test;
 
-import zephyr.plugin.core.api.monitoring.IgnoreMonitor;
-import zephyr.plugin.core.api.monitoring.Monitor;
+import zephyr.plugin.core.api.monitoring.annotations.IgnoreMonitor;
+import zephyr.plugin.core.api.monitoring.annotations.Monitor;
+import zephyr.plugin.core.api.monitoring.fileloggers.FileLogger;
 
 
 public class ParserTest03 {

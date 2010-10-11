@@ -6,7 +6,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import zephyr.plugin.core.api.logging.fileloggers.LoggerRow;
+import zephyr.plugin.core.api.monitoring.fileloggers.LoggerRow;
 
 public class LoggerRowTest {
   private StringWriter writer = null;

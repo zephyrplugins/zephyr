@@ -16,4 +16,3 @@ Export-Package: zephyr,
  zephyr.plugin.plotting,
  zephyr.plugin.plotting.plot2d,
  zephyr.plugin.plotting.plot2d.drawer2d
-Import-Package: zephyr.plugin.core.api.monitoring

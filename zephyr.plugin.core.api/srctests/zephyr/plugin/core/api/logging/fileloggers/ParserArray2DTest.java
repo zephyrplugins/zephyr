@@ -5,7 +5,8 @@ import java.io.StringWriter;
 import org.junit.Assert;
 import org.junit.Test;
 
-import zephyr.plugin.core.api.monitoring.Monitor;
+import zephyr.plugin.core.api.monitoring.annotations.Monitor;
+import zephyr.plugin.core.api.monitoring.fileloggers.FileLogger;
 
 
 public class ParserArray2DTest {

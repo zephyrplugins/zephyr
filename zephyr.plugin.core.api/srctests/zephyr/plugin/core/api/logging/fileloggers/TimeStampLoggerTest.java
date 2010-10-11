@@ -6,8 +6,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import zephyr.plugin.core.api.logging.abstracts.Monitored;
-import zephyr.plugin.core.api.logging.fileloggers.FileLogger;
+import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
+import zephyr.plugin.core.api.monitoring.fileloggers.FileLogger;
 
 public class TimeStampLoggerTest {
   protected double a = 0.0;

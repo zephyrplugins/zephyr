@@ -1,6 +1,6 @@
 package zephyr.plugin.plotting.internal.traces;
 
-import zephyr.plugin.core.api.logging.abstracts.Monitored;
+import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
 
 public class Trace {
   public final ClockTraces clockTraces;

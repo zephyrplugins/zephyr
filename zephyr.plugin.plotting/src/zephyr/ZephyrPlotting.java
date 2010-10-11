@@ -1,6 +1,6 @@
 package zephyr;
 
-import zephyr.plugin.core.api.logging.abstracts.Logger;
+import zephyr.plugin.core.api.monitoring.abstracts.Logger;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.plotting.internal.traces.ClockTracesManager;
 
