@@ -6,6 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.FIELD })
-public @interface DataIgnored {
+@Target({ ElementType.METHOD })
+public @interface LabelProvider {
+  String[] ids();
 }

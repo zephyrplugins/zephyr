@@ -5,8 +5,8 @@ import java.io.StringWriter;
 import org.junit.Assert;
 import org.junit.Test;
 
-import zephyr.plugin.core.api.monitoring.DataLogged;
-import zephyr.plugin.core.api.monitoring.LabelElementProvider;
+import zephyr.plugin.core.api.monitoring.Monitor;
+import zephyr.plugin.core.api.monitoring.LabelProvider;
 
 
 public class ParserArrayLabelsTest {
@@ -14,18 +14,18 @@ public class ParserArrayLabelsTest {
       "logged02[b]", "logged03[]data01" };
 
   static public class TestObjectMonitored {
-    @DataLogged
+    @Monitor
     protected double data01;
   }
 
-  @DataLogged(arrayIndexLabeled = false)
+  @Monitor(arrayIndexLabeled = false)
   protected final double[] logged01 = new double[2];
-  @DataLogged(arrayIndexLabeled = false)
+  @Monitor(arrayIndexLabeled = false)
   protected final double[] logged02 = new double[2];
-  @DataLogged(arrayIndexLabeled = false)
+  @Monitor(arrayIndexLabeled = false)
   protected final TestObjectMonitored[] logged03 = { new TestObjectMonitored() };
 
-  @LabelElementProvider(ids = { "logged02" })
+  @LabelProvider(ids = { "logged02" })
   protected String labelOf(int index) {
     return Character.toString((char) ('a' + index));
   }

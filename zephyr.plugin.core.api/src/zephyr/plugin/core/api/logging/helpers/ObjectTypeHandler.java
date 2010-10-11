@@ -7,13 +7,13 @@ import zephyr.plugin.core.api.logging.abstracts.FieldHandler;
 import zephyr.plugin.core.api.logging.abstracts.Logger;
 import zephyr.plugin.core.api.logging.wrappers.MonitorWrapper;
 import zephyr.plugin.core.api.logging.wrappers.Wrappers;
-import zephyr.plugin.core.api.monitoring.DataLogged;
+import zephyr.plugin.core.api.monitoring.Monitor;
 
 public class ObjectTypeHandler implements FieldHandler {
 
   @Override
   public void addField(Logger logger, Object container, Field field, List<MonitorWrapper> wrappers) {
-    DataLogged annotation = field.getAnnotation(DataLogged.class);
+    Monitor annotation = field.getAnnotation(Monitor.class);
     boolean skipLabel = annotation != null ? annotation.skipLabel() : false;
     if (!skipLabel)
       logger.labelBuilder().push(Parser.labelOf(field));

@@ -4,7 +4,7 @@ import zephyr.ZephyrPlotting;
 import zephyr.plugin.core.ZephyrPluginCommon;
 import zephyr.plugin.core.api.labels.Labels;
 import zephyr.plugin.core.api.logging.abstracts.Logger;
-import zephyr.plugin.core.api.monitoring.DataLogged;
+import zephyr.plugin.core.api.monitoring.Monitor;
 import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.api.synchronization.Timed;
@@ -25,11 +25,11 @@ public class RegisterRunnableStarted implements StartupJob, Listener<Runnable> {
 
   @Override
   public void listen(Runnable runnable) {
-    if (!runnable.getClass().isAnnotationPresent(DataLogged.class))
+    if (!runnable.getClass().isAnnotationPresent(Monitor.class))
       return;
     if (!(runnable instanceof Timed)) {
       System.err.println(String.format(TimedError, runnable,
-                                       DataLogged.class.getSimpleName(),
+                                       Monitor.class.getSimpleName(),
                                        Timed.class.getSimpleName()));
       return;
     }

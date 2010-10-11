@@ -17,9 +17,9 @@ import zephyr.plugin.core.api.logging.abstracts.FieldHandler;
 import zephyr.plugin.core.api.logging.abstracts.LoggedContainer;
 import zephyr.plugin.core.api.logging.abstracts.Logger;
 import zephyr.plugin.core.api.logging.wrappers.MonitorWrapper;
-import zephyr.plugin.core.api.monitoring.DataIgnored;
-import zephyr.plugin.core.api.monitoring.DataLogged;
-import zephyr.plugin.core.api.monitoring.LabelElementProvider;
+import zephyr.plugin.core.api.monitoring.IgnoreMonitor;
+import zephyr.plugin.core.api.monitoring.Monitor;
+import zephyr.plugin.core.api.monitoring.LabelProvider;
 
 public class Parser {
   static private List<ArrayHandler> arrayHandlers = new ArrayList<ArrayHandler>();
@@ -47,7 +47,7 @@ public class Parser {
     logger.labelBuilder().pushLabelMap(labelsMap);
     boolean classIsLogged = false;
     while (objectClass != null) {
-      classIsLogged = classIsLogged || objectClass.isAnnotationPresent(DataLogged.class);
+      classIsLogged = classIsLogged || objectClass.isAnnotationPresent(Monitor.class);
       if (objectClass.isArray())
         addElements(logger, container, wrappers, Loggers.isIndexIncluded(objectClass));
       else
@@ -70,9 +70,9 @@ public class Parser {
   private static void addFields(Logger logger, Object container, Class<?> objectClass, boolean classIsLogged,
       List<FieldHandler> handlers, List<MonitorWrapper> wrappers) {
     for (Field field : getFieldList(objectClass)) {
-      if (field.isAnnotationPresent(DataIgnored.class))
+      if (field.isAnnotationPresent(IgnoreMonitor.class))
         continue;
-      if (!classIsLogged && !field.isAnnotationPresent(DataLogged.class))
+      if (!classIsLogged && !field.isAnnotationPresent(Monitor.class))
         continue;
       field.setAccessible(true);
       for (FieldHandler fieldHandler : handlers)
@@ -88,7 +88,7 @@ public class Parser {
     Map<String, LabeledElement> labelsMaps = new LinkedHashMap<String, LabeledElement>();
     while (objectClass != null) {
       for (Method method : objectClass.getDeclaredMethods()) {
-        if (!method.isAnnotationPresent(LabelElementProvider.class))
+        if (!method.isAnnotationPresent(LabelProvider.class))
           continue;
         method.setAccessible(true);
         addLabelMaps(labelsMaps, method, container);
@@ -115,7 +115,7 @@ public class Parser {
         return "error";
       }
     };
-    LabelElementProvider annotation = method.getAnnotation(LabelElementProvider.class);
+    LabelProvider annotation = method.getAnnotation(LabelProvider.class);
     for (String id : annotation.ids())
       labelsMap.put(id, labeledElement);
   }
@@ -140,7 +140,7 @@ public class Parser {
   }
 
   protected static String labelOf(Field field) {
-    DataLogged annotation = field.getAnnotation(DataLogged.class);
+    Monitor annotation = field.getAnnotation(Monitor.class);
     String label = annotation != null ? annotation.label() : "";
     if (label.isEmpty() && (annotation == null || !annotation.skipLabel()))
       label = field.getName();
@@ -148,7 +148,7 @@ public class Parser {
   }
 
   protected static String idOf(Field field) {
-    DataLogged annotation = field.getAnnotation(DataLogged.class);
+    Monitor annotation = field.getAnnotation(Monitor.class);
     String id = annotation != null ? annotation.id() : "";
     if (id.isEmpty())
       id = field.getName();

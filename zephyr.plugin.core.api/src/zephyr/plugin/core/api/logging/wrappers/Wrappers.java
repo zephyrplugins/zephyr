@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import zephyr.plugin.core.api.labels.Labeled;
-import zephyr.plugin.core.api.monitoring.DataLogged;
+import zephyr.plugin.core.api.monitoring.Monitor;
 
 public class Wrappers {
   static final Map<String, MonitorWrapper> wrappers = new HashMap<String, MonitorWrapper>();
@@ -24,7 +24,7 @@ public class Wrappers {
   }
 
   public static List<MonitorWrapper> getWrappers(Field field, List<MonitorWrapper> parentWrappers) {
-    DataLogged monitorAnnotation = field.getAnnotation(DataLogged.class);
+    Monitor monitorAnnotation = field.getAnnotation(Monitor.class);
     if (monitorAnnotation == null)
       return parentWrappers;
     List<MonitorWrapper> result = new ArrayList<MonitorWrapper>(parentWrappers);

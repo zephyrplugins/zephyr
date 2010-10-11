@@ -5,12 +5,12 @@ import java.io.StringWriter;
 import org.junit.Assert;
 import org.junit.Test;
 
-import zephyr.plugin.core.api.monitoring.DataLogged;
+import zephyr.plugin.core.api.monitoring.Monitor;
 
 
 public class ParserBooleanTest {
   static protected final String[] expectedLabels = new String[] { "data01" };
-  @DataLogged
+  @Monitor
   protected boolean data01;
 
   @Test

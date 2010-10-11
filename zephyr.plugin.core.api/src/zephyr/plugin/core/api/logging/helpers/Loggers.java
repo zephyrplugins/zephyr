@@ -9,7 +9,7 @@ import zephyr.plugin.core.api.logging.abstracts.Monitored;
 import zephyr.plugin.core.api.logging.fileloggers.TimedFileLogger;
 import zephyr.plugin.core.api.logging.wrappers.MonitorWrapper;
 import zephyr.plugin.core.api.logging.wrappers.Wrappers;
-import zephyr.plugin.core.api.monitoring.DataLogged;
+import zephyr.plugin.core.api.monitoring.Monitor;
 
 public class Loggers {
   public static void add(Logger logger, String[] elementLabels, double[] data) {
@@ -64,14 +64,14 @@ public class Loggers {
   }
 
   public static boolean isIndexIncluded(Field field) {
-    return isIndexIncluded(field.getAnnotation(DataLogged.class));
+    return isIndexIncluded(field.getAnnotation(Monitor.class));
   }
 
   public static boolean isIndexIncluded(Class<?> objectClass) {
-    return isIndexIncluded(objectClass.getAnnotation(DataLogged.class));
+    return isIndexIncluded(objectClass.getAnnotation(Monitor.class));
   }
 
-  private static boolean isIndexIncluded(DataLogged dataLogged) {
+  private static boolean isIndexIncluded(Monitor dataLogged) {
     if (dataLogged == null)
       return true;
     return dataLogged.arrayIndexLabeled();

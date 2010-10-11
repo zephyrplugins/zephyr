@@ -10,8 +10,8 @@ import org.junit.Test;
 import zephyr.plugin.core.api.logging.abstracts.LoggedContainer;
 import zephyr.plugin.core.api.logging.abstracts.Logger;
 import zephyr.plugin.core.api.logging.abstracts.Monitored;
-import zephyr.plugin.core.api.monitoring.DataLogged;
-import zephyr.plugin.core.api.monitoring.LabelElementProvider;
+import zephyr.plugin.core.api.monitoring.Monitor;
+import zephyr.plugin.core.api.monitoring.LabelProvider;
 
 
 public class ParserTest01 {
@@ -29,29 +29,29 @@ public class ParserTest01 {
   @SuppressWarnings("unused")
   static public class TestAddLog01 implements LoggedContainer {
     private double notLogged;
-    @DataLogged
+    @Monitor
     private final double logged02FieldName = 9.0;
-    @DataLogged(label = log01LabelInt)
+    @Monitor(label = log01LabelInt)
     private final int logged03 = 6;
-    @DataLogged(label = log01LabelFloat)
+    @Monitor(label = log01LabelFloat)
     private final float logged04 = 3.0f;
-    @DataLogged
+    @Monitor
     private final TestAddLog02 logged05Child01 = new TestAddLog02();
-    @DataLogged
+    @Monitor
     private final double[] logged06ArrayDouble = { 1.0, 2.0 };
-    @DataLogged
+    @Monitor
     private final int[] logged07ArrayInt = { 3, 4 };
-    @DataLogged
+    @Monitor
     private final float[] logged08ArrayFloat = { 1.0f, 2.0f };
-    @DataLogged
+    @Monitor
     private final Object[] logged09ArrayObject = { new TestAddLog02(), new TestAddLog02() };
-    @DataLogged
+    @Monitor
     private final float[] logged10ArrayLabeled = { 1.0f, 2.0f };
-    @DataLogged(id = "elementLabeled")
+    @Monitor(id = "elementLabeled")
     private final Object[] logged11ArrayLabeled = { new TestAddLog02(), new TestAddLog02() };
-    @DataLogged(id = "elementLabeled")
+    @Monitor(id = "elementLabeled")
     private final Collection<Object> logged11CollectionLabeled = new HashSet<Object>();
-    @DataLogged
+    @Monitor
     private final TestAddLog03 logged12ClassLogged = new TestAddLog03();
 
     public TestAddLog01() {
@@ -69,19 +69,19 @@ public class ParserTest01 {
       });
     }
 
-    @LabelElementProvider(ids = { "logged10ArrayLabeled", "elementLabeled" })
+    @LabelProvider(ids = { "logged10ArrayLabeled", "elementLabeled" })
     private String labelOf(int index) {
       return ":element" + index;
     }
   }
 
   static public class TestAddLog02 {
-    @DataLogged
+    @Monitor
     double logged = 10.0;
     double notLogged = 10.0;
   }
 
-  @DataLogged
+  @Monitor
   static public class TestAddLog03 {
     double logged = 10.0;
   }

@@ -7,13 +7,13 @@ import org.junit.Test;
 
 import zephyr.plugin.core.api.logging.wrappers.Abs;
 import zephyr.plugin.core.api.logging.wrappers.Squared;
-import zephyr.plugin.core.api.monitoring.DataLogged;
+import zephyr.plugin.core.api.monitoring.Monitor;
 
 
 public class ParserWrappersTest {
   static protected final String[] expectedLabels = new String[] { "data01", "data01Squared", "data01Abs" };
 
-  @DataLogged(wrappers = { Squared.ID, Abs.ID })
+  @Monitor(wrappers = { Squared.ID, Abs.ID })
   protected double data01 = -2;
 
   @Test
