@@ -3,6 +3,7 @@ package zephyr.plugin.core.observations;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.part.ViewPart;
 
@@ -72,5 +73,20 @@ public abstract class EnvironmentView extends ViewPart implements TimedView {
 
   @Override
   public void setFocus() {
+  }
+
+  public void close() {
+    Display.getDefault().asyncExec(new Runnable() {
+      @Override
+      public void run() {
+        closeWidgets();
+      }
+    });
+  }
+
+  protected void closeWidgets() {
+    parent.setLayout(null);
+    for (Control child : parent.getChildren())
+      child.dispose();
   }
 }

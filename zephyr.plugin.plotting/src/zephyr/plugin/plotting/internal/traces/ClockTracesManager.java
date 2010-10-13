@@ -5,11 +5,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import zephyr.plugin.core.ZephyrPluginCommon;
 import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.signals.Signal;
 import zephyr.plugin.core.api.synchronization.Clock;
-import zephyr.plugin.core.api.synchronization.ClockKillable;
 
 public class ClockTracesManager {
   static final int TraceTime = 300; // Seconds
@@ -19,24 +19,22 @@ public class ClockTracesManager {
   public final Signal<List<Trace>> onTraceAdded = new Signal<List<Trace>>();
   public final Signal<List<Trace>> onTraceRemoved = new Signal<List<Trace>>();
   private final Map<Clock, ClockTraces> clocks = new LinkedHashMap<Clock, ClockTraces>();
-  private final Listener<Clock> onKillClockListener = new Listener<Clock>() {
-    @Override
-    public void listen(Clock clock) {
-      removeClock(clock);
-    }
-  };
 
   public ClockTracesManager() {
   }
 
   synchronized public DataMonitor addClock(String clockLabel, Clock clock) {
+    ZephyrPluginCommon.viewBinder().onClockRemoved.connect(new Listener<Clock>() {
+      @Override
+      public void listen(Clock clock) {
+        removeClock(clock);
+      }
+    });
     ClockTraces clockTraces = clocks.get(clock);
     if (clockTraces != null)
       return clockTraces;
     clockTraces = new ClockTraces(clockLabel, clock);
     clocks.put(clock, clockTraces);
-    if (clock instanceof ClockKillable)
-      ((ClockKillable) clock).onKill.connect(onKillClockListener);
     clockTraces.onTraceAdded.connect(new Listener<List<Trace>>() {
       @Override
       public void listen(List<Trace> traces) {
@@ -53,8 +51,6 @@ public class ClockTracesManager {
   }
 
   synchronized public void removeClock(Clock clock) {
-    if (clock instanceof ClockKillable)
-      ((ClockKillable) clock).onKill.disconnect(onKillClockListener);
     ClockTraces clockTraces = clocks.remove(clock);
     clockTraces.dispose();
   }

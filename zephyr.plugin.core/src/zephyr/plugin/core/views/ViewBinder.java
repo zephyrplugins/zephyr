@@ -15,24 +15,13 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 
 import zephyr.plugin.core.ZephyrPluginCommon;
-import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.signals.Signal;
 import zephyr.plugin.core.api.synchronization.Clock;
-import zephyr.plugin.core.api.synchronization.ClockKillable;
 
 public class ViewBinder {
   public Signal<Clock> onClockAdded = new Signal<Clock>();
+  public Signal<Clock> onClockRemoved = new Signal<Clock>();
   protected final Map<Clock, ClockViews> clockToView = new HashMap<Clock, ClockViews>();
-  private final Listener<Clock> onClockKilledListener = new Listener<Clock>() {
-    @Override
-    public void listen(Clock clock) {
-      ClockViews clockViews = clockToView.get(clock);
-      if (clockViews == null)
-        return;
-      for (SyncView view : clockViews.getViews())
-        unbind(clock, view);
-    }
-  };
   private final ViewProviders viewProviders = new ViewProviders();
 
   private String findSecondaryID(IWorkbenchPage activePage, String viewID) {
@@ -96,15 +85,12 @@ public class ViewBinder {
   protected ClockViews addClock(Clock clock) {
     ClockViews clockViews = new ClockViews(clock);
     clockToView.put(clock, clockViews);
-    if (clock instanceof ClockKillable)
-      ((ClockKillable) clock).onKill.connect(onClockKilledListener);
     onClockAdded.fire(clock);
     return clockViews;
   }
 
-  protected void removeClock(Clock clock) {
-    if (clock instanceof ClockKillable)
-      ((ClockKillable) clock).onKill.disconnect(onClockKilledListener);
+  public void removeClock(Clock clock) {
+    onClockRemoved.fire(clock);
     clockToView.remove(clock);
   }
 
@@ -140,12 +126,5 @@ public class ViewBinder {
 
   synchronized public Collection<Clock> getClocks() {
     return new ArrayList<Clock>(clockToView.keySet());
-  }
-
-  synchronized public Clock findClock(SyncView view) {
-    for (Map.Entry<Clock, ClockViews> entry : clockToView.entrySet())
-      if (entry.getValue().contains(view))
-        return entry.getKey();
-    return null;
   }
 }

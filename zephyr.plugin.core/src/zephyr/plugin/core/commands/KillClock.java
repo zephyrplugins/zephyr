@@ -7,10 +7,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-import zephyr.plugin.core.ZephyrPluginCommon;
-import zephyr.plugin.core.api.synchronization.Clock;
-import zephyr.plugin.core.api.synchronization.ClockKillable;
-import zephyr.plugin.core.views.SyncView;
+import zephyr.plugin.core.api.synchronization.Closeable;
 
 public class KillClock extends AbstractHandler {
 
@@ -18,13 +15,9 @@ public class KillClock extends AbstractHandler {
   public Object execute(ExecutionEvent event) throws ExecutionException {
     IWorkbenchPage activePage = HandlerUtil.getActiveWorkbenchWindowChecked(event).getActivePage();
     IWorkbenchPart activePart = activePage.getActivePart();
-    if (!(activePart instanceof SyncView))
+    if (!(activePart instanceof Closeable))
       return null;
-    Clock clock = ZephyrPluginCommon.viewBinder().findClock((SyncView) activePart);
-    if (clock == null)
-      return null;
-    if (clock instanceof ClockKillable)
-      ((ClockKillable) clock).kill();
+    ((Closeable) activePart).close();
     return null;
   }
 }

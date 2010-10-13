@@ -25,4 +25,8 @@ public class ZephyrCore {
       }
     });
   }
+
+  public static void removeClock(Clock clock) {
+    ZephyrPluginCommon.viewBinder().removeClock(clock);
+  }
 }
