@@ -7,8 +7,8 @@ import java.util.HashSet;
 import org.junit.Assert;
 import org.junit.Test;
 
-import zephyr.plugin.core.api.monitoring.abstracts.LoggedContainer;
-import zephyr.plugin.core.api.monitoring.abstracts.Logger;
+import zephyr.plugin.core.api.monitoring.abstracts.MonitorContainer;
+import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
 import zephyr.plugin.core.api.monitoring.annotations.LabelProvider;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
@@ -28,7 +28,7 @@ public class ParserTest01 {
       "logged11CollectionLabeled[1:element1]logged", "logged12ClassLoggedlogged" };
 
   @SuppressWarnings("unused")
-  static public class TestAddLog01 implements LoggedContainer {
+  static public class TestAddLog01 implements MonitorContainer {
     private double notLogged;
     @Monitor
     private final double logged02FieldName = 9.0;
@@ -61,13 +61,13 @@ public class ParserTest01 {
     }
 
     @Override
-    public void setLogger(Logger logger) {
+    public void setLogger(int level, DataMonitor logger) {
       logger.add(logged01AddedFromInterface, new Monitored() {
         @Override
         public double loggedValue(long stepTime) {
           return 0;
         }
-      });
+      }, 0);
     }
 
     @LabelProvider(ids = { "logged10ArrayLabeled", "elementLabeled" })

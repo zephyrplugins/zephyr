@@ -2,10 +2,8 @@ package zephyr.plugin.plotting.internal.dialogbox;
 
 import java.text.Collator;
 import java.util.Comparator;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.runtime.CoreException;
@@ -14,38 +12,39 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.ui.dialogs.FilteredItemsSelectionDialog;
 
 import zephyr.plugin.plotting.ZephyrPluginPlotting;
-import zephyr.plugin.plotting.internal.traces.ClockTraces;
 import zephyr.plugin.plotting.internal.traces.ClockTracesManager;
 import zephyr.plugin.plotting.internal.traces.Trace;
 import zephyr.plugin.plotting.internal.traces.Traces;
 
 public class SelectDataDialog extends FilteredItemsSelectionDialog {
-  private final class ClockItemsFilter extends ItemsFilter {
-    private final ClockTraces clockTraces;
+  private final class TraceFilter extends ItemsFilter {
+    private final int level;
 
-    public ClockItemsFilter(ClockTraces currentClockTraces) {
-      clockTraces = currentClockTraces;
+    public TraceFilter(int level) {
+      this.level = level;
     }
 
     @Override
     public boolean equalsFilter(ItemsFilter filter) {
-      if (clockTraces != ((ClockItemsFilter) filter).clockTraces)
+      if (level != ((TraceFilter) filter).level)
         return false;
       return super.equalsFilter(filter);
     }
 
     @Override
     public boolean isSubFilter(ItemsFilter filter) {
-      if (clockTraces != ((ClockItemsFilter) filter).clockTraces)
+      if (level != ((TraceFilter) filter).level)
         return false;
       return super.isSubFilter(filter);
     }
@@ -58,7 +57,7 @@ public class SelectDataDialog extends FilteredItemsSelectionDialog {
     @Override
     public boolean matchItem(Object item) {
       Trace trace = (Trace) item;
-      if (trace.clockTraces != clockTraces)
+      if (trace.level > level)
         return false;
       return matches(trace.label);
     }
@@ -66,22 +65,11 @@ public class SelectDataDialog extends FilteredItemsSelectionDialog {
 
   static private String SettingsID = "SelectDataDialogSettingsID";
 
-  protected ClockTraces currentClockTraces;
-  private final Map<String, ClockTraces> labelToClockTraces;
-  private final int initialIndex = 0;
+  protected int level;
 
   public SelectDataDialog(Shell parentShell) {
     super(parentShell, true);
     setInitialPattern("**");
-    labelToClockTraces = buildClockLabels();
-  }
-
-  private Map<String, ClockTraces> buildClockLabels() {
-    Map<String, ClockTraces> labelToClockTraces = new LinkedHashMap<String, ClockTraces>();
-    List<ClockTraces> clocks = ClockTracesManager.manager().getClockTraces();
-    for (ClockTraces clockTraces : clocks)
-      labelToClockTraces.put(clockTraces.clockLabel(), clockTraces);
-    return labelToClockTraces;
   }
 
   public Set<Trace> getSelectedTraces() {
@@ -93,29 +81,43 @@ public class SelectDataDialog extends FilteredItemsSelectionDialog {
 
   @Override
   protected Control createExtendedContentArea(Composite parent) {
-    final Combo combo = new Combo(parent, SWT.READ_ONLY);
-    String[] labels = new String[labelToClockTraces.size()];
-    labelToClockTraces.keySet().toArray(labels);
-    combo.setItems(labels);
-    combo.select(initialIndex);
-    combo.addModifyListener(new ModifyListener() {
+    Composite composite = new Composite(parent, SWT.NONE);
+    composite.setLayout(new RowLayout(SWT.HORIZONTAL));
+    Label historyLengthLabel = new Label(composite, SWT.NONE);
+    historyLengthLabel.setText("Level: ");
+    final Spinner spinner = new Spinner(composite, SWT.NONE);
+    spinner.setDigits(0);
+    spinner.setMinimum(Integer.MIN_VALUE);
+    spinner.addSelectionListener(new SelectionListener() {
+      private void setHistoryLength() {
+        try {
+          setLevelValue(Integer.parseInt(spinner.getText()));
+        } catch (NumberFormatException e) {
+          return;
+        }
+      }
+
       @Override
-      public void modifyText(ModifyEvent e) {
-        updateContent(combo.getText());
+      public void widgetSelected(SelectionEvent e) {
+        setHistoryLength();
+      }
+
+      @Override
+      public void widgetDefaultSelected(SelectionEvent e) {
+        setHistoryLength();
       }
     });
-    currentClockTraces = labelToClockTraces.get(combo.getText());
-    return combo;
+    return composite;
   }
 
-  protected void updateContent(String clockLabel) {
-    currentClockTraces = labelToClockTraces.get(clockLabel);
+  protected void setLevelValue(int level) {
+    this.level = level;
     applyFilter();
   }
 
   @Override
   protected ItemsFilter createFilter() {
-    return new ClockItemsFilter(currentClockTraces);
+    return new TraceFilter(level);
   }
 
   @Override

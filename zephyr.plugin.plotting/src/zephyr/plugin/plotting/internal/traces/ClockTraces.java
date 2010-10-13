@@ -7,16 +7,15 @@ import java.util.List;
 import zephyr.plugin.core.Utils;
 import zephyr.plugin.core.api.labels.Labels;
 import zephyr.plugin.core.api.monitoring.LabelBuilder;
-import zephyr.plugin.core.api.monitoring.abstracts.LoggedContainer;
-import zephyr.plugin.core.api.monitoring.abstracts.Logger;
+import zephyr.plugin.core.api.monitoring.abstracts.MonitorContainer;
+import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
 import zephyr.plugin.core.api.monitoring.helpers.Parser;
-import zephyr.plugin.core.api.monitoring.wrappers.MonitorWrapper;
 import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.signals.Signal;
 import zephyr.plugin.core.api.synchronization.Clock;
 
-public class ClockTraces implements Logger {
+public class ClockTraces implements DataMonitor {
   public final Signal<List<Trace>> onTraceAdded = new Signal<List<Trace>>();
   public final Signal<List<Trace>> onTraceRemoved = new Signal<List<Trace>>();
   public final Clock clock;
@@ -59,9 +58,9 @@ public class ClockTraces implements Logger {
   }
 
   @Override
-  synchronized public void add(String label, Monitored logged) {
+  synchronized public void add(String label, Monitored logged, int level) {
     assert checkThread();
-    Trace trace = new Trace(this, labelBuilder.buildLabel(label), logged);
+    Trace trace = new Trace(this, labelBuilder.buildLabel(label), logged, level);
     traces.add(trace);
     if (nbProcessAddingTrace == 0)
       onTraceAdded.fire(Utils.asList(trace));
@@ -77,10 +76,10 @@ public class ClockTraces implements Logger {
   public void add(Object toAdd) {
     startAddingTrace();
     if (toAdd instanceof Monitored)
-      add(Labels.label(toAdd), (Monitored) toAdd);
-    if (toAdd instanceof LoggedContainer)
-      ((LoggedContainer) toAdd).setLogger(this);
-    Parser.findAnnotations(this, toAdd, new ArrayList<MonitorWrapper>());
+      add(Labels.label(toAdd), (Monitored) toAdd, Parser.MonitorEverythingLevel);
+    if (toAdd instanceof MonitorContainer)
+      ((MonitorContainer) toAdd).setLogger(0, this);
+    Parser.findAnnotations(this, toAdd, Parser.MonitorEverythingLevel);
     endAddingTrace();
   }
 
