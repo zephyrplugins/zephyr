@@ -2,7 +2,7 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
-         point="zephyr.plugin.filehandling.filehandler">
+         point="zephyr.filehandler">
       <client
             class="zephyr.plugin.jarhandler.JarFileHandler">
       </client>

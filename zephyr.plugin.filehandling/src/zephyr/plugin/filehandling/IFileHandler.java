@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 public interface IFileHandler {
-  public static final String ID = "zephyr.plugin.filehandling.filehandler";
+  public static final String ID = "zephyr.filehandler";
 
   void handle(String filepath, String[] fileargs) throws IOException;
 

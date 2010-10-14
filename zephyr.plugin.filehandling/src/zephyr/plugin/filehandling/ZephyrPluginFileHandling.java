@@ -3,6 +3,8 @@ package zephyr.plugin.filehandling;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
+import zephyr.plugin.filehandling.internal.FileLoader;
+
 public class ZephyrPluginFileHandling extends AbstractUIPlugin {
   public static final String PLUGIN_ID = "zephyr.plugin.filehandling";
   private static ZephyrPluginFileHandling plugin;

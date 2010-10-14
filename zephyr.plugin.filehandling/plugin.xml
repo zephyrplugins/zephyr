@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension-point id="zephyr.plugin.filehandling.filehandler" name="File handler" schema="schema/zephyr.filehandler.exsd"/>
+   <extension-point id="zephyr.filehandler" name="File handler" schema="schema/zephyr.filehandler.exsd"/>
 
    <extension
          point="org.eclipse.ui.commands">
       <command
-            defaultHandler="zephyr.plugin.filehandling.OpenFile"
+            defaultHandler="zephyr.plugin.filehandling.internal.ui.OpenFile"
             description="Open a file"
             id="zephyr.plugin.filehandling.openfile"
             name="Open">
@@ -37,7 +37,7 @@
    <extension
          point="zephyr.startup">
       <client
-            class="zephyr.plugin.filehandling.StartupJob">
+            class="zephyr.plugin.filehandling.internal.StartupJob">
       </client>
    </extension>
 </plugin>
