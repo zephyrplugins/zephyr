@@ -1,5 +1,6 @@
 package zephyr.plugin.core.observations;
 
+import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -17,6 +18,10 @@ public abstract class EnvironmentView extends ViewPart implements TimedView {
   @Override
   public void createPartControl(Composite parent) {
     this.parent = parent;
+    setToolbar(getViewSite().getActionBars().getToolBarManager());
+  }
+
+  protected void setToolbar(@SuppressWarnings("unused") IToolBarManager toolBarManager) {
   }
 
   abstract protected ObsLayout getObservationLayout();
@@ -31,10 +36,10 @@ public abstract class EnvironmentView extends ViewPart implements TimedView {
   }
 
   protected void createObservationLayout() {
-    obsLayout = getObservationLayout();
+    ObsLayout localObsLayout = getObservationLayout();
     FillLayout layout = new FillLayout(SWT.VERTICAL);
     parent.setLayout(layout);
-    for (ObsWidget[] line : obsLayout.widgetArray()) {
+    for (ObsWidget[] line : localObsLayout.widgetArray()) {
       if (!hasContent(line))
         continue;
       Composite lineComposite = new Composite(parent, SWT.NONE);
@@ -43,6 +48,7 @@ public abstract class EnvironmentView extends ViewPart implements TimedView {
         widget.createWidgetComposite(lineComposite);
     }
     parent.layout(true, true);
+    obsLayout = localObsLayout;
   }
 
   static protected boolean hasContent(ObsWidget[] line) {
@@ -62,6 +68,8 @@ public abstract class EnvironmentView extends ViewPart implements TimedView {
 
   @Override
   public void repaint() {
+    if (obsLayout == null)
+      return;
     for (ObsWidget widget : obsLayout)
       widget.repaint();
   }
@@ -76,6 +84,7 @@ public abstract class EnvironmentView extends ViewPart implements TimedView {
   }
 
   public void close() {
+    obsLayout = null;
     Display.getDefault().asyncExec(new Runnable() {
       @Override
       public void run() {

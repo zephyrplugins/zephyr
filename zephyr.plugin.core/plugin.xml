@@ -48,11 +48,6 @@
             name="N Steps">
       </command>
       <command
-            defaultHandler="zephyr.plugin.core.commands.KillClock"
-            id="zephyr.plugin.core.killclock"
-            name="Stop">
-      </command>
-      <command
             defaultHandler="zephyr.plugin.core.commands.ClosePart"
             description="Close"
             id="zephyr.plugin.core.close"
@@ -260,10 +255,6 @@
    </extension>
    <extension
          point="org.eclipse.ui.commandImages">
-      <image
-            commandId="zephyr.plugin.core.killclock"
-            icon="icons/command_stop.gif">
-      </image>
       <image
             commandId="zephyr.plugin.core.commands.nsteps"
             icon="icons/action_step_clock.png">
