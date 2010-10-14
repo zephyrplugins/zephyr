@@ -260,4 +260,24 @@
             icon="icons/action_step_clock.png">
       </image>
    </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="zephyr.plugin.core.preferences.ZephyrRoot"
+            id="zephyr.plugin.core.preferences.zephyr.root"
+            name="Zephyr">
+      </page>
+      <page
+            category="zephyr.plugin.core.preferences.zephyr.root"
+            class="zephyr.plugin.core.preferences.Startup"
+            id="zephyr.plugin.core.preferences.zephyr.startup"
+            name="Startup">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="zephyr.plugin.core.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
 </plugin>

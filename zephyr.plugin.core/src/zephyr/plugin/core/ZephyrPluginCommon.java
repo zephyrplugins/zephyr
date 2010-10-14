@@ -13,6 +13,7 @@ import zephyr.plugin.core.api.Zephyr.Advertized;
 import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.signals.Signal;
 import zephyr.plugin.core.control.Control;
+import zephyr.plugin.core.preferences.PreferenceKeys;
 import zephyr.plugin.core.views.ViewBinder;
 
 public class ZephyrPluginCommon extends AbstractUIPlugin {
@@ -31,6 +32,10 @@ public class ZephyrPluginCommon extends AbstractUIPlugin {
     List<String> result = new ArrayList<String>();
     for (String arg : args)
       if (!arg.startsWith("-"))
+        result.add(arg);
+    String startupPreferences = getDefault().getPreferenceStore().getString(PreferenceKeys.StartupCommandLineKey);
+    for (String arg : startupPreferences.split(" "))
+      if (!arg.isEmpty())
         result.add(arg);
     return result;
   }
