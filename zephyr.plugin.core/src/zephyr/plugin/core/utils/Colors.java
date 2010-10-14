@@ -1,7 +1,9 @@
 package zephyr.plugin.core.utils;
 
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
@@ -34,6 +36,11 @@ public class Colors {
     if (color == null) {
       color = new Color(gc.getDevice(), rgb);
       colors.put(rgb, color);
+      if (colors.size() > 1000) {
+        Iterator<Entry<RGB, Color>> iterator = colors.entrySet().iterator();
+        iterator.next();
+        iterator.remove();
+      }
     }
     return color;
   }

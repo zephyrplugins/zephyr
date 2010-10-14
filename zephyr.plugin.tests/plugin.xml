@@ -13,11 +13,19 @@
             class="zephyr.plugin.tests.plot2d.RandomData2D"
             id="zephyr.plugin.tests.plot2d.randomdata2d">
       </client>
+      <client
+            autostart="false"
+            class="zephyr.plugin.tests.slowdrawing.SlowDrawingRunnable"
+            id="zephyr.plugin.tests.slowdrawing">
+      </client>
    </extension>
    <extension
          point="zephyr.viewprovider">
       <client
             class="zephyr.plugin.tests.plot2d.PlotRandomData2D$Provider">
+      </client>
+      <client
+            class="zephyr.plugin.tests.slowdrawing.SlowDrawingView$Provider">
       </client>
    </extension>
    <extension
@@ -27,6 +35,13 @@
             class="zephyr.plugin.tests.plot2d.PlotRandomData2D"
             id="zephyr.plugin.tests.plot2d.plotrandomplot2d"
             name="Random2D"
+            restorable="true">
+      </view>
+      <view
+            allowMultiple="true"
+            class="zephyr.plugin.tests.slowdrawing.SlowDrawingView"
+            id="zephyr.plugin.tests.slowdrawing"
+            name="Slow drawing"
             restorable="true">
       </view>
    </extension>
