@@ -23,7 +23,7 @@ public class Control implements Listener<Clock> {
     ZephyrPluginCommon.viewBinder().onClockAdded.connect(new Listener<Clock>() {
       @Override
       public void listen(Clock clock) {
-        if (!Helper.booleanState(SavedSettings.STARTSUSPENDED, false))
+        if (!Helper.booleanState(SavedSettings.STARTSUSPENDED, true))
           return;
         suspendClock(clock);
         onModeChange.fire(Control.this);

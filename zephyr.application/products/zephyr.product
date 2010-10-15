@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?pde version="3.5"?>
+
+<product name="Zephyr" uid="zephyr.product" id="zephyr.application.product" application="zephyr.application.application" version="1.0.0.qualifier" useFeatures="true" includeLaunchers="true">
+
+   <aboutInfo>
+      <image path="images/zephyr128.png"/>
+      <text>
+         Zephyr
+Thomas Degris, RLAI
+Computing Science
+University of Alberta
+      </text>
+   </aboutInfo>
+
+   <configIni use="default">
+   </configIni>
+
+   <launcherArgs>
+      <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
+   </launcherArgs>
+
+   <windowImages i16="/zephyr.application/images/zephyr16.png" i32="/zephyr.application/images/zephyr32.png" i48="/zephyr.application/images/zephyr48.png" i64="/zephyr.application/images/zephyr64.png" i128="/zephyr.application/images/zephyr128.png"/>
+
+   <launcher name="Zephyr">
+      <linux icon="/zephyr.application/images/zephyr48.xpm"/>
+      <macosx icon="/zephyr.application/images/zephyr128.icns"/>
+      <solaris/>
+      <win useIco="false">
+         <bmp/>
+      </win>
+   </launcher>
+
+   <vm>
+   </vm>
+
+   <plugins>
+   </plugins>
+
+   <features>
+      <feature id="zephyr.feature.main"/>
+      <feature id="zephyr.feature.platform"/>
+   </features>
+
+
+</product>

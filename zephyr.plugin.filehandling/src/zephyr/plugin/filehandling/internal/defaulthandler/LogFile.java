@@ -118,7 +118,7 @@ public abstract class LogFile implements Labeled {
     }
   }
 
-  synchronized public void close() {
+  public void close() {
     if (reader == null)
       return;
     try {
