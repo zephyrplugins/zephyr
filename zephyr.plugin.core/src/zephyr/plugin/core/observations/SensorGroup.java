@@ -22,6 +22,10 @@ public class SensorGroup implements ObsWidget {
   private final double min;
   private final double max;
 
+  public SensorGroup(String title, List<Integer> indexes) {
+    this(title, indexes, Double.MAX_VALUE, -Double.MAX_VALUE);
+  }
+
   public SensorGroup(String title, List<Integer> indexes, double min, double max) {
     this.title = title;
     this.indexes = indexes;

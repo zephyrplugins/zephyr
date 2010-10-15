@@ -2,7 +2,16 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension-point id="zephyr.filehandler" name="File handler" schema="schema/zephyr.filehandler.exsd"/>
-
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            allowMultiple="true"
+            class="zephyr.plugin.filehandling.internal.view.FileView"
+            id="zephyr.plugin.filehandling.internal.view.fileview"
+            name="Data"
+            restorable="true">
+      </view>
+   </extension>
    <extension
          point="org.eclipse.ui.commands">
       <command
@@ -38,6 +47,12 @@
          point="zephyr.startup">
       <client
             class="zephyr.plugin.filehandling.internal.StartupJob">
+      </client>
+   </extension>
+   <extension
+         point="zephyr.viewprovider">
+      <client
+            class="zephyr.plugin.filehandling.internal.view.FileView$Provider">
       </client>
    </extension>
 </plugin>

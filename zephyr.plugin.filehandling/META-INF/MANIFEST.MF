@@ -6,7 +6,10 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: Thomas
 Require-Bundle: org.eclipse.core.runtime,
  zephyr.plugin.core;bundle-version="1.0.0",
- org.eclipse.ui;bundle-version="3.5.0"
+ org.eclipse.ui;bundle-version="3.5.0",
+ zephyr.plugin.core.api,
+ zephyr.plugin.plotting;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: zephyr.plugin.filehandling
 Bundle-ActivationPolicy: lazy
+Import-Package: zephyr.plugin.core.api.bz2

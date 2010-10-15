@@ -14,11 +14,13 @@ import org.eclipse.ui.PlatformUI;
 
 import zephyr.ZephyrCore;
 import zephyr.plugin.filehandling.IFileHandler;
+import zephyr.plugin.filehandling.internal.defaulthandler.DefaultHandler;
 
 
 public class FileLoader {
   public static String PluginID = "zephyr.plugin.filehandling";
   private static List<IFileHandler> fileHandlers = null;
+  private static IFileHandler defaultHandler = new DefaultHandler();
 
   private FileLoader() {
   }
@@ -57,6 +59,7 @@ public class FileLoader {
           handleFile(fileHandler, filepath, fileargs);
           return;
         }
+    handleFile(defaultHandler, filepath, fileargs);
   }
 
   private static void handleFile(final IFileHandler fileHandler, final String filepath, final String[] fileargs) {
