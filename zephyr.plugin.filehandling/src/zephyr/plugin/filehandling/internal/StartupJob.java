@@ -14,7 +14,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 
 import zephyr.plugin.core.ZephyrPluginCommon;
-import zephyr.plugin.filehandling.ZephyrPluginFileHandling;
 
 public class StartupJob implements zephyr.plugin.core.startup.StartupJob {
   @Override
@@ -45,7 +44,7 @@ public class StartupJob implements zephyr.plugin.core.startup.StartupJob {
           if (ft.isSupportedType(event.currentDataType))
             fileList = (String[]) event.data;
           for (String filepath : fileList)
-            ZephyrPluginFileHandling.fileLoader().openFile(filepath);
+            FileLoader.openFile(filepath);
         }
       });
     }
@@ -58,7 +57,7 @@ public class StartupJob implements zephyr.plugin.core.startup.StartupJob {
       final String filepath = splited[0];
       if (new File(filepath).canRead()) {
         String[] fileArgs = Arrays.copyOfRange(splited, 1, splited.length);
-        ZephyrPluginFileHandling.fileLoader().openFile(filepath, fileArgs);
+        FileLoader.openFile(filepath, fileArgs);
       }
     }
   }

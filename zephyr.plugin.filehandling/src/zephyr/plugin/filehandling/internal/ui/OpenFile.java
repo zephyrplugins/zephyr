@@ -11,14 +11,13 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-import zephyr.plugin.filehandling.ZephyrPluginFileHandling;
 import zephyr.plugin.filehandling.internal.FileLoader;
 
 public class OpenFile extends AbstractHandler {
   private static String ExtKey = "defaultExtension";
   private static String FolderKey = "defaultFolder";
 
-  private final IEclipsePreferences instanceScope = new InstanceScope().getNode(ZephyrPluginFileHandling.PLUGIN_ID);
+  private final IEclipsePreferences instanceScope = new InstanceScope().getNode(FileLoader.PluginID);
 
   public OpenFile() {
   }
@@ -31,8 +30,7 @@ public class OpenFile extends AbstractHandler {
   public Object execute(ExecutionEvent event) throws ExecutionException {
     FileDialog fd = new FileDialog(HandlerUtil.getActiveShell(event), SWT.OPEN);
     fd.setText("Open");
-    FileLoader fileLoader = ZephyrPluginFileHandling.fileLoader();
-    String[] extensions = fileLoader.getExtensions();
+    String[] extensions = FileLoader.getExtensions();
     String defaultExtension = getValue(ExtKey);
     if (defaultExtension != null)
       reorderExtensions(defaultExtension, extensions);
@@ -44,7 +42,7 @@ public class OpenFile extends AbstractHandler {
     if (selected == null)
       return null;
     registerFileData(selected);
-    fileLoader.openFile(selected);
+    FileLoader.openFile(selected);
     return null;
   }
 

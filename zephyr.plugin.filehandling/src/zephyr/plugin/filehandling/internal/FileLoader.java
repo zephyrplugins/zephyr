@@ -17,12 +17,13 @@ import zephyr.plugin.filehandling.IFileHandler;
 
 
 public class FileLoader {
-  private List<IFileHandler> fileHandlers = null;
+  public static String PluginID = "zephyr.plugin.filehandling";
+  private static List<IFileHandler> fileHandlers = null;
 
-  public FileLoader() {
+  private FileLoader() {
   }
 
-  private void loadFileHandlersIFN() {
+  static private void loadFileHandlersIFN() {
     if (fileHandlers != null)
       return;
     IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(IFileHandler.ID);
@@ -40,11 +41,11 @@ public class FileLoader {
     }
   }
 
-  public void openFile(String filepath) {
+  static public void openFile(String filepath) {
     openFile(filepath, new String[0]);
   }
 
-  public void openFile(String filepath, String[] fileargs) {
+  static public void openFile(String filepath, String[] fileargs) {
     loadFileHandlersIFN();
     if (!new File(filepath).canRead()) {
       displayFileNotFoundMessage(filepath);
@@ -58,7 +59,7 @@ public class FileLoader {
         }
   }
 
-  private void handleFile(final IFileHandler fileHandler, final String filepath, final String[] fileargs) {
+  private static void handleFile(final IFileHandler fileHandler, final String filepath, final String[] fileargs) {
     ZephyrCore.start(new Runnable() {
       @Override
       public void run() {
@@ -71,7 +72,7 @@ public class FileLoader {
     });
   }
 
-  private void displayFileNotFoundMessage(String filepath) {
+  private static void displayFileNotFoundMessage(String filepath) {
     final String message = String.format("Cannot open %s", filepath);
     Display.getDefault().asyncExec(new Runnable() {
       @Override
@@ -81,7 +82,7 @@ public class FileLoader {
     });
   }
 
-  public String[] getExtensions() {
+  public static String[] getExtensions() {
     loadFileHandlersIFN();
     List<String> extensions = new ArrayList<String>();
     for (IFileHandler fileHandler : fileHandlers)

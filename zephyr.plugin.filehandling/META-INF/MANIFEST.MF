@@ -3,7 +3,6 @@ Bundle-ManifestVersion: 2
 Bundle-Name: zephyr.plugin.filehandling
 Bundle-SymbolicName: zephyr.plugin.filehandling;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: zephyr.plugin.filehandling.ZephyrPluginFileHandling
 Bundle-Vendor: Thomas
 Require-Bundle: org.eclipse.core.runtime,
  zephyr.plugin.core;bundle-version="1.0.0",
