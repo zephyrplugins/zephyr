@@ -1,13 +1,13 @@
-package zephyr.plugin.core.commands;
+package zephyr.plugin.core.internal.commands;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.Command;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 
-import zephyr.plugin.core.ZephyrPluginCommon;
 import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.control.Control;
+import zephyr.plugin.core.internal.ZephyrPluginCommon;
 import zephyr.plugin.core.utils.Helper;
 
 public abstract class ControlCommand extends AbstractHandler implements Listener<Control> {

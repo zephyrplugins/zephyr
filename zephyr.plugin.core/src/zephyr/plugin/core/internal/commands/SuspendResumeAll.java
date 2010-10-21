@@ -1,12 +1,12 @@
-package zephyr.plugin.core.commands;
+package zephyr.plugin.core.internal.commands;
 
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 
-import zephyr.plugin.core.ZephyrPluginCommon;
 import zephyr.plugin.core.control.Control;
+import zephyr.plugin.core.internal.ZephyrPluginCommon;
 
 public class SuspendResumeAll extends AbstractHandler {
   @Override

@@ -4,7 +4,13 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 
 public interface Painter {
-  boolean paint(Image image, GC gc);
+  public interface PainterMonitor {
+    void painterStep();
+
+    boolean isCanceled();
+  }
+
+  void paint(PainterMonitor painterListener, Image image, GC gc);
 
   boolean newPaintingRequired();
 }

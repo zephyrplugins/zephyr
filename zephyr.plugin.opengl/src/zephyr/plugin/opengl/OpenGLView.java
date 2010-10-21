@@ -97,9 +97,4 @@ abstract public class OpenGLView extends ViewPart implements SyncView {
   }
 
   abstract protected void render(GL2 gl);
-
-  @Override
-  public boolean isDisposed() {
-    return canvas.isDisposed();
-  }
 }

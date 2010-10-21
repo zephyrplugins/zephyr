@@ -1,140 +1,101 @@
 package zephyr.plugin.core.canvas;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.ThreadFactory;
+import java.util.LinkedList;
+import java.util.List;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.PaintEvent;
+import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.widgets.Canvas;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 
 import zephyr.plugin.core.api.synchronization.Chrono;
+import zephyr.plugin.core.canvas.Painter.PainterMonitor;
+import zephyr.plugin.core.internal.canvas.BackgroundImage;
 
-public class BackgroundCanvas {
-  static private ExecutorService executor = Executors.newFixedThreadPool(3, new ThreadFactory() {
-    @Override
-    public Thread newThread(Runnable runnable) {
-      Thread result = Executors.defaultThreadFactory().newThread(runnable);
-      result.setPriority(Thread.MIN_PRIORITY);
-      return result;
-    }
-  });
-
-  class PainterRunnable implements Runnable {
-    @Override
-    public void run() {
-      try {
-        if (canvas.isDisposed())
-          return;
-        runPainter();
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-    }
-  };
-
-  protected final Painter painter;
-  protected final Canvas canvas;
-  protected final BackgroundImage paintingImage = new BackgroundImage();
-  private final BackgroundImage canvasImage = new BackgroundImage();
-  private final PainterRunnable painterRunnable = new PainterRunnable();
-  private Future<?> future = null;
-  private final Chrono chrono = new Chrono();
-  private boolean showProgress = true;
-  private final Runnable refreshCanvas = new Runnable() {
+public class BackgroundCanvas implements PainterMonitor {
+  private final Painter painter;
+  final Canvas canvas;
+  final BackgroundImage paintingImage;
+  private final Runnable updateForeground = new Runnable() {
     @Override
     public void run() {
       if (canvas.isDisposed())
         return;
       canvas.redraw();
       canvas.update();
-      updateAllImageSize();
     }
   };
-  private final Runnable allocatePainting = new Runnable() {
-    @Override
-    public void run() {
-      paintingImage.adjustImage(canvas);
-    }
-  };
+  private final List<Overlay> overlays = new LinkedList<Overlay>();
+  private boolean showProgress = true;
+  private final boolean cancelDrawing = false;
+  private final Chrono chrono = new Chrono();
 
-  public BackgroundCanvas(Painter painter, Canvas canvas) {
-    this.canvas = canvas;
+  public BackgroundCanvas(Composite parent, Painter painter) {
+    this.canvas = new Canvas(parent, SWT.NONE);
     this.painter = painter;
+    canvas.addPaintListener(new PaintListener() {
+      @Override
+      public void paintControl(PaintEvent e) {
+        drawForeground(e.gc);
+      }
+    });
+    paintingImage = new BackgroundImage(canvas);
   }
 
-  private void runFromUIThread(Runnable runnable) {
-    if (canvas.isDisposed())
+  public void paint() {
+    showProgress = showProgress || !paintingImage.imageMatchCanvas();
+    GC gc = paintingImage.getGC();
+    if (gc == null)
       return;
-    canvas.getDisplay().syncExec(runnable);
+    chrono.start();
+    painter.paint(this, paintingImage.image(), gc);
+    showProgress = false;
+    paintingImage.disposeGC(gc);
+    updateForegroundCanvas();
   }
 
-  protected void runPainter() {
-    do {
-      boolean drawing = true;
-      while (drawing || !paintingImage.canvasSizeEquals()) {
-        if (!paintingImage.canvasSizeEquals())
-          runFromUIThread(allocatePainting);
-        if (paintingImage.image() == null)
-          return;
-        GC gc = paintingImage.getGC();
-        chrono.start();
-        long drawingTime = 0;
-        while (!canvas.isDisposed() && drawing && (drawingTime < 500 || !showProgress)) {
-          drawing = !painter.paint(paintingImage.image(), gc);
-          drawingTime = chrono.getCurrentMillis();
-        }
-        paintingImage.disposeGC(gc);
-        if (paintingImage.canvasSizeEquals()) {
-          imageToCanvas();
-          runFromUIThread(refreshCanvas);
-        }
-        drawing = drawing && !canvas.isDisposed();
-      }
-      showProgress = false;
-    } while (painter.newPaintingRequired());
+  private void updateForegroundCanvas() {
+    canvas.getDisplay().syncExec(updateForeground);
   }
 
-  private void imageToCanvas() {
-    synchronized (canvasImage) {
-      GC gc = canvasImage.getGC();
-      if (gc != null)
-        gc.drawImage(paintingImage.image(), 0, 0);
-      canvasImage.disposeGC(gc);
-    }
+  void drawForeground(GC gc) {
+    if (paintingImage.image() == null)
+      return;
+    gc.drawImage(paintingImage.image(), 0, 0);
+    for (Overlay overlay : overlays)
+      overlay.drawOverlay(gc);
   }
 
-  synchronized public boolean isDrawing() {
-    return future != null && !future.isDone() && !future.isCancelled();
+  public void addOverlay(Overlay overlay) {
+    overlays.add(overlay);
   }
 
-  synchronized public void drawNewData() {
-    if (!isDrawing())
-      future = executor.submit(painterRunnable);
+  public void removeOverlay(Overlay overlay) {
+    overlays.remove(overlay);
   }
 
-  protected void updateAllImageSize() {
-    canvasImage.updateSize(canvas);
-    paintingImage.updateSize(canvas);
+  @Override
+  public void painterStep() {
+    if (!showProgress || chrono.getTime() < 1.0)
+      return;
+    updateForegroundCanvas();
+    chrono.start();
   }
 
-  private void updateCanvasImage() {
-    if (!canvasImage.canvasSizeEquals())
-      synchronized (canvasImage) {
-        if (!canvasImage.adjustImage(canvas))
-          return;
-        showProgress();
-        drawNewData();
-      }
+  @Override
+  public boolean isCanceled() {
+    return cancelDrawing || !paintingImage.imageMatchCanvas();
   }
 
-  public void paint(GC gc) {
-    updateAllImageSize();
-    updateCanvasImage();
-    gc.drawImage(canvasImage.image(), 0, 0);
+  public void dispose() {
+    canvas.dispose();
+    paintingImage.dispose();
   }
 
-  public void showProgress() {
-    showProgress = true;
+  public Control canvas() {
+    return canvas;
   }
 }

@@ -1,6 +1,5 @@
 package zephyr.plugin.core.internal;
 
-import zephyr.plugin.core.ZephyrPluginCommon;
 import zephyr.plugin.core.startup.StartupJob;
 import zephyr.plugin.core.utils.Helper;
 

@@ -6,7 +6,7 @@ import org.eclipse.ui.application.IActionBarConfigurer;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 
-import zephyr.plugin.core.startup.StartupJobs;
+import zephyr.ZephyrSync;
 
 public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 
@@ -31,6 +31,6 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 
   @Override
   public void postWindowOpen() {
-    new StartupJobs().schedule();
+    ZephyrSync.start();
   }
 }

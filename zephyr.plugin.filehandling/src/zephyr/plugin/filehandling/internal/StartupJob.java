@@ -13,7 +13,7 @@ import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 
-import zephyr.plugin.core.ZephyrPluginCommon;
+import zephyr.ZephyrCore;
 
 public class StartupJob implements zephyr.plugin.core.startup.StartupJob {
   @Override
@@ -51,7 +51,7 @@ public class StartupJob implements zephyr.plugin.core.startup.StartupJob {
   }
 
   protected void parseCommandLine() {
-    List<String> args = ZephyrPluginCommon.getArgsFiltered();
+    List<String> args = ZephyrCore.getArgsFiltered();
     for (String zephyrArg : args) {
       String[] splited = zephyrArg.split(":");
       final String filepath = splited[0];

@@ -13,7 +13,16 @@ import zephyr.plugin.core.views.TimedView;
 
 public abstract class EnvironmentView extends ViewPart implements TimedView {
   private Composite parent;
-  private ObsLayout obsLayout;
+  ObsLayout obsLayout;
+  private final Runnable repaintWidgets = new Runnable() {
+    @Override
+    public void run() {
+      if (obsLayout == null)
+        return;
+      for (ObsWidget widget : obsLayout)
+        widget.repaint();
+    }
+  };
 
   @Override
   public void createPartControl(Composite parent) {
@@ -58,25 +67,18 @@ public abstract class EnvironmentView extends ViewPart implements TimedView {
     return result;
   }
 
-  protected boolean synchronize(double[] currentObservation) {
-    if (obsLayout == null)
-      return false;
+  protected void synchronize(double[] currentObservation) {
+    if (obsLayout == null || currentObservation == null)
+      return;
     for (ObsWidget widget : obsLayout)
       widget.updateValue(currentObservation);
-    return true;
   }
 
   @Override
   public void repaint() {
     if (obsLayout == null)
       return;
-    for (ObsWidget widget : obsLayout)
-      widget.repaint();
-  }
-
-  @Override
-  public boolean isDisposed() {
-    return parent.isDisposed();
+    parent.getDisplay().syncExec(repaintWidgets);
   }
 
   @Override
@@ -85,16 +87,8 @@ public abstract class EnvironmentView extends ViewPart implements TimedView {
 
   public void close() {
     obsLayout = null;
-    Display.getDefault().asyncExec(new Runnable() {
-      @Override
-      public void run() {
-        closeWidgets();
-      }
-    });
-  }
-
-  protected void closeWidgets() {
-    parent.setLayout(null);
+    if (parent.isDisposed())
+      return;
     for (Control child : parent.getChildren())
       child.dispose();
   }

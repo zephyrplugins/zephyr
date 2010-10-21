@@ -10,7 +10,7 @@ import java.util.jar.Attributes;
 import java.util.jar.Attributes.Name;
 import java.util.jar.Manifest;
 
-import zephyr.plugin.core.ZephyrPluginCommon;
+import zephyr.ZephyrCore;
 
 public class JarClassLoader extends ClassLoader {
   private final Map<String, Class<? extends Object>> classes = new Hashtable<String, Class<? extends Object>>();
@@ -66,7 +66,7 @@ public class JarClassLoader extends ClassLoader {
 
   private Class<? extends Object> loadPluginClass(String className) {
     try {
-      return ZephyrPluginCommon.getDefault().loadClass(className);
+      return ZephyrCore.loadClass(className);
     } catch (ClassNotFoundException e) {
     }
     return null;

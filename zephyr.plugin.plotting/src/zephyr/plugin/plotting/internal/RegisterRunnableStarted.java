@@ -1,7 +1,7 @@
 package zephyr.plugin.plotting.internal;
 
 import zephyr.ZephyrPlotting;
-import zephyr.plugin.core.ZephyrPluginCommon;
+import zephyr.ZephyrSync;
 import zephyr.plugin.core.api.labels.Labels;
 import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
@@ -20,7 +20,7 @@ public class RegisterRunnableStarted implements StartupJob, Listener<Runnable> {
 
   @Override
   public void run() {
-    ZephyrPluginCommon.onRunnableStarted.connect(this);
+    ZephyrSync.onRunnableStarted().connect(this);
   }
 
   @Override

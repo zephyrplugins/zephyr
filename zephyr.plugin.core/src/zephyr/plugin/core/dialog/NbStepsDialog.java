@@ -7,7 +7,7 @@ import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
 
-import zephyr.plugin.core.ZephyrPluginCommon;
+import zephyr.plugin.core.internal.ZephyrPluginCommon;
 
 public class NbStepsDialog extends InputDialog {
 

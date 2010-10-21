@@ -5,18 +5,26 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.GC;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.part.ViewPart;
 
+import zephyr.ZephyrSync;
 import zephyr.plugin.core.views.SyncView;
 
 public abstract class AbstractCanvasView extends ViewPart implements SyncView {
   protected Canvas canvas = null;
   protected Composite parent = null;
+  protected Runnable drawOnCanvas = new Runnable() {
+    @Override
+    public void run() {
+      if (canvas.isDisposed())
+        return;
+      canvas.redraw();
+      canvas.update();
+    }
+  };
 
   public AbstractCanvasView() {
   }
@@ -24,18 +32,20 @@ public abstract class AbstractCanvasView extends ViewPart implements SyncView {
   @Override
   public void createPartControl(final Composite parent) {
     this.parent = parent;
-    GridLayout gridLayout = new GridLayout(1, false);
-    parent.setLayout(gridLayout);
     canvas = new Canvas(parent, SWT.DOUBLE_BUFFERED);
-    canvas.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+    Views.setLayoutData(canvas);
     canvas.addPaintListener(new PaintListener() {
       @Override
       public void paintControl(PaintEvent e) {
+        if (!isSetup())
+          return;
         paint(e.gc);
       }
     });
     setToolbar(getViewSite().getActionBars().getToolBarManager());
   }
+
+  abstract protected boolean isSetup();
 
   abstract protected void paint(GC gc);
 
@@ -53,8 +63,9 @@ public abstract class AbstractCanvasView extends ViewPart implements SyncView {
 
   @Override
   public void repaint() {
-    canvas.redraw();
-    canvas.update();
+    if (!isSetup())
+      return;
+    canvas.getDisplay().syncExec(drawOnCanvas);
   }
 
   protected void setViewName(final String viewName) {
@@ -71,7 +82,8 @@ public abstract class AbstractCanvasView extends ViewPart implements SyncView {
   }
 
   @Override
-  public boolean isDisposed() {
-    return canvas.isDisposed();
+  public void dispose() {
+    ZephyrSync.disposeView(this);
+    super.dispose();
   }
 }

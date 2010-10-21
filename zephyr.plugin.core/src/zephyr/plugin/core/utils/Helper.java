@@ -46,10 +46,4 @@ public class Helper {
     ICommandService service = (ICommandService) PlatformUI.getWorkbench().getService(ICommandService.class);
     return service.getCommand(commandID);
   }
-
-  public static void refrechCommandElement(String commandID) {
-    System.out.println("Refreshing elements for " + commandID);
-    ICommandService cs = (ICommandService) PlatformUI.getWorkbench().getService(ICommandService.class);
-    cs.refreshElements(commandID, null);
-  }
 }

@@ -1,4 +1,4 @@
-package zephyr.plugin.core;
+package zephyr.plugin.core.internal;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,23 +8,24 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 import zephyr.ZephyrCore;
+import zephyr.plugin.core.RunnableFactory;
 import zephyr.plugin.core.api.Zephyr;
 import zephyr.plugin.core.api.Zephyr.Advertized;
 import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.signals.Signal;
 import zephyr.plugin.core.control.Control;
-import zephyr.plugin.core.preferences.PreferenceKeys;
-import zephyr.plugin.core.views.ViewBinder;
+import zephyr.plugin.core.internal.preferences.PreferenceKeys;
+import zephyr.plugin.core.internal.synchronization.ViewBinder;
 
 public class ZephyrPluginCommon extends AbstractUIPlugin {
+  public Signal<Runnable> onRunnableStarted = new Signal<Runnable>();
   public static final String PLUGIN_ID = "zephyr.plugin.core";
   public static boolean shuttingDown = false;
   public static boolean synchronous;
-  public static Signal<Runnable> onRunnableStarted = new Signal<Runnable>();
 
+  final ViewBinder viewBinder = new ViewBinder();
   private static ZephyrPluginCommon plugin;
 
-  private final ViewBinder viewBinder = new ViewBinder();
   private final Control control = new Control();
 
   static public List<String> getArgsFiltered() {

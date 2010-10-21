@@ -1,4 +1,4 @@
-package zephyr.plugin.core.views;
+package zephyr.plugin.core.internal.synchronization;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,9 +14,11 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 
-import zephyr.plugin.core.ZephyrPluginCommon;
 import zephyr.plugin.core.api.signals.Signal;
 import zephyr.plugin.core.api.synchronization.Clock;
+import zephyr.plugin.core.internal.ZephyrPluginCommon;
+import zephyr.plugin.core.views.SyncView;
+import zephyr.plugin.core.views.TimedView;
 
 public class ViewBinder {
   public Signal<Clock> onClockAdded = new Signal<Clock>();
@@ -82,16 +84,18 @@ public class ViewBinder {
     bind(clock, view[0]);
   }
 
-  protected ClockViews addClock(Clock clock) {
+  private ClockViews addClock(Clock clock) {
     ClockViews clockViews = new ClockViews(clock);
     clockToView.put(clock, clockViews);
     onClockAdded.fire(clock);
     return clockViews;
   }
 
-  public void removeClock(Clock clock) {
+  synchronized public void removeClock(Clock clock) {
     onClockRemoved.fire(clock);
-    clockToView.remove(clock);
+    ClockViews clockViews = clockToView.remove(clock);
+    if (clockViews != null)
+      clockViews.dispose();
   }
 
   synchronized public void bind(Clock clock, SyncView view) {
@@ -112,19 +116,22 @@ public class ViewBinder {
     if (clockViews == null)
       return;
     clockViews.removeView(view);
-    if (clockViews.isEmpty())
+    if (clockViews.isEmpty()) {
+      clockViews.dispose();
       removeClock(clock);
+    }
   }
 
   public boolean isEmpty() {
     return clockToView.isEmpty();
   }
 
-  synchronized public ClockViews getViews(Clock clock) {
-    return clockToView.get(clock);
-  }
-
   synchronized public Collection<Clock> getClocks() {
     return new ArrayList<Clock>(clockToView.keySet());
+  }
+
+  synchronized public void disposeView(SyncView view) {
+    for (Map.Entry<Clock, ClockViews> entry : clockToView.entrySet())
+      entry.getValue().removeView(view);
   }
 }

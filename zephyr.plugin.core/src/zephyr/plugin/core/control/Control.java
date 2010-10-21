@@ -5,11 +5,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import zephyr.plugin.core.ZephyrPluginCommon;
 import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.signals.Signal;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.internal.SavedSettings;
+import zephyr.plugin.core.internal.ZephyrPluginCommon;
 import zephyr.plugin.core.utils.Helper;
 
 public class Control implements Listener<Clock> {

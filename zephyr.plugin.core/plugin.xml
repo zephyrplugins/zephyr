@@ -7,7 +7,7 @@
    <extension
          point="org.eclipse.ui.commands">
       <command
-            defaultHandler="zephyr.plugin.core.commands.Synchronous"
+            defaultHandler="zephyr.plugin.core.internal.commands.Synchronous"
             id="zephyr.plugin.core.commands.synchronous"
             name="Synchronous">
          <state id="org.eclipse.ui.commands.toggleState"
@@ -15,7 +15,7 @@
          </state>
       </command>
       <command
-            defaultHandler="zephyr.plugin.core.commands.StartSuspended"
+            defaultHandler="zephyr.plugin.core.internal.commands.StartSuspended"
             id="zephyr.plugin.core.commands.startsuspended"
             name="StartSuspended">
          <state id="org.eclipse.ui.commands.toggleState"
@@ -23,38 +23,38 @@
          </state>
       </command>
       <command
-            defaultHandler="zephyr.plugin.core.commands.SuspendResumeAll"
+            defaultHandler="zephyr.plugin.core.internal.commands.SuspendResumeAll"
             id="zephyr.plugin.core.commands.suspendresume"
             name="SuspendResume">
       </command>
       <command
-            defaultHandler="zephyr.plugin.core.commands.ResumeAll"
+            defaultHandler="zephyr.plugin.core.internal.commands.ResumeAll"
             id="zephyr.plugin.core.commands.resume"
             name="Resume">
       </command>
       <command
-            defaultHandler="zephyr.plugin.core.commands.SuspendAll"
+            defaultHandler="zephyr.plugin.core.internal.commands.SuspendAll"
             id="zephyr.plugin.core.commands.suspend"
             name="Suspend">
       </command>
       <command
-            defaultHandler="zephyr.plugin.core.commands.StepAll"
+            defaultHandler="zephyr.plugin.core.internal.commands.StepAll"
             id="zephyr.plugin.core.commands.step"
             name="Step">
       </command>
       <command
-            defaultHandler="zephyr.plugin.core.commands.NStepsAll"
+            defaultHandler="zephyr.plugin.core.internal.commands.NStepsAll"
             id="zephyr.plugin.core.commands.nsteps"
             name="N Steps">
       </command>
       <command
-            defaultHandler="zephyr.plugin.core.commands.ClosePart"
+            defaultHandler="zephyr.plugin.core.internal.commands.ClosePart"
             description="Close"
             id="zephyr.plugin.core.close"
             name="Close">
       </command>
       <command
-            defaultHandler="zephyr.plugin.core.commands.ExtractZephyrJar"
+            defaultHandler="zephyr.plugin.core.internal.commands.ExtractZephyrJar"
             id="zephyr.plugin.core.extractzephyrjar"
             name="Extract Zephyr Jar">
       </command>
@@ -191,7 +191,7 @@
    <extension
          point="org.eclipse.ui.perspectives">
       <perspective
-            class="zephyr.plugin.core.Perspective"
+            class="zephyr.plugin.core.internal.Perspective"
             id="zephyr.plugin.core.perspective.initial"
             name="Zephyr Perspective">
       </perspective>
@@ -263,13 +263,13 @@
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
-            class="zephyr.plugin.core.preferences.ZephyrRoot"
+            class="zephyr.plugin.core.internal.preferences.ZephyrRoot"
             id="zephyr.plugin.core.preferences.zephyr.root"
             name="Zephyr">
       </page>
       <page
             category="zephyr.plugin.core.preferences.zephyr.root"
-            class="zephyr.plugin.core.preferences.Startup"
+            class="zephyr.plugin.core.internal.preferences.Startup"
             id="zephyr.plugin.core.preferences.zephyr.startup"
             name="Startup">
       </page>
@@ -277,7 +277,7 @@
    <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer
-            class="zephyr.plugin.core.preferences.PreferenceInitializer">
+            class="zephyr.plugin.core.internal.preferences.PreferenceInitializer">
       </initializer>
    </extension>
 </plugin>

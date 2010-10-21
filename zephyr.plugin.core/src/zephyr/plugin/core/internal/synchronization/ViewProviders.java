@@ -1,4 +1,4 @@
-package zephyr.plugin.core.views;
+package zephyr.plugin.core.internal.synchronization;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,6 +6,8 @@ import java.util.List;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
+
+import zephyr.plugin.core.views.ViewProvider;
 
 public class ViewProviders {
   private List<ViewProvider> providers = null;

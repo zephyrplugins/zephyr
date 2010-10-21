@@ -72,8 +72,10 @@ public class SensorTextGroup implements ObsWidget {
   public void repaint() {
     for (int i = 0; i < texts.length; i++) {
       Label label = labels.get(i);
-      label.setText(texts[i]);
-      label.redraw();
+      if (texts[i] != null) {
+        label.setText(texts[i]);
+        label.redraw();
+      }
     }
   }
 

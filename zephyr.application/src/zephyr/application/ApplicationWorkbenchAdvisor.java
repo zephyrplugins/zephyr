@@ -11,8 +11,7 @@ import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchAdvisor;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 
-import zephyr.plugin.core.Perspective;
-import zephyr.plugin.core.ZephyrPluginCommon;
+import zephyr.ZephyrSync;
 
 public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 
@@ -30,7 +29,7 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 
   @Override
   public String getInitialWindowPerspectiveId() {
-    return Perspective.PERSPECTIVE_ID;
+    return "zephyr.plugin.core.perspective.initial";
   }
 
   @Override
@@ -46,13 +45,13 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 
   @Override
   public boolean preShutdown() {
-    ZephyrPluginCommon.shuttingDown = true;
+    ZephyrSync.shutDown();
     return true;
   }
 
   @Override
   public void postShutdown() {
-    if (!ZephyrPluginCommon.viewBinder().isEmpty())
+    if (!ZephyrSync.isSyncEmpty())
       System.err.println("*** Post shutdown: viewBinder is not empty. Some views are still binded");
   }
 }

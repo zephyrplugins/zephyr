@@ -1,26 +1,23 @@
-package zephyr.plugin.core.preferences;
+package zephyr.plugin.core.internal.preferences;
 
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
-import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
-import zephyr.plugin.core.ZephyrPluginCommon;
+import zephyr.plugin.core.internal.ZephyrPluginCommon;
 
-public class Startup
+public class ZephyrRoot
     extends FieldEditorPreferencePage
     implements IWorkbenchPreferencePage {
 
-  public Startup() {
+  public ZephyrRoot() {
     super(GRID);
     setPreferenceStore(ZephyrPluginCommon.getDefault().getPreferenceStore());
-    setDescription("Zephyr startup preference page");
+    setDescription("");
   }
 
   @Override
   public void createFieldEditors() {
-    addField(new StringFieldEditor(PreferenceKeys.StartupCommandLineKey,
-                                   "&Startup arguments:", getFieldEditorParent()));
   }
 
   @Override

@@ -1,4 +1,4 @@
-package zephyr.plugin.core.startup;
+package zephyr.plugin.core.internal.startup;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,6 +12,8 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+
+import zephyr.plugin.core.startup.StartupJob;
 
 public class StartupJobs extends Job {
 

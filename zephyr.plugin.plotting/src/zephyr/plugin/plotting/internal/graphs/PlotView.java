@@ -3,26 +3,29 @@ package zephyr.plugin.plotting.internal.graphs;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.part.ViewPart;
 
-import zephyr.plugin.core.canvas.AbstractCanvasView;
 import zephyr.plugin.core.canvas.BackgroundCanvas;
+import zephyr.plugin.core.canvas.Overlay;
+import zephyr.plugin.core.canvas.Views;
+import zephyr.plugin.core.views.SyncView;
 import zephyr.plugin.plotting.internal.plots.PlotData;
 import zephyr.plugin.plotting.internal.plots.PlotOverTime;
 import zephyr.plugin.plotting.internal.plots.PlotSelection;
 import zephyr.plugin.plotting.internal.traces.ClockTracesManager;
 import zephyr.plugin.plotting.internal.traces.TracesSelection.TraceSelector;
 
-public class PlotView extends AbstractCanvasView implements TraceSelector {
+public class PlotView extends ViewPart implements TraceSelector, SyncView, Overlay {
   final public static String ID = "zephyr.plugin.plotting.view.plot";
   final private static String SelectionTypeKey = "selection";
 
@@ -49,16 +52,19 @@ public class PlotView extends AbstractCanvasView implements TraceSelector {
 
   @Override
   public void createPartControl(final Composite parent) {
-    super.createPartControl(parent);
-    backgroundCanvas = new BackgroundCanvas(plotOverTime, canvas);
+    backgroundCanvas = new BackgroundCanvas(parent, plotOverTime);
+    Views.setLayoutData(backgroundCanvas.canvas());
+    backgroundCanvas.addOverlay(this);
     mouseSearch = new MouseSearch(this);
     createSettingBar(parent);
-    canvas.addMouseMoveListener(new MouseMoveListener() {
+    backgroundCanvas.canvas().addMouseMoveListener(new MouseMoveListener() {
       @Override
       public void mouseMove(MouseEvent e) {
         mouseSearch.scheduleIFN(e.x, e.y);
       }
     });
+    synchronizeAction.setChecked(synchronizeData);
+    getViewSite().getActionBars().getToolBarManager().add(synchronizeAction);
   }
 
   private void createSettingBar(Composite parent) {
@@ -76,12 +82,6 @@ public class PlotView extends AbstractCanvasView implements TraceSelector {
     for (IMemento selectionMemento : selectionMementos)
       traceLabels.add(selectionMemento.getID());
     return traceLabels;
-  }
-
-  @Override
-  protected void setToolbar(IToolBarManager toolbarManager) {
-    synchronizeAction.setChecked(synchronizeData);
-    toolbarManager.add(synchronizeAction);
   }
 
   @Override
@@ -106,30 +106,25 @@ public class PlotView extends AbstractCanvasView implements TraceSelector {
 
   @Override
   public void repaint() {
-    backgroundCanvas.drawNewData();
+    backgroundCanvas.paint();
   }
 
   @Override
-  protected void paint(GC gc) {
-    backgroundCanvas.paint(gc);
+  public void drawOverlay(GC gc) {
     mouseSearch.paintMouse(gc);
   }
 
   @Override
-  public boolean synchronize() {
-    if (synchronizeData &&
-        backgroundCanvas != null &&
-        !backgroundCanvas.isDrawing()) {
+  public void synchronize() {
+    if (synchronizeData && backgroundCanvas != null)
       plotdata.synchronize();
-      return true;
-    }
-    return false;
   }
 
   @Override
   public void dispose() {
     super.dispose();
     clockGraphBindings.unBindAll();
+    backgroundCanvas.dispose();
   }
 
   public PlotSelection plotSelection() {
@@ -140,7 +135,11 @@ public class PlotView extends AbstractCanvasView implements TraceSelector {
     return plotOverTime;
   }
 
-  public void showDrawingProgress() {
-    backgroundCanvas.showProgress();
+  @Override
+  public void setFocus() {
+  }
+
+  public Control canvas() {
+    return backgroundCanvas.canvas();
   }
 }

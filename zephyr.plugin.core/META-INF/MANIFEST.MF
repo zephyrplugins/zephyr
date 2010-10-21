@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: zephyr.plugin.core
 Bundle-SymbolicName: zephyr.plugin.core;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: zephyr.plugin.core.ZephyrPluginCommon
+Bundle-Activator: zephyr.plugin.core.internal.ZephyrPluginCommon
 Bundle-Vendor: Thomas
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui,

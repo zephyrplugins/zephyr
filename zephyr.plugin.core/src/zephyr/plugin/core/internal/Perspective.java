@@ -1,11 +1,9 @@
-package zephyr.plugin.core;
+package zephyr.plugin.core.internal;
 
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
 
 public class Perspective implements IPerspectiveFactory {
-  public static final String PERSPECTIVE_ID = "zephyr.plugin.core.perspective.initial";
-
   @Override
   public void createInitialLayout(IPageLayout layout) {
     // String editorArea = layout.getEditorArea();

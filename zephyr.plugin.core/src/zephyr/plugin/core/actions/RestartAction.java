@@ -3,7 +3,7 @@ package zephyr.plugin.core.actions;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 
-import zephyr.plugin.core.ZephyrPluginCommon;
+import zephyr.plugin.core.internal.ZephyrPluginCommon;
 import zephyr.plugin.core.utils.Helper;
 import zephyr.plugin.core.views.Restartable;
 

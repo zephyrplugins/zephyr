@@ -1,4 +1,4 @@
-package zephyr.plugin.core.commands;
+package zephyr.plugin.core.internal.commands;
 
 
 

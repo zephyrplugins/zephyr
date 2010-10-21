@@ -5,7 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import zephyr.plugin.core.ZephyrPluginCommon;
+import zephyr.ZephyrSync;
 import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.signals.Signal;
@@ -33,7 +33,7 @@ public class ClockTracesManager {
     ClockTraces clockTraces = clocks.get(clock);
     if (clockTraces != null)
       return clockTraces;
-    ZephyrPluginCommon.viewBinder().onClockRemoved.connect(clockRemovedListener);
+    ZephyrSync.onClockRemoved().connect(clockRemovedListener);
     clockTraces = new ClockTraces(clockLabel, clock);
     assert !clocks.containsKey(clock);
     clocks.put(clock, clockTraces);
@@ -53,7 +53,7 @@ public class ClockTracesManager {
   }
 
   synchronized public void removeClock(Clock clock) {
-    ZephyrPluginCommon.viewBinder().onClockRemoved.disconnect(clockRemovedListener);
+    ZephyrSync.onClockRemoved().disconnect(clockRemovedListener);
     ClockTraces clockTraces = clocks.remove(clock);
     clockTraces.dispose();
   }

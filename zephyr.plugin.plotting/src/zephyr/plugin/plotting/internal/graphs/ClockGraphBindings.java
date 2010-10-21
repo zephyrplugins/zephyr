@@ -6,17 +6,15 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import zephyr.plugin.core.ZephyrPluginCommon;
+import zephyr.ZephyrSync;
 import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.synchronization.Clock;
-import zephyr.plugin.core.views.ViewBinder;
 import zephyr.plugin.plotting.internal.traces.ClockTraces;
 import zephyr.plugin.plotting.internal.traces.TraceData;
 
 public class ClockGraphBindings {
   private final PlotView plotView;
   private final Set<Clock> clockTracesSelection = new LinkedHashSet<Clock>();
-  private final ViewBinder binder = ZephyrPluginCommon.viewBinder();
   private final Listener<List<TraceData>> selectionChangedListener = new Listener<List<TraceData>>() {
     @Override
     public void listen(List<TraceData> traceDatas) {
@@ -30,14 +28,14 @@ public class ClockGraphBindings {
   }
 
   private void bind(Clock clock) {
-    binder.bind(clock, plotView);
+    ZephyrSync.bind(clock, plotView);
     boolean added = clockTracesSelection.add(clock);
     assert added;
   }
 
   protected void unbind(Clock clock) {
     if (clockTracesSelection.remove(clock))
-      binder.unbind(clock, plotView);
+      ZephyrSync.unbind(clock, plotView);
   }
 
   protected void unBindAll() {

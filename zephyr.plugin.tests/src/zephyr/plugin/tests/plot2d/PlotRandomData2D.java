@@ -25,19 +25,16 @@ public class PlotRandomData2D extends AbstractCanvasView implements TimedView {
   }
 
   @Override
-  public boolean synchronize() {
-    if (drawn == null)
-      return false;
+  public void synchronize() {
     System.arraycopy(drawn.data, 0, ydata, 0, ydata.length);
-    return true;
   }
 
   @Override
   protected void paint(GC gc) {
-    if (drawn == null)
-      return;
     plot.clear(gc);
     plot.draw(gc, xdata, ydata);
+    gc.drawString(String.valueOf(ydata[1]), 10, 10);
+    gc.drawString(String.valueOf(ydata[2]), 10, 30);
   }
 
   @Override
@@ -54,5 +51,10 @@ public class PlotRandomData2D extends AbstractCanvasView implements TimedView {
   @Override
   public boolean canTimedAdded() {
     return drawn == null;
+  }
+
+  @Override
+  protected boolean isSetup() {
+    return drawn != null;
   }
 }

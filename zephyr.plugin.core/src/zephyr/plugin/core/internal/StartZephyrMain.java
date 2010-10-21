@@ -7,7 +7,6 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
 
 import zephyr.plugin.core.RunnableFactory;
-import zephyr.plugin.core.ZephyrPluginCommon;
 import zephyr.plugin.core.startup.StartupJob;
 
 public class StartZephyrMain implements StartupJob {

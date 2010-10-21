@@ -1,8 +1,10 @@
 package zephyr;
 
+import java.util.List;
+
 import zephyr.plugin.core.RunnableFactory;
-import zephyr.plugin.core.ZephyrPluginCommon;
 import zephyr.plugin.core.api.synchronization.Clock;
+import zephyr.plugin.core.internal.ZephyrPluginCommon;
 
 public class ZephyrCore {
   static public void advertize(Clock clock, Object drawn) {
@@ -28,5 +30,13 @@ public class ZephyrCore {
 
   public static void removeClock(Clock clock) {
     ZephyrPluginCommon.viewBinder().removeClock(clock);
+  }
+
+  public static List<String> getArgsFiltered() {
+    return ZephyrPluginCommon.getArgsFiltered();
+  }
+
+  public static Class<? extends Object> loadClass(String className) throws ClassNotFoundException {
+    return ZephyrPluginCommon.getDefault().loadClass(className);
   }
 }
