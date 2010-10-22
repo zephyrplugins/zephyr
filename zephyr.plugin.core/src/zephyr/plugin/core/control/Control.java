@@ -86,6 +86,11 @@ public class Control implements Listener<Clock> {
     return !remainingSteps.isEmpty();
   }
 
+  public boolean isSuspended(Clock clock) {
+    Integer authorizedSteps = suspended.get(clock);
+    return authorizedSteps != null && authorizedSteps == 0;
+  }
+
   @Override
   public void listen(Clock clock) {
     synchronized (clock) {

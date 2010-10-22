@@ -15,6 +15,7 @@ import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 
+import zephyr.ZephyrSync;
 import zephyr.plugin.core.canvas.BackgroundCanvas;
 import zephyr.plugin.core.canvas.Overlay;
 import zephyr.plugin.core.canvas.Views;
@@ -122,6 +123,7 @@ public class PlotView extends ViewPart implements TraceSelector, SyncView, Overl
 
   @Override
   public void dispose() {
+    ZephyrSync.disposeView(this);
     super.dispose();
     clockGraphBindings.unBindAll();
     backgroundCanvas.dispose();

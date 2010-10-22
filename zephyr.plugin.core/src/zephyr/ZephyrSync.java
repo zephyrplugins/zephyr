@@ -4,6 +4,7 @@ import zephyr.plugin.core.api.signals.Signal;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.internal.ZephyrPluginCommon;
 import zephyr.plugin.core.internal.startup.StartupJobs;
+import zephyr.plugin.core.internal.synchronization.ClockViews;
 import zephyr.plugin.core.views.SyncView;
 
 public class ZephyrSync {
@@ -37,5 +38,9 @@ public class ZephyrSync {
 
   public static void disposeView(SyncView view) {
     ZephyrPluginCommon.viewBinder().disposeView(view);
+  }
+
+  public static void submitView(SyncView view) {
+    ClockViews.submitView(view);
   }
 }

@@ -133,5 +133,6 @@ public class ViewBinder {
   synchronized public void disposeView(SyncView view) {
     for (Map.Entry<Clock, ClockViews> entry : clockToView.entrySet())
       entry.getValue().removeView(view);
+    ClockViews.disposeView(view);
   }
 }

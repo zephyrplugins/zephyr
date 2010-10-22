@@ -72,9 +72,9 @@ public class PlotOverTime implements Painter {
       List<HistoryCached> histories = plotdata.getHistories();
       if (axesNeedReset != ResetMode.NoReset)
         updateAxes(histories);
+      prepareDrawingZone(gc);
       if (histories.isEmpty())
         return;
-      prepareDrawingZone(gc);
       drawTraces(painterListener, gc, histories);
     } while (axes.y.scalingRequired());
   }

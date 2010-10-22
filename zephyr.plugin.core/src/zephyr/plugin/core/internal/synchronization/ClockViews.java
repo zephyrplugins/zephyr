@@ -1,21 +1,18 @@
 package zephyr.plugin.core.internal.synchronization;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.concurrent.Future;
+import java.util.ArrayList;
+import java.util.List;
 
 import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.internal.ZephyrPluginCommon;
+import zephyr.plugin.core.internal.synchronization.tasks.ViewTask;
+import zephyr.plugin.core.internal.synchronization.tasks.ViewTaskExecutor;
+import zephyr.plugin.core.internal.synchronization.tasks.ViewTaskScheduler;
 import zephyr.plugin.core.views.SyncView;
 
 public class ClockViews implements Listener<ViewTaskExecutor> {
-  static final ViewTaskExecutor executor = new ViewTaskExecutor(3, Thread.MIN_PRIORITY);
-
-  protected final Map<ViewTask, Future<ViewTask>> views = Collections
-      .synchronizedMap(new HashMap<ViewTask, Future<ViewTask>>());
+  private static final ViewTaskScheduler viewTaskScheduler = new ViewTaskScheduler();
   private final Listener<Clock> tickListener = new Listener<Clock>() {
     @Override
     public void listen(Clock eventInfo) {
@@ -23,20 +20,22 @@ public class ClockViews implements Listener<ViewTaskExecutor> {
     }
   };
 
+  private final List<ViewTask> viewTasks = new ArrayList<ViewTask>();
   private final Clock clock;
 
   public ClockViews(Clock clock) {
     this.clock = clock;
     clock.onTick.connect(tickListener);
-    executor.onTaskExecuted.connect(this);
+    ViewTaskScheduler.onTaskExecuted.connect(this);
   }
 
   protected void synchronize() {
     if (ZephyrPluginCommon.shuttingDown)
       return;
-    for (Map.Entry<ViewTask, Future<ViewTask>> entry : views.entrySet())
-      if (entry.getValue() == null || entry.getValue().isDone())
-        entry.setValue(entry.getKey().refresh());
+    for (ViewTask task : viewTasks) {
+      task.synchronizeIFN();
+      task.submitIFN();
+    }
     if (ZephyrPluginCommon.synchronous)
       waitForCompletion();
   }
@@ -51,37 +50,39 @@ public class ClockViews implements Listener<ViewTaskExecutor> {
   }
 
   private boolean allTaskDone() {
-    for (Future<ViewTask> future : views.values())
-      if (future != null && !future.isDone())
+    for (ViewTask task : viewTasks)
+      if (!task.isDone())
         return false;
     return true;
   }
 
   synchronized public void addView(SyncView view) {
-    views.put(new ViewTask(view), null);
+    viewTasks.add(viewTaskScheduler.task(clock, view));
   }
 
-  synchronized public void removeView(final SyncView view) {
-    for (Iterator<Map.Entry<ViewTask, Future<ViewTask>>> i = views.entrySet().iterator(); i.hasNext();) {
-      Map.Entry<ViewTask, Future<ViewTask>> entry = i.next();
-      if (entry.getKey().isTaskForView(view)) {
-        i.remove();
-        return;
-      }
-    }
+  synchronized public void removeView(SyncView view) {
+    viewTasks.remove(viewTaskScheduler.task(clock, view));
   }
 
   public boolean isEmpty() {
-    return views.isEmpty();
+    return viewTasks.isEmpty();
   }
 
-  public void dispose() {
+  synchronized public void dispose() {
     clock.onTick.disconnect(tickListener);
-    views.clear();
+    viewTasks.clear();
   }
 
   @Override
   synchronized public void listen(ViewTaskExecutor eventInfo) {
     this.notify();
+  }
+
+  public static void disposeView(SyncView view) {
+    viewTaskScheduler.disposeView(view);
+  }
+
+  public static void submitView(SyncView view) {
+    viewTaskScheduler.submitView(view);
   }
 }
