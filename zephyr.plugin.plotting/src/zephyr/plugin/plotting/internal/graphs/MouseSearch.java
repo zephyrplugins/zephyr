@@ -7,20 +7,24 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 
 import zephyr.plugin.core.api.monitoring.LabelBuilder;
+import zephyr.plugin.core.canvas.Overlay;
 import zephyr.plugin.core.utils.Colors;
 import zephyr.plugin.plotting.internal.plots.PlotData;
-import zephyr.plugin.plotting.internal.plots.PlotOverTime;
 import zephyr.plugin.plotting.internal.plots.PlotData.RequestResult;
+import zephyr.plugin.plotting.internal.plots.PlotOverTime;
 import zephyr.plugin.plotting.plot2d.Axes;
 
-public class MouseSearch extends Job {
+public class MouseSearch extends Job implements Overlay {
 
   protected final PlotView plotView;
   protected Label valueLabel;
@@ -102,7 +106,8 @@ public class MouseSearch extends Job {
     valueLabel = new Label(composite, SWT.NONE);
   }
 
-  public void paintMouse(GC gc) {
+  @Override
+  public void drawOverlay(GC gc) {
     if (requestResult == null || plotView.clockGraphBindings.isEmpty()) {
       valueLabel.setText("");
       plotView.canvas().setToolTipText("");
@@ -126,5 +131,14 @@ public class MouseSearch extends Job {
     if (requestResult == null)
       return Long.MAX_VALUE;
     return requestResult.resultTime.getCurrentMillis();
+  }
+
+  public void monitor(Control control) {
+    control.addMouseMoveListener(new MouseMoveListener() {
+      @Override
+      public void mouseMove(MouseEvent e) {
+        scheduleIFN(e.x, e.y);
+      }
+    });
   }
 }

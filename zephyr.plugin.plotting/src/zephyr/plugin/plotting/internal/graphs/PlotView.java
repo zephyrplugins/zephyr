@@ -4,9 +4,6 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseMoveListener;
-import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -17,7 +14,6 @@ import org.eclipse.ui.part.ViewPart;
 
 import zephyr.ZephyrSync;
 import zephyr.plugin.core.canvas.BackgroundCanvas;
-import zephyr.plugin.core.canvas.Overlay;
 import zephyr.plugin.core.canvas.Views;
 import zephyr.plugin.core.views.SyncView;
 import zephyr.plugin.plotting.internal.plots.PlotData;
@@ -26,7 +22,7 @@ import zephyr.plugin.plotting.internal.plots.PlotSelection;
 import zephyr.plugin.plotting.internal.traces.ClockTracesManager;
 import zephyr.plugin.plotting.internal.traces.TracesSelection.TraceSelector;
 
-public class PlotView extends ViewPart implements TraceSelector, SyncView, Overlay {
+public class PlotView extends ViewPart implements TraceSelector, SyncView {
   final public static String ID = "zephyr.plugin.plotting.view.plot";
   final private static String SelectionTypeKey = "selection";
 
@@ -55,15 +51,10 @@ public class PlotView extends ViewPart implements TraceSelector, SyncView, Overl
   public void createPartControl(final Composite parent) {
     backgroundCanvas = new BackgroundCanvas(parent, plotOverTime);
     Views.setLayoutData(backgroundCanvas.canvas());
-    backgroundCanvas.addOverlay(this);
     mouseSearch = new MouseSearch(this);
+    backgroundCanvas.addOverlay(mouseSearch);
     createSettingBar(parent);
-    backgroundCanvas.canvas().addMouseMoveListener(new MouseMoveListener() {
-      @Override
-      public void mouseMove(MouseEvent e) {
-        mouseSearch.scheduleIFN(e.x, e.y);
-      }
-    });
+    mouseSearch.monitor(backgroundCanvas.canvas());
     synchronizeAction.setChecked(synchronizeData);
     getViewSite().getActionBars().getToolBarManager().add(synchronizeAction);
   }
@@ -108,11 +99,6 @@ public class PlotView extends ViewPart implements TraceSelector, SyncView, Overl
   @Override
   public void repaint() {
     backgroundCanvas.paint();
-  }
-
-  @Override
-  public void drawOverlay(GC gc) {
-    mouseSearch.paintMouse(gc);
   }
 
   @Override

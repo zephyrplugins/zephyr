@@ -10,6 +10,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.ui.IMemento;
 
+import zephyr.ZephyrSync;
 import zephyr.plugin.plotting.internal.plots.PlotData;
 
 class HistoryLength {
@@ -65,7 +66,7 @@ class HistoryLength {
     int increment = (int) (Math.pow(10, Math.floor(Math.log10(value))) / 2);
     historyLength.setIncrement(increment);
     if (plotdata.setHistoryLengthIFN(value))
-      syncView.repaint();
+      ZephyrSync.submitView(syncView);
   }
 
   public void init(IMemento memento) {

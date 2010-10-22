@@ -47,10 +47,10 @@ public class BackgroundCanvas implements PainterMonitor {
   }
 
   public void paint() {
-    showProgress = showProgress || !paintingImage.currentImageIsValide();
     Image image = paintingImage.acquireImage();
     if (image == null)
       return;
+    showProgress = showProgress || !paintingImage.currentImageIsValide();
     GC gc = new GC(image);
     chrono.start();
     painter.paint(this, image, gc);

@@ -18,6 +18,7 @@ public class DoubleBuffer implements ControlListener {
   private final Semaphore drawingSemaphore = new Semaphore(1);
   private Image backgroundImage = null;
   private Image foregroundImage = null;
+  private boolean disposed = false;
 
   public DoubleBuffer(Canvas canvas) {
     this.canvas = canvas;
@@ -34,6 +35,8 @@ public class DoubleBuffer implements ControlListener {
   }
 
   public Image acquireImage() {
+    if (disposed)
+      return null;
     acquireDrawingSemaphore();
     if (!checkBackgroundImage()) {
       if (backgroundImage != null)
@@ -69,6 +72,7 @@ public class DoubleBuffer implements ControlListener {
   }
 
   synchronized public void dispose() {
+    disposed = true;
     acquireDrawingSemaphore();
     if (backgroundImage != null)
       backgroundImage.dispose();
