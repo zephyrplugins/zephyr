@@ -11,6 +11,4 @@ public interface Painter {
   }
 
   void paint(PainterMonitor painterListener, Image image, GC gc);
-
-  boolean newPaintingRequired();
 }

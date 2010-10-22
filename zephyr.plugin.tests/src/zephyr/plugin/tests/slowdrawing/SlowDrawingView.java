@@ -73,9 +73,4 @@ public class SlowDrawingView extends ViewPart implements TimedView, Painter {
   public boolean canTimedAdded() {
     return true;
   }
-
-  @Override
-  public boolean newPaintingRequired() {
-    return false;
-  }
 }

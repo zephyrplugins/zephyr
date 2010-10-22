@@ -4,6 +4,7 @@ import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GL2GL3;
 
+import zephyr.ZephyrSync;
 import zephyr.plugin.core.helpers.ClassViewProvider;
 import zephyr.plugin.core.views.TimedView;
 import zephyr.plugin.opengl.OpenGLView;
@@ -80,5 +81,11 @@ public class View extends OpenGLView implements TimedView {
   @Override
   public boolean canTimedAdded() {
     return model == null;
+  }
+
+  @Override
+  public void dispose() {
+    ZephyrSync.disposeView(this);
+    super.dispose();
   }
 }

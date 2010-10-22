@@ -21,7 +21,7 @@ public class Model implements Runnable, Timed {
   public void run() {
     while (true) {
       clock.tick();
-      insideRadius = 1.9f + ((float) Math.sin((0.004f * clock.time())));
+      insideRadius = 1.9f + ((float) Math.sin((0.05f * clock.time())));
     }
   }
 

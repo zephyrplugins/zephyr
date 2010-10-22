@@ -27,6 +27,12 @@ abstract public class OpenGLView extends ViewPart implements SyncView {
   protected GLCanvas canvas;
   private GLProfile profile;
   private GLContext context;
+  private final Runnable drawSceneRunnable = new Runnable() {
+    @Override
+    public void run() {
+      drawScene();
+    }
+  };
 
   public OpenGLView() {
     profile = GLProfile.get(GLProfile.GL2);
@@ -82,6 +88,16 @@ abstract public class OpenGLView extends ViewPart implements SyncView {
     context.release();
   }
 
+  protected void drawScene() {
+    if (canvas.isDisposed())
+      return;
+    canvas.setCurrent();
+    context.makeCurrent();
+    render(context.getGL().getGL2());
+    canvas.swapBuffers();
+    context.release();
+  }
+
   @Override
   public void setFocus() {
     canvas.setFocus();
@@ -89,11 +105,7 @@ abstract public class OpenGLView extends ViewPart implements SyncView {
 
   @Override
   public void repaint() {
-    canvas.setCurrent();
-    context.makeCurrent();
-    render(context.getGL().getGL2());
-    canvas.swapBuffers();
-    context.release();
+    canvas.getDisplay().syncExec(drawSceneRunnable);
   }
 
   abstract protected void render(GL2 gl);

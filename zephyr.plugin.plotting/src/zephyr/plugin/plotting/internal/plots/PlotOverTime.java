@@ -42,7 +42,6 @@ public class PlotOverTime implements Painter {
   private final PlotData plotdata;
   private final Colors colors = new Colors();
   private ResetMode axesNeedReset = ResetMode.NoReset;
-  private Image lastImage = null;
   private final HashSet<Integer> hashedLines = new HashSet<Integer>();
 
   public PlotOverTime(PlotData plotdata) {
@@ -67,24 +66,17 @@ public class PlotOverTime implements Painter {
 
   @Override
   public void paint(PainterMonitor painterListener, Image image, GC gc) {
-    if (lastImage != image) {
-      resetAxes(true);
-      lastImage = image;
-    }
     gc.setAntialias(SWT.OFF);
-    preparePainting();
-    List<HistoryCached> histories = plotdata.getHistories();
-    if (axesNeedReset != ResetMode.NoReset)
-      updateAxes(histories);
-    if (histories.isEmpty())
-      return;
-    prepareDrawingZone(gc);
-    drawTraces(painterListener, gc, histories);
-  }
-
-  @Override
-  public boolean newPaintingRequired() {
-    return axes.y.scalingRequired();
+    do {
+      preparePainting();
+      List<HistoryCached> histories = plotdata.getHistories();
+      if (axesNeedReset != ResetMode.NoReset)
+        updateAxes(histories);
+      if (histories.isEmpty())
+        return;
+      prepareDrawingZone(gc);
+      drawTraces(painterListener, gc, histories);
+    } while (axes.y.scalingRequired());
   }
 
   private void updateAxes(List<HistoryCached> histories) {

@@ -7,18 +7,19 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
 import zephyr.plugin.core.api.synchronization.Chrono;
 import zephyr.plugin.core.canvas.Painter.PainterMonitor;
-import zephyr.plugin.core.internal.canvas.BackgroundImage;
+import zephyr.plugin.core.internal.canvas.DoubleBuffer;
 
 public class BackgroundCanvas implements PainterMonitor {
   private final Painter painter;
   final Canvas canvas;
-  final BackgroundImage paintingImage;
+  final DoubleBuffer paintingImage;
   private final Runnable updateForeground = new Runnable() {
     @Override
     public void run() {
@@ -42,18 +43,20 @@ public class BackgroundCanvas implements PainterMonitor {
         drawForeground(e.gc);
       }
     });
-    paintingImage = new BackgroundImage(canvas);
+    paintingImage = new DoubleBuffer(canvas);
   }
 
   public void paint() {
-    showProgress = showProgress || !paintingImage.imageMatchCanvas();
-    GC gc = paintingImage.getGC();
-    if (gc == null)
+    showProgress = showProgress || !paintingImage.currentImageIsValide();
+    Image image = paintingImage.acquireImage();
+    if (image == null)
       return;
+    GC gc = new GC(image);
     chrono.start();
-    painter.paint(this, paintingImage.image(), gc);
+    painter.paint(this, image, gc);
     showProgress = false;
-    paintingImage.disposeGC(gc);
+    paintingImage.releaseImage(gc);
+    paintingImage.swap();
     updateForegroundCanvas();
   }
 
@@ -62,9 +65,7 @@ public class BackgroundCanvas implements PainterMonitor {
   }
 
   void drawForeground(GC gc) {
-    if (paintingImage.image() == null)
-      return;
-    gc.drawImage(paintingImage.image(), 0, 0);
+    paintingImage.paintCanvas(gc);
     for (Overlay overlay : overlays)
       overlay.drawOverlay(gc);
   }
@@ -81,17 +82,17 @@ public class BackgroundCanvas implements PainterMonitor {
   public void painterStep() {
     if (!showProgress || chrono.getTime() < 1.0)
       return;
+    paintingImage.transfertImage();
     updateForegroundCanvas();
     chrono.start();
   }
 
   @Override
   public boolean isCanceled() {
-    return cancelDrawing || !paintingImage.imageMatchCanvas();
+    return cancelDrawing || !paintingImage.currentImageIsValide();
   }
 
   public void dispose() {
-    canvas.dispose();
     paintingImage.dispose();
   }
 
