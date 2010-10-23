@@ -116,10 +116,6 @@ public class ViewBinder {
     if (clockViews == null)
       return;
     clockViews.removeView(view);
-    if (clockViews.isEmpty()) {
-      clockViews.dispose();
-      removeClock(clock);
-    }
   }
 
   public boolean isEmpty() {

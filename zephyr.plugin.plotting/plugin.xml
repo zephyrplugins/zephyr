@@ -46,11 +46,6 @@
             name="Add Traces...">
       </command>
       <command
-            defaultHandler="zephyr.plugin.plotting.internal.commands.CenterPlot"
-            id="zephyr.plugin.plotting.toolbar.centerplot"
-            name="Center Plot">
-      </command>
-      <command
             id="zephyr.plugin.plotting.centerplot"
             name="Center Plot">
       </command>
@@ -99,11 +94,6 @@
       </menuContribution>
       <menuContribution
             locationURI="toolbar:zephyr.plugin.plotting.view.plot?before=zephyr.plugin.plotting.action.togglesynchronized">
-         <command
-               commandId="zephyr.plugin.plotting.toolbar.centerplot"
-               label="Center plot"
-               style="push">
-         </command>
          <command
                commandId="zephyr.plugin.plotting.toolbar.addtraces"
                label="Add Traces..."
@@ -186,10 +176,6 @@
       </image>
       <image
             commandId="zephyr.plugin.plotting.centerplot"
-            icon="icons/command_centerplot.png">
-      </image>
-      <image
-            commandId="zephyr.plugin.plotting.toolbar.centerplot"
             icon="icons/command_centerplot.png">
       </image>
    </extension>

@@ -5,6 +5,6 @@ import zephyr.plugin.plotting.internal.graphs.PlotView;
 public class CenterPlot extends PlotViewCommandHandler {
   @Override
   protected void execute(PlotView plotView) {
-    plotView.plotOverTime().resetAxes(true);
+    plotView.center();
   }
 }

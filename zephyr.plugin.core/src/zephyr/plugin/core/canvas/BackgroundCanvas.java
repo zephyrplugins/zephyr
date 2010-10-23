@@ -35,7 +35,7 @@ public class BackgroundCanvas implements PainterMonitor {
   private final Chrono chrono = new Chrono();
 
   public BackgroundCanvas(Composite parent, Painter painter) {
-    this.canvas = new Canvas(parent, SWT.NONE);
+    this.canvas = new Canvas(parent, SWT.NO_BACKGROUND);
     this.painter = painter;
     canvas.addPaintListener(new PaintListener() {
       @Override

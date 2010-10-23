@@ -3,6 +3,7 @@ package zephyr.plugin.plotting.internal.graphs;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -16,13 +17,15 @@ import zephyr.ZephyrSync;
 import zephyr.plugin.core.canvas.BackgroundCanvas;
 import zephyr.plugin.core.canvas.Views;
 import zephyr.plugin.core.views.SyncView;
+import zephyr.plugin.plotting.actions.CenterPlotAction;
+import zephyr.plugin.plotting.actions.CenterPlotAction.ViewCenterable;
 import zephyr.plugin.plotting.internal.plots.PlotData;
 import zephyr.plugin.plotting.internal.plots.PlotOverTime;
 import zephyr.plugin.plotting.internal.plots.PlotSelection;
 import zephyr.plugin.plotting.internal.traces.ClockTracesManager;
 import zephyr.plugin.plotting.internal.traces.TracesSelection.TraceSelector;
 
-public class PlotView extends ViewPart implements TraceSelector, SyncView {
+public class PlotView extends ViewPart implements TraceSelector, SyncView, ViewCenterable {
   final public static String ID = "zephyr.plugin.plotting.view.plot";
   final private static String SelectionTypeKey = "selection";
 
@@ -56,7 +59,12 @@ public class PlotView extends ViewPart implements TraceSelector, SyncView {
     createSettingBar(parent);
     mouseSearch.monitor(backgroundCanvas.canvas());
     synchronizeAction.setChecked(synchronizeData);
-    getViewSite().getActionBars().getToolBarManager().add(synchronizeAction);
+    setupToolbar(getViewSite().getActionBars().getToolBarManager());
+  }
+
+  private void setupToolbar(IToolBarManager toolBarManager) {
+    toolBarManager.add(new CenterPlotAction(this));
+    toolBarManager.add(synchronizeAction);
   }
 
   private void createSettingBar(Composite parent) {
@@ -119,15 +127,17 @@ public class PlotView extends ViewPart implements TraceSelector, SyncView {
     return plotSelection;
   }
 
-  public PlotOverTime plotOverTime() {
-    return plotOverTime;
-  }
-
   @Override
   public void setFocus() {
   }
 
   public Control canvas() {
     return backgroundCanvas.canvas();
+  }
+
+  @Override
+  public void center() {
+    plotOverTime.resetAxes(true);
+    ZephyrSync.submitView(this);
   }
 }

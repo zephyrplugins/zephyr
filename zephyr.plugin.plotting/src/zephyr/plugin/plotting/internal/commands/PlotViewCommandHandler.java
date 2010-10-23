@@ -7,7 +7,6 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-import zephyr.ZephyrSync;
 import zephyr.plugin.plotting.internal.graphs.PlotView;
 
 public abstract class PlotViewCommandHandler extends AbstractHandler {
@@ -18,7 +17,6 @@ public abstract class PlotViewCommandHandler extends AbstractHandler {
     IWorkbenchPart activePart = activePage.getActivePart();
     PlotView plotView = (PlotView) activePart;
     execute(plotView);
-    ZephyrSync.submitView(plotView);
     return null;
   }
 

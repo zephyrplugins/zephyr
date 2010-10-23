@@ -1,6 +1,5 @@
 package zephyr.plugin.plotting.plot2d;
 
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.GC;
 
 import zephyr.plugin.core.utils.Colors;
@@ -8,12 +7,11 @@ import zephyr.plugin.plotting.plot2d.drawer2d.Drawer2D;
 import zephyr.plugin.plotting.plot2d.drawer2d.Lines;
 
 public class Plot2D {
+  public final Colors colors = new Colors();
   private final Axes axes = new Axes();
-  private final Colors colors = new Colors();
   private final Drawer2D lineDrawer = new Lines();
 
   public void clear(GC gc) {
-    gc.setAntialias(SWT.OFF);
     gc.setBackground(colors.color(gc, Colors.COLOR_WHITE));
     gc.fillRectangle(gc.getClipping());
   }
@@ -36,5 +34,10 @@ public class Plot2D {
       gy[i] = axes.toGY(ydata[i]);
     }
     drawer.draw(gc, xdata, ydata, gx, gy);
+  }
+
+  public void resetAxes() {
+    axes.x.reset();
+    axes.y.reset();
   }
 }
