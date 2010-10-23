@@ -4,10 +4,13 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.swt.graphics.Point;
+
 import zephyr.plugin.core.api.signals.Listener;
-import zephyr.plugin.core.api.synchronization.Chrono;
 import zephyr.plugin.plotting.internal.traces.TraceData;
 import zephyr.plugin.plotting.internal.traces.TraceData.DataTimeInfo;
+import zephyr.plugin.plotting.mousesearch.RequestResult;
+import zephyr.plugin.plotting.plot2d.Axes;
 
 public class PlotData {
   public class HistoryCached {
@@ -16,31 +19,6 @@ public class PlotData {
 
     HistoryCached(int size) {
       values = new float[size];
-    }
-  }
-
-  public class RequestResult {
-    public final HistoryCached history;
-    public final int x;
-    public final double y;
-    public final String label;
-    public final List<String> secondaryLabels;
-    public final int synchronizationTime;
-    public final int dataAge;
-    public final Chrono resultTime = new Chrono();
-    private final TraceData traceData;
-
-    protected RequestResult(int traceIndex, int x, List<Integer> secondaryResults) {
-      history = histories.get(traceIndex);
-      this.x = x;
-      traceData = selection.get(traceIndex);
-      label = traceData.trace.label;
-      y = history.values[x];
-      dataAge = traceData.dataAge(history.timeInfo, history.values.length - x - 1);
-      synchronizationTime = history.timeInfo.synchronizationTime;
-      secondaryLabels = new ArrayList<String>();
-      for (Integer index : secondaryResults)
-        secondaryLabels.add(selection.get(index).trace.label);
     }
   }
 
@@ -98,7 +76,9 @@ public class PlotData {
     return new ArrayList<HistoryCached>(histories);
   }
 
-  synchronized public RequestResult search(Point2D.Double dataPoint, double yRes) {
+  synchronized public RequestResult search(Axes axes, Point mousePosition) {
+    Point2D.Double dataPoint = axes.toD(mousePosition);
+    double yRes = axes.scaleToDY(1);
     if (histories.isEmpty())
       return null;
     int closestTraceIndex = -1;
@@ -124,7 +104,7 @@ public class PlotData {
       if (Math.abs(closestValue - value) < yRes)
         secondaryResults.add(traceIndex);
     }
-    return new RequestResult(closestTraceIndex, x, secondaryResults);
+    return new PlotOverTimeRequestResult(axes, selection, histories, closestTraceIndex, x, secondaryResults);
   }
 
   synchronized public boolean setHistoryLengthIFN(int historyLength) {

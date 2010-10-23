@@ -5,6 +5,7 @@ import java.util.Set;
 
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -24,8 +25,11 @@ import zephyr.plugin.plotting.internal.plots.PlotOverTime;
 import zephyr.plugin.plotting.internal.plots.PlotSelection;
 import zephyr.plugin.plotting.internal.traces.ClockTracesManager;
 import zephyr.plugin.plotting.internal.traces.TracesSelection.TraceSelector;
+import zephyr.plugin.plotting.mousesearch.MouseSearch;
+import zephyr.plugin.plotting.mousesearch.MouseSearchable;
+import zephyr.plugin.plotting.mousesearch.RequestResult;
 
-public class PlotView extends ViewPart implements TraceSelector, SyncView, ViewCenterable {
+public class PlotView extends ViewPart implements TraceSelector, SyncView, ViewCenterable, MouseSearchable {
   final public static String ID = "zephyr.plugin.plotting.view.plot";
   final private static String SelectionTypeKey = "selection";
 
@@ -54,8 +58,7 @@ public class PlotView extends ViewPart implements TraceSelector, SyncView, ViewC
   public void createPartControl(final Composite parent) {
     backgroundCanvas = new BackgroundCanvas(parent, plotOverTime);
     Views.setLayoutData(backgroundCanvas.canvas());
-    mouseSearch = new MouseSearch(this);
-    mouseSearch.monitor(backgroundCanvas.canvas());
+    mouseSearch = new MouseSearch(this, backgroundCanvas.canvas());
     backgroundCanvas.addOverlay(mouseSearch);
     createSettingBar(parent);
     synchronizeAction.setChecked(synchronizeData);
@@ -139,5 +142,15 @@ public class PlotView extends ViewPart implements TraceSelector, SyncView, ViewC
   public void center() {
     plotOverTime.resetAxes(true);
     ZephyrSync.submitView(this);
+  }
+
+  @Override
+  public RequestResult search(Point mousePosition) {
+    return plotdata.search(plotOverTime.getAxes(), mousePosition);
+  }
+
+  @Override
+  public boolean emptySearch() {
+    return plotSelection.isEmpty();
   }
 }
