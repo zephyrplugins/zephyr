@@ -25,7 +25,6 @@ import zephyr.plugin.plotting.internal.plots.PlotOverTime;
 import zephyr.plugin.plotting.plot2d.Axes;
 
 public class MouseSearch extends Job implements Overlay {
-
   protected final PlotView plotView;
   protected Label valueLabel;
   protected boolean searchRunning = false;

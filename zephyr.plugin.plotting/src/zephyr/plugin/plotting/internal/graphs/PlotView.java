@@ -55,9 +55,9 @@ public class PlotView extends ViewPart implements TraceSelector, SyncView, ViewC
     backgroundCanvas = new BackgroundCanvas(parent, plotOverTime);
     Views.setLayoutData(backgroundCanvas.canvas());
     mouseSearch = new MouseSearch(this);
+    mouseSearch.monitor(backgroundCanvas.canvas());
     backgroundCanvas.addOverlay(mouseSearch);
     createSettingBar(parent);
-    mouseSearch.monitor(backgroundCanvas.canvas());
     synchronizeAction.setChecked(synchronizeData);
     setupToolbar(getViewSite().getActionBars().getToolBarManager());
   }
