@@ -30,7 +30,7 @@ public class DoubleBuffer implements ControlListener {
     return checkBackgroundImage();
   }
 
-  synchronized private boolean checkBackgroundImage() {
+  private boolean checkBackgroundImage() {
     return backgroundImage != null && backgroundImage.getBounds().equals(canvasRectangle);
   }
 

@@ -32,6 +32,8 @@ public class ClockViews implements Listener<ViewTaskExecutor> {
   protected void synchronize() {
     if (ZephyrPluginCommon.shuttingDown)
       return;
+    if (!allTaskDone())
+      return;
     for (ViewTask task : viewTasks) {
       task.synchronizeIFN();
       task.submitIFN();
