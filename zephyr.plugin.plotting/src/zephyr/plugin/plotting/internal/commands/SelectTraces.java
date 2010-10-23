@@ -10,11 +10,15 @@ public class SelectTraces extends PlotViewCommandHandler {
 
   @Override
   protected void execute(PlotView plotView) {
-    SelectDataDialog dialog = new SelectDataDialog(plotView.getViewSite().getShell());
+    selectTraces(plotView);
+  }
+
+  public static void selectTraces(PlotView view) {
+    SelectDataDialog dialog = new SelectDataDialog(view.getViewSite().getShell());
     int dialogResult = dialog.open();
     if (dialogResult != Window.OK)
       return;
-    plotView.plotSelection().setCurrentSelection(dialog.getSelectedTraces());
-    ZephyrSync.submitView(plotView);
+    view.plotSelection().setCurrentSelection(dialog.getSelectedTraces());
+    ZephyrSync.submitView(view);
   }
 }

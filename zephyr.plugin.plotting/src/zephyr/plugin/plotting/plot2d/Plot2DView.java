@@ -1,13 +1,16 @@
 package zephyr.plugin.plotting.plot2d;
 
 import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.part.ViewPart;
 
 import zephyr.plugin.core.canvas.BackgroundCanvas;
 import zephyr.plugin.core.canvas.Painter;
-import zephyr.plugin.core.canvas.Views;
 import zephyr.plugin.core.views.SyncView;
 import zephyr.plugin.plotting.actions.CenterPlotAction;
 import zephyr.plugin.plotting.actions.CenterPlotAction.ViewCenterable;
@@ -31,8 +34,11 @@ abstract public class Plot2DView extends ViewPart implements SyncView, ViewCente
   @Override
   public void createPartControl(Composite parent) {
     this.parent = parent;
+    GridLayout gridLayout = new GridLayout(1, false);
+    parent.setLayout(gridLayout);
     backgroundCanvas = new BackgroundCanvas(parent, this);
-    Views.setLayoutData(backgroundCanvas.canvas());
+    Control canvas = backgroundCanvas.canvas();
+    canvas.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
     setupToolbar(getViewSite().getActionBars().getToolBarManager());
   }
 

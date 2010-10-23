@@ -5,6 +5,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -33,7 +35,9 @@ public abstract class AbstractCanvasView extends ViewPart implements SyncView {
   public void createPartControl(final Composite parent) {
     this.parent = parent;
     canvas = new Canvas(parent, SWT.DOUBLE_BUFFERED);
-    Views.setLayoutData(canvas);
+    GridLayout gridLayout = new GridLayout(1, false);
+    canvas.getParent().setLayout(gridLayout);
+    canvas.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
     canvas.addPaintListener(new PaintListener() {
       @Override
       public void paintControl(PaintEvent e) {

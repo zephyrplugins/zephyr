@@ -6,6 +6,8 @@ import java.util.Set;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -16,10 +18,11 @@ import org.eclipse.ui.part.ViewPart;
 
 import zephyr.ZephyrSync;
 import zephyr.plugin.core.canvas.BackgroundCanvas;
-import zephyr.plugin.core.canvas.Views;
 import zephyr.plugin.core.views.SyncView;
 import zephyr.plugin.plotting.actions.CenterPlotAction;
 import zephyr.plugin.plotting.actions.CenterPlotAction.ViewCenterable;
+import zephyr.plugin.plotting.internal.graphs.actions.AddTracesAction;
+import zephyr.plugin.plotting.internal.graphs.actions.SelectTracesAction;
 import zephyr.plugin.plotting.internal.plots.PlotData;
 import zephyr.plugin.plotting.internal.plots.PlotOverTime;
 import zephyr.plugin.plotting.internal.plots.PlotSelection;
@@ -56,9 +59,12 @@ public class PlotView extends ViewPart implements TraceSelector, SyncView, ViewC
 
   @Override
   public void createPartControl(final Composite parent) {
+    GridLayout gridLayout = new GridLayout(1, false);
+    parent.setLayout(gridLayout);
     backgroundCanvas = new BackgroundCanvas(parent, plotOverTime);
-    Views.setLayoutData(backgroundCanvas.canvas());
-    mouseSearch = new MouseSearch(this, backgroundCanvas.canvas());
+    Control canvas = backgroundCanvas.canvas();
+    canvas.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+    mouseSearch = new MouseSearch(this, canvas);
     backgroundCanvas.addOverlay(mouseSearch);
     createSettingBar(parent);
     synchronizeAction.setChecked(synchronizeData);
@@ -67,6 +73,8 @@ public class PlotView extends ViewPart implements TraceSelector, SyncView, ViewC
 
   private void setupToolbar(IToolBarManager toolBarManager) {
     toolBarManager.add(new CenterPlotAction(this));
+    toolBarManager.add(new SelectTracesAction(this));
+    toolBarManager.add(new AddTracesAction(this));
     toolBarManager.add(synchronizeAction);
   }
 

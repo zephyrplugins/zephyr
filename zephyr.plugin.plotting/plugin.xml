@@ -32,16 +32,6 @@
             name="Select Traces...">
       </command>
       <command
-            defaultHandler="zephyr.plugin.plotting.internal.commands.SelectTraces"
-            id="zephyr.plugin.plotting.toolbar.selecttrace"
-            name="Select Traces...">
-      </command>
-      <command
-            defaultHandler="zephyr.plugin.plotting.internal.commands.AddTraces"
-            id="zephyr.plugin.plotting.toolbar.addtraces"
-            name="Add Traces...">
-      </command>
-      <command
             id="zephyr.plugin.plotting.addtraces"
             name="Add Traces...">
       </command>
@@ -91,24 +81,6 @@
                   style="toggle">
             </command>
          </menu>
-      </menuContribution>
-      <menuContribution
-            locationURI="toolbar:zephyr.plugin.plotting.view.plot?before=zephyr.plugin.plotting.action.togglesynchronized">
-         <command
-               commandId="zephyr.plugin.plotting.toolbar.addtraces"
-               label="Add Traces..."
-               style="push">
-         </command>
-         <command
-               commandId="zephyr.plugin.plotting.toolbar.selecttrace"
-               disabledIcon="icons/command_select_traces.png"
-               label="Select Traces..."
-               style="push">
-         </command>
-         <separator
-               name="zephyr.plugin.plotting.separator3"
-               visible="false">
-         </separator>
       </menuContribution>
       <menuContribution
             locationURI="menu:window?before=zephyr.plugin.core.separator.closeview">
@@ -163,15 +135,7 @@
             icon="icons/command_select_traces.png">
       </image>
       <image
-            commandId="zephyr.plugin.plotting.toolbar.selecttrace"
-            icon="icons/command_select_traces.png">
-      </image>
-      <image
             commandId="zephyr.plugin.plotting.addtraces"
-            icon="icons/command_add_traces.png">
-      </image>
-      <image
-            commandId="zephyr.plugin.plotting.toolbar.addtraces"
             icon="icons/command_add_traces.png">
       </image>
       <image

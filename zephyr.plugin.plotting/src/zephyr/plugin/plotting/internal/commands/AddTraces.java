@@ -14,6 +14,10 @@ import zephyr.plugin.plotting.internal.traces.Trace;
 public class AddTraces extends PlotViewCommandHandler {
   @Override
   protected void execute(PlotView plotView) {
+    addTraces(plotView);
+  }
+
+  static public void addTraces(PlotView plotView) {
     SelectDataDialog dialog = new SelectDataDialog(plotView.getViewSite().getShell());
     int dialogResult = dialog.open();
     if (dialogResult != Window.OK)
