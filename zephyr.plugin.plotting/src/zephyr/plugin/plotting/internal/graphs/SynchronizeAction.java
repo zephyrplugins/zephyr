@@ -9,7 +9,7 @@ import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 
 import zephyr.plugin.core.utils.Helper;
-import zephyr.plugin.plotting.ZephyrPluginPlotting;
+import zephyr.plugin.plotting.internal.ZephyrPluginPlotting;
 
 final class SynchronizeAction extends Action {
   private final PlotView plotView;

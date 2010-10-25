@@ -5,6 +5,7 @@ import javax.media.opengl.GL2;
 import javax.media.opengl.GL2GL3;
 
 import zephyr.ZephyrSync;
+import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.helpers.ClassViewProvider;
 import zephyr.plugin.core.views.TimedView;
 import zephyr.plugin.opengl.OpenGLView;
@@ -74,12 +75,12 @@ public class View extends OpenGLView implements TimedView {
   }
 
   @Override
-  public void addTimed(Object drawn, Object info) {
+  public void addTimed(Clock clock, Object drawn, Object info) {
     model = (Model) drawn;
   }
 
   @Override
-  public boolean canTimedAdded() {
+  public boolean canAddTimed() {
     return model == null;
   }
 

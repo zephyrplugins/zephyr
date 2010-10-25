@@ -1,7 +1,9 @@
 package zephyr.plugin.core.views;
 
-public interface TimedView extends SyncView {
-  void addTimed(Object drawn, Object info);
+import zephyr.plugin.core.api.synchronization.Clock;
 
-  boolean canTimedAdded();
+public interface TimedView extends SyncView {
+  void addTimed(Clock clock, Object drawn, Object info);
+
+  boolean canAddTimed();
 }

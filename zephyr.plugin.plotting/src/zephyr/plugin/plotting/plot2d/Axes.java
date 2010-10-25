@@ -12,6 +12,7 @@ public class Axes {
 
   public class Axe {
     final double margins;
+    public boolean transformationValid = false;
 
     private double minValue = Double.MAX_VALUE;
     private double maxValue = -Double.MAX_VALUE;
@@ -48,6 +49,7 @@ public class Axes {
       double length = Math.max(maxDisplayed - minDisplayed, 1e-5);
       scale = drawingLength / length;
       translation = -(minDisplayed + maxDisplayed) / 2.0;
+      transformationValid = true;
     }
 
     public void update(double d) {
@@ -59,10 +61,19 @@ public class Axes {
     public void reset() {
       maxValue = -Double.MAX_VALUE;
       minValue = Double.MAX_VALUE;
+      transformationValid = false;
     }
 
     public boolean scalingRequired() {
       return cachedMinValue != minValue || cachedMaxValue != maxValue;
+    }
+
+    public float min() {
+      return (float) minValue;
+    }
+
+    public float max() {
+      return (float) maxValue;
     }
   }
 

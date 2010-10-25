@@ -61,7 +61,8 @@ public class BackgroundCanvas implements PainterMonitor {
   }
 
   private void updateForegroundCanvas() {
-    canvas.getDisplay().syncExec(updateForeground);
+    if (!canvas.isDisposed())
+      canvas.getDisplay().syncExec(updateForeground);
   }
 
   void drawForeground(GC gc) {

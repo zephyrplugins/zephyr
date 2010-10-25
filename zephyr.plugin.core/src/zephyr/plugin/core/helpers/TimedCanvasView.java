@@ -2,6 +2,7 @@ package zephyr.plugin.core.helpers;
 
 import org.eclipse.swt.graphics.GC;
 
+import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.canvas.AbstractCanvasView;
 import zephyr.plugin.core.views.TimedView;
 
@@ -15,12 +16,12 @@ public abstract class TimedCanvasView extends AbstractCanvasView implements Time
   }
 
   @Override
-  public void addTimed(Object drawn, Object info) {
+  public void addTimed(Clock clock, Object drawn, Object info) {
     this.drawn = drawn;
   }
 
   @Override
-  public boolean canTimedAdded() {
+  public boolean canAddTimed() {
     return drawn == null;
   }
 

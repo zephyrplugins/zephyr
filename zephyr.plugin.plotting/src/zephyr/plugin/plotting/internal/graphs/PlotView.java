@@ -132,6 +132,7 @@ public class PlotView extends ViewPart implements TraceSelector, SyncView, ViewC
     super.dispose();
     clockGraphBindings.unBindAll();
     backgroundCanvas.dispose();
+    historyLength.dispose();
   }
 
   public PlotSelection plotSelection() {

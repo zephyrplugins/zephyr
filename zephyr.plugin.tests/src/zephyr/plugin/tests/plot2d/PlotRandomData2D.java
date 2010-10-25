@@ -2,9 +2,11 @@ package zephyr.plugin.tests.plot2d;
 
 import org.eclipse.swt.graphics.GC;
 
+import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.canvas.AbstractCanvasView;
 import zephyr.plugin.core.helpers.ClassViewProvider;
 import zephyr.plugin.core.views.TimedView;
+import zephyr.plugin.plotting.plot2d.Data2D;
 import zephyr.plugin.plotting.plot2d.Plot2D;
 
 
@@ -17,8 +19,7 @@ public class PlotRandomData2D extends AbstractCanvasView implements TimedView {
 
   private final Plot2D plot;
   private RandomData2D drawn = null;
-  private float[] xdata = null;
-  private float[] ydata = null;
+  private Data2D data;
 
   public PlotRandomData2D() {
     this.plot = new Plot2D();
@@ -26,30 +27,29 @@ public class PlotRandomData2D extends AbstractCanvasView implements TimedView {
 
   @Override
   public void synchronize() {
-    System.arraycopy(drawn.data, 0, ydata, 0, ydata.length);
+    System.arraycopy(drawn.data, 0, data.ydata, 0, data.nbPoints);
   }
 
   @Override
   protected void paint(GC gc) {
     plot.clear(gc);
-    plot.draw(gc, xdata, ydata);
-    gc.drawString(String.valueOf(ydata[1]), 10, 10);
-    gc.drawString(String.valueOf(ydata[2]), 10, 30);
+    plot.draw(gc, data);
+    gc.drawString(String.valueOf(data.ydata[1]), 10, 10);
+    gc.drawString(String.valueOf(data.ydata[2]), 10, 30);
   }
 
   @Override
-  public void addTimed(Object drawn, Object info) {
+  public void addTimed(Clock clock, Object drawn, Object info) {
     this.drawn = (RandomData2D) drawn;
     if (drawn == null)
       return;
-    xdata = new float[this.drawn.data.length];
-    for (int i = 0; i < xdata.length; i++)
-      xdata[i] = i;
-    ydata = new float[this.drawn.data.length];
+    data = new Data2D("Random", this.drawn.data.length);
+    for (int i = 0; i < data.nbPoints; i++)
+      data.xdata[i] = i;
   }
 
   @Override
-  public boolean canTimedAdded() {
+  public boolean canAddTimed() {
     return drawn == null;
   }
 

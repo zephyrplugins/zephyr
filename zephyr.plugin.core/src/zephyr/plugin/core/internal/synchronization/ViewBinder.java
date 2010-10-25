@@ -48,7 +48,7 @@ public class ViewBinder {
     IViewPart view = referenceView.getView(true);
     if (!(view instanceof TimedView))
       return false;
-    return ((TimedView) view).canTimedAdded();
+    return ((TimedView) view).canAddTimed();
   }
 
   protected TimedView displayView(String viewID) {
@@ -80,7 +80,7 @@ public class ViewBinder {
     });
     if (view[0] == null)
       return;
-    view[0].addTimed(drawn, info);
+    view[0].addTimed(clock, drawn, info);
     bind(clock, view[0]);
   }
 

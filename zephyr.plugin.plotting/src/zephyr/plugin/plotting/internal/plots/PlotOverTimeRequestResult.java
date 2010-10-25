@@ -65,4 +65,9 @@ public class PlotOverTimeRequestResult implements RequestResult {
     }
     return tooltipLabel.toString();
   }
+
+  @Override
+  public boolean dynamicText() {
+    return false;
+  }
 }

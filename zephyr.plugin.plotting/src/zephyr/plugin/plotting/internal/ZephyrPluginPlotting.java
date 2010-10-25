@@ -1,4 +1,4 @@
-package zephyr.plugin.plotting;
+package zephyr.plugin.plotting.internal;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;

@@ -22,7 +22,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.ui.dialogs.FilteredItemsSelectionDialog;
 
-import zephyr.plugin.plotting.ZephyrPluginPlotting;
+import zephyr.plugin.plotting.internal.ZephyrPluginPlotting;
 import zephyr.plugin.plotting.internal.traces.ClockTracesManager;
 import zephyr.plugin.plotting.internal.traces.Trace;
 import zephyr.plugin.plotting.internal.traces.Traces;

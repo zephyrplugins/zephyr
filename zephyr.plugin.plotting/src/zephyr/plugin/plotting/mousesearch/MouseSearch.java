@@ -90,5 +90,7 @@ public class MouseSearch extends Job implements Overlay {
     Point stickyMousePosition = requestResult.computeMousePosition();
     gc.drawRectangle(stickyMousePosition.x - halfSize, stickyMousePosition.y - halfSize,
                      halfSize * 2, halfSize * 2);
+    if (requestResult.dynamicText())
+      valueLabel.setText(requestResult.fieldLabel());
   }
 }

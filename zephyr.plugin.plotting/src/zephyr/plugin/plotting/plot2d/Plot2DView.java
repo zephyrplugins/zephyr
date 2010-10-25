@@ -4,6 +4,7 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -14,12 +15,14 @@ import zephyr.plugin.core.canvas.Painter;
 import zephyr.plugin.core.views.SyncView;
 import zephyr.plugin.plotting.actions.CenterPlotAction;
 import zephyr.plugin.plotting.actions.CenterPlotAction.ViewCenterable;
+import zephyr.plugin.plotting.mousesearch.MouseSearch;
 
 abstract public class Plot2DView extends ViewPart implements SyncView, ViewCenterable, Painter {
 
   private BackgroundCanvas backgroundCanvas;
   protected final Plot2D plot = new Plot2D();
   private Composite parent;
+  private MouseSearch mouseSearch;
 
   @Override
   public void repaint() {
@@ -39,7 +42,18 @@ abstract public class Plot2DView extends ViewPart implements SyncView, ViewCente
     backgroundCanvas = new BackgroundCanvas(parent, this);
     Control canvas = backgroundCanvas.canvas();
     canvas.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+    mouseSearch = new MouseSearch(plot, canvas);
+    backgroundCanvas.addOverlay(mouseSearch);
     setupToolbar(getViewSite().getActionBars().getToolBarManager());
+    Composite settingBar = new Composite(parent, SWT.NONE);
+    RowLayout settingBarLayout = new RowLayout();
+    settingBarLayout.center = true;
+    settingBar.setLayout(settingBarLayout);
+    setSettingBar(settingBar);
+  }
+
+  protected void setSettingBar(Composite settingBar) {
+    mouseSearch.createLabelControl(settingBar);
   }
 
   protected void setupToolbar(IToolBarManager toolBarManager) {

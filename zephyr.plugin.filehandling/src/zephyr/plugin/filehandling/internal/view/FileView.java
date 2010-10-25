@@ -7,6 +7,7 @@ import org.eclipse.jface.action.IToolBarManager;
 import zephyr.ZephyrCore;
 import zephyr.plugin.core.actions.RestartAction;
 import zephyr.plugin.core.actions.TerminateAction;
+import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.api.synchronization.Closeable;
 import zephyr.plugin.core.helpers.ClassViewProvider;
 import zephyr.plugin.core.observations.EnvironmentView;
@@ -68,7 +69,7 @@ public class FileView extends EnvironmentView implements Closeable, Restartable 
   }
 
   @Override
-  public void addTimed(Object drawn, Object info) {
+  public void addTimed(Clock clock, Object drawn, Object info) {
     logFile = (LogFile) drawn;
     restartAction.setEnabled(drawn instanceof LogFile);
     terminateAction.setEnabled(true);
@@ -76,7 +77,7 @@ public class FileView extends EnvironmentView implements Closeable, Restartable 
   }
 
   @Override
-  public boolean canTimedAdded() {
+  public boolean canAddTimed() {
     return logFile == null;
   }
 

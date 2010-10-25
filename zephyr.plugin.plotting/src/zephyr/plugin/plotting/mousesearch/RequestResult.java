@@ -8,4 +8,6 @@ public interface RequestResult {
   String fieldLabel();
 
   Point computeMousePosition();
+
+  boolean dynamicText();
 }

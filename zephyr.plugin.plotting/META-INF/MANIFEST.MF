@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: zephyr.plugin.plotting
 Bundle-SymbolicName: zephyr.plugin.plotting;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: zephyr.plugin.plotting.ZephyrPluginPlotting
+Bundle-Activator: zephyr.plugin.plotting.internal.ZephyrPluginPlotting
 Bundle-Vendor: Thomas
 Require-Bundle: zephyr.plugin.core;bundle-version="1.0.0",
  org.eclipse.ui;bundle-version="3.5.0",
@@ -13,7 +13,7 @@ Require-Bundle: zephyr.plugin.core;bundle-version="1.0.0",
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Export-Package: zephyr,
- zephyr.plugin.plotting,
+ zephyr.plugin.plotting.mousesearch,
  zephyr.plugin.plotting.actions,
  zephyr.plugin.plotting.plot2d,
  zephyr.plugin.plotting.plot2d.drawer2d

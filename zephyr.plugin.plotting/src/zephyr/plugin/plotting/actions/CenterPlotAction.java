@@ -4,7 +4,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 
 import zephyr.plugin.core.utils.Helper;
-import zephyr.plugin.plotting.ZephyrPluginPlotting;
+import zephyr.plugin.plotting.internal.ZephyrPluginPlotting;
 
 public class CenterPlotAction extends Action {
   public interface ViewCenterable {

@@ -5,7 +5,7 @@ import zephyr.plugin.core.views.ViewProvider;
 public class ClassViewProvider implements ViewProvider {
 
   private final String viewID;
-  private final Class<?> drawnClass;
+  protected final Class<?> drawnClass;
 
   public ClassViewProvider(Class<?> drawnClass, String viewID) {
     this.viewID = viewID;
