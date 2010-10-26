@@ -78,7 +78,7 @@ public class ClockTraces implements DataMonitor {
     if (toAdd instanceof Monitored)
       add(Labels.label(toAdd), (Monitored) toAdd, Parser.MonitorEverythingLevel);
     if (toAdd instanceof MonitorContainer)
-      ((MonitorContainer) toAdd).setLogger(0, this);
+      ((MonitorContainer) toAdd).addToMonitor(0, this);
     Parser.findAnnotations(this, toAdd, Parser.MonitorEverythingLevel);
     endAddingTrace();
   }

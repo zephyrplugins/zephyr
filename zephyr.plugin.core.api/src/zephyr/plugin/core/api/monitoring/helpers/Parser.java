@@ -148,7 +148,7 @@ public class Parser {
     if (child == null)
       return;
     if (child instanceof MonitorContainer)
-      ((MonitorContainer) child).setLogger(level, logger);
+      ((MonitorContainer) child).addToMonitor(level, logger);
     findAnnotations(logger, child, wrappers, level, levelRequired);
   }
 

@@ -31,7 +31,8 @@ public class DoubleBuffer implements ControlListener {
   }
 
   private boolean checkBackgroundImage() {
-    return backgroundImage != null && backgroundImage.getBounds().equals(canvasRectangle);
+    return (backgroundImage != null &&
+            !backgroundImage.isDisposed() && backgroundImage.getBounds().equals(canvasRectangle));
   }
 
   public Image acquireImage() {

@@ -61,8 +61,8 @@ public class ParserTest01 {
     }
 
     @Override
-    public void setLogger(int level, DataMonitor logger) {
-      logger.add(logged01AddedFromInterface, new Monitored() {
+    public void addToMonitor(int level, DataMonitor monitor) {
+      monitor.add(logged01AddedFromInterface, new Monitored() {
         @Override
         public double loggedValue(long stepTime) {
           return 0;

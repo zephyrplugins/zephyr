@@ -22,7 +22,7 @@ public class Zephyr {
     onAdvertize.fire(new Advertized(clock, drawn, null));
   }
 
-  static public void advertize(Clock clock, Object info, Object drawn) {
+  static public void advertize(Clock clock, Object drawn, Object info) {
     onAdvertize.fire(new Advertized(clock, drawn, info));
   }
 }
