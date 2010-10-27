@@ -41,15 +41,11 @@ public abstract class AbstractCanvasView extends ViewPart implements SyncView {
     canvas.addPaintListener(new PaintListener() {
       @Override
       public void paintControl(PaintEvent e) {
-        if (!isSetup())
-          return;
         paint(e.gc);
       }
     });
     setToolbar(getViewSite().getActionBars().getToolBarManager());
   }
-
-  abstract protected boolean isSetup();
 
   abstract protected void paint(GC gc);
 
@@ -67,8 +63,6 @@ public abstract class AbstractCanvasView extends ViewPart implements SyncView {
 
   @Override
   public void repaint() {
-    if (!isSetup())
-      return;
     canvas.getDisplay().syncExec(drawOnCanvas);
   }
 

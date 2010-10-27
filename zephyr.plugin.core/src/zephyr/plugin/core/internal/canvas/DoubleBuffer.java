@@ -115,8 +115,12 @@ public class DoubleBuffer implements ControlListener {
   }
 
   synchronized public void paintCanvas(GC gc) {
-    if (foregroundImage == null || canvas.isDisposed())
+    if (canvas.isDisposed())
       return;
+    if (foregroundImage == null) {
+      gc.fillRectangle(gc.getClipping());
+      return;
+    }
     gc.drawImage(foregroundImage, 0, 0);
   }
 }
