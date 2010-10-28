@@ -33,7 +33,7 @@ public abstract class LogFile implements Labeled {
     return labels[i];
   }
 
-  public boolean eof() {
+  synchronized public boolean eof() {
     if (reader == null)
       return true;
     boolean isReady = false;
@@ -118,7 +118,7 @@ public abstract class LogFile implements Labeled {
     }
   }
 
-  public void close() {
+  synchronized public void close() {
     if (reader == null)
       return;
     try {
