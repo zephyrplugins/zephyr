@@ -8,7 +8,7 @@
             class="zephyr.plugin.plotting.internal.graphs.PlotView"
             icon="icons/view_plotting.png"
             id="zephyr.plugin.plotting.view.plot"
-            name="Graphs"
+            name="Plot"
             restorable="true">
       </view>
    </extension>
@@ -86,7 +86,7 @@
             locationURI="menu:window?before=zephyr.plugin.core.separator.closeview">
          <command
                commandId="zephyr.plugin.plotting.commands.newplotview"
-               label="New Graphs"
+               label="New Plot"
                mnemonic="G"
                style="push">
          </command>
