@@ -18,8 +18,8 @@ public class PlotOverTimeRequestResult implements RequestResult {
   public final double y;
   public final String label;
   public final List<String> secondaryLabels;
-  public final int synchronizationTime;
-  public final int dataAge;
+  public final long synchronizationTime;
+  public final long dataAge;
   public final Chrono resultTime = new Chrono();
   private final TraceData traceData;
   private final Axes axes;
@@ -41,9 +41,9 @@ public class PlotOverTimeRequestResult implements RequestResult {
 
   @Override
   public Point computeMousePosition() {
-    int timeOffset = history.timeInfo.synchronizationTime - synchronizationTime;
+    long timeOffset = history.timeInfo.synchronizationTime - synchronizationTime;
     assert timeOffset >= 0;
-    int currentPositionX = x - timeOffset / history.timeInfo.period;
+    long currentPositionX = x - timeOffset / history.timeInfo.period;
     return axes.toG(currentPositionX, y);
   }
 

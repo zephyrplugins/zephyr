@@ -13,19 +13,19 @@ public class Chrono {
   }
 
   public void start() {
-    creationTime = System.currentTimeMillis();
+    creationTime = System.nanoTime();
+  }
+
+  public long getCurrentNano() {
+    return System.nanoTime() - creationTime;
   }
 
   public long getCurrentMillis() {
-    return System.currentTimeMillis() - creationTime;
+    return getCurrentNano() / 1000000;
   }
 
-  public double getTime() {
-    return getCurrentMillis() / 1000.0;
-  }
-
-  public float getCurrentChrono() {
-    return (float) (getCurrentMillis() / 1000.0);
+  public double getCurrentChrono() {
+    return getCurrentNano() / 1000000000.0;
   }
 
   @Override
@@ -48,5 +48,13 @@ public class Chrono {
       result.append(minutes + "m");
     result.append(seconds + "s");
     return result.toString();
+  }
+
+  public static String toPeriodString(long periodNano) {
+    if (periodNano < 1000000)
+      return String.valueOf(periodNano) + "ns";
+    if (periodNano < 1000000000)
+      return String.valueOf(periodNano / 1000000) + "ms";
+    return String.valueOf(periodNano / 1000000000) + "s";
   }
 }

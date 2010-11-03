@@ -28,7 +28,7 @@ public class TimeStepsRunnable implements Runnable {
   public void run() {
     while (true) {
       clock01.tick();
-      if (clock01.time() % 2 == 0)
+      if (clock01.timeStep() % 2 == 0)
         clock02.tick();
     }
   }

@@ -10,7 +10,7 @@ import zephyr.plugin.plotting.internal.traces.TracesSelection.TraceSelector;
 public class TraceData {
   static public class DataTimeInfo {
     public int period;
-    public int synchronizationTime;
+    public long synchronizationTime;
     public int bufferedData;
   }
 
@@ -53,7 +53,7 @@ public class TraceData {
     return !selectors.isEmpty();
   }
 
-  protected void update(int stepTime) {
+  protected void update(long stepTime) {
     double value = trace.logged.loggedValue(stepTime);
     if (Double.isNaN(value))
       value = 0;
@@ -65,14 +65,14 @@ public class TraceData {
     return histories[toHistoryIndex(historyTimeLength)];
   }
 
-  public int dataAge(DataTimeInfo timeInfo, int dataIndex) {
+  public long dataAge(DataTimeInfo timeInfo, int dataIndex) {
     return timeInfo.synchronizationTime - timeInfo.bufferedData - dataIndex * timeInfo.period;
   }
 
   public void history(double historyTimeLength, float[] values, DataTimeInfo timeInfo) {
     final History history = histories[toHistoryIndex(historyTimeLength)];
     history.toArray(values);
-    timeInfo.synchronizationTime = trace.clockTraces.clock.time();
+    timeInfo.synchronizationTime = trace.clockTraces.clock.timeStep();
     if (history instanceof AveragedHistory) {
       AveragedHistory averageHistory = (AveragedHistory) history;
       timeInfo.bufferedData = averageHistory.nbBufferedData() - 1;

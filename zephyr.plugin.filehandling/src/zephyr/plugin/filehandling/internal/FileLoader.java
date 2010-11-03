@@ -3,7 +3,9 @@ package zephyr.plugin.filehandling.internal;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -110,13 +112,22 @@ public class FileLoader {
 
   public static String[] getExtensions() {
     loadFileHandlersIFN();
-    List<String> extensions = new ArrayList<String>();
+    Set<String> extensions = new HashSet<String>();
     for (IFileHandler fileHandler : fileHandlers)
       for (String extension : fileHandler.extensions())
-        extensions.add("*." + extension);
+        extensions.add("*." + toDialogExtension(extension));
+    for (String extension : defaultHandler.extensions())
+      extensions.add("*." + toDialogExtension(extension));
     extensions.add("*.*");
     String[] result = new String[extensions.size()];
     extensions.toArray(result);
     return result;
+  }
+
+  protected static String toDialogExtension(String extension) {
+    int separatorPosition = extension.lastIndexOf('.');
+    if (separatorPosition < 0)
+      return extension;
+    return extension.substring(separatorPosition + 1);
   }
 }

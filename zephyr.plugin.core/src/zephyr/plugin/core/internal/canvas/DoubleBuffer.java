@@ -14,7 +14,6 @@ public class DoubleBuffer implements ControlListener {
 
   private final Canvas canvas;
   protected Rectangle canvasRectangle = null;
-  protected Rectangle backgroundRectangle = null;
   private final Semaphore drawingSemaphore = new Semaphore(1);
   private Image backgroundImage = null;
   private Image foregroundImage = null;
@@ -27,19 +26,15 @@ public class DoubleBuffer implements ControlListener {
   }
 
   public boolean currentImageIsValide() {
-    return checkBackgroundImage();
-  }
-
-  private boolean checkBackgroundImage() {
-    return (backgroundImage != null &&
-            !backgroundImage.isDisposed() && backgroundImage.getBounds().equals(canvasRectangle));
+    return (backgroundImage != null && !backgroundImage.isDisposed() && backgroundImage.getBounds()
+        .equals(canvasRectangle));
   }
 
   public Image acquireImage() {
     if (disposed)
       return null;
     acquireDrawingSemaphore();
-    if (!checkBackgroundImage()) {
+    if (!currentImageIsValide()) {
       if (backgroundImage != null)
         backgroundImage.dispose();
       if (nullCanvasArea()) {

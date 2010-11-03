@@ -29,7 +29,7 @@ public class ClockViews implements Listener<ViewTaskExecutor> {
     ViewTaskScheduler.onTaskExecuted.connect(this);
   }
 
-  protected void synchronize() {
+  synchronized protected void synchronize() {
     if (ZephyrPluginCommon.shuttingDown)
       return;
     if (!allTaskDone())
@@ -42,7 +42,7 @@ public class ClockViews implements Listener<ViewTaskExecutor> {
       waitForCompletion();
   }
 
-  synchronized private void waitForCompletion() {
+  private void waitForCompletion() {
     while (!allTaskDone())
       try {
         wait();

@@ -1,11 +1,11 @@
 package zephyr.plugin.filehandling.internal.defaulthandler;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import zephyr.ZephyrCore;
 import zephyr.ZephyrPlotting;
+import zephyr.plugin.core.Utils;
 import zephyr.plugin.core.api.labels.Labels;
 import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.filehandling.IFileHandler;
@@ -19,7 +19,7 @@ public class DefaultHandler implements IFileHandler {
 
   @Override
   public List<String> extensions() {
-    return new ArrayList<String>();
+    return Utils.asList(".gz", ".bz2");
   }
 
   public static void handle(String filepath) {

@@ -27,13 +27,13 @@ public class ClockTracesManager {
   };
 
   public ClockTracesManager() {
+    ZephyrSync.onClockRemoved().connect(clockRemovedListener);
   }
 
   synchronized public DataMonitor addClock(String clockLabel, Clock clock) {
     ClockTraces clockTraces = clocks.get(clock);
     if (clockTraces != null)
       return clockTraces;
-    ZephyrSync.onClockRemoved().connect(clockRemovedListener);
     clockTraces = new ClockTraces(clockLabel, clock);
     assert !clocks.containsKey(clock);
     clocks.put(clock, clockTraces);

@@ -81,7 +81,7 @@ public class BackgroundCanvas implements PainterMonitor {
 
   @Override
   public void painterStep() {
-    if (!showProgress || chrono.getTime() < 1.0)
+    if (!showProgress || chrono.getCurrentChrono() < 1.0)
       return;
     paintingImage.transfertImage();
     updateForegroundCanvas();

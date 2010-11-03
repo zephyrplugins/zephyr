@@ -24,12 +24,12 @@ public class View extends OpenGLView implements TimedView {
 
   static private final String id = "zephyr.plugin.opengl.example.view";
   private Model model;
-  private int time;
+  private long time;
   private float insideRadius;
 
   @Override
   public void synchronize() {
-    time = model.clock.time();
+    time = model.clock.timeStep();
     insideRadius = model.insideRadius;
   }
 

@@ -13,6 +13,8 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.views.IViewDescriptor;
+import org.eclipse.ui.views.IViewRegistry;
 
 import zephyr.plugin.core.api.signals.Signal;
 import zephyr.plugin.core.api.synchronization.Clock;
@@ -52,11 +54,13 @@ public class ViewBinder {
   }
 
   protected TimedView displayView(String viewID) {
+    IViewRegistry viewRegistry = PlatformUI.getWorkbench().getViewRegistry();
+    IViewDescriptor viewDescriptor = viewRegistry.find(viewID);
     IWorkbenchWindow activeWorkbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
     if (activeWorkbenchWindow == null)
       return null;
     IWorkbenchPage activePage = activeWorkbenchWindow.getActivePage();
-    String secondaryID = findSecondaryID(activePage, viewID);
+    String secondaryID = viewDescriptor.getAllowMultiple() ? findSecondaryID(activePage, viewID) : null;
     IViewPart view = null;
     try {
       view = activePage.showView(viewID, secondaryID, IWorkbenchPage.VIEW_ACTIVATE);

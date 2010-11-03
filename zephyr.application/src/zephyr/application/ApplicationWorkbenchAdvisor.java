@@ -52,6 +52,6 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
   @Override
   public void postShutdown() {
     if (!ZephyrSync.isSyncEmpty())
-      System.err.println("*** Post shutdown: viewBinder is not empty. Some views are still binded");
+      System.err.println("*** Post shutdown: viewBinder is not empty. Some views are still binded.");
   }
 }

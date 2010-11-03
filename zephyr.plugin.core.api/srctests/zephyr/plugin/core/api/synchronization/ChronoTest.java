@@ -4,15 +4,13 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import zephyr.plugin.core.api.synchronization.Chrono;
-
 public class ChronoTest {
   @Test
   public void testChrono() throws InterruptedException {
     Chrono chrono = new Chrono();
     Thread.sleep(31);
     long millis = chrono.getCurrentMillis();
-    float sec = chrono.getCurrentChrono();
+    double sec = chrono.getCurrentChrono();
     Assert.assertTrue(millis >= 30);
     Assert.assertTrue(millis < 1000);
     Assert.assertTrue(sec >= 0.03);

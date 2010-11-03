@@ -64,7 +64,7 @@ public class TracesSelection {
 
   synchronized public void update(Clock clock) {
     for (TraceData traceData : enabledTrace.values())
-      traceData.update(clock.time());
+      traceData.update(clock.timeStep());
   }
 
   synchronized public void setForceEnabled(boolean forceEnabled) {
