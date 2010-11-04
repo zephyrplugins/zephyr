@@ -72,7 +72,7 @@ public class ViewBinder {
     return (TimedView) view;
   }
 
-  private void displayAndBindView(final Clock clock, final Object drawn, Object info, final String viewID) {
+  synchronized private void displayAndBindView(final Clock clock, final Object drawn, Object info, final String viewID) {
     if (ZephyrPluginCommon.shuttingDown)
       return;
     final TimedView[] view = new TimedView[1];
