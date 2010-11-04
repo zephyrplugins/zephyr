@@ -31,7 +31,7 @@ public class DoubleBuffer implements ControlListener {
   }
 
   public Image acquireImage() {
-    if (disposed)
+    if (disposed || canvas.isDisposed())
       return null;
     acquireDrawingSemaphore();
     if (!currentImageIsValide()) {
