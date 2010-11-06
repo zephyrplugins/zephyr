@@ -24,7 +24,7 @@ public class Experiment implements ZephyrRunnable {
 
   @Override
   public void run() {
-    while (true) {
+    while (!clock.isTerminated()) {
       clock.tick();
       double[] inputs = problem.computeInputs();
       double target = problem.computeTarget(inputs);

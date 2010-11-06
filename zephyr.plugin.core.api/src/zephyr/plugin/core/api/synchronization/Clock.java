@@ -9,6 +9,7 @@ public class Clock {
   private long timeStep = -1;
   private long lastUpdate = System.nanoTime();
   private long lastPeriod = 0;
+  private boolean terminated = false;
 
   public Clock() {
     this(true);
@@ -36,5 +37,14 @@ public class Clock {
 
   public long lastPeriodNano() {
     return lastPeriod;
+  }
+
+  public void terminate() {
+    assert !terminated;
+    terminated = true;
+  }
+
+  public boolean isTerminated() {
+    return terminated;
   }
 }
