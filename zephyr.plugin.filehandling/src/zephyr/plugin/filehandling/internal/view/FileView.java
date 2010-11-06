@@ -41,8 +41,8 @@ public class FileView extends EnvironmentView implements Closeable, Restartable 
   @Override
   protected ObsLayout getObservationLayout() {
     String[] labels = logFile.labels();
-    int nbLine = (int) Math.sqrt(labels.length) + 1;
-    int nbItems = (labels.length / nbLine) + 1;
+    int nbLine = (int) Math.sqrt(labels.length);
+    int nbItems = labels.length / nbLine;
     ObsWidget[][] widgets = new ObsWidget[nbLine][];
     for (int i = 0; i < nbLine; i++) {
       ObsWidget[] line = new ObsWidget[Math.min(nbItems, labels.length - i * nbItems)];
@@ -86,6 +86,7 @@ public class FileView extends EnvironmentView implements Closeable, Restartable 
     restartAction.setEnabled(false);
     terminateAction.setEnabled(false);
     if (logFile != null) {
+      logFile.clock().terminate();
       ZephyrCore.removeClock(logFile.clock());
       logFile.close();
       logFile = null;

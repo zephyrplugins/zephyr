@@ -12,7 +12,7 @@ import zephyr.plugin.core.internal.observations.LineLayout;
 import zephyr.plugin.core.views.TimedView;
 
 public abstract class EnvironmentView extends ViewPart implements TimedView {
-  private Composite parent;
+  protected Composite parent;
   ObsLayout obsLayout;
   private final Runnable repaintWidgets = new Runnable() {
     @Override

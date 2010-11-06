@@ -39,9 +39,10 @@ public class Clock {
     return lastPeriod;
   }
 
-  public void terminate() {
+  synchronized public void terminate() {
     assert !terminated;
     terminated = true;
+    notifyAll();
   }
 
   public boolean isTerminated() {

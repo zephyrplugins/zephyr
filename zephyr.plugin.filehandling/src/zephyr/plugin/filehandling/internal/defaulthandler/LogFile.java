@@ -11,7 +11,6 @@ import zephyr.plugin.core.api.monitoring.annotations.LabelProvider;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 import zephyr.plugin.core.api.synchronization.Clock;
 
-
 public abstract class LogFile implements Labeled {
   public final Clock clock;
   protected BufferedReader reader;
@@ -35,6 +34,8 @@ public abstract class LogFile implements Labeled {
 
   synchronized public boolean eof() {
     if (reader == null)
+      return true;
+    if (clock.isTerminated())
       return true;
     boolean isReady = false;
     try {

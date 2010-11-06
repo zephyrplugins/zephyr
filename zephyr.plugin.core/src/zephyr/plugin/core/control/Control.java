@@ -79,11 +79,11 @@ public class Control implements Listener<Clock> {
   }
 
   public boolean isSuspended() {
-    List<Integer> remainingSteps = new ArrayList<Integer>(suspended.values());
-    for (Integer remainingStep : remainingSteps)
-      if (remainingStep != 0)
-        return false;
-    return !remainingSteps.isEmpty();
+    List<Integer> authorizedSteps = new ArrayList<Integer>(suspended.values());
+    for (Integer authorizedStep : authorizedSteps)
+      if (authorizedStep != null && authorizedStep == 0)
+        return true;
+    return false;
   }
 
   public boolean isSuspended(Clock clock) {
@@ -94,7 +94,7 @@ public class Control implements Listener<Clock> {
   @Override
   public void listen(Clock clock) {
     synchronized (clock) {
-      while (suspended.get(clock) == 0)
+      while (!clock.isTerminated() && suspended.get(clock) == 0)
         try {
           clock.wait();
           if (!suspended.containsKey(clock))
