@@ -16,6 +16,7 @@ import zephyr.plugin.core.api.signals.Signal;
 import zephyr.plugin.core.control.Control;
 import zephyr.plugin.core.internal.preferences.PreferenceKeys;
 import zephyr.plugin.core.internal.synchronization.ViewBinder;
+import zephyr.plugin.core.internal.synchronization.tasks.ViewTaskScheduler;
 
 public class ZephyrPluginCommon extends AbstractUIPlugin {
   public Signal<Runnable> onRunnableStarted = new Signal<Runnable>();
@@ -25,6 +26,7 @@ public class ZephyrPluginCommon extends AbstractUIPlugin {
 
   final ViewBinder viewBinder = new ViewBinder();
   private static ZephyrPluginCommon plugin;
+  private final ThreadGroup threadGroup = new ThreadGroup("ZephyrRunnable");
 
   private final Control control = new Control();
 
@@ -42,7 +44,7 @@ public class ZephyrPluginCommon extends AbstractUIPlugin {
   }
 
   public void startZephyrMain(final RunnableFactory runnableFactory) {
-    new Thread(new Runnable() {
+    Thread runnableThread = new Thread(threadGroup, new Runnable() {
       @Override
       public void run() {
         Runnable runnable = runnableFactory.createRunnable();
@@ -55,7 +57,9 @@ public class ZephyrPluginCommon extends AbstractUIPlugin {
           e.printStackTrace();
         }
       }
-    }).start();
+    });
+    runnableThread.setName("ZephyrRunnable-" + threadGroup.activeCount());
+    runnableThread.start();
   }
 
   @Override
@@ -68,6 +72,7 @@ public class ZephyrPluginCommon extends AbstractUIPlugin {
         ZephyrCore.advertize(eventInfo.clock, eventInfo.advertized, eventInfo.info);
       }
     });
+    ViewTaskScheduler.executor.setMasterThreadGroup(threadGroup);
   }
 
   @Override

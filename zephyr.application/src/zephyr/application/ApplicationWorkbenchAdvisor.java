@@ -34,13 +34,18 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 
   @Override
   public void postStartup() {
+    enableActivities("zephyr.plugin.core.activity");
+  }
+
+  protected void enableActivities(String... ids) {
     IWorkbenchActivitySupport activitySupport = PlatformUI.getWorkbench().getActivitySupport();
     IActivityManager activityManager = activitySupport.getActivityManager();
     Set<String> enabledActivities = new HashSet<String>();
-    String id = "zephyr.plugin.core.activity";
-    if (activityManager.getActivity(id).isDefined())
-      enabledActivities.add(id);
-    activitySupport.setEnabledActivityIds(enabledActivities);
+    for (String id : ids)
+      if (activityManager.getActivity(id).isDefined())
+        enabledActivities.add(id);
+    Set<String> definedActivities = enabledActivities;
+    activitySupport.setEnabledActivityIds(definedActivities);
   }
 
   @Override

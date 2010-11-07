@@ -53,13 +53,6 @@
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.core.expressions"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="org.eclipse.core.variables"
          download-size="0"
          install-size="0"
@@ -68,20 +61,6 @@
 
    <plugin
          id="com.ibm.icu"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.text"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.apache.commons.logging"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -130,20 +109,6 @@
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.help"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="javax.servlet"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="org.eclipse.swt"
          download-size="0"
          install-size="0"
@@ -166,20 +131,6 @@
 
    <plugin
          id="org.eclipse.ui.workbench"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.core.commands"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.core.databinding.beans"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -224,20 +175,6 @@
          install-size="0"
          version="0.0.0"
          fragment="true"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.update.configurator"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.equinox.simpleconfigurator"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
          unpack="false"/>
 
    <plugin
@@ -461,13 +398,6 @@
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.rcp"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="org.eclipse.core.contenttype"
          download-size="0"
          install-size="0"
@@ -483,20 +413,6 @@
 
    <plugin
          id="org.eclipse.equinox.common"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.equinox.ds"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.equinox.util"
          download-size="0"
          install-size="0"
          version="0.0.0"

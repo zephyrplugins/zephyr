@@ -8,7 +8,7 @@ import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.views.SyncView;
 
 public class ViewTaskScheduler {
-  static final ViewTaskExecutor executor = new ViewTaskExecutor(3, Thread.MIN_PRIORITY);
+  public static final ViewTaskExecutor executor = new ViewTaskExecutor(Thread.MIN_PRIORITY);
   private final Map<SyncView, ViewTask> viewTasks = new HashMap<SyncView, ViewTask>();
   public static final Signal<ViewTaskExecutor> onTaskExecuted = new Signal<ViewTaskExecutor>();
 
@@ -32,5 +32,11 @@ public class ViewTaskScheduler {
     ViewTask task = viewTasks.get(view);
     if (task != null)
       task.submitIFN();
+  }
+
+  public void adjustCoreThread() {
+    int nbThread = Math.max(1, Math.min(10, executor.nbActiveZephyrThread()));
+    executor.setCorePoolSize(nbThread);
+    executor.setMaximumPoolSize(nbThread);
   }
 }

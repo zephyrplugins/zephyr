@@ -37,6 +37,7 @@ public class SensorGroup implements ObsWidget {
     FillLayout fillLayout = new FillLayout();
     fillLayout.type = SWT.HORIZONTAL;
     group.setLayout(fillLayout);
+    group.setToolTipText(title);
     for (int i = 0; i < indexes.size(); i++) {
       Canvas canvas = new Canvas(group, SWT.DOUBLE_BUFFERED);
       ObsStat obsState = new ObsStat(title + " " + i, indexes.get(i), min, max);

@@ -1,5 +1,6 @@
 package zephyr.plugin.filehandling.internal.view;
 
+import java.io.File;
 import java.util.Arrays;
 
 import org.eclipse.jface.action.IToolBarManager;
@@ -74,6 +75,7 @@ public class FileView extends EnvironmentView implements Closeable, Restartable 
     restartAction.setEnabled(drawn instanceof LogFile);
     terminateAction.setEnabled(true);
     createLayout();
+    setViewName(new File(logFile.filepath).getName(), logFile.filepath);
   }
 
   @Override

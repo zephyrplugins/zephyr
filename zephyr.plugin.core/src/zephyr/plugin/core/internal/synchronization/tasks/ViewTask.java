@@ -94,7 +94,7 @@ public class ViewTask implements Runnable, Listener<Clock> {
     view.synchronize();
   }
 
-  public void submitIFN() {
+  synchronized public void submitIFN() {
     dirtyFlag.soil();
     if (!isDone())
       return;

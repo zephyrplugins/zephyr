@@ -1,7 +1,7 @@
 package zephyr.plugin.core.internal.preferences;
 
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
-import org.eclipse.jface.preference.StringFieldEditor;
+import org.eclipse.jface.preference.FileFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
@@ -19,8 +19,8 @@ public class Startup
 
   @Override
   public void createFieldEditors() {
-    addField(new StringFieldEditor(PreferenceKeys.StartupCommandLineKey,
-                                   "&Startup arguments:", getFieldEditorParent()));
+    addField(new FileFieldEditor(PreferenceKeys.StartupCommandLineKey,
+                                 "&Startup arguments:", getFieldEditorParent()));
   }
 
   @Override

@@ -23,9 +23,11 @@ public abstract class EnvironmentView extends ViewPart implements TimedView {
         widget.repaint();
     }
   };
+  private String defaultViewName = "EnvironmentView";
 
   @Override
   public void createPartControl(Composite parent) {
+    defaultViewName = getPartName();
     this.parent = parent;
     setToolbar(getViewSite().getActionBars().getToolBarManager());
   }
@@ -85,10 +87,24 @@ public abstract class EnvironmentView extends ViewPart implements TimedView {
   public void setFocus() {
   }
 
+  protected void setViewName(final String viewName, final String tooltip) {
+    Display.getDefault().asyncExec(new Runnable() {
+      @SuppressWarnings("synthetic-access")
+      @Override
+      public void run() {
+        setPartName(viewName);
+        setTitleToolTip(tooltip);
+        firePropertyChange(org.eclipse.ui.IWorkbenchPart.PROP_TITLE);
+        parent.redraw();
+      }
+    });
+  }
+
   public void close() {
     obsLayout = null;
     if (parent.isDisposed())
       return;
+    setViewName(defaultViewName, "");
     for (Control child : parent.getChildren())
       child.dispose();
   }

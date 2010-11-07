@@ -26,19 +26,18 @@ public class ClockViews implements Listener<ViewTaskExecutor> {
   public ClockViews(Clock clock) {
     this.clock = clock;
     clock.onTick.connect(tickListener);
+    viewTaskScheduler.adjustCoreThread();
     ViewTaskScheduler.onTaskExecuted.connect(this);
   }
 
   synchronized protected void synchronize() {
     if (ZephyrPluginCommon.shuttingDown)
       return;
-    if (!allTaskDone())
-      return;
     for (ViewTask task : viewTasks) {
       task.synchronizeIFN();
       task.submitIFN();
     }
-    if (ZephyrPluginCommon.synchronous)
+    if (ZephyrPluginCommon.synchronous && allTaskDone())
       waitForCompletion();
   }
 
@@ -73,6 +72,7 @@ public class ClockViews implements Listener<ViewTaskExecutor> {
   synchronized public void dispose() {
     clock.onTick.disconnect(tickListener);
     viewTasks.clear();
+    viewTaskScheduler.adjustCoreThread();
   }
 
   @Override

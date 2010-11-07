@@ -206,6 +206,14 @@
             activityId="zephyr.plugin.core.activity"
             pattern="zephyr.plugin.*">
       </activityPatternBinding>
+      <activity
+            id="zephyr.disable.ui.editors.activity"
+            name="Zephyr Disable Eclipse Editors Activity">
+      </activity>
+      <activityPatternBinding
+            activityId="zephyr.disable.ui.editors.activity"
+            pattern="org.eclipse.ui.*">
+      </activityPatternBinding>
    </extension>
    <extension
          point="org.eclipse.ui.bindings">

@@ -97,12 +97,15 @@ public class Control implements Listener<Clock> {
       while (!clock.isTerminated() && suspended.get(clock) == 0)
         try {
           clock.wait();
-          if (!suspended.containsKey(clock))
+          if (!suspended.containsKey(clock)) {
+            onModeChange.fire(this);
             return;
+          }
         } catch (InterruptedException e) {
           e.printStackTrace();
         }
       suspended.put(clock, suspended.get(clock) - 1);
     }
+    onModeChange.fire(this);
   }
 }
