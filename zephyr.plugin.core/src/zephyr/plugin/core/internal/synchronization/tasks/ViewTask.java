@@ -47,23 +47,23 @@ public class ViewTask implements Runnable, Listener<Clock> {
   @Override
   public void run() {
     try {
-      while (!disposed && dirtyFlag.isDirty() && !isSynchronizationRequired()) {
-        dirtyFlag.clean();
-        view.repaint();
+      if (disposed)
+        return;
+      paintView();
+      if (synchronizationRequired && (allThreadDead() || allClocksSuspended())) {
+        synchronizeWithModel();
+        paintView();
       }
     } catch (Exception e) {
       e.printStackTrace();
     }
   }
 
-  private boolean isSynchronizationRequired() {
-    if (!synchronizationRequired)
-      return false;
-    if (clocks.isEmpty())
-      return false;
-    if (allThreadDead() || allClocksSuspended())
-      synchronizeWithModel();
-    return synchronizationRequired;
+  private void paintView() {
+    do {
+      dirtyFlag.clean();
+      view.repaint();
+    } while (!disposed && dirtyFlag.isDirty());
   }
 
   synchronized private boolean allClocksSuspended() {
@@ -94,11 +94,11 @@ public class ViewTask implements Runnable, Listener<Clock> {
     view.synchronize();
   }
 
-  synchronized public void submitIFN() {
+  synchronized public void submitIFN(ViewTaskExecutor executor) {
     dirtyFlag.soil();
     if (!isDone())
       return;
-    future = ViewTaskScheduler.executor.submit(this);
+    future = executor.submit(this);
   }
 
   public boolean isTaskForView(SyncView view) {

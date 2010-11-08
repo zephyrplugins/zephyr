@@ -62,6 +62,7 @@ public class PlotView extends ViewPart implements TraceSelector, SyncView, ViewC
     GridLayout gridLayout = new GridLayout(1, false);
     parent.setLayout(gridLayout);
     backgroundCanvas = new BackgroundCanvas(parent, plotOverTime);
+    backgroundCanvas.listenControlEvent(this);
     Control canvas = backgroundCanvas.canvas();
     canvas.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
     mouseSearch = new MouseSearch(this, canvas);

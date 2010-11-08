@@ -12,32 +12,32 @@ import zephyr.plugin.core.internal.synchronization.tasks.ViewTaskScheduler;
 import zephyr.plugin.core.views.SyncView;
 
 public class ClockViews implements Listener<ViewTaskExecutor> {
-  private static final ViewTaskScheduler viewTaskScheduler = new ViewTaskScheduler();
   private final Listener<Clock> tickListener = new Listener<Clock>() {
     @Override
     public void listen(Clock eventInfo) {
       synchronize();
     }
   };
-
+  private final ViewTaskExecutor executor = new ViewTaskExecutor();
   private final List<ViewTask> viewTasks = new ArrayList<ViewTask>();
   private final Clock clock;
 
   public ClockViews(Clock clock) {
     this.clock = clock;
     clock.onTick.connect(tickListener);
-    viewTaskScheduler.adjustCoreThread();
     ViewTaskScheduler.onTaskExecuted.connect(this);
   }
 
   synchronized protected void synchronize() {
     if (ZephyrPluginCommon.shuttingDown)
       return;
-    for (ViewTask task : viewTasks) {
+    for (ViewTask task : viewTasks)
       task.synchronizeIFN();
-      task.submitIFN();
+    if (allTaskDone()) {
+      for (ViewTask task : viewTasks)
+        task.submitIFN(executor);
     }
-    if (ZephyrPluginCommon.synchronous && allTaskDone())
+    if (ZephyrPluginCommon.synchronous)
       waitForCompletion();
   }
 
@@ -58,11 +58,11 @@ public class ClockViews implements Listener<ViewTaskExecutor> {
   }
 
   synchronized public void addView(SyncView view) {
-    viewTasks.add(viewTaskScheduler.task(clock, view));
+    viewTasks.add(ZephyrPluginCommon.viewScheduler().task(clock, view));
   }
 
   synchronized public void removeView(SyncView view) {
-    viewTasks.remove(viewTaskScheduler.task(clock, view));
+    viewTasks.remove(ZephyrPluginCommon.viewScheduler().task(clock, view));
   }
 
   public boolean isEmpty() {
@@ -72,7 +72,7 @@ public class ClockViews implements Listener<ViewTaskExecutor> {
   synchronized public void dispose() {
     clock.onTick.disconnect(tickListener);
     viewTasks.clear();
-    viewTaskScheduler.adjustCoreThread();
+    executor.shutdown();
   }
 
   @Override
@@ -81,10 +81,10 @@ public class ClockViews implements Listener<ViewTaskExecutor> {
   }
 
   public static void disposeView(SyncView view) {
-    viewTaskScheduler.disposeView(view);
+    ZephyrPluginCommon.viewScheduler().disposeView(view);
   }
 
   public static void submitView(SyncView view) {
-    viewTaskScheduler.submitView(view);
+    ZephyrPluginCommon.viewScheduler().submitView(view);
   }
 }

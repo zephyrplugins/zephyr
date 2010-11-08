@@ -25,6 +25,7 @@ public class ZephyrPluginCommon extends AbstractUIPlugin {
   public static boolean synchronous;
 
   final ViewBinder viewBinder = new ViewBinder();
+  final private ViewTaskScheduler viewTaskScheduler = new ViewTaskScheduler();
   private static ZephyrPluginCommon plugin;
   private final ThreadGroup threadGroup = new ThreadGroup("ZephyrRunnable");
 
@@ -59,6 +60,7 @@ public class ZephyrPluginCommon extends AbstractUIPlugin {
       }
     });
     runnableThread.setName("ZephyrRunnable-" + threadGroup.activeCount());
+    runnableThread.setDaemon(true);
     runnableThread.start();
   }
 
@@ -72,7 +74,6 @@ public class ZephyrPluginCommon extends AbstractUIPlugin {
         ZephyrCore.advertize(eventInfo.clock, eventInfo.advertized, eventInfo.info);
       }
     });
-    ViewTaskScheduler.executor.setMasterThreadGroup(threadGroup);
   }
 
   @Override
@@ -87,6 +88,10 @@ public class ZephyrPluginCommon extends AbstractUIPlugin {
 
   static public Control control() {
     return getDefault().control;
+  }
+
+  static public ViewTaskScheduler viewScheduler() {
+    return getDefault().viewTaskScheduler;
   }
 
   public static ZephyrPluginCommon getDefault() {

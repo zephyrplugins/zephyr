@@ -19,15 +19,14 @@ public class ClockTracesManager {
   public final Signal<List<Trace>> onTraceAdded = new Signal<List<Trace>>();
   public final Signal<List<Trace>> onTraceRemoved = new Signal<List<Trace>>();
   private final Map<Clock, ClockTraces> clocks = new LinkedHashMap<Clock, ClockTraces>();
-  private final Listener<Clock> clockRemovedListener = new Listener<Clock>() {
-    @Override
-    public void listen(Clock clock) {
-      removeClock(clock);
-    }
-  };
 
   public ClockTracesManager() {
-    ZephyrSync.onClockRemoved().connect(clockRemovedListener);
+    ZephyrSync.onClockRemoved().connect(new Listener<Clock>() {
+      @Override
+      public void listen(Clock clock) {
+        removeClock(clock);
+      }
+    });
   }
 
   synchronized public DataMonitor addClock(String clockLabel, Clock clock) {
@@ -53,7 +52,6 @@ public class ClockTracesManager {
   }
 
   synchronized public void removeClock(Clock clock) {
-    ZephyrSync.onClockRemoved().disconnect(clockRemovedListener);
     ClockTraces clockTraces = clocks.remove(clock);
     clockTraces.dispose();
   }

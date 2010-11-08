@@ -9,6 +9,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 
+import zephyr.ZephyrSync;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.helpers.ClassViewProvider;
 import zephyr.plugin.core.views.TimedView;
@@ -33,8 +34,9 @@ public class JarView extends ViewPart implements TimedView {
     parentLayout.marginWidth = 0;
     parentLayout.marginHeight = 0;
     parent.setLayout(parentLayout);
-    // for (JarRunnable jarRunnable : JarFileHandler.jars)
-    // ZephyrSync.bind(jarRunnable.clock, this);
+    refreshView();
+    for (JarRunnable jarRunnable : JarFileHandler.jars)
+      ZephyrSync.bind(jarRunnable.clock, this);
   }
 
   @Override

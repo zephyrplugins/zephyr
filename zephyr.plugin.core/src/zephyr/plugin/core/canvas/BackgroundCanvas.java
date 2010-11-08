@@ -4,6 +4,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.GC;
@@ -12,9 +14,11 @@ import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
+import zephyr.ZephyrSync;
 import zephyr.plugin.core.api.synchronization.Chrono;
 import zephyr.plugin.core.canvas.Painter.PainterMonitor;
 import zephyr.plugin.core.internal.canvas.DoubleBuffer;
+import zephyr.plugin.core.views.SyncView;
 
 public class BackgroundCanvas implements PainterMonitor {
   private final Painter painter;
@@ -26,13 +30,14 @@ public class BackgroundCanvas implements PainterMonitor {
       if (canvas.isDisposed())
         return;
       canvas.redraw();
-      canvas.update();
     }
   };
   private final List<Overlay> overlays = new LinkedList<Overlay>();
   private boolean showProgress = true;
   private final boolean cancelDrawing = false;
   private final Chrono chrono = new Chrono();
+  private long numBackgroundDrawing = 0;
+  private long numForegroundDrawing = 0;
 
   public BackgroundCanvas(Composite parent, Painter painter) {
     this.canvas = new Canvas(parent, SWT.NO_BACKGROUND);
@@ -58,6 +63,7 @@ public class BackgroundCanvas implements PainterMonitor {
     paintingImage.releaseImage(gc);
     paintingImage.swap();
     updateForegroundCanvas();
+    numBackgroundDrawing++;
   }
 
   private void updateForegroundCanvas() {
@@ -66,6 +72,7 @@ public class BackgroundCanvas implements PainterMonitor {
   }
 
   void drawForeground(GC gc) {
+    numForegroundDrawing++;
     paintingImage.paintCanvas(gc);
     for (Overlay overlay : overlays)
       overlay.drawOverlay(gc);
@@ -99,5 +106,19 @@ public class BackgroundCanvas implements PainterMonitor {
 
   public Control canvas() {
     return canvas;
+  }
+
+  public void listenControlEvent(final SyncView syncView) {
+    canvas.addControlListener(new ControlListener() {
+      @Override
+      public void controlResized(ControlEvent e) {
+        ZephyrSync.submitView(syncView);
+      }
+
+      @Override
+      public void controlMoved(ControlEvent e) {
+        ZephyrSync.submitView(syncView);
+      }
+    });
   }
 }

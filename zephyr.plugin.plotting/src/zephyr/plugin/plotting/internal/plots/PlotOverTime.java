@@ -120,7 +120,7 @@ public class PlotOverTime implements Painter {
         }
         colorIndex += 1;
       }
-      if (painterMonitor.isCanceled() || axesNeedReset != ResetMode.NoReset)
+      if (painterMonitor.isCanceled() || axesNeedReset != ResetMode.NoReset || axes.y.scalingRequired())
         return;
       painterMonitor.painterStep();
     }

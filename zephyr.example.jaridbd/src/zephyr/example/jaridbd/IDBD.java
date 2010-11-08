@@ -21,7 +21,7 @@ public class IDBD extends LMS {
   public void update(double[] x, double y) {
     error = y - predict(x);
     for (int i = 0; i < weights.length; i++) {
-      betas[i] += metaStepSize * error * x[i] * hs[i];
+      betas[i] = Math.max(-10, betas[i] + (metaStepSize * error * x[i] * hs[i]));
       double alpha_i = Math.exp(betas[i]);
       weights[i] += alpha_i * error * x[i];
       hs[i] = hs[i] * Math.max(0, 1 - alpha_i * x[i] * x[i]) + alpha_i * error * x[i];

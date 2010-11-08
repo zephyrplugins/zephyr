@@ -16,6 +16,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.IViewDescriptor;
 import org.eclipse.ui.views.IViewRegistry;
 
+import zephyr.plugin.core.Utils;
 import zephyr.plugin.core.api.signals.Signal;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.internal.ZephyrPluginCommon;
@@ -72,20 +73,24 @@ public class ViewBinder {
     return (TimedView) view;
   }
 
-  synchronized private void displayAndBindView(final Clock clock, final Object drawn, Object info, final String viewID) {
+  private void displayAndBindView(final Clock clock, final Object drawn, final Object info,
+      final String viewID) {
     if (ZephyrPluginCommon.shuttingDown)
       return;
-    final TimedView[] view = new TimedView[1];
-    Display.getDefault().syncExec(new Runnable() {
+    Runnable bindViewRunnable = new Runnable() {
       @Override
       public void run() {
-        view[0] = displayView(viewID);
+        TimedView view = displayView(viewID);
+        if (view == null)
+          return;
+        view.addTimed(clock, drawn, info);
+        bind(clock, view);
       }
-    });
-    if (view[0] == null)
-      return;
-    view[0].addTimed(clock, drawn, info);
-    bind(clock, view[0]);
+    };
+    if (Utils.isUIThread())
+      bindViewRunnable.run();
+    else
+      Display.getDefault().syncExec(bindViewRunnable);
   }
 
   private ClockViews addClock(Clock clock) {
@@ -109,7 +114,10 @@ public class ViewBinder {
     clockViews.addView(view);
   }
 
-  synchronized public void bindViews(Clock clock, Object drawn, Object info) {
+  // displayAndBindView need to call the ViewBinder from within
+  // a UI thread inside a syncExec. Therefore, this method cannot be
+  // synchronized
+  public void bindViews(Clock clock, Object drawn, Object info) {
     List<String> viewIDs = viewProviders.findViews(drawn);
     for (String viewID : viewIDs)
       displayAndBindView(clock, drawn, info, viewID);
