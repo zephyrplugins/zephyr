@@ -4,21 +4,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 import zephyr.plugin.core.api.signals.Signal;
-import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.views.SyncView;
 
 public class ViewTaskScheduler {
-  private final ViewTaskExecutor defaultExecutor = new ViewTaskExecutor();
+  private final ViewTaskExecutor defaultExecutor = new ViewTaskExecutor(1);
   private final Map<SyncView, ViewTask> viewTasks = new HashMap<SyncView, ViewTask>();
   public static final Signal<ViewTaskExecutor> onTaskExecuted = new Signal<ViewTaskExecutor>();
 
-  synchronized public ViewTask task(Clock clock, SyncView view) {
+  synchronized public ViewTask task(SyncView view) {
     ViewTask task = viewTasks.get(view);
     if (task == null) {
       task = new ViewTask(view);
       viewTasks.put(view, task);
     }
-    task.addClock(clock);
     return task;
   }
 
@@ -31,6 +29,6 @@ public class ViewTaskScheduler {
   public void submitView(SyncView view) {
     ViewTask task = viewTasks.get(view);
     if (task != null)
-      task.submitIFN(defaultExecutor);
+      task.refreshIFN(defaultExecutor);
   }
 }

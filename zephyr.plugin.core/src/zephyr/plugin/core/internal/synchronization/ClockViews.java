@@ -18,9 +18,11 @@ public class ClockViews implements Listener<ViewTaskExecutor> {
       synchronize();
     }
   };
-  private final ViewTaskExecutor executor = new ViewTaskExecutor();
+  private final ViewTaskExecutor executor = new ViewTaskExecutor(1);
   private final List<ViewTask> viewTasks = new ArrayList<ViewTask>();
   private final Clock clock;
+  private Thread runnableThread = null;
+  private boolean synchronizationRequired = true;
 
   public ClockViews(Clock clock) {
     this.clock = clock;
@@ -31,14 +33,19 @@ public class ClockViews implements Listener<ViewTaskExecutor> {
   synchronized protected void synchronize() {
     if (ZephyrPluginCommon.shuttingDown)
       return;
-    for (ViewTask task : viewTasks)
-      task.synchronizeIFN();
-    if (allTaskDone()) {
-      for (ViewTask task : viewTasks)
-        task.submitIFN(executor);
-    }
+    synchronizationRequired = true;
+    runnableThread = Thread.currentThread();
+    refreshViewsIFN();
     if (ZephyrPluginCommon.synchronous)
       waitForCompletion();
+  }
+
+  private void refreshViewsIFN() {
+    if (!allTaskDone())
+      return;
+    synchronizationRequired = false;
+    for (ViewTask task : viewTasks)
+      task.refreshIFN(executor, true);
   }
 
   private void waitForCompletion() {
@@ -58,11 +65,11 @@ public class ClockViews implements Listener<ViewTaskExecutor> {
   }
 
   synchronized public void addView(SyncView view) {
-    viewTasks.add(ZephyrPluginCommon.viewScheduler().task(clock, view));
+    viewTasks.add(ZephyrPluginCommon.viewScheduler().task(view));
   }
 
   synchronized public void removeView(SyncView view) {
-    viewTasks.remove(ZephyrPluginCommon.viewScheduler().task(clock, view));
+    viewTasks.remove(ZephyrPluginCommon.viewScheduler().task(view));
   }
 
   public boolean isEmpty() {
@@ -77,7 +84,10 @@ public class ClockViews implements Listener<ViewTaskExecutor> {
 
   @Override
   synchronized public void listen(ViewTaskExecutor eventInfo) {
-    this.notify();
+    notify();
+    if ((ZephyrPluginCommon.control().isSuspended(clock) || !runnableThread.isAlive())
+        && synchronizationRequired && allTaskDone())
+      refreshViewsIFN();
   }
 
   public static void disposeView(SyncView view) {

@@ -70,7 +70,7 @@ public class PlotOverTime implements Painter {
     do {
       preparePainting();
       List<HistoryCached> histories = plotdata.getHistories();
-      if (axesNeedReset != ResetMode.NoReset)
+      if (axesNeedScaling())
         updateAxes(histories);
       prepareDrawingZone(gc);
       if (histories.isEmpty())
@@ -120,10 +120,14 @@ public class PlotOverTime implements Painter {
         }
         colorIndex += 1;
       }
-      if (painterMonitor.isCanceled() || axesNeedReset != ResetMode.NoReset || axes.y.scalingRequired())
+      if (painterMonitor.isCanceled() || axesNeedScaling())
         return;
       painterMonitor.painterStep();
     }
+  }
+
+  private boolean axesNeedScaling() {
+    return axesNeedReset != ResetMode.NoReset || axes.y.scalingRequired();
   }
 
   public void resetAxes(boolean resetYAxe) {

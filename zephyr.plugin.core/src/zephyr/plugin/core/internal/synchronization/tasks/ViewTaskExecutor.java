@@ -8,7 +8,6 @@ import java.util.concurrent.TimeUnit;
 
 public class ViewTaskExecutor extends ThreadPoolExecutor {
   static protected ThreadGroup viewThreadGroup = new ThreadGroup("ZephyrViews");
-  static private int NbThread = 1;
 
   static protected class Factory implements ThreadFactory {
     @Override
@@ -21,8 +20,8 @@ public class ViewTaskExecutor extends ThreadPoolExecutor {
     }
   }
 
-  public ViewTaskExecutor() {
-    super(NbThread, NbThread, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>(), new Factory());
+  public ViewTaskExecutor(int nbThread) {
+    super(nbThread, nbThread, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>(), new Factory());
   }
 
   @Override

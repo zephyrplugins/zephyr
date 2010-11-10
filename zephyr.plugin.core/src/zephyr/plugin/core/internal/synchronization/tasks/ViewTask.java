@@ -1,47 +1,17 @@
 package zephyr.plugin.core.internal.synchronization.tasks;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
 import java.util.concurrent.Future;
 
-import zephyr.plugin.core.api.signals.Listener;
-import zephyr.plugin.core.api.synchronization.Clock;
-import zephyr.plugin.core.internal.ZephyrPluginCommon;
 import zephyr.plugin.core.views.SyncView;
 
-public class ViewTask implements Runnable, Listener<Clock> {
-  protected class IsDirtyFlag {
-    private boolean isDirty = false;
-
-    synchronized protected boolean isDirty() {
-      return isDirty;
-    }
-
-    synchronized protected void soil() {
-      isDirty = true;
-    }
-
-    synchronized protected void clean() {
-      isDirty = false;
-    }
-  }
-
+public class ViewTask implements Runnable {
   final private SyncView view;
   private Future<?> future;
-  private final IsDirtyFlag dirtyFlag = new IsDirtyFlag();
-  private boolean synchronizationRequired = false;
-  private final Set<Clock> clocks = new HashSet<Clock>();
-  private final Set<Thread> threads = new HashSet<Thread>();
   private boolean disposed = false;
+  private boolean isDirty = false;
 
   protected ViewTask(SyncView view) {
     this.view = view;
-    ZephyrPluginCommon.viewBinder().onClockRemoved.connect(this);
-  }
-
-  public void addClock(Clock clock) {
-    clocks.add(clock);
   }
 
   @Override
@@ -49,73 +19,38 @@ public class ViewTask implements Runnable, Listener<Clock> {
     try {
       if (disposed)
         return;
-      paintView();
-      if (synchronizationRequired && (allThreadDead() || allClocksSuspended())) {
-        synchronizeWithModel();
-        paintView();
+      while (isDirty) {
+        isDirty = false;
+        view.repaint();
       }
     } catch (Exception e) {
       e.printStackTrace();
     }
   }
 
-  private void paintView() {
-    do {
-      dirtyFlag.clean();
-      view.repaint();
-    } while (!disposed && dirtyFlag.isDirty());
+
+  public boolean refreshIFN(ViewTaskExecutor executor) {
+    return refreshIFN(executor, false);
   }
 
-  synchronized private boolean allClocksSuspended() {
-    for (Clock clock : clocks)
-      if (!ZephyrPluginCommon.control().isSuspended(clock))
-        return false;
-    return true;
-  }
-
-  synchronized private boolean allThreadDead() {
-    Iterator<Thread> i = threads.iterator();
-    while (i.hasNext())
-      if (!i.next().isAlive())
-        i.remove();
-    return threads.isEmpty();
-  }
-
-  synchronized public void synchronizeIFN() {
-    threads.add(Thread.currentThread());
-    synchronizationRequired = true;
+  synchronized public boolean refreshIFN(ViewTaskExecutor executor, boolean synchronize) {
+    isDirty = true;
     if (!isDone())
-      return;
-    synchronizeWithModel();
-  }
-
-  private void synchronizeWithModel() {
-    synchronizationRequired = false;
-    view.synchronize();
-  }
-
-  synchronized public void submitIFN(ViewTaskExecutor executor) {
-    dirtyFlag.soil();
-    if (!isDone())
-      return;
+      return false;
+    boolean hasSynchronized = false;
+    if (synchronize) {
+      view.synchronize();
+      hasSynchronized = true;
+    }
     future = executor.submit(this);
-  }
-
-  public boolean isTaskForView(SyncView view) {
-    return this.view == view;
+    return hasSynchronized;
   }
 
   public boolean isDone() {
     return future == null || future.isDone();
   }
 
-  @Override
-  synchronized public void listen(Clock clock) {
-    clocks.remove(clock);
-  }
-
   public void dispose() {
     disposed = true;
-    ZephyrPluginCommon.viewBinder().onClockRemoved.disconnect(this);
   }
 }
