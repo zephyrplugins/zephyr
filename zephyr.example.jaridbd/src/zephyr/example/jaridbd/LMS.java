@@ -5,6 +5,9 @@ import zephyr.plugin.core.api.monitoring.wrappers.Squared;
 
 public class LMS {
   private final double stepSize;
+  /**
+   * Indicate to Zephyr to monitor the field error as well as its square
+   */
   @Monitor(wrappers = Squared.ID)
   protected double error;
   @Monitor

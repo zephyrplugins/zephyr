@@ -8,7 +8,7 @@ import org.eclipse.swt.graphics.Rectangle;
 import zephyr.plugin.core.Utils;
 
 public class Axes {
-  static final private int Padding = 2;
+  static final private int Padding = 0;
 
   public class Axe {
     final double margins;

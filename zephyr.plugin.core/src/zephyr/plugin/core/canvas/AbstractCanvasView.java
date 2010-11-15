@@ -49,7 +49,6 @@ public abstract class AbstractCanvasView extends ViewPart implements SyncView {
 
   abstract protected void paint(GC gc);
 
-  @SuppressWarnings("unused")
   protected void setToolbar(IToolBarManager toolbarManager) {
   }
 

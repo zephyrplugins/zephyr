@@ -2,7 +2,6 @@ package zephyr.plugin.plotting.plot2d;
 
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -38,15 +37,19 @@ abstract public class Plot2DView extends ViewPart implements SyncView, ViewCente
   public void createPartControl(Composite parent) {
     this.parent = parent;
     GridLayout gridLayout = new GridLayout(1, false);
+    gridLayout.marginHeight = 0;
+    gridLayout.marginWidth = 0;
     parent.setLayout(gridLayout);
     backgroundCanvas = new BackgroundCanvas(parent, this);
+    backgroundCanvas.setFillLayout();
     Control canvas = backgroundCanvas.canvas();
-    canvas.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
     mouseSearch = new MouseSearch(plot, canvas);
     backgroundCanvas.addOverlay(mouseSearch);
     setupToolbar(getViewSite().getActionBars().getToolBarManager());
     Composite settingBar = new Composite(parent, SWT.NONE);
     RowLayout settingBarLayout = new RowLayout();
+    settingBarLayout.marginWidth = 0;
+    settingBarLayout.marginHeight = 0;
     settingBarLayout.center = true;
     settingBar.setLayout(settingBarLayout);
     setSettingBar(settingBar);

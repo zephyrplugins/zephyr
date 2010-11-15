@@ -6,7 +6,6 @@ import java.util.Set;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -60,11 +59,13 @@ public class PlotView extends ViewPart implements TraceSelector, SyncView, ViewC
   @Override
   public void createPartControl(final Composite parent) {
     GridLayout gridLayout = new GridLayout(1, false);
+    gridLayout.marginHeight = 0;
+    gridLayout.marginWidth = 0;
     parent.setLayout(gridLayout);
     backgroundCanvas = new BackgroundCanvas(parent, plotOverTime);
     backgroundCanvas.listenControlEvent(this);
+    backgroundCanvas.setFillLayout();
     Control canvas = backgroundCanvas.canvas();
-    canvas.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
     mouseSearch = new MouseSearch(this, canvas);
     backgroundCanvas.addOverlay(mouseSearch);
     createSettingBar(parent);
@@ -82,6 +83,8 @@ public class PlotView extends ViewPart implements TraceSelector, SyncView, ViewC
   private void createSettingBar(Composite parent) {
     Composite composite = new Composite(parent, SWT.NONE);
     RowLayout layout = new RowLayout();
+    layout.marginHeight = 0;
+    layout.marginWidth = 0;
     composite.setLayout(layout);
     layout.center = true;
     historyLength.createPartControl(composite, this);

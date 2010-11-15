@@ -10,6 +10,7 @@ import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -120,5 +121,9 @@ public class BackgroundCanvas implements PainterMonitor {
         ZephyrSync.submitView(syncView);
       }
     });
+  }
+
+  public void setFillLayout() {
+    canvas.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
   }
 }

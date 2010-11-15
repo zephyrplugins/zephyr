@@ -16,3 +16,4 @@ Export-Package: zephyr.plugin.core.api,
  zephyr.plugin.core.api.monitoring.wrappers,
  zephyr.plugin.core.api.signals,
  zephyr.plugin.core.api.synchronization
+Require-Bundle: org.junit4;bundle-version="4.8.1";resolution:=optional

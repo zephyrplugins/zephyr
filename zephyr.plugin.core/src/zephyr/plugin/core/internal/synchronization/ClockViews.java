@@ -18,7 +18,7 @@ public class ClockViews implements Listener<ViewTaskExecutor> {
       synchronize();
     }
   };
-  private final ViewTaskExecutor executor = new ViewTaskExecutor(1);
+  private final ViewTaskExecutor executor = new ViewTaskExecutor(2);
   private final List<ViewTask> viewTasks = new ArrayList<ViewTask>();
   private final Clock clock;
   private Thread runnableThread = null;

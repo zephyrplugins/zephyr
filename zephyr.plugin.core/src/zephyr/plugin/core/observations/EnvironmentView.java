@@ -32,7 +32,7 @@ public abstract class EnvironmentView extends ViewPart implements TimedView {
     setToolbar(getViewSite().getActionBars().getToolBarManager());
   }
 
-  protected void setToolbar(@SuppressWarnings("unused") IToolBarManager toolBarManager) {
+  protected void setToolbar(IToolBarManager toolBarManager) {
   }
 
   abstract protected ObsLayout getObservationLayout();

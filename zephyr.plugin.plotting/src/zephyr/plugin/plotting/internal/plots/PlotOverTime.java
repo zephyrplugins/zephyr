@@ -67,16 +67,13 @@ public class PlotOverTime implements Painter {
   @Override
   public void paint(PainterMonitor painterListener, Image image, GC gc) {
     gc.setAntialias(SWT.OFF);
-    do {
-      preparePainting();
-      List<HistoryCached> histories = plotdata.getHistories();
-      if (axesNeedScaling())
-        updateAxes(histories);
-      prepareDrawingZone(gc);
-      if (histories.isEmpty())
-        return;
-      drawTraces(painterListener, gc, histories);
-    } while (axes.y.scalingRequired());
+    preparePainting();
+    List<HistoryCached> histories = plotdata.getHistories();
+    updateAxes(histories);
+    prepareDrawingZone(gc);
+    if (histories.isEmpty())
+      return;
+    drawTraces(painterListener, gc, histories);
   }
 
   private void updateAxes(List<HistoryCached> histories) {
@@ -120,14 +117,10 @@ public class PlotOverTime implements Painter {
         }
         colorIndex += 1;
       }
-      if (painterMonitor.isCanceled() || axesNeedScaling())
+      if (painterMonitor.isCanceled())
         return;
       painterMonitor.painterStep();
     }
-  }
-
-  private boolean axesNeedScaling() {
-    return axesNeedReset != ResetMode.NoReset || axes.y.scalingRequired();
   }
 
   public void resetAxes(boolean resetYAxe) {
