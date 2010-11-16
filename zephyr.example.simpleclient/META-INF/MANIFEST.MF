@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: zephyr.example.simpleclient
+Bundle-SymbolicName: zephyr.example.simpleclient;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: Thomas
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Require-Bundle: zephyr.plugin.core;bundle-version="1.0.0",
+ zephyr.plugin.core.api;bundle-version="1.0.0"
