@@ -44,9 +44,10 @@ public class JarView extends ViewPart implements TimedView {
   }
 
   @Override
-  public void synchronize() {
+  public boolean synchronize() {
     for (JarComposite jarComposite : composites)
       jarComposite.synchronize();
+    return true;
   }
 
   @Override

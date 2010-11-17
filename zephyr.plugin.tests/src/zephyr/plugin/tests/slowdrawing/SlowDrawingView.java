@@ -58,7 +58,8 @@ public class SlowDrawingView extends ViewPart implements TimedView, Painter {
   }
 
   @Override
-  public void synchronize() {
+  public boolean synchronize() {
+    return true;
   }
 
   @Override

@@ -29,21 +29,20 @@ public class ViewTask implements Runnable {
   }
 
 
-  public boolean refreshIFN(ViewTaskExecutor executor) {
-    return refreshIFN(executor, false);
+  public void refreshIFN(ViewTaskExecutor executor) {
+    refreshIFN(executor, false);
   }
 
-  synchronized public boolean refreshIFN(ViewTaskExecutor executor, boolean synchronize) {
-    isDirty = true;
+  synchronized public void refreshIFN(ViewTaskExecutor executor, boolean synchronize) {
+    isDirty = !synchronize;
     if (!isDone())
-      return false;
+      return;
     boolean hasSynchronized = false;
-    if (synchronize) {
-      view.synchronize();
-      hasSynchronized = true;
-    }
-    future = executor.submit(this);
-    return hasSynchronized;
+    if (synchronize)
+      hasSynchronized = view.synchronize();
+    isDirty = isDirty || hasSynchronized;
+    if (isDirty)
+      future = executor.submit(this);
   }
 
   public boolean isDone() {

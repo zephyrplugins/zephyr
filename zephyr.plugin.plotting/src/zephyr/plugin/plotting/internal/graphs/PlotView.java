@@ -125,9 +125,10 @@ public class PlotView extends ViewPart implements TraceSelector, SyncView, ViewC
   }
 
   @Override
-  public void synchronize() {
-    if (synchronizeData && backgroundCanvas != null)
-      plotdata.synchronize();
+  public boolean synchronize() {
+    if (!synchronizeData || backgroundCanvas == null)
+      return false;
+    return plotdata.synchronize();
   }
 
   @Override

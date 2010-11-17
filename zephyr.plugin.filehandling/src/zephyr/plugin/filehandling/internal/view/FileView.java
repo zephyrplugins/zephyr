@@ -63,10 +63,11 @@ public class FileView extends EnvironmentView implements Closeable, Restartable 
   }
 
   @Override
-  public void synchronize() {
+  public boolean synchronize() {
     if (logFile == null)
-      return;
+      return false;
     synchronize(logFile.currentLine());
+    return true;
   }
 
   @Override

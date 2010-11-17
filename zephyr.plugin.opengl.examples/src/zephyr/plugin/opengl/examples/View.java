@@ -28,9 +28,10 @@ public class View extends OpenGLView implements TimedView {
   private float insideRadius;
 
   @Override
-  public void synchronize() {
+  public boolean synchronize() {
     time = model.clock.timeStep();
     insideRadius = model.insideRadius;
+    return true;
   }
 
   @Override

@@ -1,7 +1,7 @@
 package zephyr.plugin.core.views;
 
 public interface SyncView {
-  void synchronize();
+  boolean synchronize();
 
   void repaint();
 }

@@ -26,8 +26,9 @@ public class PlotRandomData2D extends AbstractCanvasView implements TimedView {
   }
 
   @Override
-  public void synchronize() {
+  public boolean synchronize() {
     System.arraycopy(drawn.data, 0, data.ydata, 0, data.nbPoints);
+    return true;
   }
 
   @Override

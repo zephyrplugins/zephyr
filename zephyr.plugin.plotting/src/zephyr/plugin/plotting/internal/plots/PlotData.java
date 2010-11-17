@@ -52,9 +52,9 @@ public class PlotData {
     histories.clear();
   }
 
-  synchronized public void synchronize() {
+  synchronized public boolean synchronize() {
     if (selection.isEmpty())
-      return;
+      return false;
     if (histories.isEmpty())
       prepareHistories();
     for (int i = 0; i < selection.size(); i++) {
@@ -62,6 +62,7 @@ public class PlotData {
       HistoryCached history = histories.get(i);
       traceData.history(currentHistoryLength, history.values, history.timeInfo);
     }
+    return true;
   }
 
   private void prepareHistories() {
