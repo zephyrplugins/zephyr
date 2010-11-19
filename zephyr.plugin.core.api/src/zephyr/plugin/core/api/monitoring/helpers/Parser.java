@@ -12,10 +12,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import zephyr.plugin.core.api.labels.CollectionLabelBuilder;
 import zephyr.plugin.core.api.labels.LabeledElement;
+import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.core.api.monitoring.abstracts.FieldHandler;
 import zephyr.plugin.core.api.monitoring.abstracts.MonitorContainer;
-import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.core.api.monitoring.annotations.IgnoreMonitor;
 import zephyr.plugin.core.api.monitoring.annotations.LabelProvider;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
@@ -66,11 +67,13 @@ public class Parser {
     return Math.max(level, monitor != null ? monitor.level() : Integer.MIN_VALUE);
   }
 
-  private static void addElements(DataMonitor logger, Object container, List<MonitorWrapper> wrappers, boolean includeIndex,
+  private static void addElements(DataMonitor logger, Object container, List<MonitorWrapper> wrappers,
+      boolean includeIndex,
       int classLevel, int levelRequired) {
     for (ArrayHandler arrayHandler : arrayHandlers)
       if (arrayHandler.canHandleArray(container)) {
-        CollectionLabelBuilder labelBuilder = new CollectionLabelBuilder(logger, Array.getLength(container), "", "",
+        CollectionLabelBuilder labelBuilder = new CollectionLabelBuilder(logger.labelBuilder(),
+                                                                         Array.getLength(container), "", "",
                                                                          includeIndex);
         arrayHandler.addArray(logger, container, labelBuilder, wrappers, classLevel, levelRequired);
         break;
@@ -152,7 +155,7 @@ public class Parser {
     findAnnotations(logger, child, wrappers, level, levelRequired);
   }
 
-  protected static String labelOf(Field field) {
+  public static String labelOf(Field field) {
     Monitor annotation = field.getAnnotation(Monitor.class);
     String label = annotation != null ? annotation.label() : "";
     if (label.isEmpty() && (annotation == null || !annotation.skipLabel()))
@@ -160,7 +163,7 @@ public class Parser {
     return label;
   }
 
-  protected static String idOf(Field field) {
+  public static String idOf(Field field) {
     Monitor annotation = field.getAnnotation(Monitor.class);
     String id = annotation != null ? annotation.id() : "";
     if (id.isEmpty())
@@ -170,7 +173,7 @@ public class Parser {
 
   public static String[] buildLabels(DataMonitor logger, Field field, int size) {
     String[] labels = new String[size];
-    CollectionLabelBuilder arrayLabelBuilder = new CollectionLabelBuilder(logger, field, size);
+    CollectionLabelBuilder arrayLabelBuilder = new CollectionLabelBuilder(logger.labelBuilder(), field, size);
     for (int i = 0; i < labels.length; i++)
       labels[i] = arrayLabelBuilder.elementLabel(i);
     return labels;

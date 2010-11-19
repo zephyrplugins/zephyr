@@ -10,7 +10,8 @@ import org.osgi.framework.BundleContext;
 import zephyr.ZephyrCore;
 import zephyr.plugin.core.RunnableFactory;
 import zephyr.plugin.core.api.Zephyr;
-import zephyr.plugin.core.api.Zephyr.Advertized;
+import zephyr.plugin.core.api.advertizement.Advertizement;
+import zephyr.plugin.core.api.advertizement.Advertizement.Advertized;
 import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.signals.Signal;
 import zephyr.plugin.core.control.Control;
@@ -68,7 +69,7 @@ public class ZephyrPluginCommon extends AbstractUIPlugin {
   public void start(BundleContext context) throws Exception {
     super.start(context);
     plugin = this;
-    Zephyr.onAdvertize.connect(new Listener<Zephyr.Advertized>() {
+    Zephyr.advertizement().onAdvertize.connect(new Listener<Advertizement.Advertized>() {
       @Override
       public void listen(Advertized eventInfo) {
         ZephyrCore.advertize(eventInfo.clock, eventInfo.advertized, eventInfo.info);

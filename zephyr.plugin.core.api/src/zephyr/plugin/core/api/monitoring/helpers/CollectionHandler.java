@@ -4,8 +4,9 @@ import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.List;
 
-import zephyr.plugin.core.api.monitoring.abstracts.FieldHandler;
+import zephyr.plugin.core.api.labels.CollectionLabelBuilder;
 import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
+import zephyr.plugin.core.api.monitoring.abstracts.FieldHandler;
 import zephyr.plugin.core.api.monitoring.wrappers.MonitorWrapper;
 import zephyr.plugin.core.api.monitoring.wrappers.Wrappers;
 
@@ -25,10 +26,11 @@ public class CollectionHandler implements FieldHandler {
   }
 
   @Override
-  public void addField(DataMonitor logger, Object container, Field field, List<MonitorWrapper> wrappers, int level, int levelRequired) {
+  public void addField(DataMonitor logger, Object container, Field field, List<MonitorWrapper> wrappers, int level,
+      int levelRequired) {
     Collection<Object> collection = collection(field, container);
     int arraySize = collection.size();
-    CollectionLabelBuilder collectionLabelBuilder = new CollectionLabelBuilder(logger, field, arraySize);
+    CollectionLabelBuilder collectionLabelBuilder = new CollectionLabelBuilder(logger.labelBuilder(), field, arraySize);
     int index = 0;
     List<MonitorWrapper> localWrappers = Wrappers.getWrappers(field, wrappers);
     for (Object o : collection) {

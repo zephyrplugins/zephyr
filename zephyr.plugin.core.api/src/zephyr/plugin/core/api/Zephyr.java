@@ -1,28 +1,20 @@
 package zephyr.plugin.core.api;
 
-import zephyr.plugin.core.api.signals.Signal;
+import zephyr.plugin.core.api.advertizement.Advertizement;
 import zephyr.plugin.core.api.synchronization.Clock;
 
 public class Zephyr {
-  static public class Advertized {
-    public final Object advertized;
-    public final Object info;
-    public final Clock clock;
+  static private Advertizement advertizement = new Advertizement();
 
-    public Advertized(Clock clock, Object advertized, Object info) {
-      this.clock = clock;
-      this.advertized = advertized;
-      this.info = info;
-    }
-  };
-
-  public static final Signal<Advertized> onAdvertize = new Signal<Advertized>();
+  static public Advertizement advertizement() {
+    return advertizement;
+  }
 
   static public void advertize(Clock clock, Object drawn) {
-    onAdvertize.fire(new Advertized(clock, drawn, null));
+    advertize(clock, drawn, null);
   }
 
   static public void advertize(Clock clock, Object drawn, Object info) {
-    onAdvertize.fire(new Advertized(clock, drawn, info));
+    advertizement.parse(clock, drawn, info);
   }
 }

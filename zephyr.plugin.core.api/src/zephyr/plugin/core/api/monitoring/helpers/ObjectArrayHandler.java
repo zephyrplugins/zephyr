@@ -3,6 +3,7 @@ package zephyr.plugin.core.api.monitoring.helpers;
 import java.lang.reflect.Array;
 import java.util.List;
 
+import zephyr.plugin.core.api.labels.CollectionLabelBuilder;
 import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.core.api.monitoring.wrappers.MonitorWrapper;
 

@@ -4,8 +4,9 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.List;
 
-import zephyr.plugin.core.api.monitoring.abstracts.FieldHandler;
+import zephyr.plugin.core.api.labels.CollectionLabelBuilder;
 import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
+import zephyr.plugin.core.api.monitoring.abstracts.FieldHandler;
 import zephyr.plugin.core.api.monitoring.wrappers.MonitorWrapper;
 import zephyr.plugin.core.api.monitoring.wrappers.Wrappers;
 
@@ -30,13 +31,14 @@ public class PrimitiveArrayHandler implements FieldHandler, ArrayHandler {
     String label = Parser.labelOf(field);
     String id = Parser.idOf(field);
     boolean includeIndex = Loggers.isIndexIncluded(field);
-    CollectionLabelBuilder labelBuilder = new CollectionLabelBuilder(logger, Array.getLength(array), label, id,
-                                                                     includeIndex);
+    CollectionLabelBuilder labelBuilder = new CollectionLabelBuilder(logger.labelBuilder(), Array.getLength(array),
+                                                                     label, id, includeIndex);
     addArray(logger, array, labelBuilder, Wrappers.getWrappers(field, localWrappers), level, levelRequired);
   }
 
   @Override
-  public void addArray(DataMonitor logger, Object array, CollectionLabelBuilder labelBuilder, List<MonitorWrapper> wrappers,
+  public void addArray(DataMonitor logger, Object array, CollectionLabelBuilder labelBuilder,
+      List<MonitorWrapper> wrappers,
       int level, int levelRequired) {
     String[] elementLabels = new String[Array.getLength(array)];
     for (int i = 0; i < elementLabels.length; i++)
