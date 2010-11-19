@@ -34,17 +34,27 @@ public class Advertizement {
 
   public final Signal<Advertized> onAdvertize = new Signal<Advertized>();
 
-  public void advertizeInstance(Clock clock, Object drawn) {
-    onAdvertize.fire(new Advertized(clock, drawn, null));
-  }
-
   public void advertizeInstance(Clock clock, Object drawn, Object info) {
     onAdvertize.fire(new Advertized(clock, drawn, info));
   }
 
+  private void advertizeInstance(Advertize advertize, String label, Stack<Object> parents, Object advertized,
+      Clock clock, Object info) {
+    Class<?> infoProviderClass = advertize != null ? advertize.infoProvider() : null;
+    if (infoProviderClass == null)
+      infoProviderClass = DefaultInfoProvider.class;
+    Object infoProvider = newInfoProviderInstance(infoProviderClass);
+    Object providedInfo = info;
+    if (infoProvider instanceof InfoProvider) {
+      InfoProvider castedInfoProvider = (InfoProvider) infoProvider;
+      providedInfo = castedInfoProvider.provideInfo(label, advertized, parents, info);
+    }
+    advertizeInstance(clock, advertized, providedInfo);
+  }
+
   public void parse(Clock clock, Object advertized, Object info) {
-    advertizeInstance(clock, advertized, info);
     Stack<Object> parents = new Stack<Object>();
+    advertizeInstance(advertized.getClass().getAnnotation(Advertize.class), "", parents, advertized, clock, info);
     parents.push(advertized);
     recursiveParse(clock, new LabelBuilder(), advertized, parents, info);
   }
@@ -52,11 +62,9 @@ public class Advertizement {
   private void recursiveParse(Clock clock, LabelBuilder labelBuilder, Object advertized, Stack<Object> parents,
       Object info) {
     Class<?> objectClass = advertized.getClass();
-    boolean classIsAdvertized = false;
     while (objectClass != null) {
-      Advertize advertize = objectClass.getAnnotation(Advertize.class);
-      classIsAdvertized = classIsAdvertized || advertize != null;
-      parseFields(classIsAdvertized, objectClass, labelBuilder, advertized, parents, clock, info);
+      Advertize classAdvertize = objectClass.getAnnotation(Advertize.class);
+      parseFields(classAdvertize, objectClass, labelBuilder, advertized, parents, clock, info);
       objectClass = objectClass.getSuperclass();
     }
   }
@@ -72,22 +80,22 @@ public class Advertizement {
     return fields;
   }
 
-  private void parseFields(boolean classIsAdvertized, Class<?> advertizedClass, LabelBuilder labelBuilder,
+  private void parseFields(Advertize classAdvertize, Class<?> advertizedClass, LabelBuilder labelBuilder,
       Object advertized, Stack<Object> parents, Clock clock, Object info) {
     for (Field field : getFieldList(advertizedClass)) {
       if (field.isSynthetic() || field.getType().isPrimitive())
         continue;
       Advertize advertize = field.getAnnotation(Advertize.class);
-      if (!classIsAdvertized && advertize == null)
+      if (classAdvertize == null && advertize == null)
         continue;
       field.setAccessible(true);
       Object fieldValue = getFieldValue(advertized, field);
       if (fieldValue == null)
         continue;
       if (field.getType().isArray()) {
-        advertizeElements(labelBuilder, parents, clock, info, field, fieldValue);
+        advertizeElements(labelBuilder, parents, clock, info, field, fieldValue, classAdvertize);
       } else
-        advertizeAndParse(labelBuilder, parents, clock, info, field, fieldValue);
+        advertizeAndParse(labelBuilder, parents, clock, info, field, fieldValue, classAdvertize);
     }
   }
 
@@ -96,7 +104,7 @@ public class Advertizement {
   }
 
   protected void advertizeElements(LabelBuilder labelBuilder, Stack<Object> parents, Clock clock, Object info,
-      Field field, Object fieldValue) {
+      Field field, Object fieldValue, Advertize classAdvertize) {
     if (fieldValue.getClass().getComponentType().isPrimitive())
       return;
     int length = Array.getLength(fieldValue);
@@ -104,18 +112,19 @@ public class Advertizement {
     for (int i = 0; i < length; i++) {
       String label = collectionLabelBuilder.elementLabel(i);
       Object advertized = Array.get(fieldValue, i);
-      advertizeAndParse(labelBuilder, label, parents, clock, info, field, advertized);
+      advertizeAndParse(labelBuilder, label, parents, clock, info, field, advertized, classAdvertize);
     }
   }
 
   protected void advertizeAndParse(LabelBuilder labelBuilder, Stack<Object> parents, Clock clock,
-      Object info, Field field, Object advertized) {
-    advertizeAndParse(labelBuilder, labelOf(labelBuilder, field), parents, clock, info, field, advertized);
+      Object info, Field field, Object advertized, Advertize classAdvertize) {
+    advertizeAndParse(labelBuilder, labelOf(labelBuilder, field), parents, clock, info, field, advertized,
+                      classAdvertize);
   }
 
   protected void advertizeAndParse(LabelBuilder labelBuilder, String label, Stack<Object> parents, Clock clock,
-      Object info, Field field, Object advertized) {
-    advertizeField(field, label, parents, advertized, clock, info);
+      Object info, Field field, Object advertized, Advertize classAdvertize) {
+    advertizeField(field, label, parents, advertized, clock, info, classAdvertize);
     labelBuilder.push(label);
     parents.push(advertized);
     recursiveParse(clock, labelBuilder, advertized, parents, info);
@@ -124,16 +133,10 @@ public class Advertizement {
   }
 
   private void advertizeField(Field field, String label, Stack<Object> parents, Object advertized,
-      Clock clock, Object info) {
-    Advertize advertize = field.getAnnotation(Advertize.class);
-    Class<?> infoProviderClass = advertize != null ? advertize.infoProvider() : DefaultInfoProvider.class;
-    Object infoProvider = newInfoProviderInstance(infoProviderClass);
-    Object providedInfo = info;
-    if (infoProvider instanceof InfoProvider) {
-      InfoProvider castedInfoProvider = (InfoProvider) infoProvider;
-      providedInfo = castedInfoProvider.provideInfo(label, advertized, parents, info);
-    }
-    advertizeInstance(clock, advertized, providedInfo);
+      Clock clock, Object info, Advertize classAdvertize) {
+    Advertize advertize = (field.isAnnotationPresent(Advertize.class) ?
+        field.getAnnotation(Advertize.class) : classAdvertize);
+    advertizeInstance(advertize, label, parents, advertized, clock, info);
   }
 
   protected Object newInfoProviderInstance(Class<?> infoProviderClass) {
