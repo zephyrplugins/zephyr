@@ -95,7 +95,7 @@
             locationURI="toolbar:toolbar.window?before=zephyr.plugin.console.toolbar.showconsole">
          <command
                commandId="zephyr.plugin.plotting.commands.newplotview"
-               label="New Graphs"
+               label="New Plot"
                style="push">
          </command>
       </menuContribution>
