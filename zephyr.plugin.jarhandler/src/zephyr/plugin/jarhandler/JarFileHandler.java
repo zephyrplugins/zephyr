@@ -67,7 +67,7 @@ public class JarFileHandler implements IFileHandler {
           + Runnable.class.getCanonicalName());
     JarRunnable jarRunnable = new JarRunnable(filepath, mainObject);
     jars.add(jarRunnable);
-    Zephyr.advertize(jarRunnable.clock, jarRunnable, jarRunnable.clockName());
+    Zephyr.advertise(jarRunnable.clock, jarRunnable, jarRunnable.clockName());
     ZephyrPlotting.createLogger(jarRunnable.clockName(), jarRunnable.clock).add(jarRunnable.runnable);
     jarRunnable.run();
   }

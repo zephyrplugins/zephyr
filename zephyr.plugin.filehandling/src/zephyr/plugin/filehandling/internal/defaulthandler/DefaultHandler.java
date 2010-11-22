@@ -24,7 +24,7 @@ public class DefaultHandler implements IFileHandler {
 
   public static void handle(String filepath) {
     LogFile logfile = LogFile.load(filepath);
-    ZephyrCore.advertize(logfile.clock(), logfile);
+    ZephyrCore.advertise(logfile.clock(), logfile);
     DataMonitor logger = ZephyrPlotting.createLogger(Labels.label(logfile), logfile.clock);
     logger.add(logfile);
     while (!logfile.eof())

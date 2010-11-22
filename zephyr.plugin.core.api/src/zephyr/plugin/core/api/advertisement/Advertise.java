@@ -1,4 +1,4 @@
-package zephyr.plugin.core.api.advertizement;
+package zephyr.plugin.core.api.advertisement;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,6 +7,6 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.FIELD, ElementType.TYPE })
-public @interface Advertize {
-  Class<?> infoProvider() default Advertizement.DefaultInfoProvider.class;
+public @interface Advertise {
+  Class<?> infoProvider() default Advertisement.DefaultInfoProvider.class;
 }

@@ -15,7 +15,7 @@ public class RandomData2D implements Runnable {
 
   public RandomData2D() {
     ZephyrPlotting.createLogger("Random", clock).add(this);
-    ZephyrCore.advertize(clock, this);
+    ZephyrCore.advertise(clock, this);
   }
 
   @Override

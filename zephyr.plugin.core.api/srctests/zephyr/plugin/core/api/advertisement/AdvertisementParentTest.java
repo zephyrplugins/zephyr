@@ -1,4 +1,4 @@
-package zephyr.plugin.core.api.advertizement;
+package zephyr.plugin.core.api.advertisement;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -10,21 +10,21 @@ import junit.framework.Assert;
 import org.junit.Test;
 
 import zephyr.plugin.core.api.Zephyr;
-import zephyr.plugin.core.api.advertizement.Advertizement.Advertized;
+import zephyr.plugin.core.api.advertisement.Advertisement.Advertised;
 import zephyr.plugin.core.api.signals.Listener;
 
-public class AdvertizementParentTest {
+public class AdvertisementParentTest {
   static public class ParentInfoProvider implements InfoProvider {
     @Override
-    public Object provideInfo(String label, Object advertized, Stack<Object> parents, Object info) {
+    public Object provideInfo(String label, Object advertised, Stack<Object> parents, Object info) {
       return new ArrayList<Object>(parents);
     }
   }
 
-  @Advertize(infoProvider = ParentInfoProvider.class)
+  @Advertise(infoProvider = ParentInfoProvider.class)
   public static class Toto {
-    String totoField = "TotoField";
-    Tata tata = new Tata();
+    final String totoField = "TotoField";
+    final Tata tata = new Tata();
 
     @Override
     public String toString() {
@@ -32,9 +32,9 @@ public class AdvertizementParentTest {
     }
   }
 
-  @Advertize(infoProvider = ParentInfoProvider.class)
+  @Advertise(infoProvider = ParentInfoProvider.class)
   public static class Tata {
-    String tataField = "TataField";
+    final String tataField = "TataField";
 
     @Override
     public String toString() {
@@ -44,22 +44,22 @@ public class AdvertizementParentTest {
 
   @Test
   public void testParent() {
-    final List<Object> hasBeenAdvertized = new ArrayList<Object>();
-    Zephyr.advertizement().onAdvertize.connect(new Listener<Advertizement.Advertized>() {
+    final List<Object> hasBeenAdvertised = new ArrayList<Object>();
+    Zephyr.advertisement().onAdvertise.connect(new Listener<Advertisement.Advertised>() {
       @SuppressWarnings("unchecked")
       @Override
-      public void listen(Advertized eventInfo) {
+      public void listen(Advertised eventInfo) {
         if (!(eventInfo.info instanceof Collection<?>))
           return;
         for (Object element : (Collection<Object>) eventInfo.info)
-          hasBeenAdvertized.add(element);
-        hasBeenAdvertized.add(eventInfo.advertized);
+          hasBeenAdvertised.add(element);
+        hasBeenAdvertised.add(eventInfo.advertised);
       }
     });
     Toto toto = new Toto();
-    Zephyr.advertize(null, toto);
+    Zephyr.advertise(null, toto);
     checkCollection(new Object[] { toto, toto, toto.tata, toto, toto.tata, toto.tata.tataField, toto, toto.totoField },
-                    hasBeenAdvertized);
+                    hasBeenAdvertised);
   }
 
   private void checkCollection(Object[] expected, List<Object> collection) {

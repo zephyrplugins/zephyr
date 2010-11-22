@@ -6,7 +6,7 @@
          <meta.schema plugin="zephyr.plugin.core" id="zephyr.plugin.core.views.timedlistener" name="Timed Listener"/>
       </appinfo>
       <documentation>
-         Timed Listener that is going to be called every time a Timed instance is advertized.
+         Timed Listener that is going to be called every time a Timed instance is advertised.
       </documentation>
    </annotation>
 

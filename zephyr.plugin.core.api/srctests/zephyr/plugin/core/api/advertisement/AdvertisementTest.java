@@ -1,4 +1,4 @@
-package zephyr.plugin.core.api.advertizement;
+package zephyr.plugin.core.api.advertisement;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,39 +9,39 @@ import junit.framework.Assert;
 import org.junit.Test;
 
 import zephyr.plugin.core.api.Zephyr;
-import zephyr.plugin.core.api.advertizement.Advertizement.Advertized;
+import zephyr.plugin.core.api.advertisement.Advertisement.Advertised;
 import zephyr.plugin.core.api.signals.Listener;
 
-public class AdvertizementTest {
+public class AdvertisementTest {
   static private final String infoString = "info";
 
   static public class StringInfoProvider implements InfoProvider {
     @Override
-    public Object provideInfo(String label, Object advertized, Stack<Object> parents, Object info) {
+    public Object provideInfo(String label, Object advertised, Stack<Object> parents, Object info) {
       return label + "." + (String) info;
     }
   }
 
-  @Advertize(infoProvider = StringInfoProvider.class)
+  @Advertise(infoProvider = StringInfoProvider.class)
   private final String label01 = "Toto";
-  @Advertize(infoProvider = StringInfoProvider.class)
+  @Advertise(infoProvider = StringInfoProvider.class)
   private final String label02 = "Tata";
-  @Advertize(infoProvider = StringInfoProvider.class)
+  @Advertise(infoProvider = StringInfoProvider.class)
   private final String[] labels = new String[] { "Titi", "Tutu" };
 
   @Test
-  public void testAdvertize() {
-    final List<String> advertized = new ArrayList<String>();
-    Zephyr.advertizement().onAdvertize.connect(new Listener<Advertizement.Advertized>() {
+  public void testAdvertise() {
+    final List<String> advertised = new ArrayList<String>();
+    Zephyr.advertisement().onAdvertise.connect(new Listener<Advertisement.Advertised>() {
       @Override
-      public void listen(Advertized eventInfo) {
-        if (eventInfo.advertized instanceof String)
-          advertized.add(String.format("%s[%s]", eventInfo.advertized, eventInfo.info));
+      public void listen(Advertised eventInfo) {
+        if (eventInfo.advertised instanceof String)
+          advertised.add(String.format("%s[%s]", eventInfo.advertised, eventInfo.info));
       }
     });
-    Zephyr.advertize(null, this, infoString);
+    Zephyr.advertise(null, this, infoString);
     checkCollection(new String[] { toAd("label01", label01), toAd("label02", label02),
-        toAd("labels", labels[0], 0), toAd("labels", labels[1], 1) }, advertized);
+        toAd("labels", labels[0], 0), toAd("labels", labels[1], 1) }, advertised);
   }
 
   private String toAd(String fieldName, String fieldValue) {

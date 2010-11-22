@@ -13,7 +13,7 @@ public class Model implements Runnable, Timed {
   float insideRadius;
 
   public Model() {
-    ZephyrCore.advertize(clock, this);
+    ZephyrCore.advertise(clock, this);
     ZephyrPlotting.createLogger("Model", clock).add(this);
   }
 

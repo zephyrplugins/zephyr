@@ -9,7 +9,7 @@ public class SlowDrawingRunnable implements ZephyrRunnable {
   private final Clock clock = new Clock();
 
   public SlowDrawingRunnable() {
-    Zephyr.advertize(clock, this);
+    Zephyr.advertise(clock, this);
   }
 
   @Override

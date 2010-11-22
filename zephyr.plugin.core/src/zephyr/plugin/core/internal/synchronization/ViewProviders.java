@@ -28,12 +28,12 @@ public class ViewProviders {
     return providers;
   }
 
-  protected List<String> findViews(Object advertized) {
+  protected List<String> findViews(Object advertised) {
     if (providers == null)
       providers = createProviders();
     List<String> viewIDs = new ArrayList<String>();
     for (ViewProvider provider : providers)
-      if (provider.canViewDraw(advertized))
+      if (provider.canViewDraw(advertised))
         viewIDs.add(provider.viewID());
     return viewIDs;
   }
