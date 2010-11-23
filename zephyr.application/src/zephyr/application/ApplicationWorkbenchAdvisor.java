@@ -1,16 +1,11 @@
 package zephyr.application;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.activities.IActivityManager;
-import org.eclipse.ui.activities.IWorkbenchActivitySupport;
 import org.eclipse.ui.application.IWorkbenchConfigurer;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchAdvisor;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 
+import zephyr.ZephyrCore;
 import zephyr.ZephyrSync;
 
 public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
@@ -34,18 +29,7 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 
   @Override
   public void postStartup() {
-    enableActivities("zephyr.plugin.core.activity");
-  }
-
-  protected void enableActivities(String... ids) {
-    IWorkbenchActivitySupport activitySupport = PlatformUI.getWorkbench().getActivitySupport();
-    IActivityManager activityManager = activitySupport.getActivityManager();
-    Set<String> enabledActivities = new HashSet<String>();
-    for (String id : ids)
-      if (activityManager.getActivity(id).isDefined())
-        enabledActivities.add(id);
-    Set<String> definedActivities = enabledActivities;
-    activitySupport.setEnabledActivityIds(definedActivities);
+    ZephyrCore.enableZephyr();
   }
 
   @Override

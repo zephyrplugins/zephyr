@@ -207,11 +207,11 @@
             pattern="zephyr.plugin.*">
       </activityPatternBinding>
       <activity
-            id="zephyr.disable.ui.editors.activity"
-            name="Zephyr Disable Eclipse Editors Activity">
+            id="zephyr.ui.editors.activity"
+            name="Zephyr Eclipse Editors Activity">
       </activity>
       <activityPatternBinding
-            activityId="zephyr.disable.ui.editors.activity"
+            activityId="zephyr.ui.editors.activity"
             pattern="org.eclipse.ui.*">
       </activityPatternBinding>
    </extension>
@@ -287,5 +287,11 @@
       <initializer
             class="zephyr.plugin.core.internal.preferences.PreferenceInitializer">
       </initializer>
+   </extension>
+   <extension
+         point="org.eclipse.ui.startup">
+      <startup
+            class="zephyr.plugin.core.internal.Startup">
+      </startup>
    </extension>
 </plugin>
