@@ -7,6 +7,8 @@ import java.util.List;
 import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
+import zephyr.plugin.core.api.monitoring.fileloggers.FileLogger;
+import zephyr.plugin.core.api.monitoring.fileloggers.LoggerRow;
 import zephyr.plugin.core.api.monitoring.fileloggers.TimedFileLogger;
 import zephyr.plugin.core.api.monitoring.wrappers.MonitorWrapper;
 import zephyr.plugin.core.api.monitoring.wrappers.Wrappers;
@@ -16,7 +18,8 @@ public class Loggers {
     add(logger, elementLabels, data, null, level);
   }
 
-  public static void add(DataMonitor logger, String[] elementLabels, final double[] data, List<MonitorWrapper> wrappers, int level) {
+  public static void add(DataMonitor logger, String[] elementLabels, final double[] data,
+      List<MonitorWrapper> wrappers, int level) {
     assert elementLabels.length == data.length;
     for (int i = 0; i < data.length; i++) {
       final int elementIndex = i;
@@ -29,7 +32,8 @@ public class Loggers {
     }
   }
 
-  public static void add(DataMonitor logger, String[] elementLabels, final int[] data, List<MonitorWrapper> wrappers, int level) {
+  public static void add(DataMonitor logger, String[] elementLabels, final int[] data, List<MonitorWrapper> wrappers,
+      int level) {
     assert elementLabels.length == data.length;
     for (int i = 0; i < data.length; i++) {
       final int elementIndex = i;
@@ -42,7 +46,8 @@ public class Loggers {
     }
   }
 
-  public static void add(DataMonitor logger, String[] elementLabels, final float[] data, List<MonitorWrapper> wrappers, int level) {
+  public static void add(DataMonitor logger, String[] elementLabels, final float[] data, List<MonitorWrapper> wrappers,
+      int level) {
     assert elementLabels.length == data.length;
     for (int i = 0; i < data.length; i++) {
       final int elementIndex = i;
@@ -55,7 +60,8 @@ public class Loggers {
     }
   }
 
-  public static void addMonitored(DataMonitor logger, String label, Monitored monitored, List<MonitorWrapper> wrappers, int level) {
+  public static void addMonitored(DataMonitor logger, String label, Monitored monitored, List<MonitorWrapper> wrappers,
+      int level) {
     logger.add(label, monitored, level);
     if (wrappers == null)
       return;
@@ -80,6 +86,24 @@ public class Loggers {
   static public TimedFileLogger newLoggerWithTime(String filepath) {
     try {
       return new TimedFileLogger(filepath);
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
+
+  public static FileLogger newLogger(String filepath) {
+    try {
+      return new FileLogger(filepath);
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
+
+  public static LoggerRow newLoggerRow(String filepath) {
+    try {
+      return new LoggerRow(filepath);
     } catch (FileNotFoundException e) {
       e.printStackTrace();
     }
