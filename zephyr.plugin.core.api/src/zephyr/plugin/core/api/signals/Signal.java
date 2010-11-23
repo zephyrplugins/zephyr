@@ -44,4 +44,8 @@ public class Signal<T> {
       return;
     fire(eventInfoGenerator.generate());
   }
+
+  public int nbListeners() {
+    return listeners.size();
+  }
 }
