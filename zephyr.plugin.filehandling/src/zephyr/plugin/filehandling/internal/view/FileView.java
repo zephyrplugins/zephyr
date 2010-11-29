@@ -1,7 +1,6 @@
 package zephyr.plugin.filehandling.internal.view;
 
 import java.io.File;
-import java.util.Arrays;
 
 import org.eclipse.jface.action.IToolBarManager;
 
@@ -49,7 +48,7 @@ public class FileView extends EnvironmentView implements Closeable, Restartable 
       ObsWidget[] line = new ObsWidget[Math.min(nbItems, labels.length - i * nbItems)];
       for (int j = 0; j < line.length; j++) {
         int labelIndex = i * nbItems + j;
-        line[j] = new SensorGroup(labels[labelIndex], Arrays.asList((Integer) labelIndex));
+        line[j] = new SensorGroup(labels[labelIndex], new int[] { labelIndex });
       }
       widgets[i] = line;
     }

@@ -53,7 +53,8 @@ public class ClockTracesManager {
 
   synchronized public void removeClock(Clock clock) {
     ClockTraces clockTraces = clocks.remove(clock);
-    clockTraces.dispose();
+    if (clockTraces != null)
+      clockTraces.dispose();
   }
 
   synchronized public void setForceEnabled(boolean booleanState) {

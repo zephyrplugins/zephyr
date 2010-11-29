@@ -1,7 +1,6 @@
 package zephyr.plugin.core.observations;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
@@ -15,22 +14,34 @@ import zephyr.plugin.core.internal.observations.ObsStat;
 import zephyr.plugin.core.internal.observations.RichDisplayBar;
 
 public class SensorGroup implements ObsWidget {
-  private final List<ObsStat> stats = new ArrayList<ObsStat>();
-  private final List<Canvas> canvasList = new ArrayList<Canvas>();
+  private final ObsStat[] stats;
+  private final Canvas[] canvasArray;
   private final String title;
-  private final List<Integer> indexes;
-  private final double min;
-  private final double max;
+  private final int[] indexes;
+  private final double[] mins;
+  private final double[] maxs;
 
-  public SensorGroup(String title, List<Integer> indexes) {
+  public SensorGroup(String title, int[] indexes) {
     this(title, indexes, Double.MAX_VALUE, -Double.MAX_VALUE);
   }
 
-  public SensorGroup(String title, List<Integer> indexes, double min, double max) {
+  public SensorGroup(String title, int[] indexes, double min, double max) {
+    this(title, indexes, toArray(indexes.length, min), toArray(indexes.length, max));
+  }
+
+  private static double[] toArray(int length, double value) {
+    double[] result = new double[length];
+    Arrays.fill(result, value);
+    return result;
+  }
+
+  public SensorGroup(String title, int[] indexes, double[] mins, double[] maxs) {
     this.title = title;
     this.indexes = indexes;
-    this.min = min;
-    this.max = max;
+    stats = new ObsStat[indexes.length];
+    canvasArray = new Canvas[indexes.length];
+    this.mins = mins;
+    this.maxs = maxs;
   }
 
   private void layoutRichBar(Group group) {
@@ -38,9 +49,9 @@ public class SensorGroup implements ObsWidget {
     fillLayout.type = SWT.HORIZONTAL;
     group.setLayout(fillLayout);
     group.setToolTipText(title);
-    for (int i = 0; i < indexes.size(); i++) {
+    for (int i = 0; i < indexes.length; i++) {
       Canvas canvas = new Canvas(group, SWT.DOUBLE_BUFFERED);
-      ObsStat obsState = new ObsStat(title + " " + i, indexes.get(i), min, max);
+      ObsStat obsState = new ObsStat(title + " " + i, indexes[i], mins[i], maxs[i]);
       final RichDisplayBar displayBar = new RichDisplayBar(obsState);
       canvas.addPaintListener(new PaintListener() {
         @Override
@@ -48,15 +59,14 @@ public class SensorGroup implements ObsWidget {
           displayBar.paint(event.gc);
         }
       });
-      canvasList.add(canvas);
-      stats.add(obsState);
+      canvasArray[i] = canvas;
+      stats[i] = obsState;
     }
   }
 
-
   @Override
   synchronized public void createWidgetComposite(Composite parent) {
-    if (indexes.size() == 0)
+    if (indexes.length == 0)
       return;
     Group group = new Group(parent, SWT.NONE);
     group.setText(title);
@@ -74,12 +84,12 @@ public class SensorGroup implements ObsWidget {
 
   @Override
   public void repaint() {
-    for (Canvas canvas : canvasList)
+    for (Canvas canvas : canvasArray)
       canvas.redraw();
   }
 
   @Override
   public boolean hasContent() {
-    return indexes.size() > 0;
+    return indexes.length > 0;
   }
 }
