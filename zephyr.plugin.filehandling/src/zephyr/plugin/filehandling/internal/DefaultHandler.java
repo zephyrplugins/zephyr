@@ -1,4 +1,4 @@
-package zephyr.plugin.filehandling.internal.defaulthandler;
+package zephyr.plugin.filehandling.internal;
 
 import java.io.IOException;
 import java.util.List;
@@ -7,6 +7,7 @@ import zephyr.ZephyrCore;
 import zephyr.ZephyrPlotting;
 import zephyr.plugin.core.Utils;
 import zephyr.plugin.core.api.labels.Labels;
+import zephyr.plugin.core.api.logfiles.LogFile;
 import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.filehandling.IFileHandler;
 

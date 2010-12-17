@@ -7,6 +7,7 @@ import org.eclipse.jface.action.IToolBarManager;
 import zephyr.ZephyrCore;
 import zephyr.plugin.core.actions.RestartAction;
 import zephyr.plugin.core.actions.TerminateAction;
+import zephyr.plugin.core.api.logfiles.LogFile;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.api.synchronization.Closeable;
 import zephyr.plugin.core.helpers.ClassViewProvider;
@@ -15,8 +16,7 @@ import zephyr.plugin.core.observations.ObsLayout;
 import zephyr.plugin.core.observations.ObsWidget;
 import zephyr.plugin.core.observations.SensorGroup;
 import zephyr.plugin.core.views.Restartable;
-import zephyr.plugin.filehandling.internal.defaulthandler.DefaultHandler;
-import zephyr.plugin.filehandling.internal.defaulthandler.LogFile;
+import zephyr.plugin.filehandling.internal.DefaultHandler;
 
 public class FileView extends EnvironmentView implements Closeable, Restartable {
   static public class Provider extends ClassViewProvider {

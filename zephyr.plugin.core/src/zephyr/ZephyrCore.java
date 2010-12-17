@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.activities.IActivityManager;
 import org.eclipse.ui.activities.IWorkbenchActivitySupport;
@@ -58,13 +59,18 @@ public class ZephyrCore {
   }
 
   public static void enableActivities(String... ids) {
-    IWorkbenchActivitySupport activitySupport = PlatformUI.getWorkbench().getActivitySupport();
+    final IWorkbenchActivitySupport activitySupport = PlatformUI.getWorkbench().getActivitySupport();
     IActivityManager activityManager = activitySupport.getActivityManager();
     Set<String> enabledActivities = new HashSet<String>();
     for (String id : ids)
       if (activityManager.getActivity(id).isDefined())
         enabledActivities.add(id);
-    Set<String> definedActivities = enabledActivities;
-    activitySupport.setEnabledActivityIds(definedActivities);
+    final Set<String> definedActivities = enabledActivities;
+    Display.getDefault().asyncExec(new Runnable() {
+      @Override
+      public void run() {
+        activitySupport.setEnabledActivityIds(definedActivities);
+      }
+    });
   }
 }

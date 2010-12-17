@@ -15,9 +15,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 
 import zephyr.ZephyrCore;
+import zephyr.plugin.core.api.logfiles.LogFile;
 import zephyr.plugin.filehandling.IFileHandler;
-import zephyr.plugin.filehandling.internal.defaulthandler.DefaultHandler;
-import zephyr.plugin.filehandling.internal.defaulthandler.LogFile;
 
 
 public class FileLoader {

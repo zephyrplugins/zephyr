@@ -11,7 +11,7 @@ public class Axes {
   static final private int Padding = 0;
 
   public class Axe {
-    final double margins;
+    final int margin;
     public boolean transformationValid = false;
 
     private double minValue = Double.MAX_VALUE;
@@ -23,14 +23,8 @@ public class Axes {
     double translation = 0.0;
     double scale = 0.0;
 
-    protected Axe(double margins) {
-      this.margins = margins;
-    }
-
-    public Axe(double translation, double scale) {
-      margins = -Double.MAX_VALUE;
-      this.translation = translation;
-      this.scale = scale;
+    protected Axe(int margin) {
+      this.margin = margin;
     }
 
     protected double toD(int x) {
@@ -43,9 +37,11 @@ public class Axes {
 
     public void updateTransformation(int drawingLength) {
       cachedMinValue = minValue;
-      minDisplayed = minValue - Math.abs(minValue * margins);
       cachedMaxValue = maxValue;
-      maxDisplayed = maxValue + Math.abs(maxValue * margins);
+      double valueScale = (maxValue - minValue) / drawingLength;
+      assert valueScale >= 0;
+      minDisplayed = minValue - valueScale * margin;
+      maxDisplayed = maxValue + valueScale * margin;
       double length = Math.max(maxDisplayed - minDisplayed, 1e-5);
       scale = drawingLength / length;
       translation = -(minDisplayed + maxDisplayed) / 2.0;
@@ -85,7 +81,7 @@ public class Axes {
 
   public Axes() {
     x = new Axe(0);
-    y = new Axe(0.001);
+    y = new Axe(2);
     drawingZone = new Rectangle(0, 0, 0, 0);
   }
 
@@ -147,13 +143,5 @@ public class Axes {
 
   public boolean isInDrawingZone(Point position) {
     return drawingZone.contains(position);
-  }
-
-  @Override
-  protected Axes clone() {
-    return new Axes(new Axe(x.translation, x.scale), new Axe(y.translation, y.scale),
-                    drawingTranslationX, drawingTranslationY,
-                    new Rectangle(drawingZone.x, drawingZone.y,
-                                  drawingZone.width, drawingZone.height));
   }
 }

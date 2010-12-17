@@ -1,4 +1,4 @@
-package zephyr.plugin.filehandling.internal.defaulthandler;
+package zephyr.plugin.core.api.logfiles;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -32,16 +32,18 @@ public abstract class LogFile implements Labeled {
     return labels[i];
   }
 
-  synchronized public boolean eof() {
+  public boolean eof() {
     if (reader == null)
       return true;
     if (clock.isTerminated())
       return true;
     boolean isReady = false;
-    try {
-      isReady = reader.ready();
-    } catch (IOException e) {
-      e.printStackTrace();
+    synchronized (reader) {
+      try {
+        isReady = reader.ready();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
     }
     return !isReady;
   }
@@ -74,10 +76,12 @@ public abstract class LogFile implements Labeled {
     if (reader == null)
       return null;
     String line = null;
-    try {
-      line = reader.readLine();
-    } catch (IOException e) {
-      e.printStackTrace();
+    synchronized (reader) {
+      try {
+        line = reader.readLine();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
     }
     if (line.startsWith("#"))
       return null;
@@ -86,7 +90,7 @@ public abstract class LogFile implements Labeled {
     return line;
   }
 
-  synchronized public void step() {
+  public void step() {
     String line = null;
     while (!eof() && line == null) {
       line = readLine();
@@ -119,14 +123,16 @@ public abstract class LogFile implements Labeled {
     }
   }
 
-  synchronized public void close() {
+  public void close() {
     if (reader == null)
       return;
-    try {
-      reader.close();
-      reader = null;
-    } catch (IOException e) {
-      e.printStackTrace();
+    synchronized (reader) {
+      try {
+        reader.close();
+        reader = null;
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
     }
   }
 

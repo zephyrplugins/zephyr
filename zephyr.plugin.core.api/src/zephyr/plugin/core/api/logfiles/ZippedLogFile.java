@@ -1,4 +1,4 @@
-package zephyr.plugin.filehandling.internal.defaulthandler;
+package zephyr.plugin.core.api.logfiles;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
