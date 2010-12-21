@@ -20,7 +20,7 @@ public class AdvertisementInvocationTest {
     }
   }
 
-  class Child {
+  static class Child {
     @Advertise
     final GrandChild grandChild = new GrandChild();
   }
@@ -32,7 +32,7 @@ public class AdvertisementInvocationTest {
   }
 
   @Advertise(infoProvider = InfoProviderGrandChild.class)
-  class GrandChild {
+  static class GrandChild {
   }
 
   static public class InfoProviderMocString {

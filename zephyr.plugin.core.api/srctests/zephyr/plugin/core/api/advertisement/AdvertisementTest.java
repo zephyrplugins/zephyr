@@ -23,11 +23,11 @@ public class AdvertisementTest {
   }
 
   @Advertise(infoProvider = StringInfoProvider.class)
-  private final String label01 = "Toto";
+  public final String label01 = "Toto";
   @Advertise(infoProvider = StringInfoProvider.class)
-  private final String label02 = "Tata";
+  public final String label02 = "Tata";
   @Advertise(infoProvider = StringInfoProvider.class)
-  private final String[] labels = new String[] { "Titi", "Tutu" };
+  public final String[] labels = new String[] { "Titi", "Tutu" };
 
   @Test
   public void testAdvertise() {

@@ -7,8 +7,8 @@ import java.util.Stack;
 import zephyr.plugin.core.api.labels.LabeledElement;
 
 public class LabelBuilder {
-  public static String DefaultSeparator = "/";
-  public static String DefaultElementSeparator = ":";
+  public static final String DefaultSeparator = "/";
+  public static final String DefaultElementSeparator = ":";
 
   private final String separator;
   private final Stack<String> prefixStack = new Stack<String>();

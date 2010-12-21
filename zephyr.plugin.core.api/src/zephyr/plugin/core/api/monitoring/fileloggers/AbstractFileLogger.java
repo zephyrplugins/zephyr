@@ -25,8 +25,8 @@ public class AbstractFileLogger {
   private void checkFolders() {
     File logFile = new File(filepath);
     File folder = logFile.getParentFile();
-    if (!folder.isDirectory())
-      folder.mkdirs();
+    if (!folder.isDirectory() && !folder.mkdirs())
+      throw new RuntimeException("Could not create folder");
   }
 
   public AbstractFileLogger(Writer writer) {
@@ -43,7 +43,10 @@ public class AbstractFileLogger {
     file.flush();
     file.close();
     file = null;
-    if (temporaryFile)
-      new File(filepath + TEMP).renameTo(new File(filepath));
+    if (temporaryFile) {
+      File finalFile = new File(filepath + TEMP);
+      if (!finalFile.renameTo(new File(filepath)))
+        throw new RuntimeException("Error renaming to " + filepath);
+    }
   }
 }

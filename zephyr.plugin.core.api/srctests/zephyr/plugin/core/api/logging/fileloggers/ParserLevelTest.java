@@ -17,13 +17,13 @@ import zephyr.plugin.core.api.monitoring.helpers.Parser;
 
 public class ParserLevelTest implements DataMonitor {
   @Monitor
-  class A {
-    int a;
+  static class A {
+    protected int a;
   }
 
-  class B {
+  static class B {
     @Monitor
-    int b;
+    protected int b;
   }
 
   static protected final String[] labelLevel0 = new String[] { "a0a", "b0b", "i0" };

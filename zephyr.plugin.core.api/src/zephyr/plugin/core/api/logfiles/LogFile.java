@@ -83,7 +83,7 @@ public abstract class LogFile implements Labeled {
         e.printStackTrace();
       }
     }
-    if (line.startsWith("#"))
+    if (line == null || line.startsWith("#"))
       return null;
     if (line.isEmpty())
       return null;

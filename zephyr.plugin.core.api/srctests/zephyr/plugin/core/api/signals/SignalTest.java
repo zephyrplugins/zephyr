@@ -7,7 +7,7 @@ import org.junit.Test;
 
 public class SignalTest {
 
-  class EventInfo {
+  static class EventInfo {
     int eventValue;
 
     EventInfo(int eventValue) {
@@ -18,8 +18,8 @@ public class SignalTest {
   private Signal<EventInfo> signalEvent;
   private Signal<SignalTest> signalThis;
 
-  final int value01 = 4;
-  final int value02 = 8;
+  final public int value01 = 4;
+  final public int value02 = 8;
   int info01;
 
   @Before

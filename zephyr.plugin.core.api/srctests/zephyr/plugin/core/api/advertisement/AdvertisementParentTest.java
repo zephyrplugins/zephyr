@@ -23,7 +23,7 @@ public class AdvertisementParentTest {
 
   @Advertise(infoProvider = ParentInfoProvider.class)
   public static class Toto {
-    final String totoField = "TotoField";
+    final public String totoField = "TotoField";
     final Tata tata = new Tata();
 
     @Override
@@ -34,7 +34,7 @@ public class AdvertisementParentTest {
 
   @Advertise(infoProvider = ParentInfoProvider.class)
   public static class Tata {
-    final String tataField = "TataField";
+    final public String tataField = "TataField";
 
     @Override
     public String toString() {

@@ -65,17 +65,20 @@ public class FileLoggerTest {
   public void testTemporaryFile() throws IOException {
     File file = File.createTempFile("junit", ".test");
     Assert.assertTrue(file.canRead());
-    file.delete();
+    if (!file.delete())
+      throw new RuntimeException("Could not delete " + file.getAbsolutePath());
     Assert.assertFalse(file.canRead());
     FileLogger logger = new FileLogger(file.getAbsolutePath());
     Assert.assertTrue(file.canRead());
     logger.close();
-    file.delete();
+    if (!file.delete())
+      throw new RuntimeException("Could not delete " + file.getAbsolutePath());
     logger = new FileLogger(file.getAbsolutePath(), false, true);
     Assert.assertTrue(new File(file.getAbsolutePath() + AbstractFileLogger.TEMP).canRead());
     Assert.assertFalse(file.canRead());
     logger.close();
     Assert.assertTrue(file.canRead());
-    file.delete();
+    if (!file.delete())
+      throw new RuntimeException("Could not delete " + file.getAbsolutePath());
   }
 }

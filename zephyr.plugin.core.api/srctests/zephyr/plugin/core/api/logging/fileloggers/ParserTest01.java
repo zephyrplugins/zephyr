@@ -29,13 +29,13 @@ public class ParserTest01 {
 
   @SuppressWarnings("unused")
   static public class TestAddLog01 implements MonitorContainer {
-    private double notLogged;
+    public double notLogged;
     @Monitor
-    private final double logged02FieldName = 9.0;
+    public final double logged02FieldName = 9.0;
     @Monitor(label = log01LabelInt)
-    private final int logged03 = 6;
+    public final int logged03 = 6;
     @Monitor(label = log01LabelFloat)
-    private final float logged04 = 3.0f;
+    public final float logged04 = 3.0f;
     @Monitor
     private final TestAddLog02 logged05Child01 = new TestAddLog02();
     @Monitor
@@ -78,13 +78,13 @@ public class ParserTest01 {
 
   static public class TestAddLog02 {
     @Monitor
-    double logged = 10.0;
-    double notLogged = 10.0;
+    public double logged = 10.0;
+    public double notLogged = 10.0;
   }
 
   @Monitor
   static public class TestAddLog03 {
-    double logged = 10.0;
+    public double logged = 10.0;
   }
 
   @Test

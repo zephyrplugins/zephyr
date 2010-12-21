@@ -74,16 +74,6 @@ public class CBZip2InputStream extends InputStream implements BZip2Constants {
     // throw new CCoruptionError();
   }
 
-  @SuppressWarnings("unused")
-  private static void badBGLengths() {
-    cadvise();
-  }
-
-  @SuppressWarnings("unused")
-  private static void bitStreamEOF() {
-    cadvise();
-  }
-
   private static void compressedStreamEOF() {
     cadvise();
   }
@@ -320,7 +310,7 @@ public class CBZip2InputStream extends InputStream implements BZip2Constants {
       } catch (IOException e) {
         compressedStreamEOF();
       }
-      if (thech == -1)
+      if (thech == (char) -1)
         compressedStreamEOF();
       zzi = thech;
       bsBuff = bsBuff << 8 | zzi & 0xff;
@@ -518,7 +508,7 @@ public class CBZip2InputStream extends InputStream implements BZip2Constants {
               } catch (IOException e) {
                 compressedStreamEOF();
               }
-              if (thech == -1)
+              if (thech == (char) -1)
                 compressedStreamEOF();
               zzi = thech;
               bsBuff = bsBuff << 8 | zzi & 0xff;
@@ -570,7 +560,7 @@ public class CBZip2InputStream extends InputStream implements BZip2Constants {
                     } catch (IOException e) {
                       compressedStreamEOF();
                     }
-                    if (thech == -1)
+                    if (thech == (char) -1)
                       compressedStreamEOF();
                     zzi = thech;
                     bsBuff = bsBuff << 8 | zzi & 0xff;
@@ -679,7 +669,6 @@ public class CBZip2InputStream extends InputStream implements BZip2Constants {
       tt[cftab[ch]] = i;
       cftab[ch]++;
     }
-    cftab = null;
 
     tPos = tt[origPtr];
 
