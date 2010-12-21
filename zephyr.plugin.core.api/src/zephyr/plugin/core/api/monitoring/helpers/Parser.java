@@ -52,7 +52,7 @@ public class Parser {
     boolean classIsLogged = false;
     while (objectClass != null) {
       Monitor monitor = objectClass.getAnnotation(Monitor.class);
-      classIsLogged = classIsLogged || (monitor != null && monitor.level() <= levelRequired);
+      classIsLogged = classIsLogged || monitor != null && monitor.level() <= levelRequired;
       int classLevel = levelOf(level, monitor);
       if (objectClass.isArray())
         addElements(logger, container, wrappers, Loggers.isIndexIncluded(objectClass), classLevel, levelRequired);

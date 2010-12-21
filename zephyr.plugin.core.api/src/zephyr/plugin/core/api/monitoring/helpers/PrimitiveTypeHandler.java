@@ -3,8 +3,8 @@ package zephyr.plugin.core.api.monitoring.helpers;
 import java.lang.reflect.Field;
 import java.util.List;
 
-import zephyr.plugin.core.api.monitoring.abstracts.FieldHandler;
 import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
+import zephyr.plugin.core.api.monitoring.abstracts.FieldHandler;
 import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
 import zephyr.plugin.core.api.monitoring.wrappers.MonitorWrapper;
 import zephyr.plugin.core.api.monitoring.wrappers.Wrappers;
@@ -12,7 +12,8 @@ import zephyr.plugin.core.api.monitoring.wrappers.Wrappers;
 public class PrimitiveTypeHandler implements FieldHandler {
 
   @Override
-  public void addField(DataMonitor logger, final Object container, final Field field, List<MonitorWrapper> wrappers, int level, int levelRequired) {
+  public void addField(DataMonitor logger, final Object container, final Field field, List<MonitorWrapper> wrappers,
+      int level, int levelRequired) {
     List<MonitorWrapper> localWrappers = Wrappers.getWrappers(field, wrappers);
     if (field.getType().equals(Boolean.TYPE))
       Loggers.addMonitored(logger, Parser.labelOf(field), createBooleanLogged(container, field), localWrappers, level);

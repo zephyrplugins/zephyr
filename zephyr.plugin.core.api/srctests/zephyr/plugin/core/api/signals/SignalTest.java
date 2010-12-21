@@ -5,9 +5,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import zephyr.plugin.core.api.signals.Listener;
-import zephyr.plugin.core.api.signals.Signal;
-
 public class SignalTest {
 
   class EventInfo {

@@ -17,9 +17,8 @@ public class LineLayout extends Layout {
   @Override
   protected Point computeSize(Composite composite, int wHint, int hHint, boolean flushCache) {
     Control children[] = composite.getChildren();
-    if (flushCache || sizes == null || sizes.length != children.length) {
+    if (flushCache || sizes == null || sizes.length != children.length)
       initialize(children);
-    }
     int width = wHint, height = hHint;
     if (wHint == SWT.DEFAULT)
       width = prefWidth;
@@ -31,9 +30,8 @@ public class LineLayout extends Layout {
   @Override
   protected void layout(Composite composite, boolean flushCache) {
     Control children[] = composite.getChildren();
-    if (flushCache || sizes == null || sizes.length != children.length) {
+    if (flushCache || sizes == null || sizes.length != children.length)
       initialize(children);
-    }
     Rectangle rect = composite.getClientArea();
     int x = MARGIN;
     final int y = MARGIN;
@@ -54,7 +52,7 @@ public class LineLayout extends Layout {
   }
 
   private float computeWidthRatio(Control[] children, Rectangle rect) {
-    return ((rect.width - fixedWidth - ((children.length - 1) * SPACING) - 2 * MARGIN) / (float) (prefWidth - fixedWidth));
+    return (rect.width - fixedWidth - (children.length - 1) * SPACING - 2 * MARGIN) / (float) (prefWidth - fixedWidth);
   }
 
   void initialize(Control children[]) {

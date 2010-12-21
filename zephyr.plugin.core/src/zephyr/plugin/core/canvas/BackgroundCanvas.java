@@ -41,7 +41,7 @@ public class BackgroundCanvas implements PainterMonitor {
   private long numForegroundDrawing = 0;
 
   public BackgroundCanvas(Composite parent, Painter painter) {
-    this.canvas = new Canvas(parent, SWT.NO_BACKGROUND);
+    canvas = new Canvas(parent, SWT.NO_BACKGROUND);
     this.painter = painter;
     canvas.addPaintListener(new PaintListener() {
       @Override

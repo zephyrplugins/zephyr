@@ -45,8 +45,7 @@ public class SensorTextGroup implements ObsWidget {
     GridLayout gridLayout = new GridLayout();
     gridLayout.numColumns = 2;
     group.setLayout(gridLayout);
-    for (int i = 0; i < textClients.length; i++) {
-      TextClient textClient = textClients[i];
+    for (TextClient textClient : textClients) {
       createLabels(group, textClient);
     }
   }

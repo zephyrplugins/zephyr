@@ -135,7 +135,7 @@ public class Snippet209 {
           rot++;
           gl.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_LINE);
           gl.glColor3f(0.9f, 0.9f, 0.9f);
-          drawTorus(gl, 1, 1.9f + ((float) Math.sin((0.004f * frot))), 15, 15);
+          drawTorus(gl, 1, 1.9f + (float) Math.sin((0.004f * frot)), 15, 15);
           canvas.swapBuffers();
           context.release();
           display.asyncExec(this);
@@ -143,10 +143,9 @@ public class Snippet209 {
       }
     });
 
-    while (!shell.isDisposed()) {
+    while (!shell.isDisposed())
       if (!display.readAndDispatch())
         display.sleep();
-    }
     display.dispose();
   }
 }

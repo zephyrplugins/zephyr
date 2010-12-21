@@ -114,9 +114,9 @@ public class Advertisement {
       Object fieldValue = getFieldValue(advertised, field);
       if (fieldValue == null)
         continue;
-      if (field.getType().isArray()) {
+      if (field.getType().isArray())
         advertiseElements(labelBuilder, parents, clock, info, field, fieldValue, classAdvertise);
-      } else
+      else
         advertiseAndParse(labelBuilder, parents, clock, info, field, fieldValue, classAdvertise);
     }
   }
@@ -156,8 +156,8 @@ public class Advertisement {
 
   private void advertiseField(Field field, String label, Stack<Object> parents, Object advertised,
       Clock clock, Object info, Advertise classAdvertise) {
-    Advertise advertise = (field.isAnnotationPresent(Advertise.class) ?
-        field.getAnnotation(Advertise.class) : classAdvertise);
+    Advertise advertise = field.isAnnotationPresent(Advertise.class) ?
+        field.getAnnotation(Advertise.class) : classAdvertise;
     Object infoProvider = annotationToInfoProvider(advertise, advertised);
     Object providedInfo = provideInfo(label, parents, advertised, info, infoProvider);
     advertiseInstance(clock, advertised, providedInfo);

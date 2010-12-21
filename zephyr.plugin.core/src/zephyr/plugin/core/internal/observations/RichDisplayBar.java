@@ -73,13 +73,13 @@ public class RichDisplayBar {
   private void drawSideCursor(Rectangle barRectangle, GC gc, int y) {
     Point left = new Point(barRectangle.x + barRectangle.width, y);
     gc.fillPolygon(new int[] { left.x, left.y,
-        left.x + SideCursorWidth, left.y - (SideCursorHeight / 2),
-        left.x + SideCursorWidth, left.y + (SideCursorHeight / 2) });
+        left.x + SideCursorWidth, left.y - SideCursorHeight / 2,
+        left.x + SideCursorWidth, left.y + SideCursorHeight / 2 });
   }
 
   private void drawMean(Rectangle barRectangle, GC gc, int meanPosition) {
     gc.setBackground(colors.color(gc, Colors.COLOR_DARK_GRAY));
-    gc.fillRectangle(barRectangle.x, meanPosition - (MeanHeight / 2),
+    gc.fillRectangle(barRectangle.x, meanPosition - MeanHeight / 2,
                      barRectangle.width, MeanHeight);
   }
 
@@ -90,7 +90,7 @@ public class RichDisplayBar {
   private void drawStandardDeviation(Rectangle barRectangle, GC gc, int meanPosition) {
     int stddevLength = Math.max(1, (int) (obsStat.scaledStdDev() * barRectangle.height));
     gc.setBackground(colors.color(gc, Colors.COLOR_LIGHT_RED));
-    gc.fillRectangle(barRectangle.x, meanPosition - (stddevLength / 2),
+    gc.fillRectangle(barRectangle.x, meanPosition - stddevLength / 2,
                      barRectangle.width, stddevLength);
   }
 

@@ -53,7 +53,7 @@ public class JarComposite {
 
   public void synchronize() {
     timeStep = clock.timeStep();
-    period = (long) (period == -1 ? clock.lastPeriodNano() : (period * decay + clock.lastPeriodNano() * (1 - decay)));
+    period = (long) (period == -1 ? clock.lastPeriodNano() : period * decay + clock.lastPeriodNano() * (1 - decay));
   }
 
   private boolean adjustLabel(Label label, String text) {

@@ -10,7 +10,8 @@ import zephyr.plugin.core.api.monitoring.wrappers.MonitorWrapper;
 public class ObjectArrayHandler extends PrimitiveArrayHandler {
 
   @Override
-  public void addArray(DataMonitor logger, Object array, CollectionLabelBuilder labelBuilder, List<MonitorWrapper> wrappers,
+  public void addArray(DataMonitor logger, Object array, CollectionLabelBuilder labelBuilder,
+      List<MonitorWrapper> wrappers,
       int level, int levelRequired) {
     int arraySize = Array.getLength(array);
     for (int i = 0; i < arraySize; i++) {

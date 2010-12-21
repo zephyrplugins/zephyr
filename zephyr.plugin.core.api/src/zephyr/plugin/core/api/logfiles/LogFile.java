@@ -92,9 +92,8 @@ public abstract class LogFile implements Labeled {
 
   public void step() {
     String line = null;
-    while (!eof() && line == null) {
+    while (!eof() && line == null)
       line = readLine();
-    }
     if (line != null)
       lineToData(line);
     clock.tick();

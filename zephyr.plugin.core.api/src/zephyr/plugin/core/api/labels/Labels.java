@@ -17,9 +17,9 @@ public class Labels {
   }
 
   public static String collectionLabel(String collectionPattern, int index, String suffix, boolean includeIndex) {
-    StringBuilder result = (includeIndex ?
+    StringBuilder result = includeIndex ?
         new StringBuilder(String.format(collectionPattern, index)) :
-        new StringBuilder(collectionPattern));
+        new StringBuilder(collectionPattern);
     if (suffix != null)
       result.append(suffix);
     result.append("]");

@@ -58,7 +58,7 @@ public class Plot2D implements MouseSearchable {
     Data2D bestData = null;
     int xIndex = -1;
     double bestDistance = Double.MAX_VALUE;
-    for (Data2D data : datas) {
+    for (Data2D data : datas)
       for (int i = 0; i < data.nbPoints; i++) {
         double distance = dataPoint.distance(data.xdata[i], data.ydata[i]);
         if (distance < bestDistance) {
@@ -67,7 +67,6 @@ public class Plot2D implements MouseSearchable {
           bestData = data;
         }
       }
-    }
     if (bestData == null)
       return null;
     return new Plot2DRequestResult(axes, bestData, xIndex);

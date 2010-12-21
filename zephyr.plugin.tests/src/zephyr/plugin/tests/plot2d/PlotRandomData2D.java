@@ -22,7 +22,7 @@ public class PlotRandomData2D extends AbstractCanvasView implements TimedView {
   private Data2D data;
 
   public PlotRandomData2D() {
-    this.plot = new Plot2D();
+    plot = new Plot2D();
   }
 
   @Override
