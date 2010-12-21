@@ -66,7 +66,7 @@ public class TraceData {
   }
 
   public long dataAge(DataTimeInfo timeInfo, int dataIndex) {
-    return timeInfo.synchronizationTime - timeInfo.bufferedData - dataIndex * timeInfo.period;
+    return timeInfo.synchronizationTime - timeInfo.bufferedData - (long) dataIndex * timeInfo.period;
   }
 
   public void history(double historyTimeLength, float[] values, DataTimeInfo timeInfo) {

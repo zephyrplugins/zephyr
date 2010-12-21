@@ -46,7 +46,7 @@
    <extension
          point="zephyr.startup">
       <client
-            class="zephyr.plugin.filehandling.internal.StartupJob">
+            class="zephyr.plugin.filehandling.internal.FileHandlingStartupJob">
       </client>
    </extension>
    <extension

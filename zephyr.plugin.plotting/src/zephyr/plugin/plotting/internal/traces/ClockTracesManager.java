@@ -13,7 +13,7 @@ import zephyr.plugin.core.api.synchronization.Clock;
 
 public class ClockTracesManager {
   static final int TraceTime = 300; // Seconds
-  static protected boolean forceEnabled = false;
+  protected boolean forceEnabled = false;
   private static ClockTracesManager manager = null;
 
   public final Signal<List<Trace>> onTraceAdded = new Signal<List<Trace>>();

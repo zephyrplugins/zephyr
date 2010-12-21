@@ -20,7 +20,7 @@ import zephyr.plugin.filehandling.IFileHandler;
 
 
 public class FileLoader {
-  public static String PluginID = "zephyr.plugin.filehandling";
+  public static final String PluginID = "zephyr.plugin.filehandling";
   private static List<IFileHandler> fileHandlers = null;
   private static IFileHandler defaultHandler = new DefaultHandler();
   private static byte[] types = { Character.DECIMAL_DIGIT_NUMBER, Character.UPPERCASE_LETTER,

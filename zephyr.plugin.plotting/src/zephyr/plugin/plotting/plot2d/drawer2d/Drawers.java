@@ -18,7 +18,7 @@ public class Drawers {
     }
   };
   static public final Drawer2D Dots = new Drawer2D() {
-    final private int Radius = 1;
+    final static private int Radius = 1;
 
     @Override
     public void draw(GC gc, float[] xdata, float[] ydata, int[] gx, int[] gy) {

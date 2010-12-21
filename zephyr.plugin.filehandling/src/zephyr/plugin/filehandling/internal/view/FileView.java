@@ -27,7 +27,6 @@ public class FileView extends EnvironmentView implements Closeable, Restartable 
 
   public static final String ID = "zephyr.plugin.filehandling.internal.view.fileview";
   protected LogFile logFile = null;
-  double[] currentObservation;
   private final TerminateAction terminateAction;
   private final RestartAction restartAction;
 

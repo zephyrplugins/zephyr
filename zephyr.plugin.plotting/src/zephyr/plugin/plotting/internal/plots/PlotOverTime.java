@@ -18,7 +18,7 @@ import zephyr.plugin.plotting.plot2d.Axes;
 public class PlotOverTime implements Painter {
   static public RGB[] colorsOrder = { Colors.COLOR_BLUE, Colors.COLOR_DARK_RED, Colors.COLOR_DARK_GREEN,
       Colors.COLOR_DARK_BLUE, Colors.COLOR_DARK_MAGENTA, Colors.COLOR_BLACK, Colors.COLOR_GREEN, Colors.COLOR_MAGENTA,
-      Colors.COLOR_RED, Colors.COLOR_DARK_CYAN, Colors.COLOR_DARK_YELLOW, Colors.COLOR_YELLOW, Colors.COLOR_CYAN };
+      Colors.COLOR_RED, Colors.COLOR_DARK_CYAN, Colors.COLOR_DARK_YELLOW, Colors.COLOR_CYAN };
 
   private enum ResetMode {
     NoReset,

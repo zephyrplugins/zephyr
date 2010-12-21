@@ -13,7 +13,7 @@ import zephyr.plugin.plotting.mousesearch.RequestResult;
 import zephyr.plugin.plotting.plot2d.Axes;
 
 public class PlotData {
-  public class HistoryCached {
+  static public class HistoryCached {
     final float[] values;
     final public DataTimeInfo timeInfo = new DataTimeInfo();
 

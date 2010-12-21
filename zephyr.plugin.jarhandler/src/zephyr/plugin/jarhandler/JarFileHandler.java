@@ -1,6 +1,8 @@
 package zephyr.plugin.jarhandler;
 
 import java.io.IOException;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.jar.Manifest;
@@ -48,8 +50,13 @@ public class JarFileHandler implements IFileHandler {
   }
 
   @Override
-  public void handle(String filepath, String[] fileargs) throws IOException {
-    JarClassLoader jarLoader = new JarClassLoader(filepath);
+  public void handle(final String filepath, String[] fileargs) throws IOException {
+    JarClassLoader jarLoader = AccessController.doPrivileged(new PrivilegedAction<JarClassLoader>() {
+      @Override
+      public JarClassLoader run() {
+        return new JarClassLoader(filepath);
+      }
+    });
     String className = fileargs.length == 1 ? fileargs[0] : retrieveClassName(jarLoader);
     if (className == null)
       throw new RuntimeException("Cannot find the main class to load");

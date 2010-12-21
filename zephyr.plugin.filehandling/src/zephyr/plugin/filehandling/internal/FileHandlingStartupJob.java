@@ -15,7 +15,7 @@ import org.eclipse.ui.PlatformUI;
 
 import zephyr.ZephyrCore;
 
-public class StartupJob implements zephyr.plugin.core.startup.StartupJob {
+public class FileHandlingStartupJob implements zephyr.plugin.core.startup.StartupJob {
   @Override
   public int level() {
     return 20;
@@ -43,6 +43,8 @@ public class StartupJob implements zephyr.plugin.core.startup.StartupJob {
           FileTransfer ft = FileTransfer.getInstance();
           if (ft.isSupportedType(event.currentDataType))
             fileList = (String[]) event.data;
+          if (fileList == null)
+            return;
           for (String filepath : fileList)
             FileLoader.openFile(filepath);
         }

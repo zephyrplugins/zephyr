@@ -10,7 +10,7 @@ import zephyr.plugin.core.Utils;
 public class Axes {
   static final private int Padding = 0;
 
-  public class Axe {
+  static public class Axe {
     final int margin;
     public boolean transformationValid = false;
 

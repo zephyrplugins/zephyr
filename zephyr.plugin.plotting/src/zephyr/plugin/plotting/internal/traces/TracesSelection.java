@@ -28,7 +28,7 @@ public class TracesSelection {
     }
   };
 
-  private boolean forceEnabled = ClockTracesManager.forceEnabled;
+  private boolean forceEnabled = ClockTracesManager.manager().forceEnabled;
   private final Map<Trace, TraceData> enabledTrace = new ConcurrentHashMap<Trace, TraceData>();
   private final ClockTraces clockTraces;
 

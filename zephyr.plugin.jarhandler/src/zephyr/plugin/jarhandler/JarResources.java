@@ -48,17 +48,23 @@ public final class JarResources {
   }
 
   private void buildJarDictionary() {
+    FileInputStream fis = null;
+    try {
+      fis = new FileInputStream(jarFile);
+    } catch (FileNotFoundException e1) {
+      e1.printStackTrace();
+      return;
+    }
+    ZipInputStream zis = new ZipInputStream(fis);
     try {
       ZipFile zipFile = new ZipFile(jarFile);
       Enumeration<? extends Object> e = zipFile.entries();
       while (e.hasMoreElements()) {
         ZipEntry ze = (ZipEntry) e.nextElement();
-        fileToSize.put(ze.getName(), new Integer((int) ze.getSize()));
+        fileToSize.put(ze.getName(), (int) ze.getSize());
       }
       zipFile.close();
 
-      FileInputStream fis = new FileInputStream(jarFile);
-      ZipInputStream zis = new ZipInputStream(fis);
       ZipEntry ze = null;
       while ((ze = zis.getNextEntry()) != null) {
         if (ze.isDirectory())
@@ -81,6 +87,11 @@ public final class JarResources {
     } catch (NullPointerException e) {
     } catch (FileNotFoundException e) {
       e.printStackTrace();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    try {
+      zis.close();
     } catch (IOException e) {
       e.printStackTrace();
     }

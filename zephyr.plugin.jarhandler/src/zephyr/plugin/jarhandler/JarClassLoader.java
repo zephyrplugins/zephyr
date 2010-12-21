@@ -89,7 +89,6 @@ public class JarClassLoader extends ClassLoader {
     String path = name.replace('.', '/').concat("/");
     String specTitle = null, specVersion = null, specVendor = null;
     String implTitle = null, implVersion = null, implVendor = null;
-    String sealed = null;
     URL sealBase = null;
 
     Attributes attributes = manifest != null ? manifest.getAttributes(path) : null;
@@ -100,7 +99,6 @@ public class JarClassLoader extends ClassLoader {
       implTitle = attributes.getValue(Name.IMPLEMENTATION_TITLE);
       implVersion = attributes.getValue(Name.IMPLEMENTATION_VERSION);
       implVendor = attributes.getValue(Name.IMPLEMENTATION_VENDOR);
-      sealed = attributes.getValue(Name.SEALED);
     }
     attributes = manifest != null ? manifest.getMainAttributes() : null;
     if (attributes != null) {
@@ -116,8 +114,6 @@ public class JarClassLoader extends ClassLoader {
         implVersion = attributes.getValue(Name.IMPLEMENTATION_VERSION);
       if (implVendor == null)
         implVendor = attributes.getValue(Name.IMPLEMENTATION_VENDOR);
-      if (sealed == null)
-        sealed = attributes.getValue(Name.SEALED);
     }
     return definePackage(name, specTitle, specVersion, specVendor,
                          implTitle, implVersion, implVendor, sealBase);
