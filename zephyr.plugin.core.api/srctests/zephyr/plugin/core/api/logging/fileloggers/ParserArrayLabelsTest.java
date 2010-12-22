@@ -11,7 +11,7 @@ import zephyr.plugin.core.api.monitoring.fileloggers.FileLogger;
 
 
 public class ParserArrayLabelsTest {
-  static protected final String[] expectedLabels = new String[] { "logged01[]", "logged01[]", "logged02[a]",
+  static final String[] expectedLabels = new String[] { "logged01[]", "logged01[]", "logged02[a]",
       "logged02[b]", "logged03[]data01" };
 
   static public class TestObjectMonitored {

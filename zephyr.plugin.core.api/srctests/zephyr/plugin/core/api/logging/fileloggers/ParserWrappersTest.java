@@ -12,7 +12,7 @@ import zephyr.plugin.core.api.monitoring.wrappers.Squared;
 
 
 public class ParserWrappersTest {
-  static protected final String[] expectedLabels = new String[] { "data01", "data01Squared", "data01Abs" };
+  static final String[] expectedLabels = new String[] { "data01", "data01Squared", "data01Abs" };
 
   @Monitor(wrappers = { Squared.ID, Abs.ID })
   protected double data01 = -2;

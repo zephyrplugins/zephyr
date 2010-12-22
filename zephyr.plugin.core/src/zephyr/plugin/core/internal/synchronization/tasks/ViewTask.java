@@ -21,7 +21,9 @@ public class ViewTask implements Runnable {
         return;
       while (isDirty) {
         isDirty = false;
-        view.repaint();
+        synchronized (view) {
+          view.repaint();
+        }
       }
     } catch (Exception e) {
       e.printStackTrace();
@@ -33,13 +35,15 @@ public class ViewTask implements Runnable {
     refreshIFN(executor, false);
   }
 
-  synchronized public void refreshIFN(ViewTaskExecutor executor, boolean synchronize) {
+  public void refreshIFN(ViewTaskExecutor executor, boolean synchronize) {
     isDirty = !synchronize;
     if (!isDone())
       return;
     boolean hasSynchronized = false;
     if (synchronize)
-      hasSynchronized = view.synchronize();
+      synchronized (view) {
+        hasSynchronized = view.synchronize();
+      }
     isDirty = isDirty || hasSynchronized;
     if (isDirty)
       future = executor.submit(this);

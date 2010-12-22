@@ -37,11 +37,11 @@ public class SensorGroup implements ObsWidget {
 
   public SensorGroup(String title, int[] indexes, double[] mins, double[] maxs) {
     this.title = title;
-    this.indexes = indexes;
+    this.indexes = indexes.clone();
     stats = new ObsStat[indexes.length];
     canvasArray = new Canvas[indexes.length];
-    this.mins = mins;
-    this.maxs = maxs;
+    this.mins = mins.clone();
+    this.maxs = maxs.clone();
   }
 
   private void layoutRichBar(Group group) {

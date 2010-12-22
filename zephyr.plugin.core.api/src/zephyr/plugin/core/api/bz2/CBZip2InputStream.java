@@ -59,6 +59,16 @@
  */
 package zephyr.plugin.core.api.bz2;
 
+import static zephyr.plugin.core.api.bz2.BZip2Constants.G_SIZE;
+import static zephyr.plugin.core.api.bz2.BZip2Constants.MAX_ALPHA_SIZE;
+import static zephyr.plugin.core.api.bz2.BZip2Constants.MAX_CODE_LEN;
+import static zephyr.plugin.core.api.bz2.BZip2Constants.MAX_SELECTORS;
+import static zephyr.plugin.core.api.bz2.BZip2Constants.N_GROUPS;
+import static zephyr.plugin.core.api.bz2.BZip2Constants.RUNA;
+import static zephyr.plugin.core.api.bz2.BZip2Constants.RUNB;
+import static zephyr.plugin.core.api.bz2.BZip2Constants.baseBlockSize;
+import static zephyr.plugin.core.api.bz2.BZip2Constants.rNums;
+
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -68,7 +78,7 @@ import java.io.InputStream;
  * 
  * @author <a href="mailto:keiron@aftexsw.com">Keiron Liddle</a>
  */
-public class CBZip2InputStream extends InputStream implements BZip2Constants {
+public class CBZip2InputStream extends InputStream {
   private static void cadvise() {
     System.out.println("CRC Error");
     // throw new CCoruptionError();

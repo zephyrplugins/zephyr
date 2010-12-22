@@ -27,9 +27,12 @@ public class PrimitiveTypeHandler implements FieldHandler {
       public double loggedValue(long stepTime) {
         try {
           return field.getDouble(container);
-        } catch (Exception e) {
+        } catch (IllegalArgumentException e) {
+          e.printStackTrace();
+        } catch (IllegalAccessException e) {
+          e.printStackTrace();
         }
-        return 0.0;
+        return 0;
       }
     };
   }
@@ -40,7 +43,10 @@ public class PrimitiveTypeHandler implements FieldHandler {
       public double loggedValue(long stepTime) {
         try {
           return field.getBoolean(container) ? 1 : 0;
-        } catch (Exception e) {
+        } catch (IllegalArgumentException e) {
+          e.printStackTrace();
+        } catch (IllegalAccessException e) {
+          e.printStackTrace();
         }
         return 0.0;
       }

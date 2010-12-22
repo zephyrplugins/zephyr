@@ -9,7 +9,7 @@ import org.eclipse.ui.handlers.HandlerUtil;
 import zephyr.plugin.plotting.internal.traces.ClockTracesManager;
 
 public class EnableAllTraces extends AbstractHandler {
-  public static String ID = "zephyr.plugin.plotting.commands.enablealltraces";
+  public static final String ID = "zephyr.plugin.plotting.commands.enablealltraces";
 
   @Override
   public Object execute(ExecutionEvent event) throws ExecutionException {

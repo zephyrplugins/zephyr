@@ -13,7 +13,7 @@ public class Synchronous extends AbstractHandler {
   @Override
   public Object execute(ExecutionEvent event) throws ExecutionException {
     Command command = event.getCommand();
-    ZephyrPluginCommon.synchronous = !HandlerUtil.toggleCommandState(command);
+    ZephyrPluginCommon.setSynchronous(!HandlerUtil.toggleCommandState(command));
     return null;
   }
 }

@@ -8,7 +8,7 @@ import java.io.Writer;
 
 public class AbstractFileLogger {
 
-  public static String TEMP = ".tmp";
+  public static final String TEMP = ".tmp";
   public final String filepath;
   protected PrintWriter file;
   protected final boolean temporaryFile;

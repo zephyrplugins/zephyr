@@ -7,7 +7,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 public class ViewTaskExecutor extends ThreadPoolExecutor {
-  static protected ThreadGroup viewThreadGroup = new ThreadGroup("ZephyrViews");
+  static ThreadGroup viewThreadGroup = new ThreadGroup("ZephyrViews");
 
   static protected class Factory implements ThreadFactory {
     @Override

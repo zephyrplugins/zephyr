@@ -22,8 +22,8 @@ import zephyr.plugin.core.internal.synchronization.tasks.ViewTaskScheduler;
 public class ZephyrPluginCommon extends AbstractUIPlugin {
   public Signal<Runnable> onRunnableStarted = new Signal<Runnable>();
   public static final String PLUGIN_ID = "zephyr.plugin.core";
-  public static boolean shuttingDown = false;
-  public static boolean synchronous;
+  private static boolean shuttingDown = false;
+  private static boolean synchronous;
 
   final ViewBinder viewBinder = new ViewBinder();
   final private ViewTaskScheduler viewTaskScheduler = new ViewTaskScheduler();
@@ -102,5 +102,21 @@ public class ZephyrPluginCommon extends AbstractUIPlugin {
   @SuppressWarnings("unchecked")
   public Class<? extends Object> loadClass(String className) throws ClassNotFoundException {
     return plugin.getBundle().loadClass(className);
+  }
+
+  public static void setSynchronous(boolean value) {
+    synchronous = value;
+  }
+
+  public static boolean synchronous() {
+    return synchronous;
+  }
+
+  public static boolean isShuttingDown() {
+    return shuttingDown;
+  }
+
+  public static void shutDown() {
+    shuttingDown = true;
   }
 }

@@ -39,9 +39,8 @@ public class ExtractZephyrJar extends AbstractHandler {
   }
 
   public static void copyFile(File sourceFile, File destFile) throws IOException {
-    if (!destFile.exists())
-      destFile.createNewFile();
-
+    if (!destFile.exists() && !destFile.createNewFile())
+      throw new RuntimeException("Error creating the new jar file: " + destFile.getAbsolutePath());
     FileChannel source = null;
     FileChannel destination = null;
     try {

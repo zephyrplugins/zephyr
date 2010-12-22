@@ -31,12 +31,12 @@ public class ClockViews implements Listener<ViewTaskExecutor> {
   }
 
   synchronized protected void synchronize() {
-    if (ZephyrPluginCommon.shuttingDown)
+    if (ZephyrPluginCommon.isShuttingDown())
       return;
     synchronizationRequired = true;
     runnableThread = Thread.currentThread();
     refreshViewsIFN();
-    if (ZephyrPluginCommon.synchronous)
+    if (ZephyrPluginCommon.synchronous())
       waitForCompletion();
   }
 

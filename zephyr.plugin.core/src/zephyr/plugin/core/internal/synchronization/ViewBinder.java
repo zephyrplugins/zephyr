@@ -75,7 +75,7 @@ public class ViewBinder {
 
   private void displayAndBindView(final Clock clock, final Object drawn, final Object info,
       final String viewID) {
-    if (ZephyrPluginCommon.shuttingDown)
+    if (ZephyrPluginCommon.isShuttingDown())
       return;
     Runnable bindViewRunnable = new Runnable() {
       @Override

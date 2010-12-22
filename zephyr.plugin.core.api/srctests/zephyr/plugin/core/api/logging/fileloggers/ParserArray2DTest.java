@@ -10,7 +10,7 @@ import zephyr.plugin.core.api.monitoring.fileloggers.FileLogger;
 
 
 public class ParserArray2DTest {
-  static protected final String[] expectedLabels = new String[] { "logged01Array2D[0][0]", "logged01Array2D[0][1]",
+  static final String[] expectedLabels = new String[] { "logged01Array2D[0][0]", "logged01Array2D[0][1]",
       "logged01Array2D[0][2]", "logged01Array2D[1][0]", "logged01Array2D[1][1]", "logged01Array2D[1][2]" };
 
   @Monitor

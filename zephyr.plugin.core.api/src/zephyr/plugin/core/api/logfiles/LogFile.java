@@ -145,10 +145,10 @@ public abstract class LogFile implements Labeled {
   }
 
   public double[] currentLine() {
-    return current;
+    return current.clone();
   }
 
   public String[] labels() {
-    return labels;
+    return labels.clone();
   }
 }

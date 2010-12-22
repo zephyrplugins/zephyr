@@ -13,7 +13,7 @@ public class ZephyrSync {
   }
 
   public static void shutDown() {
-    ZephyrPluginCommon.shuttingDown = true;
+    ZephyrPluginCommon.shutDown();
   }
 
   public static boolean isSyncEmpty() {

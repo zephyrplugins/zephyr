@@ -24,7 +24,7 @@ public class NbStepsDialog extends InputDialog {
       return null;
     }
   };
-  static protected int value = -1;
+  static int value = -1;
 
   private static String TimeStepsKey = "defaultNbTimeSteps";
   private final static IEclipsePreferences instanceScope = new InstanceScope().getNode(ZephyrPluginCommon.PLUGIN_ID);

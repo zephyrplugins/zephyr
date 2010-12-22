@@ -35,7 +35,6 @@ public class BackgroundCanvas implements PainterMonitor {
   };
   private final List<Overlay> overlays = new LinkedList<Overlay>();
   private boolean showProgress = true;
-  private final boolean cancelDrawing = false;
   private final Chrono chrono = new Chrono();
   private long numBackgroundDrawing = 0;
   private long numForegroundDrawing = 0;
@@ -98,7 +97,7 @@ public class BackgroundCanvas implements PainterMonitor {
 
   @Override
   public boolean isCanceled() {
-    return cancelDrawing || !paintingImage.currentImageIsValide();
+    return !paintingImage.currentImageIsValide();
   }
 
   public void dispose() {

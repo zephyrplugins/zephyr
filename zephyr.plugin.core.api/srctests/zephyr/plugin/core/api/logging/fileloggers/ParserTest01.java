@@ -19,7 +19,7 @@ public class ParserTest01 {
   static protected final String logged01AddedFromInterface = "logged01AddedFromInterface";
   static protected final String log01LabelInt = "logged03LabelInt";
   static protected final String log01LabelFloat = "logged04LabelFloat";
-  static protected final String[] expectedLabels = new String[] { logged01AddedFromInterface, "logged02FieldName",
+  static final String[] expectedLabels = new String[] { logged01AddedFromInterface, "logged02FieldName",
       log01LabelInt, log01LabelFloat, "logged05Child01logged", "logged06ArrayDouble[0]", "logged06ArrayDouble[1]",
       "logged07ArrayInt[0]", "logged07ArrayInt[1]", "logged08ArrayFloat[0]", "logged08ArrayFloat[1]",
       "logged09ArrayObject[0]logged", "logged09ArrayObject[1]logged", "logged10ArrayLabeled[0:element0]",

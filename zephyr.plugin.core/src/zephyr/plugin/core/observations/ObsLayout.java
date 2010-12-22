@@ -8,11 +8,11 @@ public class ObsLayout implements Iterable<ObsWidget> {
   private final ObsWidget[][] widgetArray;
 
   public ObsLayout(ObsWidget[][] widgetArray) {
-    this.widgetArray = widgetArray;
+    this.widgetArray = widgetArray.clone();
   }
 
   public ObsWidget[][] widgetArray() {
-    return widgetArray;
+    return widgetArray.clone();
   }
 
   @Override

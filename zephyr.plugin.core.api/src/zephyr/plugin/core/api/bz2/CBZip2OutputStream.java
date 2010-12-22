@@ -60,6 +60,17 @@
 
 package zephyr.plugin.core.api.bz2;
 
+import static zephyr.plugin.core.api.bz2.BZip2Constants.G_SIZE;
+import static zephyr.plugin.core.api.bz2.BZip2Constants.MAX_ALPHA_SIZE;
+import static zephyr.plugin.core.api.bz2.BZip2Constants.MAX_SELECTORS;
+import static zephyr.plugin.core.api.bz2.BZip2Constants.NUM_OVERSHOOT_BYTES;
+import static zephyr.plugin.core.api.bz2.BZip2Constants.N_GROUPS;
+import static zephyr.plugin.core.api.bz2.BZip2Constants.N_ITERS;
+import static zephyr.plugin.core.api.bz2.BZip2Constants.RUNA;
+import static zephyr.plugin.core.api.bz2.BZip2Constants.RUNB;
+import static zephyr.plugin.core.api.bz2.BZip2Constants.baseBlockSize;
+import static zephyr.plugin.core.api.bz2.BZip2Constants.rNums;
+
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -70,7 +81,7 @@ import java.io.OutputStream;
  * @author <a href="mailto:keiron@aftexsw.com">Keiron Liddle</a>
  * 
  */
-public class CBZip2OutputStream extends OutputStream implements BZip2Constants {
+public class CBZip2OutputStream extends OutputStream {
   protected static final int SETMASK = 1 << 21;
   protected static final int CLEARMASK = ~SETMASK;
   protected static final int GREATER_ICOST = 15;

@@ -10,7 +10,7 @@ import zephyr.plugin.core.api.monitoring.fileloggers.FileLogger;
 
 
 public class ParserBooleanTest {
-  static protected final String[] expectedLabels = new String[] { "data01" };
+  static final String[] expectedLabels = new String[] { "data01" };
   @Monitor
   protected boolean data01;
 

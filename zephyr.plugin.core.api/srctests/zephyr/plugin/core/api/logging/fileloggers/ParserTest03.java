@@ -11,7 +11,7 @@ import zephyr.plugin.core.api.monitoring.fileloggers.FileLogger;
 
 
 public class ParserTest03 {
-  static protected final String[] expectedLabels = new String[] { "data01", "ignoreLabel" };
+  static final String[] expectedLabels = new String[] { "data01", "ignoreLabel" };
 
   @Monitor
   static public class TestObjectMonitored {
