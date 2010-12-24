@@ -1,9 +1,21 @@
 package zephyr.plugin.core.internal;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IPageListener;
+import org.eclipse.ui.IPartListener;
+import org.eclipse.ui.IWindowListener;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.activities.IActivityManager;
+import org.eclipse.ui.activities.IWorkbenchActivitySupport;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -18,16 +30,17 @@ import zephyr.plugin.core.control.Control;
 import zephyr.plugin.core.internal.preferences.PreferenceKeys;
 import zephyr.plugin.core.internal.synchronization.ViewBinder;
 import zephyr.plugin.core.internal.synchronization.tasks.ViewTaskScheduler;
+import zephyr.plugin.core.views.SyncView;
 
-public class ZephyrPluginCommon extends AbstractUIPlugin {
+public class ZephyrPluginCore extends AbstractUIPlugin {
   public Signal<Runnable> onRunnableStarted = new Signal<Runnable>();
   public static final String PLUGIN_ID = "zephyr.plugin.core";
-  private static boolean shuttingDown = false;
+  static private boolean zephyrEnabled = false;
   private static boolean synchronous;
 
   final ViewBinder viewBinder = new ViewBinder();
   final private ViewTaskScheduler viewTaskScheduler = new ViewTaskScheduler();
-  private static ZephyrPluginCommon plugin;
+  private static ZephyrPluginCore plugin;
   private final ThreadGroup threadGroup = new ThreadGroup("ZephyrRunnable");
 
   private final Control control = new Control();
@@ -95,7 +108,7 @@ public class ZephyrPluginCommon extends AbstractUIPlugin {
     return getDefault().viewTaskScheduler;
   }
 
-  public static ZephyrPluginCommon getDefault() {
+  public static ZephyrPluginCore getDefault() {
     return plugin;
   }
 
@@ -112,11 +125,92 @@ public class ZephyrPluginCommon extends AbstractUIPlugin {
     return synchronous;
   }
 
-  public static boolean isShuttingDown() {
-    return shuttingDown;
+  public static void setupPartListener() {
+    PlatformUI.getWorkbench().addWindowListener(new IWindowListener() {
+      @Override
+      public void windowOpened(IWorkbenchWindow window) {
+        for (IWorkbenchPage page : window.getPages())
+          pageOpened(page);
+        window.addPageListener(new IPageListener() {
+          @Override
+          public void pageOpened(IWorkbenchPage page) {
+            ZephyrPluginCore.pageOpened(page);
+          }
+
+          @Override
+          public void pageClosed(IWorkbenchPage page) {
+          }
+
+          @Override
+          public void pageActivated(IWorkbenchPage page) {
+          }
+        });
+      }
+
+      @Override
+      public void windowDeactivated(IWorkbenchWindow window) {
+      }
+
+      @Override
+      public void windowClosed(IWorkbenchWindow window) {
+      }
+
+      @Override
+      public void windowActivated(IWorkbenchWindow window) {
+      }
+    });
   }
 
-  public static void shutDown() {
-    shuttingDown = true;
+  static protected void pageOpened(IWorkbenchPage page) {
+    page.addPartListener(new IPartListener() {
+      @Override
+      public void partOpened(IWorkbenchPart part) {
+      }
+
+      @Override
+      public void partDeactivated(IWorkbenchPart part) {
+      }
+
+      @Override
+      public void partClosed(IWorkbenchPart part) {
+        if (part instanceof SyncView)
+          ZephyrPluginCore.viewBinder().disposeView((SyncView) part);
+      }
+
+      @Override
+      public void partBroughtToTop(IWorkbenchPart part) {
+      }
+
+      @Override
+      public void partActivated(IWorkbenchPart part) {
+        if (part instanceof SyncView)
+          ZephyrPluginCore.viewScheduler().enable((SyncView) part);
+      }
+    });
+  }
+
+  static public void enableZephyrActivity() {
+    zephyrEnabled = true;
+    enableActivities("zephyr.plugin.core.activity");
+  }
+
+  static void enableActivities(String... ids) {
+    final IWorkbenchActivitySupport activitySupport = PlatformUI.getWorkbench().getActivitySupport();
+    IActivityManager activityManager = activitySupport.getActivityManager();
+    Set<String> enabledActivities = new HashSet<String>();
+    for (String id : ids)
+      if (activityManager.getActivity(id).isDefined())
+        enabledActivities.add(id);
+    final Set<String> definedActivities = enabledActivities;
+    Display.getDefault().asyncExec(new Runnable() {
+      @Override
+      public void run() {
+        activitySupport.setEnabledActivityIds(definedActivities);
+      }
+    });
+  }
+
+  public static boolean isZephyrEnabled() {
+    return zephyrEnabled;
   }
 }

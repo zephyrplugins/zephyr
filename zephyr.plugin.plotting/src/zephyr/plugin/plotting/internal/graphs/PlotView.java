@@ -16,6 +16,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 
 import zephyr.ZephyrSync;
+import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.canvas.BackgroundCanvas;
 import zephyr.plugin.core.views.SyncView;
 import zephyr.plugin.plotting.actions.CenterPlotAction;
@@ -125,7 +126,7 @@ public class PlotView extends ViewPart implements TraceSelector, SyncView, ViewC
   }
 
   @Override
-  public boolean synchronize() {
+  public boolean synchronize(Clock clock) {
     if (!synchronizeData || backgroundCanvas == null)
       return false;
     return plotdata.synchronize();
@@ -133,11 +134,10 @@ public class PlotView extends ViewPart implements TraceSelector, SyncView, ViewC
 
   @Override
   public void dispose() {
-    ZephyrSync.disposeView(this);
-    super.dispose();
     clockGraphBindings.unBindAll();
     backgroundCanvas.dispose();
     historyLength.dispose();
+    super.dispose();
   }
 
   public PlotSelection plotSelection() {

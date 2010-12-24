@@ -2,6 +2,7 @@ package zephyr.plugin.core.internal.synchronization;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,14 +20,13 @@ import org.eclipse.ui.views.IViewRegistry;
 import zephyr.plugin.core.Utils;
 import zephyr.plugin.core.api.signals.Signal;
 import zephyr.plugin.core.api.synchronization.Clock;
-import zephyr.plugin.core.internal.ZephyrPluginCommon;
 import zephyr.plugin.core.views.SyncView;
 import zephyr.plugin.core.views.TimedView;
 
 public class ViewBinder {
   public Signal<Clock> onClockAdded = new Signal<Clock>();
   public Signal<Clock> onClockRemoved = new Signal<Clock>();
-  protected final Map<Clock, ClockViews> clockToView = new HashMap<Clock, ClockViews>();
+  protected final Map<Clock, ClockViews> clockToView = Collections.synchronizedMap(new HashMap<Clock, ClockViews>());
   private final ViewProviders viewProviders = new ViewProviders();
 
   private String findSecondaryID(IWorkbenchPage activePage, String viewID) {
@@ -75,8 +75,6 @@ public class ViewBinder {
 
   private void displayAndBindView(final Clock clock, final Object drawn, final Object info,
       final String viewID) {
-    if (ZephyrPluginCommon.isShuttingDown())
-      return;
     Runnable bindViewRunnable = new Runnable() {
       @Override
       public void run() {
@@ -93,21 +91,25 @@ public class ViewBinder {
       Display.getDefault().syncExec(bindViewRunnable);
   }
 
-  private ClockViews addClock(Clock clock) {
-    ClockViews clockViews = new ClockViews(clock);
+  public ClockViews addClock(Clock clock) {
+    ClockViews clockViews = clockToView.get(clock);
+    if (clockViews != null)
+      return clockViews;
+    clockViews = new ClockViews(clock);
     clockToView.put(clock, clockViews);
     onClockAdded.fire(clock);
     return clockViews;
   }
 
-  synchronized public void removeClock(Clock clock) {
-    onClockRemoved.fire(clock);
+  public void removeClock(Clock clock, boolean waitFor) {
     ClockViews clockViews = clockToView.remove(clock);
-    if (clockViews != null)
-      clockViews.dispose();
+    if (clockViews != null) {
+      onClockRemoved.fire(clock);
+      clockViews.dispose(waitFor);
+    }
   }
 
-  synchronized public void bind(Clock clock, SyncView view) {
+  public void bind(Clock clock, SyncView view) {
     ClockViews clockViews = clockToView.get(clock);
     if (clockViews == null)
       clockViews = addClock(clock);
@@ -123,7 +125,7 @@ public class ViewBinder {
       displayAndBindView(clock, drawn, info, viewID);
   }
 
-  synchronized public void unbind(Clock clock, SyncView view) {
+  public void unbind(Clock clock, SyncView view) {
     ClockViews clockViews = clockToView.get(clock);
     if (clockViews == null)
       return;
@@ -134,13 +136,17 @@ public class ViewBinder {
     return clockToView.isEmpty();
   }
 
-  synchronized public Collection<Clock> getClocks() {
-    return new ArrayList<Clock>(clockToView.keySet());
+  public Collection<Clock> getClocks() {
+    synchronized (clockToView) {
+      return new ArrayList<Clock>(clockToView.keySet());
+    }
   }
 
-  synchronized public void disposeView(SyncView view) {
-    for (Map.Entry<Clock, ClockViews> entry : clockToView.entrySet())
-      entry.getValue().removeView(view);
+  public void disposeView(SyncView view) {
+    synchronized (clockToView) {
+      for (Map.Entry<Clock, ClockViews> entry : clockToView.entrySet())
+        entry.getValue().removeView(view);
+    }
     ClockViews.disposeView(view);
   }
 }

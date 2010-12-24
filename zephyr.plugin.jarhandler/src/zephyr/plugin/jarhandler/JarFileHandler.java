@@ -3,7 +3,6 @@ package zephyr.plugin.jarhandler;
 import java.io.IOException;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.jar.Manifest;
 
@@ -15,32 +14,6 @@ import zephyr.plugin.core.api.synchronization.Timed;
 import zephyr.plugin.filehandling.IFileHandler;
 
 public class JarFileHandler implements IFileHandler {
-  public class JarRunnable {
-    final Runnable runnable;
-    final Clock clock;
-    private final String filename;
-
-    public JarRunnable(String filename, Object object) {
-      runnable = (Runnable) object;
-      clock = ((Timed) object).clock();
-      this.filename = filename;
-    }
-
-    public String clockName() {
-      return runnable.getClass().getSimpleName();
-    }
-
-    public void run() {
-      runnable.run();
-    }
-
-    public String filename() {
-      return filename;
-    }
-  }
-
-  static protected final List<JarRunnable> jars = new ArrayList<JarRunnable>();
-
   public JarFileHandler() {
   }
 
@@ -72,11 +45,13 @@ public class JarFileHandler implements IFileHandler {
     if (!(mainObject instanceof Runnable))
       throw new RuntimeException(mainObject.getClass().getCanonicalName() + " must implement "
           + Runnable.class.getCanonicalName());
-    JarRunnable jarRunnable = new JarRunnable(filepath, mainObject);
-    jars.add(jarRunnable);
-    Zephyr.advertise(jarRunnable.clock, jarRunnable, jarRunnable.clockName());
-    ZephyrPlotting.createLogger(jarRunnable.clockName(), jarRunnable.clock).add(jarRunnable.runnable);
-    jarRunnable.run();
+    Clock clock = ((Timed) mainObject).clock();
+    clock.info().put("Class", mainObject.getClass().getSimpleName(),
+                              mainObject.getClass().getCanonicalName());
+    clock.info().putFile(filepath);
+    Zephyr.advertise(clock, mainObject);
+    ZephyrPlotting.createLogger(clock).add(mainObject);
+    ((Runnable) mainObject).run();
   }
 
   private String retrieveClassName(JarClassLoader jarLoader) {

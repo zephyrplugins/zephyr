@@ -9,17 +9,30 @@ public class Clock {
   private long timeStep = -1;
   private long lastUpdate = System.nanoTime();
   private long lastPeriod = 0;
+  private boolean terminating = false;
   private boolean terminated = false;
+  private final ClockInfo info;
 
   public Clock() {
-    this(true);
+    this("NoName", true);
   }
 
-  public Clock(boolean isSuspendable) {
+  public Clock(String label) {
+    this(label, true);
+  }
+
+  public Clock(String label, boolean isSuspendable) {
     this.isSuspendable = isSuspendable;
+    info = new ClockInfo(label);
   }
 
   public void tick() {
+    if (terminated)
+      throw new RuntimeException("Clock is terminated");
+    if (isTerminated()) {
+      terminated = true;
+      return;
+    }
     timeStep++;
     updateChrono();
     onTick.fire(this);
@@ -39,13 +52,15 @@ public class Clock {
     return lastPeriod;
   }
 
-  synchronized public void terminate() {
-    assert !terminated;
-    terminated = true;
-    notifyAll();
+  public void terminate() {
+    terminating = true;
   }
 
   public boolean isTerminated() {
-    return terminated;
+    return terminating;
+  }
+
+  public ClockInfo info() {
+    return info;
   }
 }

@@ -7,13 +7,13 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-import zephyr.plugin.core.internal.ZephyrPluginCommon;
+import zephyr.plugin.core.internal.ZephyrPluginCore;
 
 public class Synchronous extends AbstractHandler {
   @Override
   public Object execute(ExecutionEvent event) throws ExecutionException {
     Command command = event.getCommand();
-    ZephyrPluginCommon.setSynchronous(!HandlerUtil.toggleCommandState(command));
+    ZephyrPluginCore.setSynchronous(!HandlerUtil.toggleCommandState(command));
     return null;
   }
 }

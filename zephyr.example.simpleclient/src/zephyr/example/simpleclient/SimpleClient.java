@@ -16,7 +16,7 @@ public class SimpleClient implements ZephyrRunnable {
   /**
    * Clock instance used to synchronize with Zephyr
    */
-  private final Clock clock = new Clock();
+  private final Clock clock = new Clock("SimpleClient");
 
   public SimpleClient() {
   }

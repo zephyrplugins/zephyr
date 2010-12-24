@@ -23,12 +23,16 @@ public class ViewTaskScheduler {
   synchronized public void disposeView(SyncView view) {
     ViewTask task = viewTasks.remove(view);
     if (task != null)
-      task.dispose();
+      task.disable();
   }
 
   public void submitView(SyncView view) {
     ViewTask task = viewTasks.get(view);
     if (task != null)
       task.refreshIFN(defaultExecutor);
+  }
+
+  public void enable(SyncView view) {
+    task(view).enable();
   }
 }

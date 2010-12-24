@@ -1,35 +1,28 @@
 package zephyr;
 
-import java.util.HashSet;
+import java.util.Collection;
 import java.util.List;
-import java.util.Set;
-
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.activities.IActivityManager;
-import org.eclipse.ui.activities.IWorkbenchActivitySupport;
 
 import zephyr.plugin.core.RunnableFactory;
 import zephyr.plugin.core.api.synchronization.Clock;
-import zephyr.plugin.core.internal.ZephyrPluginCommon;
+import zephyr.plugin.core.internal.ZephyrPluginCore;
+import zephyr.plugin.core.internal.startup.StartupJobs;
 
 public class ZephyrCore {
-  static private boolean zephyrEnabled = false;
-
   static public void advertise(Clock clock, Object drawn) {
-    ZephyrPluginCommon.viewBinder().bindViews(clock, drawn, null);
+    ZephyrPluginCore.viewBinder().bindViews(clock, drawn, null);
   }
 
   static public void advertise(Clock clock, Object drawn, Object info) {
-    ZephyrPluginCommon.viewBinder().bindViews(clock, drawn, info);
+    ZephyrPluginCore.viewBinder().bindViews(clock, drawn, info);
   }
 
   public static void start(RunnableFactory runnableFactory) {
-    ZephyrPluginCommon.getDefault().startZephyrMain(runnableFactory);
+    ZephyrPluginCore.getDefault().startZephyrMain(runnableFactory);
   }
 
   public static void start(final Runnable runnable) {
-    ZephyrPluginCommon.getDefault().startZephyrMain(new RunnableFactory() {
+    ZephyrPluginCore.getDefault().startZephyrMain(new RunnableFactory() {
       @Override
       public Runnable createRunnable() {
         return runnable;
@@ -38,39 +31,32 @@ public class ZephyrCore {
   }
 
   public static void removeClock(Clock clock) {
-    ZephyrPluginCommon.viewBinder().removeClock(clock);
+    ZephyrPluginCore.viewBinder().removeClock(clock, false);
   }
 
   public static List<String> getArgsFiltered() {
-    return ZephyrPluginCommon.getArgsFiltered();
+    return ZephyrPluginCore.getArgsFiltered();
   }
 
   public static Class<? extends Object> loadClass(String className) throws ClassNotFoundException {
-    return ZephyrPluginCommon.getDefault().loadClass(className);
-  }
-
-  static public void enableZephyr() {
-    ZephyrCore.enableActivities("zephyr.plugin.core.activity");
-    zephyrEnabled = true;
+    return ZephyrPluginCore.getDefault().loadClass(className);
   }
 
   static public boolean zephyrEnabled() {
-    return zephyrEnabled;
+    return ZephyrPluginCore.isZephyrEnabled();
   }
 
-  public static void enableActivities(String... ids) {
-    final IWorkbenchActivitySupport activitySupport = PlatformUI.getWorkbench().getActivitySupport();
-    IActivityManager activityManager = activitySupport.getActivityManager();
-    Set<String> enabledActivities = new HashSet<String>();
-    for (String id : ids)
-      if (activityManager.getActivity(id).isDefined())
-        enabledActivities.add(id);
-    final Set<String> definedActivities = enabledActivities;
-    Display.getDefault().asyncExec(new Runnable() {
-      @Override
-      public void run() {
-        activitySupport.setEnabledActivityIds(definedActivities);
-      }
-    });
+  public static void start() {
+    ZephyrPluginCore.setupPartListener();
+    ZephyrPluginCore.enableZephyrActivity();
+    new StartupJobs().schedule();
+  }
+
+  public static void shutDown() {
+    Collection<Clock> clocks = ZephyrSync.getClocks();
+    for (Clock clock : clocks)
+      clock.terminate();
+    for (Clock clock : clocks)
+      ZephyrPluginCore.viewBinder().removeClock(clock, true);
   }
 }

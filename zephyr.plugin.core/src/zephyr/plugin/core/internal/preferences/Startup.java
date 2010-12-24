@@ -5,7 +5,7 @@ import org.eclipse.jface.preference.FileFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
-import zephyr.plugin.core.internal.ZephyrPluginCommon;
+import zephyr.plugin.core.internal.ZephyrPluginCore;
 
 public class Startup
     extends FieldEditorPreferencePage
@@ -13,7 +13,7 @@ public class Startup
 
   public Startup() {
     super(GRID);
-    setPreferenceStore(ZephyrPluginCommon.getDefault().getPreferenceStore());
+    setPreferenceStore(ZephyrPluginCore.getDefault().getPreferenceStore());
     setDescription("Zephyr startup preference page");
   }
 

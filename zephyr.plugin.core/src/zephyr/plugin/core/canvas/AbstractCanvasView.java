@@ -12,7 +12,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.part.ViewPart;
 
-import zephyr.ZephyrSync;
 import zephyr.plugin.core.views.SyncView;
 
 public abstract class AbstractCanvasView extends ViewPart implements SyncView {
@@ -76,11 +75,5 @@ public abstract class AbstractCanvasView extends ViewPart implements SyncView {
         parent.update();
       }
     });
-  }
-
-  @Override
-  public void dispose() {
-    ZephyrSync.disposeView(this);
-    super.dispose();
   }
 }

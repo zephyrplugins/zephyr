@@ -7,11 +7,11 @@ import org.eclipse.core.commands.ExecutionException;
 
 import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.control.Control;
-import zephyr.plugin.core.internal.ZephyrPluginCommon;
+import zephyr.plugin.core.internal.ZephyrPluginCore;
 import zephyr.plugin.core.utils.Helper;
 
 public abstract class ControlCommand extends AbstractHandler implements Listener<Control> {
-  protected final Control control = ZephyrPluginCommon.control();
+  protected final Control control = ZephyrPluginCore.control();
   protected final Command command;
   private final boolean actionWhenSuspended;
 
@@ -36,7 +36,7 @@ public abstract class ControlCommand extends AbstractHandler implements Listener
 
   @Override
   public boolean isEnabled() {
-    final boolean suspended = ZephyrPluginCommon.control().isSuspended();
+    final boolean suspended = ZephyrPluginCore.control().isSuspended();
     return actionWhenSuspended ? suspended : !suspended;
   }
 }

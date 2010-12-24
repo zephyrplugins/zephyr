@@ -61,7 +61,7 @@ public class FileView extends EnvironmentView implements Closeable, Restartable 
   }
 
   @Override
-  public boolean synchronize() {
+  public boolean synchronize(Clock clock) {
     if (logFile == null)
       return false;
     synchronize(logFile.currentLine());
@@ -105,11 +105,5 @@ public class FileView extends EnvironmentView implements Closeable, Restartable 
         DefaultHandler.handle(filepath);
       }
     });
-  }
-
-  @Override
-  public void dispose() {
-    close();
-    super.dispose();
   }
 }

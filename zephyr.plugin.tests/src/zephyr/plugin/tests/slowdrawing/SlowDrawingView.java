@@ -43,7 +43,7 @@ public class SlowDrawingView extends ViewPart implements TimedView, Painter {
     gc.fillRectangle(gc.getClipping());
     gc.setLineWidth(1);
     Chrono chrono = new Chrono();
-    while (chrono.getCurrentChrono() < 10) {
+    while (chrono.getCurrentChrono() < 5) {
       gc.setForeground(colors.color(gc, new RGB(random.nextInt(256), random.nextInt(256), random.nextInt(256))));
       Rectangle clipping = gc.getClipping();
       gc.drawPoint(random.nextInt(clipping.width), random.nextInt(clipping.width));
@@ -58,7 +58,7 @@ public class SlowDrawingView extends ViewPart implements TimedView, Painter {
   }
 
   @Override
-  public boolean synchronize() {
+  public boolean synchronize(Clock clock) {
     return true;
   }
 

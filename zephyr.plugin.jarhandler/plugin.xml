@@ -7,49 +7,5 @@
             class="zephyr.plugin.jarhandler.JarFileHandler">
       </client>
    </extension>
-   <extension
-         point="zephyr.viewprovider">
-      <client
-            class="zephyr.plugin.jarhandler.JarView$Provider">
-      </client>
-   </extension>
-   <extension
-         point="org.eclipse.ui.views">
-      <view
-            allowMultiple="false"
-            class="zephyr.plugin.jarhandler.JarView"
-            icon="icons/cog.png"
-            id="zephyr.plugin.jarhandler.jarview"
-            name="Loaded Jars"
-            restorable="true">
-      </view>
-   </extension>
-   <extension
-         point="org.eclipse.ui.menus">
-      <menuContribution
-            locationURI="menu:window?before=zephyr.plugin.core.separator.closeview">
-            <command
-                  commandId="zephyr.plugin.jarhandler.showjars"
-                  id="zephyr.plugin.jarhandler.menus.showjars"
-                  mnemonic="J">
-            </command>
-      </menuContribution>
-   </extension>
-   <extension
-         point="org.eclipse.ui.commands">
-      <command
-            defaultHandler="zephyr.plugin.jarhandler.ShowJarViewCommand"
-            description="Show the Loaded Jars view"
-            id="zephyr.plugin.jarhandler.showjars"
-            name="Show Loaded Jars...">
-      </command>
-   </extension>
-   <extension
-         point="org.eclipse.ui.commandImages">
-      <image
-            commandId="zephyr.plugin.jarhandler.showjars"
-            icon="icons/cog.png">
-      </image>
-   </extension>
 
 </plugin>

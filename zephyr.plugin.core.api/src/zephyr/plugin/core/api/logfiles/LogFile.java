@@ -24,7 +24,8 @@ public abstract class LogFile implements Labeled {
     reader = getReader(filepath);
     labels = readLabels();
     current = new double[labels.length];
-    clock = new Clock();
+    clock = new Clock(label());
+    clock.info().putFile(filepath);
   }
 
   @LabelProvider(ids = { "current" })
@@ -137,7 +138,11 @@ public abstract class LogFile implements Labeled {
 
   @Override
   public String label() {
-    return new File(filepath).getName();
+    String fileName = new File(filepath).getName();
+    int extensionIndex = fileName.indexOf(".");
+    if (extensionIndex == -1)
+      return fileName;
+    return fileName.substring(0, extensionIndex);
   }
 
   public Clock clock() {

@@ -20,7 +20,7 @@ public class Experiment implements ZephyrRunnable {
   /**
    * Instance used to synchronize the data with Zephyr
    */
-  final private Clock clock = new Clock();
+  final private Clock clock = new Clock("IDBDExample");
   final private Problem problem = new Problem(new Random(0), numTotalInputs, numRelevantInputs);
   final private LMS lms = new LMS(numTotalInputs, .1 / numTotalInputs);
   final private IDBD idbd = new IDBD(numTotalInputs, 0.01, .1 / numTotalInputs);

@@ -1,4 +1,4 @@
-package zephyr.plugin.jarhandler;
+package zephyr.plugin.core.internal.views;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -9,10 +9,9 @@ import org.eclipse.swt.widgets.Label;
 
 import zephyr.plugin.core.api.synchronization.Chrono;
 import zephyr.plugin.core.api.synchronization.Clock;
-import zephyr.plugin.jarhandler.JarFileHandler.JarRunnable;
+import zephyr.plugin.core.api.synchronization.ClockInfo;
 
-public class JarComposite {
-  static final double decay = 0.9;
+public class ClockComposite {
   private final Label timeStepLabel;
   private final Label periodLabel;
   private final Clock clock;
@@ -20,25 +19,33 @@ public class JarComposite {
   private long period = -1;
   private final Group group;
 
-  public JarComposite(Composite parent, JarRunnable jar) {
-    clock = jar.clock;
+  public ClockComposite(Composite parent, Clock clock) {
+    this.clock = clock;
     group = new Group(parent, SWT.NONE);
     GridLayout gridLayout = new GridLayout();
     gridLayout.numColumns = 2;
     group.setLayout(gridLayout);
-    constantTextLabel(group, "Filename: ", jar.filename());
-    constantTextLabel(group, "Class: ", jar.runnable.getClass().getCanonicalName());
-    timeStepLabel = updatedShortTextLabel(group, "Step: ");
-    periodLabel = updatedShortTextLabel(group, "Period: ");
+    ClockInfo clockInfo = clock.info();
+    constantTextLabel(group, "Name", clockInfo.label());
+    for (String caption : clockInfo.captions()) {
+      constantTextLabel(group, caption, clockInfo.value(caption), clockInfo.info(caption));
+    }
+    timeStepLabel = updatedShortTextLabel(group, "Step");
+    periodLabel = updatedShortTextLabel(group, "Period");
   }
 
   private void constantTextLabel(Composite parent, String stringLabel, String constantValue) {
+    constantTextLabel(parent, stringLabel, constantValue, "");
+  }
+
+  private void constantTextLabel(Composite parent, String stringLabel, String constantValue, String tooltip) {
     Label label = new Label(parent, SWT.NONE);
     label.setText(stringLabel);
     Label valueLabel = new Label(parent, SWT.NONE);
     GridData griddata = new GridData(SWT.RIGHT, SWT.UP, true, false);
     valueLabel.setLayoutData(griddata);
     valueLabel.setText(constantValue);
+    valueLabel.setToolTipText(tooltip);
   }
 
   private Label updatedShortTextLabel(Composite parent, String stringLabel) {
@@ -53,7 +60,7 @@ public class JarComposite {
 
   public void synchronize() {
     timeStep = clock.timeStep();
-    period = (long) (period == -1 ? clock.lastPeriodNano() : period * decay + clock.lastPeriodNano() * (1 - decay));
+    period = clock.lastPeriodNano();
   }
 
   private boolean adjustLabel(Label label, String text) {
@@ -72,5 +79,9 @@ public class JarComposite {
 
   public void setLayoutData(GridData griddata) {
     group.setLayoutData(griddata);
+  }
+
+  public void dispose() {
+    group.dispose();
   }
 }

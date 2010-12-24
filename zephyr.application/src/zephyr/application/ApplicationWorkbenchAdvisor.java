@@ -6,7 +6,6 @@ import org.eclipse.ui.application.WorkbenchAdvisor;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 
 import zephyr.ZephyrCore;
-import zephyr.ZephyrSync;
 
 public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 
@@ -28,19 +27,13 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
   }
 
   @Override
-  public void postStartup() {
-    ZephyrCore.enableZephyr();
+  public void preStartup() {
+    ZephyrCore.start();
   }
 
   @Override
   public boolean preShutdown() {
-    ZephyrSync.shutDown();
+    ZephyrCore.shutDown();
     return true;
-  }
-
-  @Override
-  public void postShutdown() {
-    if (!ZephyrSync.isSyncEmpty())
-      System.err.println("*** Post shutdown: viewBinder is not empty. Some views are still binded.");
   }
 }

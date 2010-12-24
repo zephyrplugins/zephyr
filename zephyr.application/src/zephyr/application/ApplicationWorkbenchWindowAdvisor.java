@@ -6,8 +6,6 @@ import org.eclipse.ui.application.IActionBarConfigurer;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 
-import zephyr.ZephyrSync;
-
 public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 
   public ApplicationWorkbenchWindowAdvisor(IWorkbenchWindowConfigurer configurer) {
@@ -27,10 +25,5 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
     configurer.setShowStatusLine(true);
     configurer.setShowProgressIndicator(false);
     configurer.setTitle("Zephyr");
-  }
-
-  @Override
-  public void postWindowOpen() {
-    ZephyrSync.start();
   }
 }

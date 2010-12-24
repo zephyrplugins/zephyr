@@ -9,7 +9,7 @@ import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.signals.Signal;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.internal.SavedSettings;
-import zephyr.plugin.core.internal.ZephyrPluginCommon;
+import zephyr.plugin.core.internal.ZephyrPluginCore;
 import zephyr.plugin.core.utils.Helper;
 
 public class Control implements Listener<Clock> {
@@ -20,7 +20,7 @@ public class Control implements Listener<Clock> {
   }
 
   public void connectSuspendOnJobStarting() {
-    ZephyrPluginCommon.viewBinder().onClockAdded.connect(new Listener<Clock>() {
+    ZephyrPluginCore.viewBinder().onClockAdded.connect(new Listener<Clock>() {
       @Override
       public void listen(Clock clock) {
         if (!Helper.booleanState(SavedSettings.STARTSUSPENDED, true))
@@ -44,7 +44,7 @@ public class Control implements Listener<Clock> {
 
   public void suspend() {
     assert !isSuspended();
-    for (Clock clock : ZephyrPluginCommon.viewBinder().getClocks())
+    for (Clock clock : ZephyrPluginCore.viewBinder().getClocks())
       suspendClock(clock);
     onModeChange.fire(this);
   }

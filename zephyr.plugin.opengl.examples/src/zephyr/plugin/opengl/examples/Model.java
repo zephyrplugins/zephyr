@@ -8,13 +8,13 @@ import zephyr.plugin.core.api.synchronization.Timed;
 
 public class Model implements Runnable, Timed {
 
-  final Clock clock = new Clock();
+  final Clock clock = new Clock("Model");
   @Monitor
   float insideRadius;
 
   public Model() {
     ZephyrCore.advertise(clock, this);
-    ZephyrPlotting.createLogger("Model", clock).add(this);
+    ZephyrPlotting.createLogger(clock).add(this);
   }
 
   @Override

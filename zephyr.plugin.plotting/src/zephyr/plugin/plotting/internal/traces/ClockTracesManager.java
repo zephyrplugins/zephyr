@@ -30,6 +30,7 @@ public class ClockTracesManager {
   }
 
   synchronized public DataMonitor addClock(String clockLabel, Clock clock) {
+    ZephyrSync.declareClock(clock);
     ClockTraces clockTraces = clocks.get(clock);
     if (clockTraces != null)
       return clockTraces;

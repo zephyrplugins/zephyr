@@ -4,7 +4,7 @@ import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
-import zephyr.plugin.core.internal.ZephyrPluginCommon;
+import zephyr.plugin.core.internal.ZephyrPluginCore;
 
 public class ZephyrRoot
     extends FieldEditorPreferencePage
@@ -12,7 +12,7 @@ public class ZephyrRoot
 
   public ZephyrRoot() {
     super(GRID);
-    setPreferenceStore(ZephyrPluginCommon.getDefault().getPreferenceStore());
+    setPreferenceStore(ZephyrPluginCore.getDefault().getPreferenceStore());
     setDescription("");
   }
 

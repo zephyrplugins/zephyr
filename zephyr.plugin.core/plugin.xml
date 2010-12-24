@@ -58,6 +58,11 @@
             id="zephyr.plugin.core.extractzephyrjar"
             name="Extract Zephyr Jar">
       </command>
+      <command
+            defaultHandler="zephyr.plugin.core.internal.commands.ShowClockView"
+            id="zephyr.plugin.core.showclockview"
+            name="Show Clock View">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -177,6 +182,12 @@
       </menuContribution>
       <menuContribution
             locationURI="menu:window">
+         <command
+               commandId="zephyr.plugin.core.showclockview"
+               label="Show Clocks"
+               mnemonic="k"
+               style="push">
+         </command>
          <separator
                name="zephyr.plugin.core.separator.closeview"
                visible="true">
@@ -251,6 +262,12 @@
             schemeId="zephyr.plugin.core.scheme"
             sequence="M1+W">
       </key>
+      <key
+            commandId="zephyr.plugin.core.showclockview"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="zephyr.plugin.core.scheme"
+            sequence="M1+K">
+      </key>
    </extension>
    <extension
          point="zephyr.startup">
@@ -266,6 +283,10 @@
       <image
             commandId="zephyr.plugin.core.commands.nsteps"
             icon="icons/action_step_clock.png">
+      </image>
+      <image
+            commandId="zephyr.plugin.core.showclockview"
+            icon="icons/view_clocks.png">
       </image>
    </extension>
    <extension
@@ -293,5 +314,22 @@
       <startup
             class="zephyr.plugin.core.internal.Startup">
       </startup>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            allowMultiple="false"
+            class="zephyr.plugin.core.internal.views.ClocksView"
+            icon="icons/view_clocks.png"
+            id="zephyr.plugin.core.clocksview"
+            name="Clocks"
+            restorable="true">
+      </view>
+   </extension>
+   <extension
+         point="zephyr.viewprovider">
+      <client
+            class="zephyr.plugin.core.internal.views.ClocksView$Provider">
+      </client>
    </extension>
 </plugin>

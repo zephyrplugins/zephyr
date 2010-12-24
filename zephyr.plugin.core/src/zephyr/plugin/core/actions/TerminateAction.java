@@ -4,7 +4,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 
 import zephyr.plugin.core.api.synchronization.Closeable;
-import zephyr.plugin.core.internal.ZephyrPluginCommon;
+import zephyr.plugin.core.internal.ZephyrPluginCore;
 import zephyr.plugin.core.utils.Helper;
 
 public class TerminateAction extends Action {
@@ -13,7 +13,7 @@ public class TerminateAction extends Action {
   public TerminateAction(Closeable view) {
     super("Terminate", IAction.AS_PUSH_BUTTON);
     this.view = view;
-    setImageDescriptor(Helper.getImageDescriptor(ZephyrPluginCommon.PLUGIN_ID, "icons/action_terminate.gif"));
+    setImageDescriptor(Helper.getImageDescriptor(ZephyrPluginCore.PLUGIN_ID, "icons/action_terminate.gif"));
   }
 
   @Override

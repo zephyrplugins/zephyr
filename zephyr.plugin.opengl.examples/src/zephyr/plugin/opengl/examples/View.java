@@ -4,7 +4,6 @@ import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GL2GL3;
 
-import zephyr.ZephyrSync;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.helpers.ClassViewProvider;
 import zephyr.plugin.core.views.TimedView;
@@ -28,7 +27,7 @@ public class View extends OpenGLView implements TimedView {
   private float insideRadius;
 
   @Override
-  public boolean synchronize() {
+  public boolean synchronize(Clock clock) {
     time = model.clock.timeStep();
     insideRadius = model.insideRadius;
     return true;
@@ -83,11 +82,5 @@ public class View extends OpenGLView implements TimedView {
   @Override
   public boolean canAddTimed() {
     return model == null;
-  }
-
-  @Override
-  public void dispose() {
-    ZephyrSync.disposeView(this);
-    super.dispose();
   }
 }
