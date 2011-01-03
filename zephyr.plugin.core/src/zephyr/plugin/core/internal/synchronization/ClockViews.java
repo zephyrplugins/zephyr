@@ -54,7 +54,9 @@ public class ClockViews implements Listener<ViewTaskExecutor> {
   private void waitForCompletion() {
     while (!allTaskDone())
       try {
-        wait();
+        synchronized (this) {
+          wait();
+        }
       } catch (InterruptedException e) {
         e.printStackTrace();
       }

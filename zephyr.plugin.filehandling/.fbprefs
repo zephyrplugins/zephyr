@@ -1,5 +1,5 @@
 #FindBugs User Preferences
-#Sun Jan 02 19:43:29 CET 2011
+#Mon Jan 03 20:38:45 CET 2011
 detectorAppendingToAnObjectOutputStream=AppendingToAnObjectOutputStream|true
 detectorBCPMethodReturnCheck=BCPMethodReturnCheck|false
 detectorBadAppletConstructor=BadAppletConstructor|false
@@ -71,7 +71,7 @@ detectorFindSpinLoop=FindSpinLoop|true
 detectorFindSqlInjection=FindSqlInjection|true
 detectorFindTwoLockWait=FindTwoLockWait|true
 detectorFindUncalledPrivateMethods=FindUncalledPrivateMethods|true
-detectorFindUnconditionalWait=FindUnconditionalWait|true
+detectorFindUnconditionalWait=FindUnconditionalWait|false
 detectorFindUninitializedGet=FindUninitializedGet|true
 detectorFindUnrelatedTypesInGenericContainer=FindUnrelatedTypesInGenericContainer|true
 detectorFindUnreleasedLock=FindUnreleasedLock|true
