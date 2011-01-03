@@ -28,14 +28,15 @@ public class TracesSelection {
     }
   };
 
-  private boolean forceEnabled = ClockTracesManager.manager().forceEnabled;
   private final Map<Trace, TraceData> enabledTrace = new ConcurrentHashMap<Trace, TraceData>();
   private final ClockTraces clockTraces;
+  private boolean forceEnabled;
 
   public TracesSelection(ClockTraces clockTraces) {
     this.clockTraces = clockTraces;
     clockTraces.onTraceAdded.connect(traceAddedListener);
     clockTraces.onTraceRemoved.connect(traceRemovedListener);
+    setForceEnabled(ClockTracesManager.manager().forceEnabled());
   }
 
   private TraceData enableTrace(Trace trace) {

@@ -1,9 +1,8 @@
 package zephyr.plugin.core.internal.synchronization;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-
-import org.eclipse.swt.widgets.Display;
 
 import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.synchronization.Clock;
@@ -21,7 +20,7 @@ public class ClockViews implements Listener<ViewTaskExecutor> {
     }
   };
   private final ViewTaskExecutor executor = new ViewTaskExecutor(2);
-  private final List<ViewTask> viewTasks = new ArrayList<ViewTask>();
+  private final List<ViewTask> viewTasks = Collections.synchronizedList(new ArrayList<ViewTask>());
   private final Clock clock;
   private Thread runnableThread = null;
   private boolean synchronizationRequired = true;
@@ -32,7 +31,7 @@ public class ClockViews implements Listener<ViewTaskExecutor> {
     ViewTaskScheduler.onTaskExecuted.connect(this);
   }
 
-  synchronized protected void synchronize() {
+  protected void synchronize() {
     synchronizationRequired = true;
     runnableThread = Thread.currentThread();
     refreshViewsIFN();
@@ -44,7 +43,11 @@ public class ClockViews implements Listener<ViewTaskExecutor> {
     if (!allTaskDone())
       return;
     synchronizationRequired = false;
-    for (ViewTask task : viewTasks)
+    List<ViewTask> tasks;
+    synchronized (viewTasks) {
+      tasks = new ArrayList<ViewTask>(viewTasks);
+    }
+    for (ViewTask task : tasks)
       task.refreshIFN(executor, clock, true);
   }
 
@@ -64,11 +67,11 @@ public class ClockViews implements Listener<ViewTaskExecutor> {
     return true;
   }
 
-  synchronized public void addView(SyncView view) {
+  public void addView(SyncView view) {
     viewTasks.add(ZephyrPluginCore.viewScheduler().task(view));
   }
 
-  synchronized public void removeView(SyncView view) {
+  public void removeView(SyncView view) {
     viewTasks.remove(ZephyrPluginCore.viewScheduler().task(view));
   }
 
@@ -76,18 +79,17 @@ public class ClockViews implements Listener<ViewTaskExecutor> {
     return viewTasks.isEmpty();
   }
 
-  synchronized public void dispose(boolean waitFor) {
+  public void dispose() {
     clock.onTick.disconnect(tickListener);
     executor.shutdown();
-    if (waitFor)
-      while (!allTaskDone())
-        Display.getCurrent().readAndDispatch();
     viewTasks.clear();
   }
 
   @Override
-  synchronized public void listen(ViewTaskExecutor eventInfo) {
-    notify();
+  public void listen(ViewTaskExecutor eventInfo) {
+    synchronized (this) {
+      notify();
+    }
     if ((ZephyrPluginCore.control().isSuspended(clock) || runnableThread == null || !runnableThread.isAlive())
         && synchronizationRequired && allTaskDone())
       refreshViewsIFN();

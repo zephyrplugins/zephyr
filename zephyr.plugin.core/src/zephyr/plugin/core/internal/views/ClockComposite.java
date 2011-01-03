@@ -1,8 +1,11 @@
 package zephyr.plugin.core.internal.views;
 
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
@@ -10,6 +13,8 @@ import org.eclipse.swt.widgets.Label;
 import zephyr.plugin.core.api.synchronization.Chrono;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.api.synchronization.ClockInfo;
+import zephyr.plugin.core.internal.ZephyrPluginCore;
+import zephyr.plugin.core.utils.Helper;
 
 public class ClockComposite {
   private final Label timeStepLabel;
@@ -26,7 +31,7 @@ public class ClockComposite {
     gridLayout.numColumns = 2;
     group.setLayout(gridLayout);
     ClockInfo clockInfo = clock.info();
-    constantTextLabel(group, "Name", clockInfo.label());
+    createLabelLine(group);
     for (String caption : clockInfo.captions()) {
       constantTextLabel(group, caption, clockInfo.value(caption), clockInfo.info(caption));
     }
@@ -34,8 +39,25 @@ public class ClockComposite {
     periodLabel = updatedShortTextLabel(group, "Period");
   }
 
-  private void constantTextLabel(Composite parent, String stringLabel, String constantValue) {
-    constantTextLabel(parent, stringLabel, constantValue, "");
+  private void createLabelLine(Composite parent) {
+    Label label = new Label(parent, SWT.NONE);
+    label.setText(clock.info().label());
+    Composite buttons = new Composite(parent, SWT.NONE);
+    GridData griddata = new GridData(SWT.RIGHT, SWT.UP, true, false);
+    buttons.setLayoutData(griddata);
+    RowLayout buttonsLayout = new RowLayout();
+    buttons.setLayout(buttonsLayout);
+    buttonsLayout.marginTop = 0;
+    buttonsLayout.marginBottom = 0;
+    // addButton(buttons, "icons/action_suspend.gif");
+    // addButton(buttons, "icons/action_restart.gif");
+    addButton(buttons, "icons/action_terminate.gif");
+  }
+
+  protected void addButton(Composite parent, String iconPath) {
+    Button terminateButton = new Button(parent, SWT.FLAT);
+    ImageDescriptor imageDescriptor = Helper.getImageDescriptor(ZephyrPluginCore.PLUGIN_ID, iconPath);
+    terminateButton.setImage(imageDescriptor.createImage());
   }
 
   private void constantTextLabel(Composite parent, String stringLabel, String constantValue, String tooltip) {

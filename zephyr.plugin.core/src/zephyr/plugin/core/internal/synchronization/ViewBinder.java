@@ -101,11 +101,11 @@ public class ViewBinder {
     return clockViews;
   }
 
-  public void removeClock(Clock clock, boolean waitFor) {
+  public void removeClock(Clock clock) {
     ClockViews clockViews = clockToView.remove(clock);
     if (clockViews != null) {
       onClockRemoved.fire(clock);
-      clockViews.dispose(waitFor);
+      clockViews.dispose();
     }
   }
 

@@ -73,9 +73,18 @@ public abstract class LogFile implements Labeled {
     }
   }
 
-  private String readLine() {
+  private String readDataLine() {
     if (reader == null)
       return null;
+    String line = readLine();
+    if (line == null || line.startsWith("#"))
+      return null;
+    if (line.isEmpty())
+      return null;
+    return line;
+  }
+
+  private String readLine() {
     String line = null;
     synchronized (reader) {
       try {
@@ -84,17 +93,13 @@ public abstract class LogFile implements Labeled {
         e.printStackTrace();
       }
     }
-    if (line == null || line.startsWith("#"))
-      return null;
-    if (line.isEmpty())
-      return null;
     return line;
   }
 
   public void step() {
     String line = null;
     while (!eof() && line == null)
-      line = readLine();
+      line = readDataLine();
     if (line != null)
       lineToData(line);
     clock.tick();
@@ -113,9 +118,11 @@ public abstract class LogFile implements Labeled {
   public static LogFile load(String filename) {
     try {
       if (filename.endsWith(".gz"))
-        return new ZippedLogFile(filename);
+        return new GZippedLogFile(filename);
       if (filename.endsWith(".bz2"))
         return new BZippedLogFile(filename);
+      if (filename.endsWith(".zip"))
+        return new ZippedLogFile(filename);
       return new TextLogFile(filename);
     } catch (IOException e) {
       e.printStackTrace();

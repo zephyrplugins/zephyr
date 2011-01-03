@@ -1,5 +1,5 @@
 #FindBugs User Preferences
-#Thu Dec 23 18:17:33 MST 2010
+#Sun Jan 02 19:43:29 CET 2011
 detectorAppendingToAnObjectOutputStream=AppendingToAnObjectOutputStream|true
 detectorBCPMethodReturnCheck=BCPMethodReturnCheck|false
 detectorBadAppletConstructor=BadAppletConstructor|false
@@ -35,7 +35,7 @@ detectorEqualsOperandShouldHaveClassCompatibleWithThis=EqualsOperandShouldHaveCl
 detectorFieldItemSummary=FieldItemSummary|true
 detectorFinalizerNullsFields=FinalizerNullsFields|true
 detectorFindBadCast=FindBadCast|false
-detectorFindBadCast2=FindBadCast2|true
+detectorFindBadCast2=FindBadCast2|false
 detectorFindBadEqualsImplementation=FindBadEqualsImplementation|false
 detectorFindBadForLoop=FindBadForLoop|true
 detectorFindBugsSummaryStats=FindBugsSummaryStats|true
@@ -97,7 +97,7 @@ detectorLazyInit=LazyInit|true
 detectorLoadOfKnownNullValue=LoadOfKnownNullValue|true
 detectorLockedFields=LockedFields|false
 detectorLostLoggerDueToWeakReference=LostLoggerDueToWeakReference|true
-detectorMethodReturnCheck=MethodReturnCheck|true
+detectorMethodReturnCheck=MethodReturnCheck|false
 detectorMethods=Methods|true
 detectorMultithreadedInstanceAccess=MultithreadedInstanceAccess|true
 detectorMutableLock=MutableLock|true
@@ -132,7 +132,7 @@ detectorStaticCalendarDetector=StaticCalendarDetector|true
 detectorStringConcatenation=StringConcatenation|true
 detectorSuperfluousInstanceOf=SuperfluousInstanceOf|true
 detectorSuspiciousThreadInterrupted=SuspiciousThreadInterrupted|true
-detectorSwitchFallthrough=SwitchFallthrough|true
+detectorSwitchFallthrough=SwitchFallthrough|false
 detectorSynchronizationOnSharedBuiltinConstant=SynchronizationOnSharedBuiltinConstant|true
 detectorSynchronizeAndNullCheckField=SynchronizeAndNullCheckField|true
 detectorSynchronizeOnClassLiteralNotGetClass=SynchronizeOnClassLiteralNotGetClass|true
@@ -151,7 +151,7 @@ detectorUseObjectEquals=UseObjectEquals|false
 detectorUselessSubclassMethod=UselessSubclassMethod|false
 detectorVarArgsProblems=VarArgsProblems|true
 detectorVolatileUsage=VolatileUsage|true
-detectorWaitInLoop=WaitInLoop|true
+detectorWaitInLoop=WaitInLoop|false
 detectorWrongMapIterator=WrongMapIterator|true
 detectorXMLFactoryBypass=XMLFactoryBypass|true
 detector_threshold=2

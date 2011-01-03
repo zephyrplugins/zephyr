@@ -31,7 +31,7 @@ public class ZephyrCore {
   }
 
   public static void removeClock(Clock clock) {
-    ZephyrPluginCore.viewBinder().removeClock(clock, false);
+    ZephyrPluginCore.viewBinder().removeClock(clock);
   }
 
   public static List<String> getArgsFiltered() {
@@ -57,6 +57,6 @@ public class ZephyrCore {
     for (Clock clock : clocks)
       clock.terminate();
     for (Clock clock : clocks)
-      ZephyrPluginCore.viewBinder().removeClock(clock, true);
+      ZephyrPluginCore.viewBinder().removeClock(clock);
   }
 }

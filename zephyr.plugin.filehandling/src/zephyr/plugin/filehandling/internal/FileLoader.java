@@ -31,7 +31,7 @@ public class FileLoader {
   private FileLoader() {
   }
 
-  static private void loadFileHandlersIFN() {
+  static synchronized private void loadFileHandlersIFN() {
     if (fileHandlers != null)
       return;
     IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(IFileHandler.ID);

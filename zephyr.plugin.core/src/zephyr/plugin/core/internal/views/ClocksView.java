@@ -1,6 +1,7 @@
 package zephyr.plugin.core.internal.views;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -112,11 +113,16 @@ public class ClocksView extends ViewPart implements SyncView {
 
   @Override
   public boolean synchronize(Clock clock) {
-    if (clock != null) {
-      composites.get(clock).synchronize();
+    ClockComposite clockComposites = composites.get(clock);
+    if (clockComposites != null) {
+      clockComposites.synchronize();
       return true;
     }
-    for (ClockComposite composite : composites.values())
+    Collection<ClockComposite> values;
+    synchronized (composites) {
+      values = new ArrayList<ClockComposite>(composites.values());
+    }
+    for (ClockComposite composite : values)
       composite.synchronize();
     return true;
   }
