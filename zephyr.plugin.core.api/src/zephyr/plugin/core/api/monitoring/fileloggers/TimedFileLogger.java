@@ -1,10 +1,10 @@
 package zephyr.plugin.core.api.monitoring.fileloggers;
 
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.StringWriter;
 
 public class TimedFileLogger extends FileLogger {
-  public TimedFileLogger(String filepath) throws FileNotFoundException {
+  public TimedFileLogger(String filepath) throws IOException {
     this(filepath, false);
   }
 
@@ -12,8 +12,12 @@ public class TimedFileLogger extends FileLogger {
     super(writer, false);
   }
 
-  public TimedFileLogger(String filepath, boolean temporaryFile) throws FileNotFoundException {
-    super(filepath, true, temporaryFile);
+  public TimedFileLogger(String filepath, boolean temporaryFile) throws IOException {
+    this(filepath, temporaryFile, false);
+  }
+
+  public TimedFileLogger(String filepath, boolean temporaryFile, boolean compress) throws IOException {
+    super(filepath, true, temporaryFile, compress);
   }
 
   public void update() {

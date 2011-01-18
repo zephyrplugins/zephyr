@@ -1,25 +1,33 @@
 package zephyr.plugin.core.api.monitoring.fileloggers;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.Writer;
+import java.util.zip.GZIPOutputStream;
 
 public class AbstractFileLogger {
-
   public static final String TEMP = ".tmp";
   public final String filepath;
   protected PrintWriter file;
   protected final boolean temporaryFile;
 
-  public AbstractFileLogger(String filepath, boolean temporaryFile) throws FileNotFoundException {
-    this.filepath = filepath;
+  public AbstractFileLogger(String filepath, boolean temporaryFile, boolean compress) throws IOException {
+    this.filepath = compress ? filepath + ".gz" : filepath;
     checkFolders();
     this.temporaryFile = temporaryFile;
-    String fileCreatedPath = temporaryFile ? filepath + TEMP : filepath;
-    FileOutputStream newFile = new FileOutputStream(fileCreatedPath);
-    file = new PrintWriter(newFile);
+    String fileCreatedPath = temporaryFile ? this.filepath + TEMP : this.filepath;
+    OutputStream outputStream = createOutputStream(fileCreatedPath, compress);
+    file = new PrintWriter(outputStream, true);
+  }
+
+  protected OutputStream createOutputStream(String fileCreatedPath, boolean compress) throws IOException {
+    OutputStream fileOutputStream = new FileOutputStream(fileCreatedPath);
+    if (!compress)
+      return fileOutputStream;
+    return new GZIPOutputStream(fileOutputStream);
   }
 
   private void checkFolders() {

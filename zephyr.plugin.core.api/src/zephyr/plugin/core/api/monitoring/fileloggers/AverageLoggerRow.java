@@ -1,6 +1,6 @@
 package zephyr.plugin.core.api.monitoring.fileloggers;
 
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 
 
@@ -8,7 +8,7 @@ public class AverageLoggerRow extends LoggerRow {
   private final int stepsToAvg;
   private final ArrayList<Double> arrayList;
 
-  public AverageLoggerRow(String filepath, int stepsToAvg) throws FileNotFoundException {
+  public AverageLoggerRow(String filepath, int stepsToAvg) throws IOException {
     super(filepath);
     this.stepsToAvg = stepsToAvg;
     arrayList = new ArrayList<Double>(stepsToAvg);

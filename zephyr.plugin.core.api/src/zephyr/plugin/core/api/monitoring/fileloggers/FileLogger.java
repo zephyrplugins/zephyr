@@ -1,6 +1,6 @@
 package zephyr.plugin.core.api.monitoring.fileloggers;
 
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,8 +22,8 @@ public class FileLogger extends AbstractFileLogger implements DataMonitor {
   private final boolean timeStamps;
   private boolean legendWrote = false;
 
-  public FileLogger(String filepath) throws FileNotFoundException {
-    this(filepath, false, false);
+  public FileLogger(String filepath) throws IOException {
+    this(filepath, false, false, false);
   }
 
   public FileLogger(StringWriter writer) {
@@ -36,8 +36,12 @@ public class FileLogger extends AbstractFileLogger implements DataMonitor {
     init();
   }
 
-  public FileLogger(String filepath, boolean timeStamps, boolean temporaryFile) throws FileNotFoundException {
-    super(filepath, temporaryFile);
+  public FileLogger(String filepath, boolean timeStamps, boolean temporaryFile) throws IOException {
+    this(filepath, timeStamps, temporaryFile, false);
+  }
+
+  public FileLogger(String filepath, boolean timeStamps, boolean temporaryFile, boolean compress) throws IOException {
+    super(filepath, temporaryFile, compress);
     this.timeStamps = timeStamps;
     init();
   }

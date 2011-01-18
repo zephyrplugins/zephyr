@@ -1,15 +1,19 @@
 package zephyr.plugin.core.api.monitoring.fileloggers;
 
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.Writer;
 
 public class LoggerRow extends AbstractFileLogger {
-  public LoggerRow(String filepath) throws FileNotFoundException {
+  public LoggerRow(String filepath) throws IOException {
     this(filepath, false);
   }
 
-  public LoggerRow(String filepath, boolean temporaryFile) throws FileNotFoundException {
-    super(filepath, temporaryFile);
+  public LoggerRow(String filepath, boolean temporaryFile) throws IOException {
+    this(filepath, temporaryFile, false);
+  }
+
+  public LoggerRow(String filepath, boolean temporaryFile, boolean compress) throws IOException {
+    super(filepath, temporaryFile, compress);
   }
 
   public LoggerRow(Writer writer) {
@@ -31,6 +35,5 @@ public class LoggerRow extends AbstractFileLogger {
       line.append(data + " ");
     }
     file.println(line.substring(0, line.length() - 1).toString());
-    file.flush();
   }
 }

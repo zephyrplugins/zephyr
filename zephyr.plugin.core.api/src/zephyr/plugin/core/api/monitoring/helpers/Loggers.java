@@ -1,6 +1,6 @@
 package zephyr.plugin.core.api.monitoring.helpers;
 
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.List;
 
@@ -86,7 +86,7 @@ public class Loggers {
   static public TimedFileLogger newLoggerWithTime(String filepath) {
     try {
       return new TimedFileLogger(filepath);
-    } catch (FileNotFoundException e) {
+    } catch (IOException e) {
       e.printStackTrace();
     }
     return null;
@@ -95,7 +95,7 @@ public class Loggers {
   public static FileLogger newLogger(String filepath) {
     try {
       return new FileLogger(filepath);
-    } catch (FileNotFoundException e) {
+    } catch (IOException e) {
       e.printStackTrace();
     }
     return null;
@@ -104,7 +104,7 @@ public class Loggers {
   public static LoggerRow newLoggerRow(String filepath) {
     try {
       return new LoggerRow(filepath);
-    } catch (FileNotFoundException e) {
+    } catch (IOException e) {
       e.printStackTrace();
     }
     return null;
