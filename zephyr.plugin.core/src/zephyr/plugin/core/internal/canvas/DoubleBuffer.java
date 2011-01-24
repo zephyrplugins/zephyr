@@ -78,6 +78,8 @@ public class DoubleBuffer implements ControlListener {
   }
 
   synchronized public void swap() {
+    if (disposed)
+      return;
     acquireDrawingSemaphore();
     Image buffer = foregroundImage;
     foregroundImage = backgroundImage;

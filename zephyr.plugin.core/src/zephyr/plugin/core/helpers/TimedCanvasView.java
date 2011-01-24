@@ -16,13 +16,11 @@ public abstract class TimedCanvasView extends AbstractCanvasView implements Time
   }
 
   @Override
-  public void addTimed(Clock clock, Object drawn, Object info) {
+  public boolean addTimed(Clock clock, Object drawn, Object info) {
+    if (this.drawn != null)
+      return false;
     this.drawn = drawn;
-  }
-
-  @Override
-  public boolean canAddTimed() {
-    return drawn == null;
+    return true;
   }
 
   abstract protected void paintTimed(GC gc);

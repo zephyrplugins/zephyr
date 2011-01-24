@@ -101,6 +101,7 @@ public class BackgroundCanvas implements PainterMonitor {
   }
 
   public void dispose() {
+    canvas.dispose();
     paintingImage.dispose();
   }
 

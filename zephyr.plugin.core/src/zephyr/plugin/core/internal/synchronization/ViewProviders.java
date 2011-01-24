@@ -28,13 +28,13 @@ public class ViewProviders {
     return providers;
   }
 
-  protected List<String> findViews(Object advertised) {
+  synchronized protected List<ViewProvider> findViews(Object advertised) {
     if (providers == null)
       providers = createProviders();
-    List<String> viewIDs = new ArrayList<String>();
+    List<ViewProvider> viewProviders = new ArrayList<ViewProvider>();
     for (ViewProvider provider : providers)
       if (provider.canViewDraw(advertised))
-        viewIDs.add(provider.viewID());
-    return viewIDs;
+        viewProviders.add(provider);
+    return viewProviders;
   }
 }

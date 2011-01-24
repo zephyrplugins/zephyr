@@ -19,6 +19,8 @@ import org.eclipse.ui.part.ViewPart;
 import zephyr.ZephyrSync;
 import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.synchronization.Clock;
+import zephyr.plugin.core.internal.ZephyrPluginCore;
+import zephyr.plugin.core.internal.preferences.PreferenceKeys;
 import zephyr.plugin.core.views.SyncView;
 import zephyr.plugin.core.views.ViewProvider;
 
@@ -34,6 +36,11 @@ public class ClocksView extends ViewPart implements SyncView {
     @Override
     public boolean canViewDraw(Object drawn) {
       return true;
+    }
+
+    @Override
+    public boolean allowNewView() {
+      return ZephyrPluginCore.getDefault().getPreferenceStore().getBoolean(PreferenceKeys.OpenClockViewKey);
     }
   }
 
@@ -159,6 +166,8 @@ public class ClocksView extends ViewPart implements SyncView {
       clockComposite.dispose();
       ZephyrSync.unbind(clock, this);
     }
+    if (parent != null)
+      parent.layout(true, true);
   }
 
   @Override

@@ -21,4 +21,9 @@ public class ClassViewProvider implements ViewProvider {
   public boolean canViewDraw(Object drawn) {
     return drawnClass.isInstance(drawn);
   }
+
+  @Override
+  public boolean allowNewView() {
+    return true;
+  }
 }

@@ -296,12 +296,6 @@
             id="zephyr.plugin.core.preferences.zephyr.root"
             name="Zephyr">
       </page>
-      <page
-            category="zephyr.plugin.core.preferences.zephyr.root"
-            class="zephyr.plugin.core.internal.preferences.Startup"
-            id="zephyr.plugin.core.preferences.zephyr.startup"
-            name="Startup">
-      </page>
    </extension>
    <extension
          point="org.eclipse.core.runtime.preferences">

@@ -75,12 +75,15 @@ public class View extends OpenGLView implements TimedView {
   }
 
   @Override
-  public void addTimed(Clock clock, Object drawn, Object info) {
+  public boolean addTimed(Clock clock, Object drawn, Object info) {
+    if (model != null)
+      return false;
     model = (Model) drawn;
+    return true;
   }
 
   @Override
-  public boolean canAddTimed() {
-    return model == null;
+  public void removeTimed(Clock clock) {
+    dispose();
   }
 }

@@ -8,7 +8,7 @@ import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.views.SyncView;
 
 public class ViewTask implements Runnable {
-  final private SyncView view;
+  final SyncView view;
   private Future<?> future;
   private boolean enabled;
   private boolean isDirty = false;
@@ -49,7 +49,7 @@ public class ViewTask implements Runnable {
         hasSynchronized = view.synchronize(clock);
       }
     isDirty = isDirty || hasSynchronized;
-    if (isDirty)
+    if (isDirty && !executor.isShutdown())
       future = executor.submit(this);
   }
 
@@ -65,5 +65,9 @@ public class ViewTask implements Runnable {
     enabled = false;
     while (!isDone())
       Display.getCurrent().readAndDispatch();
+  }
+
+  public SyncView view() {
+    return view;
   }
 }

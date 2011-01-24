@@ -7,7 +7,7 @@ import zephyr.plugin.core.api.signals.Signal;
 import zephyr.plugin.core.views.SyncView;
 
 public class ViewTaskScheduler {
-  private final ViewTaskExecutor defaultExecutor = new ViewTaskExecutor(1);
+  protected final ViewTaskExecutor defaultExecutor = new ViewTaskExecutor(1);
   private final Map<SyncView, ViewTask> viewTasks = new HashMap<SyncView, ViewTask>();
   public static final Signal<ViewTaskExecutor> onTaskExecuted = new Signal<ViewTaskExecutor>();
 
@@ -34,5 +34,9 @@ public class ViewTaskScheduler {
 
   public void enable(SyncView view) {
     task(view).enable();
+  }
+
+  public void dispose() {
+    defaultExecutor.shutdownNow();
   }
 }

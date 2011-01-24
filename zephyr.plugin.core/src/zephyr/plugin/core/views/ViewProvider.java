@@ -4,4 +4,6 @@ public interface ViewProvider {
   String viewID();
 
   boolean canViewDraw(Object drawn);
+
+  boolean allowNewView();
 }

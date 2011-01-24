@@ -42,17 +42,18 @@ public class PlotRandomData2D extends AbstractCanvasView implements TimedView {
   }
 
   @Override
-  public void addTimed(Clock clock, Object drawn, Object info) {
+  public boolean addTimed(Clock clock, Object drawn, Object info) {
+    if (this.drawn != null)
+      return false;
     this.drawn = (RandomData2D) drawn;
-    if (drawn == null)
-      return;
     data = new Data2D("Random", this.drawn.data.length);
     for (int i = 0; i < data.nbPoints; i++)
       data.xdata[i] = i;
+    return true;
   }
 
   @Override
-  public boolean canAddTimed() {
-    return drawn == null;
+  public void removeTimed(Clock clock) {
+    dispose();
   }
 }

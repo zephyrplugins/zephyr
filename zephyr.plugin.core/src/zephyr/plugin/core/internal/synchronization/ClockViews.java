@@ -43,12 +43,14 @@ public class ClockViews implements Listener<ViewTaskExecutor> {
     if (!allTaskDone())
       return;
     synchronizationRequired = false;
-    List<ViewTask> tasks;
-    synchronized (viewTasks) {
-      tasks = new ArrayList<ViewTask>(viewTasks);
-    }
-    for (ViewTask task : tasks)
+    for (ViewTask task : getViewTasks())
       task.refreshIFN(executor, clock, true);
+  }
+
+  ArrayList<ViewTask> getViewTasks() {
+    synchronized (viewTasks) {
+      return new ArrayList<ViewTask>(viewTasks);
+    }
   }
 
   private void waitForCompletion() {
@@ -63,7 +65,7 @@ public class ClockViews implements Listener<ViewTaskExecutor> {
   }
 
   private boolean allTaskDone() {
-    for (ViewTask task : viewTasks)
+    for (ViewTask task : getViewTasks())
       if (!task.isDone())
         return false;
     return true;
@@ -83,7 +85,7 @@ public class ClockViews implements Listener<ViewTaskExecutor> {
 
   public void dispose() {
     clock.onTick.disconnect(tickListener);
-    executor.shutdown();
+    executor.shutdownNow();
     viewTasks.clear();
   }
 
@@ -103,5 +105,13 @@ public class ClockViews implements Listener<ViewTaskExecutor> {
 
   public static void submitView(SyncView view) {
     ZephyrPluginCore.viewScheduler().submitView(view);
+  }
+
+  public SyncView[] getViews() {
+    ArrayList<ViewTask> tasks = getViewTasks();
+    SyncView[] result = new SyncView[tasks.size()];
+    for (int i = 0; i < result.length; i++)
+      result[i] = tasks.get(i).view();
+    return result;
   }
 }

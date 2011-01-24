@@ -53,6 +53,7 @@ public class ZephyrCore {
   }
 
   public static void shutDown() {
+    ZephyrPluginCore.viewScheduler().dispose();
     Collection<Clock> clocks = ZephyrSync.getClocks();
     for (Clock clock : clocks)
       clock.terminate();

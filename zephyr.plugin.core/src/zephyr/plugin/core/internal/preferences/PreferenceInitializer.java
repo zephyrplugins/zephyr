@@ -10,6 +10,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
   public void initializeDefaultPreferences() {
     IPreferenceStore store = ZephyrPluginCore.getDefault().getPreferenceStore();
     store.setDefault(PreferenceKeys.StartupCommandLineKey, "");
+    store.setDefault(PreferenceKeys.OpenClockViewKey, true);
   }
 
 }

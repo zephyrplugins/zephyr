@@ -69,17 +69,15 @@ public class FileView extends EnvironmentView implements Closeable, Restartable 
   }
 
   @Override
-  public void addTimed(Clock clock, Object drawn, Object info) {
+  public boolean addTimed(Clock clock, Object drawn, Object info) {
+    if (logFile != null)
+      return false;
     logFile = (LogFile) drawn;
     restartAction.setEnabled(drawn instanceof LogFile);
     terminateAction.setEnabled(true);
     createLayout();
     setViewName(new File(logFile.filepath).getName(), logFile.filepath);
-  }
-
-  @Override
-  public boolean canAddTimed() {
-    return logFile == null;
+    return true;
   }
 
   @Override
@@ -105,5 +103,10 @@ public class FileView extends EnvironmentView implements Closeable, Restartable 
         DefaultHandler.handle(filepath);
       }
     });
+  }
+
+  @Override
+  public void removeTimed(Clock clock) {
+    dispose();
   }
 }

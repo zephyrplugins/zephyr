@@ -68,11 +68,18 @@ public class SlowDrawingView extends ViewPart implements TimedView, Painter {
   }
 
   @Override
-  public void addTimed(Clock clock, Object drawn, Object info) {
+  public boolean addTimed(Clock clock, Object drawn, Object info) {
+    return true;
   }
 
   @Override
-  public boolean canAddTimed() {
-    return true;
+  public void removeTimed(Clock clock) {
+    dispose();
+  }
+
+  @Override
+  public void dispose() {
+    backgroundCanvas.dispose();
+    super.dispose();
   }
 }

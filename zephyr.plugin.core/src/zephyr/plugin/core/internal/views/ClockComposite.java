@@ -2,6 +2,8 @@ package zephyr.plugin.core.internal.views;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
@@ -10,6 +12,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 
+import zephyr.ZephyrCore;
 import zephyr.plugin.core.api.synchronization.Chrono;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.api.synchronization.ClockInfo;
@@ -19,7 +22,7 @@ import zephyr.plugin.core.utils.Helper;
 public class ClockComposite {
   private final Label timeStepLabel;
   private final Label periodLabel;
-  private final Clock clock;
+  final Clock clock;
   private long timeStep;
   private long period = -1;
   private final Group group;
@@ -32,9 +35,8 @@ public class ClockComposite {
     group.setLayout(gridLayout);
     ClockInfo clockInfo = clock.info();
     createLabelLine(group);
-    for (String caption : clockInfo.captions()) {
+    for (String caption : clockInfo.captions())
       constantTextLabel(group, caption, clockInfo.value(caption), clockInfo.info(caption));
-    }
     timeStepLabel = updatedShortTextLabel(group, "Step");
     periodLabel = updatedShortTextLabel(group, "Period");
   }
@@ -51,13 +53,25 @@ public class ClockComposite {
     buttonsLayout.marginBottom = 0;
     // addButton(buttons, "icons/action_suspend.gif");
     // addButton(buttons, "icons/action_restart.gif");
-    addButton(buttons, "icons/action_terminate.gif");
+    addTerminateButton(buttons);
   }
 
-  protected void addButton(Composite parent, String iconPath) {
-    Button terminateButton = new Button(parent, SWT.FLAT);
+  private void addTerminateButton(Composite buttons) {
+    Button button = addButton(buttons, "icons/action_terminate.gif");
+    button.addMouseListener(new MouseAdapter() {
+      @Override
+      public void mouseUp(MouseEvent e) {
+        clock.terminate();
+        ZephyrCore.removeClock(clock);
+      }
+    });
+  }
+
+  protected Button addButton(Composite parent, String iconPath) {
+    Button button = new Button(parent, SWT.FLAT);
     ImageDescriptor imageDescriptor = Helper.getImageDescriptor(ZephyrPluginCore.PLUGIN_ID, iconPath);
-    terminateButton.setImage(imageDescriptor.createImage());
+    button.setImage(imageDescriptor.createImage());
+    return button;
   }
 
   private void constantTextLabel(Composite parent, String stringLabel, String constantValue, String tooltip) {
