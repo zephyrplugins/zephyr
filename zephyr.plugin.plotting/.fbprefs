@@ -1,5 +1,5 @@
 #FindBugs User Preferences
-#Mon Jan 03 20:38:45 CET 2011
+#Mon Jan 24 20:16:49 MST 2011
 detectorAppendingToAnObjectOutputStream=AppendingToAnObjectOutputStream|true
 detectorBCPMethodReturnCheck=BCPMethodReturnCheck|false
 detectorBadAppletConstructor=BadAppletConstructor|false
@@ -101,7 +101,7 @@ detectorMethodReturnCheck=MethodReturnCheck|false
 detectorMethods=Methods|true
 detectorMultithreadedInstanceAccess=MultithreadedInstanceAccess|true
 detectorMutableLock=MutableLock|true
-detectorMutableStaticFields=MutableStaticFields|true
+detectorMutableStaticFields=MutableStaticFields|false
 detectorNaming=Naming|true
 detectorNoise=Noise|false
 detectorNoiseNullDeref=NoiseNullDeref|false
