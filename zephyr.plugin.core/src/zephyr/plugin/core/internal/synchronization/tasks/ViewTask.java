@@ -5,15 +5,14 @@ import java.util.concurrent.Future;
 import org.eclipse.swt.widgets.Display;
 
 import zephyr.plugin.core.api.synchronization.Clock;
-import zephyr.plugin.core.views.SyncView;
 
 public class ViewTask implements Runnable {
-  final SyncView view;
+  final ViewReference view;
   private Future<?> future;
   private boolean enabled;
   private boolean isDirty = false;
 
-  protected ViewTask(SyncView view) {
+  protected ViewTask(ViewReference view) {
     this.view = view;
     enabled = false;
   }
@@ -67,7 +66,7 @@ public class ViewTask implements Runnable {
       Display.getCurrent().readAndDispatch();
   }
 
-  public SyncView view() {
+  public ViewReference viewRef() {
     return view;
   }
 }

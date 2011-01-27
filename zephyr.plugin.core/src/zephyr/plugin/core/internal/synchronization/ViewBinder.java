@@ -14,9 +14,10 @@ import zephyr.ZephyrSync;
 import zephyr.plugin.core.Utils;
 import zephyr.plugin.core.api.signals.Signal;
 import zephyr.plugin.core.api.synchronization.Clock;
+import zephyr.plugin.core.internal.ZephyrPluginCore;
+import zephyr.plugin.core.internal.synchronization.tasks.ViewReference;
 import zephyr.plugin.core.internal.synchronization.viewfinder.ViewFinder;
 import zephyr.plugin.core.views.SyncView;
-import zephyr.plugin.core.views.TimedView;
 import zephyr.plugin.core.views.ViewProvider;
 
 public class ViewBinder {
@@ -26,16 +27,16 @@ public class ViewBinder {
   private final ViewProviders viewProviders = new ViewProviders();
 
   private void bindWithNewView(Clock clock, Object drawn, Object info, ViewFinder viewFinder) {
-    TimedView view = viewFinder.provideNewView();
-    if (view != null && view.addTimed(clock, drawn, info))
-      uiRunBindView(clock, view);
+    ViewReference viewRef = viewFinder.provideNewView();
+    if (viewRef != null && viewRef.addTimed(clock, drawn, info))
+      uiRunBindView(clock, viewRef.view());
   }
 
   private boolean bindWithOpenedViews(Clock clock, Object drawn, Object info, ViewFinder viewFinder) {
     for (IViewReference reference : viewFinder.existingViews()) {
-      TimedView view = viewFinder.showView(reference);
+      ViewReference view = viewFinder.showView(reference);
       if (view != null && view.addTimed(clock, drawn, info)) {
-        uiRunBindView(clock, view);
+        uiRunBindView(clock, view.view());
         return true;
       }
     }
@@ -102,12 +103,11 @@ public class ViewBinder {
   }
 
   public void unbind(Clock clock, SyncView view) {
-    if (view instanceof TimedView)
-      ((TimedView) view).removeTimed(clock);
     ClockViews clockViews = clockToView.get(clock);
     if (clockViews == null)
       return;
     clockViews.removeView(view);
+    ZephyrPluginCore.viewScheduler().scheduleRemoveTimed(view, clock);
   }
 
   public boolean isEmpty() {
@@ -125,6 +125,6 @@ public class ViewBinder {
       for (Map.Entry<Clock, ClockViews> entry : clockToView.entrySet())
         entry.getValue().removeView(view);
     }
-    ClockViews.disposeView(view);
+    ZephyrPluginCore.viewScheduler().disposeView(view);
   }
 }

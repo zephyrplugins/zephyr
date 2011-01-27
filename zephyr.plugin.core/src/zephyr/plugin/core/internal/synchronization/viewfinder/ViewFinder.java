@@ -14,6 +14,8 @@ import org.eclipse.ui.views.IViewDescriptor;
 import org.eclipse.ui.views.IViewRegistry;
 
 import zephyr.plugin.core.Utils;
+import zephyr.plugin.core.internal.ZephyrPluginCore;
+import zephyr.plugin.core.internal.synchronization.tasks.ViewReference;
 import zephyr.plugin.core.views.TimedView;
 
 public class ViewFinder {
@@ -44,11 +46,11 @@ public class ViewFinder {
     return existingViews;
   }
 
-  public TimedView showView(IViewReference reference) {
+  public ViewReference showView(IViewReference reference) {
     return showView(reference.getSecondaryId(), reference.getPage());
   }
 
-  private TimedView showView(final String secondaryID, final IWorkbenchPage page) {
+  private ViewReference showView(final String secondaryID, final IWorkbenchPage page) {
     showViewResult = null;
     Runnable bindViewRunnable = new Runnable() {
       @Override
@@ -66,18 +68,17 @@ public class ViewFinder {
       bindViewRunnable.run();
     else
       Display.getDefault().syncExec(bindViewRunnable);
-    return showViewResult;
-
+    return showViewResult != null ? ZephyrPluginCore.viewScheduler().task(showViewResult).viewRef() : null;
   }
 
-  private TimedView showView(final String secondaryID) {
+  private ViewReference showView(final String secondaryID) {
     IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
     if (window == null)
       window = PlatformUI.getWorkbench().getWorkbenchWindows()[0];
     return showView(secondaryID, window.getActivePage());
   }
 
-  public TimedView provideNewView() {
+  public ViewReference provideNewView() {
     IViewRegistry viewRegistry = PlatformUI.getWorkbench().getViewRegistry();
     IViewDescriptor descriptor = viewRegistry.find(viewID);
     if (!descriptor.getAllowMultiple())

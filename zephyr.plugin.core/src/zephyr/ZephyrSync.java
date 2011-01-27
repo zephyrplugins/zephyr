@@ -5,7 +5,6 @@ import java.util.Collection;
 import zephyr.plugin.core.api.signals.Signal;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.internal.ZephyrPluginCore;
-import zephyr.plugin.core.internal.synchronization.ClockViews;
 import zephyr.plugin.core.views.SyncView;
 
 public class ZephyrSync {
@@ -35,7 +34,7 @@ public class ZephyrSync {
   }
 
   public static void submitView(SyncView view) {
-    ClockViews.submitView(view);
+    ZephyrPluginCore.viewScheduler().submitView(view);
   }
 
   public static Collection<Clock> getClocks() {

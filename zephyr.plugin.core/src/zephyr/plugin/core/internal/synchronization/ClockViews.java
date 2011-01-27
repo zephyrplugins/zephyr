@@ -99,19 +99,11 @@ public class ClockViews implements Listener<ViewTaskExecutor> {
       refreshViewsIFN();
   }
 
-  public static void disposeView(SyncView view) {
-    ZephyrPluginCore.viewScheduler().disposeView(view);
-  }
-
-  public static void submitView(SyncView view) {
-    ZephyrPluginCore.viewScheduler().submitView(view);
-  }
-
   public SyncView[] getViews() {
     ArrayList<ViewTask> tasks = getViewTasks();
     SyncView[] result = new SyncView[tasks.size()];
     for (int i = 0; i < result.length; i++)
-      result[i] = tasks.get(i).view();
+      result[i] = tasks.get(i).viewRef().view();
     return result;
   }
 }

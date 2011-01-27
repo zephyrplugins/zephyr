@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import zephyr.plugin.core.api.signals.Signal;
+import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.views.SyncView;
 
 public class ViewTaskScheduler {
@@ -14,7 +15,7 @@ public class ViewTaskScheduler {
   synchronized public ViewTask task(SyncView view) {
     ViewTask task = viewTasks.get(view);
     if (task == null) {
-      task = new ViewTask(view);
+      task = new ViewTask(new ViewReference(view));
       viewTasks.put(view, task);
     }
     return task;
@@ -30,6 +31,17 @@ public class ViewTaskScheduler {
     ViewTask task = viewTasks.get(view);
     if (task != null)
       task.refreshIFN(defaultExecutor);
+  }
+
+  public void scheduleRemoveTimed(final SyncView view, final Clock clock) {
+    if (defaultExecutor.isShutdown())
+      return;
+    defaultExecutor.execute(new Runnable() {
+      @Override
+      public void run() {
+        task(view).viewRef().removeTimed(clock);
+      }
+    });
   }
 
   public void enable(SyncView view) {
