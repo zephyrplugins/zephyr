@@ -22,9 +22,7 @@ public class ViewTaskScheduler {
   }
 
   synchronized public void disposeView(SyncView view) {
-    ViewTask task = viewTasks.remove(view);
-    if (task != null)
-      task.disable();
+    viewTasks.remove(view);
   }
 
   public void submitView(SyncView view) {
@@ -42,10 +40,6 @@ public class ViewTaskScheduler {
         task(view).viewRef().removeTimed(clock);
       }
     });
-  }
-
-  public void enable(SyncView view) {
-    task(view).enable();
   }
 
   public void dispose() {

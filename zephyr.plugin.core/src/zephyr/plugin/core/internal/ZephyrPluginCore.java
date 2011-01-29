@@ -183,8 +183,6 @@ public class ZephyrPluginCore extends AbstractUIPlugin {
 
       @Override
       public void partActivated(IWorkbenchPart part) {
-        if (part instanceof SyncView)
-          ZephyrPluginCore.viewScheduler().enable((SyncView) part);
       }
     });
   }

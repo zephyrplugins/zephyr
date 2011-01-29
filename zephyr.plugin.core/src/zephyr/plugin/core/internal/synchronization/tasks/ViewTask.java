@@ -9,18 +9,16 @@ import zephyr.plugin.core.api.synchronization.Clock;
 public class ViewTask implements Runnable {
   final ViewReference view;
   private Future<?> future;
-  private boolean enabled;
   private boolean isDirty = false;
 
   protected ViewTask(ViewReference view) {
     this.view = view;
-    enabled = false;
   }
 
   @Override
   public void run() {
     try {
-      while (isDirty && enabled) {
+      while (isDirty) {
         isDirty = false;
         synchronized (view) {
           view.repaint();
@@ -37,8 +35,6 @@ public class ViewTask implements Runnable {
   }
 
   public void refreshIFN(ViewTaskExecutor executor, Clock clock, boolean synchronize) {
-    if (!enabled)
-      return;
     isDirty = !synchronize;
     if (!isDone())
       return;
@@ -56,12 +52,8 @@ public class ViewTask implements Runnable {
     return future == null || future.isDone();
   }
 
-  public void enable() {
-    enabled = true;
-  }
-
   public void disable() {
-    enabled = false;
+    isDirty = false;
     while (!isDone())
       Display.getCurrent().readAndDispatch();
   }
