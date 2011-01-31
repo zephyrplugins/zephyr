@@ -102,10 +102,16 @@ public abstract class EnvironmentView extends ViewPart implements TimedView {
 
   public void close() {
     obsLayout = null;
-    if (parent.isDisposed())
-      return;
-    setViewName(defaultViewName, "");
-    for (Control child : parent.getChildren())
-      child.dispose();
+    Display.getDefault().asyncExec(new Runnable() {
+      @Override
+      public void run() {
+        if (parent.isDisposed())
+          return;
+        for (Control child : parent.getChildren())
+          child.dispose();
+      }
+    });
+    if (!parent.isDisposed())
+      setViewName(defaultViewName, "");
   }
 }

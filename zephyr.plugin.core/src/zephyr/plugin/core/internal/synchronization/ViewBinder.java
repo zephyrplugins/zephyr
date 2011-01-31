@@ -103,11 +103,11 @@ public class ViewBinder {
   }
 
   public void unbind(Clock clock, SyncView view) {
+    ZephyrPluginCore.viewScheduler().scheduleRemoveTimed(view, clock);
     ClockViews clockViews = clockToView.get(clock);
     if (clockViews == null)
       return;
     clockViews.removeView(view);
-    ZephyrPluginCore.viewScheduler().scheduleRemoveTimed(view, clock);
   }
 
   public boolean isEmpty() {

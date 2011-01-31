@@ -95,7 +95,6 @@ public class DoubleBuffer implements ControlListener {
     try {
       drawingSemaphore.acquire();
     } catch (InterruptedException e) {
-      e.printStackTrace();
     }
   }
 
