@@ -10,12 +10,13 @@ import java.util.zip.GZIPOutputStream;
 
 public class AbstractFileLogger {
   public static final String TEMP = ".tmp";
+  public static final String GZEXT = ".gz";
   public final String filepath;
   protected PrintWriter file;
   protected final boolean temporaryFile;
 
   public AbstractFileLogger(String filepath, boolean temporaryFile, boolean compress) throws IOException {
-    this.filepath = compress ? filepath + ".gz" : filepath;
+    this.filepath = compress ? filepath + GZEXT : filepath;
     checkFolders();
     this.temporaryFile = temporaryFile;
     String fileCreatedPath = temporaryFile ? this.filepath + TEMP : this.filepath;
@@ -43,8 +44,12 @@ public class AbstractFileLogger {
     filepath = null;
   }
 
-  static public boolean exist(String filename) {
-    return new File(filename).canRead();
+  static public boolean exist(String filepath) {
+    String[] possibilities = new String[] { filepath, filepath + TEMP, filepath + GZEXT, filepath + GZEXT + TEMP };
+    for (String possibility : possibilities)
+      if (new File(possibility).canRead())
+        return true;
+    return false;
   }
 
   public void close() {

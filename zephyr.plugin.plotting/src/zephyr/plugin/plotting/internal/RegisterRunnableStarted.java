@@ -1,10 +1,7 @@
 package zephyr.plugin.plotting.internal;
 
-import zephyr.ZephyrPlotting;
 import zephyr.ZephyrSync;
 import zephyr.plugin.core.api.Zephyr;
-import zephyr.plugin.core.api.advertisement.Advertise;
-import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.synchronization.Clock;
@@ -35,9 +32,7 @@ public class RegisterRunnableStarted implements StartupJob, Listener<Runnable> {
       return;
     }
     Clock clock = ((Timed) runnable).clock();
-    DataMonitor logger = ZephyrPlotting.createLogger(clock);
-    logger.add(runnable);
-    if (!runnable.getClass().isAnnotationPresent(Advertise.class))
+    if (clock == null)
       return;
     Zephyr.advertise(clock, runnable);
   }

@@ -32,7 +32,7 @@ public class AdvertisementTest {
   @Test
   public void testAdvertise() {
     final List<String> advertised = new ArrayList<String>();
-    Zephyr.advertisement().onAdvertise.connect(new Listener<Advertisement.Advertised>() {
+    Zephyr.advertisement().onAdvertiseNode.connect(new Listener<Advertisement.Advertised>() {
       @Override
       public void listen(Advertised eventInfo) {
         if (eventInfo.advertised instanceof String)

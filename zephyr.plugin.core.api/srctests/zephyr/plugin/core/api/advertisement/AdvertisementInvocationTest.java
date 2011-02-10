@@ -11,6 +11,7 @@ import org.junit.Test;
 import zephyr.plugin.core.api.Zephyr;
 import zephyr.plugin.core.api.advertisement.Advertisement.Advertised;
 import zephyr.plugin.core.api.signals.Listener;
+import zephyr.plugin.core.api.synchronization.Clock;
 
 @Advertise
 public class AdvertisementInvocationTest {
@@ -54,7 +55,7 @@ public class AdvertisementInvocationTest {
 
   private void checkAdvertise(Object advertised, String[] expected) {
     final List<String> hasBeenAdvertised = new ArrayList<String>();
-    Zephyr.advertisement().onAdvertise.connect(new Listener<Advertisement.Advertised>() {
+    Zephyr.advertisement().onAdvertiseNode.connect(new Listener<Advertisement.Advertised>() {
       @Override
       public void listen(Advertised eventInfo) {
         if (!(eventInfo.info instanceof String))
@@ -62,7 +63,7 @@ public class AdvertisementInvocationTest {
         hasBeenAdvertised.add((String) eventInfo.info);
       }
     });
-    Zephyr.advertise(null, advertised);
+    Zephyr.advertise((Clock) null, advertised);
     String[] stringInfos = new String[hasBeenAdvertised.size()];
     hasBeenAdvertised.toArray(stringInfos);
     Assert.assertTrue(Arrays.equals(expected, stringInfos));

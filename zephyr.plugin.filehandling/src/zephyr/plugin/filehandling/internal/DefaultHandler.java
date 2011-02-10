@@ -3,11 +3,9 @@ package zephyr.plugin.filehandling.internal;
 import java.io.IOException;
 import java.util.List;
 
-import zephyr.ZephyrCore;
-import zephyr.ZephyrPlotting;
 import zephyr.plugin.core.Utils;
+import zephyr.plugin.core.api.Zephyr;
 import zephyr.plugin.core.api.logfiles.LogFile;
-import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.filehandling.IFileHandler;
 
 public class DefaultHandler implements IFileHandler {
@@ -24,9 +22,7 @@ public class DefaultHandler implements IFileHandler {
 
   public static void handle(String filepath) {
     LogFile logfile = LogFile.load(filepath);
-    ZephyrCore.advertise(logfile.clock(), logfile);
-    DataMonitor logger = ZephyrPlotting.createLogger(logfile.clock);
-    logger.add(logfile);
+    Zephyr.advertise(logfile);
     while (!logfile.eof())
       logfile.step();
     logfile.close();

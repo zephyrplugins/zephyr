@@ -36,10 +36,12 @@ public class Advertisement {
     }
   };
 
-  public final Signal<Advertised> onAdvertise = new Signal<Advertised>();
+  public final Signal<Advertised> onAdvertiseNode = new Signal<Advertised>();
+
+  public final Signal<Advertised> onAdvertiseRoot = new Signal<Advertised>();
 
   public void advertiseInstance(Clock clock, Object drawn, Object info) {
-    onAdvertise.fire(new Advertised(clock, drawn, info));
+    onAdvertiseNode.fire(new Advertised(clock, drawn, info));
   }
 
   protected Object provideInfo(String label, Stack<Object> parents, Object advertised, Object info, Object infoProvider) {
@@ -76,6 +78,7 @@ public class Advertisement {
     Stack<Object> parents = new Stack<Object>();
     Object infoProvider = annotationToInfoProvider(advertised.getClass().getAnnotation(Advertise.class), advertised);
     Object providedInfo = provideInfo("", parents, advertised, info, infoProvider);
+    onAdvertiseRoot.fire(new Advertised(clock, advertised, info));
     advertiseInstance(clock, advertised, providedInfo);
     parents.push(advertised);
     recursiveParse(clock, new LabelBuilder(), advertised, parents, info);

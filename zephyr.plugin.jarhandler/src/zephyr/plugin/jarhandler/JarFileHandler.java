@@ -6,7 +6,6 @@ import java.security.PrivilegedAction;
 import java.util.List;
 import java.util.jar.Manifest;
 
-import zephyr.ZephyrPlotting;
 import zephyr.plugin.core.Utils;
 import zephyr.plugin.core.api.Zephyr;
 import zephyr.plugin.core.api.synchronization.Clock;
@@ -50,7 +49,6 @@ public class JarFileHandler implements IFileHandler {
                               mainObject.getClass().getCanonicalName());
     clock.info().putFile(filepath);
     Zephyr.advertise(clock, mainObject);
-    ZephyrPlotting.createLogger(clock).add(mainObject);
     ((Runnable) mainObject).run();
   }
 

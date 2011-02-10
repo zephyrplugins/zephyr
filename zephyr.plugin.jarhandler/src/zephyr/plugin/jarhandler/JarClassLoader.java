@@ -56,17 +56,9 @@ public class JarClassLoader extends ClassLoader {
     return loadClass(className, false);
   }
 
-  private Class<? extends Object> loadSystemClass(String className) {
+  private Class<? extends Object> loadZephyrFrameworkClass(String className) {
     try {
-      return super.findSystemClass(className);
-    } catch (ClassNotFoundException e) {
-    }
-    return null;
-  }
-
-  private Class<? extends Object> loadPluginClass(String className) {
-    try {
-      return ZephyrCore.loadClass(className);
+      return ZephyrCore.classLoader().loadClass(className);
     } catch (ClassNotFoundException e) {
     }
     return null;
@@ -134,11 +126,7 @@ public class JarClassLoader extends ClassLoader {
     if (result != null)
       return result;
 
-    result = loadSystemClass(className);
-    if (result != null)
-      return result;
-
-    result = loadPluginClass(className);
+    result = loadZephyrFrameworkClass(className);
     if (result != null)
       return result;
 

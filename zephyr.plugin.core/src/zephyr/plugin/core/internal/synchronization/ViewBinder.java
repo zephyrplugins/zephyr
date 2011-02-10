@@ -63,7 +63,7 @@ public class ViewBinder {
     if (Utils.isUIThread())
       bindViewRunnable.run();
     else
-      Display.getDefault().syncExec(bindViewRunnable);
+      Display.getDefault().asyncExec(bindViewRunnable);
   }
 
   // displayAndBindView need to call the ViewBinder from within

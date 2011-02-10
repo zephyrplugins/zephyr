@@ -1,5 +1,7 @@
 package zephyr.plugin.core.internal;
 
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -42,8 +44,17 @@ public class ZephyrPluginCore extends AbstractUIPlugin {
   final private ViewTaskScheduler viewTaskScheduler = new ViewTaskScheduler();
   private static ZephyrPluginCore plugin;
   private final ThreadGroup threadGroup = new ThreadGroup("ZephyrRunnable");
-
+  private final ZephyrClassLoader classLoader;
   private final Control control = new Control();
+
+  public ZephyrPluginCore() {
+    classLoader = AccessController.doPrivileged(new PrivilegedAction<ZephyrClassLoader>() {
+      @Override
+      public ZephyrClassLoader run() {
+        return new ZephyrClassLoader();
+      }
+    });
+  }
 
   static public List<String> getArgsFiltered() {
     String[] args = Platform.getCommandLineArgs();
@@ -82,10 +93,10 @@ public class ZephyrPluginCore extends AbstractUIPlugin {
   public void start(BundleContext context) throws Exception {
     super.start(context);
     plugin = this;
-    Zephyr.advertisement().onAdvertise.connect(new Listener<Advertisement.Advertised>() {
+    Zephyr.advertisement().onAdvertiseNode.connect(new Listener<Advertisement.Advertised>() {
       @Override
       public void listen(Advertised eventInfo) {
-        ZephyrCore.advertise(eventInfo.clock, eventInfo.advertised, eventInfo.info);
+        ZephyrCore.advertiseInstance(eventInfo.clock, eventInfo.advertised, eventInfo.info);
       }
     });
   }
@@ -210,5 +221,9 @@ public class ZephyrPluginCore extends AbstractUIPlugin {
 
   public static boolean isZephyrEnabled() {
     return zephyrEnabled;
+  }
+
+  public ClassLoader classLoader() {
+    return classLoader;
   }
 }

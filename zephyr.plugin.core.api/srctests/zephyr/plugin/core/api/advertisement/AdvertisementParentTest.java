@@ -12,6 +12,7 @@ import org.junit.Test;
 import zephyr.plugin.core.api.Zephyr;
 import zephyr.plugin.core.api.advertisement.Advertisement.Advertised;
 import zephyr.plugin.core.api.signals.Listener;
+import zephyr.plugin.core.api.synchronization.Clock;
 
 public class AdvertisementParentTest {
   static public class ParentInfoProvider implements InfoProvider {
@@ -45,7 +46,7 @@ public class AdvertisementParentTest {
   @Test
   public void testParent() {
     final List<Object> hasBeenAdvertised = new ArrayList<Object>();
-    Zephyr.advertisement().onAdvertise.connect(new Listener<Advertisement.Advertised>() {
+    Zephyr.advertisement().onAdvertiseNode.connect(new Listener<Advertisement.Advertised>() {
       @SuppressWarnings("unchecked")
       @Override
       public void listen(Advertised eventInfo) {
@@ -57,7 +58,7 @@ public class AdvertisementParentTest {
       }
     });
     Toto toto = new Toto();
-    Zephyr.advertise(null, toto);
+    Zephyr.advertise((Clock) null, toto);
     checkCollection(new Object[] { toto, toto, toto.tata, toto, toto.tata, toto.tata.tataField, toto, toto.totoField },
                     hasBeenAdvertised);
   }

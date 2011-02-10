@@ -10,7 +10,7 @@ public class ZephyrPlotting {
   }
 
   /**
-   * Specify the label through Clock constructor
+   * Use Zephyr.advertize
    */
   @Deprecated
   static public DataMonitor createLogger(String label, Clock clock) {

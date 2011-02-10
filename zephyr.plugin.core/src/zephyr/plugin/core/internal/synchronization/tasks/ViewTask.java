@@ -40,9 +40,7 @@ public class ViewTask implements Runnable {
       return;
     boolean hasSynchronized = false;
     if (synchronize)
-      synchronized (view) {
-        hasSynchronized = view.synchronize(clock);
-      }
+      hasSynchronized = view.synchronize(clock);
     isDirty = isDirty || hasSynchronized;
     if (isDirty && !executor.isShutdown())
       future = executor.submit(this);

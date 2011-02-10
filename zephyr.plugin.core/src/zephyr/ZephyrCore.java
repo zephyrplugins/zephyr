@@ -9,11 +9,7 @@ import zephyr.plugin.core.internal.ZephyrPluginCore;
 import zephyr.plugin.core.internal.startup.StartupJobs;
 
 public class ZephyrCore {
-  static public void advertise(Clock clock, Object drawn) {
-    ZephyrPluginCore.viewBinder().bindViews(clock, drawn, null);
-  }
-
-  static public void advertise(Clock clock, Object drawn, Object info) {
+  static public void advertiseInstance(Clock clock, Object drawn, Object info) {
     ZephyrPluginCore.viewBinder().bindViews(clock, drawn, info);
   }
 
@@ -38,8 +34,8 @@ public class ZephyrCore {
     return ZephyrPluginCore.getArgsFiltered();
   }
 
-  public static Class<? extends Object> loadClass(String className) throws ClassNotFoundException {
-    return ZephyrPluginCore.getDefault().loadClass(className);
+  public static ClassLoader classLoader() {
+    return ZephyrPluginCore.getDefault().classLoader();
   }
 
   static public boolean zephyrEnabled() {
