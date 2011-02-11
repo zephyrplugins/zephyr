@@ -214,4 +214,10 @@
             sequence="M1+T">
       </key>
    </extension>
+   <extension
+         point="zephyr.classpath">
+      <classpath>
+         classpath body text
+      </classpath>
+   </extension>
 </plugin>

@@ -11,7 +11,7 @@ import org.osgi.framework.Bundle;
 public class ZephyrClassLoader extends ClassLoader {
   private List<Bundle> zephyrClasspathBundles = null;
 
-  private Class<? extends Object> loadSystemClass(String className) {
+  private Class<? extends Object> superFindSystemClass(String className) {
     try {
       return super.findSystemClass(className);
     } catch (ClassNotFoundException e) {
@@ -21,22 +21,21 @@ public class ZephyrClassLoader extends ClassLoader {
 
   @SuppressWarnings("unchecked")
   @Override
-  public synchronized Class<? extends Object> loadClass(String className, boolean resolveIt)
-      throws ClassNotFoundException {
-    Class<? extends Object> result = loadSystemClass(className);
+  protected Class<?> findClass(String name) throws ClassNotFoundException {
+    Class<? extends Object> result = superFindSystemClass(name);
     if (result != null)
       return result;
     if (zephyrClasspathBundles == null)
       zephyrClasspathBundles = initializeZephyrClasspathBundles();
     for (Bundle bundle : zephyrClasspathBundles) {
       try {
-        result = bundle.loadClass(className);
+        result = bundle.loadClass(name);
       } catch (ClassNotFoundException e) {
       }
       if (result != null)
         return result;
     }
-    throw new ClassNotFoundException(className);
+    throw new ClassNotFoundException(name);
   }
 
   private List<Bundle> initializeZephyrClasspathBundles() {

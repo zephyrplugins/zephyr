@@ -6,6 +6,10 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: Thomas
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: zephyr.plugin.core;bundle-version="1.0.0",
- zephyr.plugin.filehandling;bundle-version="1.0.0"
-Bundle-ClassPath: jython.jar,
- .
+ zephyr.plugin.filehandling;bundle-version="1.0.0",
+ org.eclipse.ui;bundle-version="3.6.1",
+ org.eclipse.core.runtime;bundle-version="3.6.0"
+Bundle-ClassPath: .,
+ jython2.5.2rc3/jython.jar
+Bundle-Activator: zephyr.plugin.jython.internal.JythonPlugin
+Bundle-ActivationPolicy: lazy
