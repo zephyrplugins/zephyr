@@ -7,7 +7,7 @@ def _findclock(clock, object):
         return clock
     return object.clock() if callable(object.clock) else object.clock
 
-def advertize(object, clock = None):
+def advertise(object, clock = None):
     Zephyr.advertise(_findclock(clock, object), object)
     
 def monfunc(clock, func, level = 0, name = None):
