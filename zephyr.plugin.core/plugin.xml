@@ -74,10 +74,11 @@
                label="File"
                mnemonic="F">
             <separator
-                  name="zephyr.plugin.core.endstd">
+                  name="zephyr.plugin.core.zephyrbegin"
+                  visible="true">
             </separator>
             <separator
-                  name="zephyr.plugin.core.separator.zephyrcommon"
+                  name="zephyr.plugin.core.zephyrend"
                   visible="true">
             </separator>
             <command

@@ -16,7 +16,7 @@ public class ObsStat {
   double min = Double.MAX_VALUE;
   private double stdCalc;
   private double stdDev;
-  double current;
+  protected double current;
   double length;
   private double barMax;
   double barMin;
