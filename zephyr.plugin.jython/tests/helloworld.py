@@ -1,4 +1,8 @@
-import java.lang.System
 
 if __name__ == '__main__':
-    java.lang.System.out.println("Hello world")
+    print("Hello world")
+    value = 0
+    while value < 1000:
+        value += 1
+    print('done')
+        

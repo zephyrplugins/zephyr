@@ -9,7 +9,6 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui,
  zephyr.plugin.core.api;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Bundle-ActivationPolicy: lazy
 Export-Package: zephyr,
  zephyr.plugin.core;
   uses:="zephyr.plugin.core.synchronization,
@@ -25,3 +24,4 @@ Export-Package: zephyr,
  zephyr.plugin.core.startup,
  zephyr.plugin.core.utils;uses:="org.eclipse.jface.resource,org.eclipse.ui.plugin,org.eclipse.swt.graphics",
  zephyr.plugin.core.views
+Bundle-ActivationPolicy: lazy
