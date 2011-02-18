@@ -1,6 +1,5 @@
 from zephyr.plugin.core.api import Zephyr
 from zephyr import ZephyrPlotting
-from zephyr.plugin.core.api.synchronization import Clock
 
 def _findclock(clock, obj):
     if clock is not None:
