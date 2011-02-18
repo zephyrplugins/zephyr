@@ -200,7 +200,7 @@ public class ZephyrPluginCore extends AbstractUIPlugin {
 
   static public void enableZephyrActivity() {
     zephyrEnabled = true;
-    enableActivities("zephyr.plugin.core.activity");
+    // enableActivities("zephyr.plugin.core.activity");
   }
 
   static void enableActivities(String... ids) {

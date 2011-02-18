@@ -214,6 +214,14 @@
       <activity
             id="zephyr.plugin.core.activity"
             name="Zephyr Activity">
+         <enabledWhen>
+            <with
+                  variable="zephyr.plugin.core.isZephyrEnabled">
+               <equals
+                     value="true">
+               </equals>
+            </with>
+         </enabledWhen>
       </activity>
       <activityPatternBinding
             activityId="zephyr.plugin.core.activity"
@@ -222,6 +230,14 @@
       <activity
             id="zephyr.ui.editors.activity"
             name="Zephyr Eclipse Editors Activity">
+         <enabledWhen>
+            <with
+                  variable="zephyr.plugin.core.isZephyrEnabled">
+               <equals
+                     value="false">
+               </equals>
+            </with>
+         </enabledWhen>
       </activity>
       <activityPatternBinding
             activityId="zephyr.ui.editors.activity"
@@ -327,5 +343,15 @@
       <client
             class="zephyr.plugin.core.internal.views.ClocksView$Provider">
       </client>
+   </extension>
+   <extension
+         point="org.eclipse.ui.services">
+      <sourceProvider
+            provider="zephyr.plugin.core.internal.ZephyrVariables">
+         <variable
+               name="zephyr.plugin.core.variable1"
+               priorityLevel="workbench">
+         </variable>
+      </sourceProvider>
    </extension>
 </plugin>

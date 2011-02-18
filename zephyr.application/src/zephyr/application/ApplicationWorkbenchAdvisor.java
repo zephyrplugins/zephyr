@@ -11,6 +11,7 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 
   @Override
   public void initialize(IWorkbenchConfigurer configurer) {
+    ZephyrCore.start();
     super.initialize(configurer);
     configurer.setSaveAndRestore(true);
   }
@@ -28,7 +29,6 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 
   @Override
   public void preStartup() {
-    ZephyrCore.start();
   }
 
   @Override
