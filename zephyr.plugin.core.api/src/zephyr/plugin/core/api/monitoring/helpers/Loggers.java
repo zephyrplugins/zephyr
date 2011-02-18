@@ -84,12 +84,7 @@ public class Loggers {
   }
 
   static public TimedFileLogger newLoggerWithTime(String filepath) {
-    try {
-      return new TimedFileLogger(filepath);
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    return null;
+    return newLoggerWithTime(filepath, false);
   }
 
   public static FileLogger newLogger(String filepath) {
@@ -104,6 +99,15 @@ public class Loggers {
   public static LoggerRow newLoggerRow(String filepath) {
     try {
       return new LoggerRow(filepath);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
+
+  public static TimedFileLogger newLoggerWithTime(String filepath, boolean compress) {
+    try {
+      return new TimedFileLogger(filepath, false, compress);
     } catch (IOException e) {
       e.printStackTrace();
     }
