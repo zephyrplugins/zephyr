@@ -1,5 +1,8 @@
 package zephyr.plugin.core.internal.views;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
@@ -20,12 +23,25 @@ import zephyr.plugin.core.internal.ZephyrPluginCore;
 import zephyr.plugin.core.utils.Helper;
 
 public class ClockComposite {
+  static class UpdatableLabelInfo {
+    public Label label;
+    public String value;
+    public String info;
+
+    public UpdatableLabelInfo(Label label, String value, String info) {
+      this.label = label;
+      this.value = value;
+      this.info = info;
+    }
+  }
+
   private final Label timeStepLabel;
   private final Label periodLabel;
   final Clock clock;
   private long timeStep;
   private long period = -1;
   private final Group group;
+  private final Map<String, UpdatableLabelInfo> captionToLabelInfo = new HashMap<String, UpdatableLabelInfo>();
 
   public ClockComposite(Composite parent, Clock clock) {
     this.clock = clock;
@@ -35,10 +51,15 @@ public class ClockComposite {
     group.setLayout(gridLayout);
     ClockInfo clockInfo = clock.info();
     createLabelLine(group);
-    for (String caption : clockInfo.captions())
-      constantTextLabel(group, caption, clockInfo.value(caption), clockInfo.info(caption));
     timeStepLabel = updatedShortTextLabel(group, "Step");
     periodLabel = updatedShortTextLabel(group, "Period");
+    for (String caption : clockInfo.captions())
+      updatableTextLabel(group, caption, clockInfo.value(caption), clockInfo.info(caption));
+  }
+
+  private void updatableTextLabel(Group group, String caption, String value, String info) {
+    Label label = createTextLabel(group, caption, value, info);
+    captionToLabelInfo.put(caption, new UpdatableLabelInfo(label, value, info));
   }
 
   private void createLabelLine(Composite parent) {
@@ -74,7 +95,7 @@ public class ClockComposite {
     return button;
   }
 
-  private void constantTextLabel(Composite parent, String stringLabel, String constantValue, String tooltip) {
+  private Label createTextLabel(Composite parent, String stringLabel, String constantValue, String tooltip) {
     Label label = new Label(parent, SWT.NONE);
     label.setText(stringLabel);
     Label valueLabel = new Label(parent, SWT.NONE);
@@ -82,6 +103,7 @@ public class ClockComposite {
     valueLabel.setLayoutData(griddata);
     valueLabel.setText(constantValue);
     valueLabel.setToolTipText(tooltip);
+    return valueLabel;
   }
 
   private Label updatedShortTextLabel(Composite parent, String stringLabel) {
@@ -97,6 +119,12 @@ public class ClockComposite {
   public void synchronize() {
     timeStep = clock.timeStep();
     period = clock.lastPeriodNano();
+    ClockInfo clockInfo = clock.info();
+    for (String caption : clockInfo.captions()) {
+      UpdatableLabelInfo labelInfo = captionToLabelInfo.get(caption);
+      labelInfo.value = clockInfo.value(caption);
+      labelInfo.info = clockInfo.info(caption);
+    }
   }
 
   private boolean adjustLabel(Label label, String text) {
@@ -109,6 +137,10 @@ public class ClockComposite {
     boolean layoutChanged = false;
     layoutChanged = adjustLabel(timeStepLabel, String.valueOf(timeStep)) || layoutChanged;
     layoutChanged = adjustLabel(periodLabel, Chrono.toPeriodString(period)) || layoutChanged;
+    for (UpdatableLabelInfo labelInfo : captionToLabelInfo.values()) {
+      layoutChanged = adjustLabel(labelInfo.label, labelInfo.value) || layoutChanged;
+      labelInfo.label.setToolTipText(labelInfo.info);
+    }
     if (layoutChanged)
       group.layout(true);
   }
@@ -119,5 +151,6 @@ public class ClockComposite {
 
   public void dispose() {
     group.dispose();
+    captionToLabelInfo.clear();
   }
 }
