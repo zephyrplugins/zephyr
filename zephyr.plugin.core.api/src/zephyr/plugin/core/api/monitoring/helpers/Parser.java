@@ -6,7 +6,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -14,9 +13,11 @@ import java.util.Map;
 
 import zephyr.plugin.core.api.labels.CollectionLabelBuilder;
 import zephyr.plugin.core.api.labels.LabeledElement;
+import zephyr.plugin.core.api.labels.Labels;
 import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.core.api.monitoring.abstracts.FieldHandler;
 import zephyr.plugin.core.api.monitoring.abstracts.MonitorContainer;
+import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
 import zephyr.plugin.core.api.monitoring.annotations.IgnoreMonitor;
 import zephyr.plugin.core.api.monitoring.annotations.LabelProvider;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
@@ -25,28 +26,10 @@ import zephyr.plugin.core.api.monitoring.wrappers.MonitorWrapper;
 public class Parser {
   public static final int MonitorEverythingLevel = Integer.MAX_VALUE;
 
-  static private List<ArrayHandler> arrayHandlers = new ArrayList<ArrayHandler>();
-  static private List<FieldHandler> fieldHandlers = new ArrayList<FieldHandler>();
-
-  static {
-    arrayHandlers.add(new ObjectArrayHandler());
-    arrayHandlers.add(new PrimitiveArrayHandler());
-    addFieldHandler(new ObjectTypeHandler());
-    addFieldHandler(new PrimitiveTypeHandler());
-    addFieldHandler(new CollectionHandler());
-    for (ArrayHandler handler : arrayHandlers)
-      addFieldHandler((FieldHandler) handler);
-  }
-
-  public static void addFieldHandler(FieldHandler fieldHandler) {
-    fieldHandlers.add(fieldHandler);
-  }
-
   public static void findAnnotations(DataMonitor logger, Object container, List<MonitorWrapper> wrappers, int level,
       int levelRequired) {
     Class<?> objectClass = container.getClass();
-    List<FieldHandler> handlers = new ArrayList<FieldHandler>(fieldHandlers);
-    Collections.reverse(handlers);
+    List<FieldHandler> handlers = Handlers.getFieldHandlers();
     Map<String, LabeledElement> labelsMap = buildLabelMaps(container);
     logger.labelBuilder().pushLabelMap(labelsMap);
     boolean classIsLogged = false;
@@ -70,7 +53,7 @@ public class Parser {
   private static void addElements(DataMonitor logger, Object container, List<MonitorWrapper> wrappers,
       boolean includeIndex,
       int classLevel, int levelRequired) {
-    for (ArrayHandler arrayHandler : arrayHandlers)
+    for (ArrayHandler arrayHandler : Handlers.arrayHandlers)
       if (arrayHandler.canHandleArray(container)) {
         CollectionLabelBuilder labelBuilder = new CollectionLabelBuilder(logger.labelBuilder(),
                                                                          Array.getLength(container), "", "",
@@ -181,5 +164,13 @@ public class Parser {
 
   public static void findAnnotations(DataMonitor logger, Object container, int levelRequired) {
     findAnnotations(logger, container, new ArrayList<MonitorWrapper>(), Integer.MIN_VALUE, levelRequired);
+  }
+
+  public static void parse(DataMonitor dataMonitor, Object toParse, int levelRequired) {
+    if (toParse instanceof Monitored)
+      dataMonitor.add(Labels.label(toParse), (Monitored) toParse, 0);
+    if (toParse instanceof MonitorContainer)
+      ((MonitorContainer) toParse).addToMonitor(0, dataMonitor);
+    findAnnotations(dataMonitor, toParse, levelRequired);
   }
 }

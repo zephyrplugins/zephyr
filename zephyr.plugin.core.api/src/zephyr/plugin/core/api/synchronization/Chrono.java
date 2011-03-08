@@ -12,6 +12,10 @@ public class Chrono {
     start();
   }
 
+  public Chrono(long creationTime) {
+    this.creationTime = creationTime;
+  }
+
   public void start() {
     creationTime = System.nanoTime();
   }
@@ -56,5 +60,9 @@ public class Chrono {
     if (periodNano < 1000000000)
       return String.valueOf(periodNano / 1000000) + "ms";
     return String.valueOf(periodNano / 1000000000) + "s";
+  }
+
+  static public long longTimeAgo() {
+    return System.nanoTime() - ((long) 365 * (long) 24 * 3600 * 1000000000);
   }
 }

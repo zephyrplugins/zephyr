@@ -6,7 +6,7 @@ public class Abs implements MonitorWrapper {
   public static final String ID = "abs";
 
   @Override
-  public Monitored createLogged(final Monitored logged) {
+  public Monitored createMonitored(final Monitored logged) {
     return new Monitored() {
       @Override
       public double loggedValue(long stepTime) {

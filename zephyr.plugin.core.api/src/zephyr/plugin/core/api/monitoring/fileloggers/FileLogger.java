@@ -5,10 +5,8 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-import zephyr.plugin.core.api.labels.Labels;
 import zephyr.plugin.core.api.monitoring.LabelBuilder;
 import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
-import zephyr.plugin.core.api.monitoring.abstracts.MonitorContainer;
 import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
 import zephyr.plugin.core.api.monitoring.helpers.Parser;
 
@@ -70,11 +68,7 @@ public class FileLogger extends AbstractFileLogger implements DataMonitor {
   }
 
   public void add(Object toAdd, int levelRequired) {
-    if (toAdd instanceof Monitored)
-      add(Labels.label(toAdd), (Monitored) toAdd);
-    if (toAdd instanceof MonitorContainer)
-      ((MonitorContainer) toAdd).addToMonitor(0, this);
-    Parser.findAnnotations(this, toAdd, levelRequired);
+    Parser.parse(this, toAdd, levelRequired);
   }
 
   public void update(long stepTime) {

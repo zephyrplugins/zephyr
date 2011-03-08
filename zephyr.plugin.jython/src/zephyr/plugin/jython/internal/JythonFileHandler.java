@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.python.core.PyDictionary;
+import org.python.core.PyList;
 import org.python.core.PyString;
 import org.python.core.PySystemState;
 import org.python.util.PythonInterpreter;
@@ -19,11 +20,19 @@ public class JythonFileHandler implements IFileHandler {
   public void handle(String filepath, String[] fileargs) throws IOException {
     PyDictionary table = new PyDictionary();
     PySystemState state = new PySystemState();
+    state.argv = buildArgumentList(fileargs);
     state.setClassLoader(new ZepyClassLoader());
     for (String pluginPath : getPluginPythonPath())
       state.path.append(new PyString(pluginToPythonPath(pluginPath)));
     PythonInterpreter interpreter = new PythonInterpreter(table, state);
     interpreter.execfile(filepath);
+  }
+
+  private PyList buildArgumentList(String[] fileargs) {
+    PyList result = new PyList();
+    for (String arg : fileargs)
+      result.add(new PyString(arg));
+    return result;
   }
 
   private String[] getPluginPythonPath() {

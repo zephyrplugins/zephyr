@@ -66,7 +66,7 @@ public class Loggers {
     if (wrappers == null)
       return;
     for (MonitorWrapper wrapper : wrappers)
-      logger.add(label + Wrappers.wrapperLabel(wrapper), wrapper.createLogged(monitored), 0);
+      logger.add(label + Wrappers.wrapperLabel(wrapper), wrapper.createMonitored(monitored), 0);
   }
 
   public static boolean isIndexIncluded(Field field) {

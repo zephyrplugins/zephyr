@@ -27,6 +27,9 @@ public class ClockInfo implements Labeled {
     put("File", file.getName(), file.getAbsolutePath());
   }
 
+  public void put(String caption, String value) {
+    put(caption, value, "");
+  }
 
   public void put(String caption, String value, String info) {
     captionToValue.put(caption, value);

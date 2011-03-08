@@ -85,7 +85,8 @@ public class SensorGroup implements ObsWidget {
   @Override
   public void repaint() {
     for (Canvas canvas : canvasArray)
-      canvas.redraw();
+      if (!canvas.isDisposed())
+        canvas.redraw();
   }
 
   @Override

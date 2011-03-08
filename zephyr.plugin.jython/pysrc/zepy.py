@@ -6,8 +6,8 @@ def _findclock(clock, obj):
         return clock
     return obj.clock() if callable(obj.clock) else obj.clock
 
-def advertise(obj, clock = None):
-    Zephyr.advertise(_findclock(clock, obj), obj)
+def advertise(obj, clock = None, info = None):
+    Zephyr.advertise(_findclock(clock, obj), obj, info)
     
 def monfunc(clock, func, level = 0, name = None):
     logger = ZephyrPlotting.createLogger(clock)

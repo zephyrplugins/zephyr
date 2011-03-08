@@ -85,7 +85,7 @@ public class ParserLevelTest implements DataMonitor {
   }
 
   private void add(Object toAdd, int levelRequired) {
-    Parser.findAnnotations(this, toAdd, levelRequired);
+    Parser.parse(this, toAdd, levelRequired);
   }
 
   @Override

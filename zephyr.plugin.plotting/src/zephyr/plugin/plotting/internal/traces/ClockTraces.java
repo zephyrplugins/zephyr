@@ -5,10 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import zephyr.plugin.core.Utils;
-import zephyr.plugin.core.api.labels.Labels;
 import zephyr.plugin.core.api.monitoring.LabelBuilder;
 import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
-import zephyr.plugin.core.api.monitoring.abstracts.MonitorContainer;
 import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
 import zephyr.plugin.core.api.monitoring.helpers.Parser;
 import zephyr.plugin.core.api.signals.Listener;
@@ -75,11 +73,7 @@ public class ClockTraces implements DataMonitor {
   @Override
   public void add(Object toAdd) {
     startAddingTrace();
-    if (toAdd instanceof Monitored)
-      add(Labels.label(toAdd), (Monitored) toAdd, Parser.MonitorEverythingLevel);
-    if (toAdd instanceof MonitorContainer)
-      ((MonitorContainer) toAdd).addToMonitor(0, this);
-    Parser.findAnnotations(this, toAdd, Parser.MonitorEverythingLevel);
+    Parser.parse(this, toAdd, Parser.MonitorEverythingLevel);
     endAddingTrace();
   }
 

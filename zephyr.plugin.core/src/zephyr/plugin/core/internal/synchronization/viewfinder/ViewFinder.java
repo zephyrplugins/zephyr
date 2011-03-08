@@ -81,8 +81,10 @@ public class ViewFinder {
   public ViewReference provideNewView() {
     IViewRegistry viewRegistry = PlatformUI.getWorkbench().getViewRegistry();
     IViewDescriptor descriptor = viewRegistry.find(viewID);
-    if (descriptor == null)
+    if (descriptor == null) {
+      System.err.println("Zephyr warning: no descriptor can be found for view " + viewID);
       return null;
+    }
     if (!descriptor.getAllowMultiple())
       return showView((String) null);
     return showView(findAvailableSecondaryID());

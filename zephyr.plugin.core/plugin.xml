@@ -241,7 +241,7 @@
       </activity>
       <activityPatternBinding
             activityId="zephyr.ui.editors.activity"
-            pattern="org.eclipse.ui.*">
+            pattern="org.eclipse.ui.edit.*">
       </activityPatternBinding>
    </extension>
    <extension

@@ -110,6 +110,8 @@ public class Advertisement {
     for (Field field : getFieldList(advertisedClass)) {
       if (field.isSynthetic() || field.getType().isPrimitive())
         continue;
+      if (field.isAnnotationPresent(IgnoreAdvertise.class))
+        continue;
       Advertise advertise = field.getAnnotation(Advertise.class);
       if (classAdvertise == null && advertise == null)
         continue;
@@ -159,6 +161,8 @@ public class Advertisement {
 
   private void advertiseField(Field field, String label, Stack<Object> parents, Object advertised,
       Clock clock, Object info, Advertise classAdvertise) {
+    if (field.isAnnotationPresent(IgnoreAdvertise.class))
+      return;
     Advertise advertise = field.isAnnotationPresent(Advertise.class) ?
         field.getAnnotation(Advertise.class) : classAdvertise;
     Object infoProvider = annotationToInfoProvider(advertise, advertised);

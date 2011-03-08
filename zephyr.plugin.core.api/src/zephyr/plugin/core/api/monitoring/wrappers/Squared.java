@@ -6,7 +6,7 @@ public class Squared implements MonitorWrapper {
   public static final String ID = "squared";
 
   @Override
-  public Monitored createLogged(final Monitored logged) {
+  public Monitored createMonitored(final Monitored logged) {
     return new Monitored() {
       @Override
       public double loggedValue(long stepTime) {

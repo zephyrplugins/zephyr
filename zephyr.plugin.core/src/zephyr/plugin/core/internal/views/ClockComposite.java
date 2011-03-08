@@ -1,6 +1,7 @@
 package zephyr.plugin.core.internal.views;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -49,17 +50,9 @@ public class ClockComposite {
     GridLayout gridLayout = new GridLayout();
     gridLayout.numColumns = 2;
     group.setLayout(gridLayout);
-    ClockInfo clockInfo = clock.info();
     createLabelLine(group);
     timeStepLabel = updatedShortTextLabel(group, "Step");
     periodLabel = updatedShortTextLabel(group, "Period");
-    for (String caption : clockInfo.captions())
-      updatableTextLabel(group, caption, clockInfo.value(caption), clockInfo.info(caption));
-  }
-
-  private void updatableTextLabel(Group group, String caption, String value, String info) {
-    Label label = createTextLabel(group, caption, value, info);
-    captionToLabelInfo.put(caption, new UpdatableLabelInfo(label, value, info));
   }
 
   private void createLabelLine(Composite parent) {
@@ -96,11 +89,7 @@ public class ClockComposite {
   }
 
   private Label createTextLabel(Composite parent, String stringLabel, String constantValue, String tooltip) {
-    Label label = new Label(parent, SWT.NONE);
-    label.setText(stringLabel);
-    Label valueLabel = new Label(parent, SWT.NONE);
-    GridData griddata = new GridData(SWT.RIGHT, SWT.UP, true, false);
-    valueLabel.setLayoutData(griddata);
+    Label valueLabel = updatedShortTextLabel(parent, stringLabel);
     valueLabel.setText(constantValue);
     valueLabel.setToolTipText(tooltip);
     return valueLabel;
@@ -122,6 +111,11 @@ public class ClockComposite {
     ClockInfo clockInfo = clock.info();
     for (String caption : clockInfo.captions()) {
       UpdatableLabelInfo labelInfo = captionToLabelInfo.get(caption);
+      if (labelInfo == null) {
+        labelInfo = new UpdatableLabelInfo(null, "", "");
+        captionToLabelInfo.put(caption, labelInfo);
+        continue;
+      }
       labelInfo.value = clockInfo.value(caption);
       labelInfo.info = clockInfo.info(caption);
     }
@@ -137,9 +131,17 @@ public class ClockComposite {
     boolean layoutChanged = false;
     layoutChanged = adjustLabel(timeStepLabel, String.valueOf(timeStep)) || layoutChanged;
     layoutChanged = adjustLabel(periodLabel, Chrono.toPeriodString(period)) || layoutChanged;
-    for (UpdatableLabelInfo labelInfo : captionToLabelInfo.values()) {
-      layoutChanged = adjustLabel(labelInfo.label, labelInfo.value) || layoutChanged;
-      labelInfo.label.setToolTipText(labelInfo.info);
+    HashSet<Map.Entry<String, UpdatableLabelInfo>> labelSet =
+        new HashSet<Map.Entry<String, UpdatableLabelInfo>>(captionToLabelInfo.entrySet());
+    for (Map.Entry<String, UpdatableLabelInfo> entry : labelSet) {
+      UpdatableLabelInfo labelInfo = entry.getValue();
+      if (labelInfo.label == null) {
+        labelInfo.label = createTextLabel(group, entry.getKey(), labelInfo.value, labelInfo.info);
+        group.getParent().layout(true);
+      } else {
+        layoutChanged = adjustLabel(labelInfo.label, labelInfo.value) || layoutChanged;
+        labelInfo.label.setToolTipText(labelInfo.info);
+      }
     }
     if (layoutChanged)
       group.layout(true);
