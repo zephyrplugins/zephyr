@@ -8,7 +8,7 @@ import org.eclipse.core.runtime.Platform;
 import org.osgi.framework.Bundle;
 
 
-public class ZephyrClassLoader extends ClassLoader {
+public class ZephyrClassLoaderInternal extends ClassLoader {
   private List<Bundle> zephyrClasspathBundles = null;
 
   private Class<? extends Object> superFindSystemClass(String className) {

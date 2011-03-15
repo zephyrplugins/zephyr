@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: zephyr.plugin.clojure
+Bundle-SymbolicName: zephyr.plugin.clojure;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: Thomas
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ClassPath: clojure-1.2.0/clojure.jar,
+ .
+Require-Bundle: zephyr.plugin.core;bundle-version="1.0.0",
+ zephyr.plugin.core.api;bundle-version="1.0.0",
+ zephyr.plugin.filehandling;bundle-version="1.0.0"

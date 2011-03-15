@@ -44,14 +44,14 @@ public class ZephyrPluginCore extends AbstractUIPlugin {
   final private ViewTaskScheduler viewTaskScheduler = new ViewTaskScheduler();
   private static ZephyrPluginCore plugin;
   private final ThreadGroup threadGroup = new ThreadGroup("ZephyrRunnable");
-  private final ZephyrClassLoader classLoader;
+  private final ZephyrClassLoaderInternal classLoader;
   private final Control control = new Control();
 
   public ZephyrPluginCore() {
-    classLoader = AccessController.doPrivileged(new PrivilegedAction<ZephyrClassLoader>() {
+    classLoader = AccessController.doPrivileged(new PrivilegedAction<ZephyrClassLoaderInternal>() {
       @Override
-      public ZephyrClassLoader run() {
-        return new ZephyrClassLoader();
+      public ZephyrClassLoaderInternal run() {
+        return new ZephyrClassLoaderInternal();
       }
     });
   }
