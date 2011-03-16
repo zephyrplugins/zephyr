@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.List;
 
 import zephyr.plugin.core.Utils;
-import zephyr.plugin.core.utils.ZephyrClassLoader;
 import zephyr.plugin.filehandling.IFileHandler;
 import clojure.lang.Compiler;
 import clojure.lang.RT;
@@ -20,8 +19,8 @@ public class ClojureFileHandler implements IFileHandler {
     setClassLoader();
     try {
       Compiler.loadFile(filepath);
-      Var main = RT.var(extractNamespace(filepath), "main");
-      Object result = main.invoke(fileargs);
+      Var mainFunction = RT.var(extractNamespace(filepath), "main");
+      Object result = mainFunction.invoke(fileargs);
       System.out.println(String.valueOf(result));
     } catch (Exception e) {
       e.printStackTrace();
@@ -30,7 +29,14 @@ public class ClojureFileHandler implements IFileHandler {
 
   private void setClassLoader() {
     ClassLoader parentClassLoader = Thread.currentThread().getContextClassLoader();
-    ZephyrClassLoader zephyrClassLoader = new ZephyrClassLoader(parentClassLoader);
+    final LoaderProxy loaderProxy = new LoaderProxy(parentClassLoader);
+    ZephyrClassLoader zephyrClassLoader = new ZephyrClassLoader(loaderProxy);
+    try {
+      loaderProxy.loadClass("clojure.lang.IFn");
+      zephyrClassLoader.loadClass("clojure.lang.IFn");
+    } catch (ClassNotFoundException e) {
+      e.printStackTrace();
+    }
     Thread.currentThread().setContextClassLoader(zephyrClassLoader);
   }
 

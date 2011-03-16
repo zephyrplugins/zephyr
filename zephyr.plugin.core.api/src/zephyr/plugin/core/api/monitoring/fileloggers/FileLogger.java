@@ -93,7 +93,7 @@ public class FileLogger extends AbstractFileLogger implements DataMonitor {
       line.append(" ");
     }
     for (int i = 0; i < loggeds.size(); i++) {
-      double value = loggeds.get(i).loggedValue(stepTime);
+      double value = loggeds.get(i).monitoredValue(stepTime);
       line.append(String.valueOf(value));
       if (Double.isInfinite(value) && !atLeastOneInfinite.get(i)) {
         System.err.println(String.format("Warning: %s is infinite", labels.get(i)));

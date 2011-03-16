@@ -1,5 +1,5 @@
 package zephyr.plugin.core.api.monitoring.abstracts;
 
 public interface Monitored {
-  double loggedValue(long stepTime);
+  double monitoredValue(long stepTime);
 }

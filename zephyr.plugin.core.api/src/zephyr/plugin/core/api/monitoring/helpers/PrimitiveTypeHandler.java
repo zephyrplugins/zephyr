@@ -24,7 +24,7 @@ public class PrimitiveTypeHandler implements FieldHandler {
   private Monitored createValueLogged(final Object container, final Field field) {
     return new Monitored() {
       @Override
-      public double loggedValue(long stepTime) {
+      public double monitoredValue(long stepTime) {
         try {
           return field.getDouble(container);
         } catch (IllegalArgumentException e) {
@@ -40,7 +40,7 @@ public class PrimitiveTypeHandler implements FieldHandler {
   private Monitored createBooleanLogged(final Object container, final Field field) {
     return new Monitored() {
       @Override
-      public double loggedValue(long stepTime) {
+      public double monitoredValue(long stepTime) {
         try {
           return field.getBoolean(container) ? 1 : 0;
         } catch (IllegalArgumentException e) {

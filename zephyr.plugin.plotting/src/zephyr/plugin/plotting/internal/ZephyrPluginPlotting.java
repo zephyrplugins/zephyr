@@ -23,7 +23,7 @@ public class ZephyrPluginPlotting extends AbstractUIPlugin {
   private final Listener<Advertisement.Advertised> advertisedRootListener = new Listener<Advertisement.Advertised>() {
     @Override
     public void listen(Advertised eventInfo) {
-      DataMonitor logger = ZephyrPlotting.createLogger(eventInfo.clock);
+      DataMonitor logger = ZephyrPlotting.createMonitor(eventInfo.clock);
       logger.add(eventInfo.advertised);
     }
   };

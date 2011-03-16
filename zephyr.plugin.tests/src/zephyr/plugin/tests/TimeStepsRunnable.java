@@ -10,15 +10,15 @@ public class TimeStepsRunnable implements Runnable {
   private final Clock clock02 = new Clock("Clock02");
 
   public TimeStepsRunnable() {
-    ZephyrPlotting.createLogger(clock01).add("clock01", new Monitored() {
+    ZephyrPlotting.createMonitor(clock01).add("clock01", new Monitored() {
       @Override
-      public double loggedValue(long stepTime) {
+      public double monitoredValue(long stepTime) {
         return stepTime;
       }
     }, 0);
-    ZephyrPlotting.createLogger(clock02).add("clock02", new Monitored() {
+    ZephyrPlotting.createMonitor(clock02).add("clock02", new Monitored() {
       @Override
-      public double loggedValue(long stepTime) {
+      public double monitoredValue(long stepTime) {
         return stepTime;
       }
     }, 0);

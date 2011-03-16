@@ -5,7 +5,7 @@ import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.plotting.internal.traces.ClockTracesManager;
 
 public class ZephyrPlotting {
-  static public DataMonitor createLogger(Clock clock) {
+  static public DataMonitor createMonitor(Clock clock) {
     return ClockTracesManager.manager().addClock(clock.info().label(), clock);
   }
 

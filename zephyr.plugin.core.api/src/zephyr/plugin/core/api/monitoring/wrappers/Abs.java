@@ -9,8 +9,8 @@ public class Abs implements MonitorWrapper {
   public Monitored createMonitored(final Monitored logged) {
     return new Monitored() {
       @Override
-      public double loggedValue(long stepTime) {
-        return Math.abs(logged.loggedValue(stepTime));
+      public double monitoredValue(long stepTime) {
+        return Math.abs(logged.monitoredValue(stepTime));
       }
     };
   }
