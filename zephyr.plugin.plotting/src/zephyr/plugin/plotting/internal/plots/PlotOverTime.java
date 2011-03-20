@@ -8,6 +8,7 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.RGB;
 
+import zephyr.ZephyrPlotting;
 import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.canvas.Painter;
 import zephyr.plugin.core.utils.Colors;
@@ -43,6 +44,8 @@ public class PlotOverTime implements Painter {
   private final Colors colors = new Colors();
   private ResetMode axesNeedReset = ResetMode.NoReset;
   private final HashSet<Integer> hashedLines = new HashSet<Integer>();
+  private int lineWidth = 1;
+  private boolean antiAliasing = false;
 
   public PlotOverTime(PlotData plotdata) {
     this.plotdata = plotdata;
@@ -66,7 +69,8 @@ public class PlotOverTime implements Painter {
 
   @Override
   public void paint(PainterMonitor painterListener, Image image, GC gc) {
-    gc.setAntialias(SWT.OFF);
+    updatePreferences();
+    gc.setAntialias(antiAliasing ? SWT.ON : SWT.OFF);
     preparePainting();
     List<HistoryCached> histories = plotdata.getHistories();
     updateAxes(histories);
@@ -74,6 +78,11 @@ public class PlotOverTime implements Painter {
     if (histories.isEmpty())
       return;
     drawTraces(painterListener, gc, histories);
+  }
+
+  private void updatePreferences() {
+    antiAliasing = ZephyrPlotting.preferredAntiAliasing();
+    lineWidth = ZephyrPlotting.preferredLineSize();
   }
 
   private void updateAxes(List<HistoryCached> histories) {
@@ -95,7 +104,7 @@ public class PlotOverTime implements Painter {
     axes.updateScaling(gc.getClipping());
     gc.setBackground(colors.color(gc, Colors.COLOR_WHITE));
     gc.fillRectangle(gc.getClipping());
-    gc.setLineWidth(1);
+    gc.setLineWidth(lineWidth);
   }
 
   private void drawTraces(PainterMonitor painterMonitor, GC gc, List<HistoryCached> histories) {

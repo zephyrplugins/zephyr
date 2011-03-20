@@ -2,11 +2,21 @@ package zephyr;
 
 import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.core.api.synchronization.Clock;
+import zephyr.plugin.plotting.internal.ZephyrPluginPlotting;
 import zephyr.plugin.plotting.internal.traces.ClockTracesManager;
+import zephyr.plugin.plotting.preferences.PreferenceConstants;
 
 public class ZephyrPlotting {
   static public DataMonitor createMonitor(Clock clock) {
     return ClockTracesManager.manager().addClock(clock.info().label(), clock);
+  }
+
+  static public int preferredLineSize() {
+    return ZephyrPluginPlotting.getDefault().getPreferenceStore().getInt(PreferenceConstants.LineSizePrefLabel);
+  }
+
+  static public boolean preferredAntiAliasing() {
+    return ZephyrPluginPlotting.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.AntiAliasingPrefLabel);
   }
 
   /**

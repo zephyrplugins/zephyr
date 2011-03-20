@@ -220,4 +220,19 @@
          classpath body text
       </classpath>
    </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="zephyr.plugin.core.preferences.zephyr.root"
+            class="zephyr.plugin.plotting.preferences.PlottingPreferencePage"
+            id="zephyr.plugin.plotting.preferences.PlottingPreferencePage"
+            name="Plotting">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="zephyr.plugin.plotting.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
 </plugin>
