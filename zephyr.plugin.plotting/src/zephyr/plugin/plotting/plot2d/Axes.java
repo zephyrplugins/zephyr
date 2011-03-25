@@ -49,7 +49,8 @@ public class Axes {
     }
 
     public void update(double d) {
-      assert Utils.checkValue(d);
+      if (!Utils.checkValue(d))
+        return;
       minValue = Math.min(minValue, d);
       maxValue = Math.max(maxValue, d);
     }

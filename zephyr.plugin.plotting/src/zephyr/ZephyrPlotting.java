@@ -8,7 +8,10 @@ import zephyr.plugin.plotting.preferences.PreferenceConstants;
 
 public class ZephyrPlotting {
   static public DataMonitor createMonitor(Clock clock) {
-    return ClockTracesManager.manager().addClock(clock.info().label(), clock);
+    final ClockTracesManager manager = ClockTracesManager.manager();
+    if (manager == null)
+      return null;
+    return manager.addClock(clock.info().label(), clock);
   }
 
   static public int preferredLineSize() {
