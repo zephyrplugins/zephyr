@@ -84,7 +84,8 @@ public class ParserLevelTest implements DataMonitor {
     add(toAdd, Parser.MonitorEverythingLevel);
   }
 
-  private void add(Object toAdd, int levelRequired) {
+  @Override
+  public void add(Object toAdd, int levelRequired) {
     Parser.parse(this, toAdd, levelRequired);
   }
 

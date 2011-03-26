@@ -72,8 +72,13 @@ public class ClockTraces implements DataMonitor {
 
   @Override
   public void add(Object toAdd) {
+    add(toAdd, Parser.MonitorEverythingLevel);
+  }
+
+  @Override
+  public void add(Object toAdd, int level) {
     startAddingTrace();
-    Parser.parse(this, toAdd, Parser.MonitorEverythingLevel);
+    Parser.parse(this, toAdd, level);
     endAddingTrace();
   }
 

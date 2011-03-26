@@ -5,10 +5,12 @@ import org.osgi.framework.BundleContext;
 
 import zephyr.ZephyrPlotting;
 import zephyr.plugin.core.api.Zephyr;
+import zephyr.plugin.core.api.Zephyr.DataMonitorProvider;
 import zephyr.plugin.core.api.advertisement.Advertisement;
 import zephyr.plugin.core.api.advertisement.Advertisement.Advertised;
 import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.core.api.signals.Listener;
+import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.utils.Helper;
 import zephyr.plugin.plotting.internal.commands.EnableAllTraces;
 import zephyr.plugin.plotting.internal.traces.ClockTracesManager;
@@ -38,6 +40,12 @@ public class ZephyrPluginPlotting extends AbstractUIPlugin {
     plugin = this;
     ClockTracesManager.setManager(traces);
     Zephyr.advertisement().onAdvertiseRoot.connect(advertisedRootListener);
+    Zephyr.setDefaultMonitorProvider(new DataMonitorProvider() {
+      @Override
+      public DataMonitor createDataMonitor(Clock clock) {
+        return ZephyrPlotting.createMonitor(clock);
+      }
+    });
   }
 
   @Override

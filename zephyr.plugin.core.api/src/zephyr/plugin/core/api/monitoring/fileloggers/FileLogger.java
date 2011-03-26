@@ -67,6 +67,7 @@ public class FileLogger extends AbstractFileLogger implements DataMonitor {
     add(toAdd, Parser.MonitorEverythingLevel);
   }
 
+  @Override
   public void add(Object toAdd, int levelRequired) {
     Parser.parse(this, toAdd, levelRequired);
   }

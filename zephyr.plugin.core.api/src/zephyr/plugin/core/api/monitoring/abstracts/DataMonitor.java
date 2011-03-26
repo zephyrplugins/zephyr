@@ -5,6 +5,8 @@ import zephyr.plugin.core.api.monitoring.LabelBuilder;
 public interface DataMonitor {
   void add(Object toAdd);
 
+  void add(Object toAdd, int level);
+
   void add(String label, Monitored logged, int level);
 
   LabelBuilder labelBuilder();
