@@ -37,10 +37,13 @@ public class Advertisement {
   };
 
   public final Signal<Advertised> onAdvertiseNode = new Signal<Advertised>();
-
   public final Signal<Advertised> onAdvertiseRoot = new Signal<Advertised>();
 
+  private boolean verbose = false;
+
   public void advertiseInstance(Clock clock, Object drawn, Object info) {
+    printMessageOut(String.format("Clock: %s, Instance of: %s Info: %s", clock.info().label(), String.valueOf(drawn),
+                                  String.valueOf(info)));
     onAdvertiseNode.fire(new Advertised(clock, drawn, info));
   }
 
@@ -139,6 +142,8 @@ public class Advertisement {
     for (int i = 0; i < length; i++) {
       String label = collectionLabelBuilder.elementLabel(i);
       Object advertised = Array.get(fieldValue, i);
+      if (advertised == null)
+        continue;
       advertiseAndParse(labelBuilder, label, parents, clock, info, field, advertised, classAdvertise);
     }
   }
@@ -186,13 +191,13 @@ public class Advertisement {
   protected Object getFieldValue(Object parent, Field field) {
     if (!Modifier.isFinal(field.getModifiers())) {
       String messagePattern = "Warning: Zephyr advertises %s but it is not final: new values will not be advertised";
-      System.err.println(String.format(messagePattern, field.toGenericString()));
+      printMessageErr(String.format(messagePattern, field.toGenericString()));
     }
     try {
       Object instance = field.get(parent);
       if (instance == null)
-        System.err.println(String.format("Warning: Zephyr cannot advertise %s because it is null",
-                                         field.toGenericString()));
+        printMessageErr(String
+            .format("Warning: Zephyr cannot advertise %s because it is null", field.toGenericString()));
       return instance;
     } catch (IllegalArgumentException e) {
       e.printStackTrace();
@@ -200,5 +205,19 @@ public class Advertisement {
       e.printStackTrace();
     }
     return null;
+  }
+
+  private void printMessageOut(String message) {
+    if (verbose)
+      System.out.println(message);
+  }
+
+  private void printMessageErr(String message) {
+    if (verbose)
+      System.err.println(message);
+  }
+
+  public void setVerbose(boolean verbose) {
+    this.verbose = verbose;
   }
 }
