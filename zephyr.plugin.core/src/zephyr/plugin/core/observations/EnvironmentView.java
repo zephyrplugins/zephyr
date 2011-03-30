@@ -8,6 +8,9 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.part.ViewPart;
 
+import zephyr.ZephyrSync;
+import zephyr.plugin.core.api.signals.Listener;
+import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.internal.observations.LineLayout;
 import zephyr.plugin.core.views.TimedView;
 
@@ -24,6 +27,18 @@ public abstract class EnvironmentView extends ViewPart implements TimedView {
     }
   };
   private String defaultViewName = "EnvironmentView";
+
+  abstract protected Clock displayedClock();
+
+  public EnvironmentView() {
+    ZephyrSync.onClockRemoved().connect(new Listener<Clock>() {
+      @Override
+      public void listen(Clock clock) {
+        if (displayedClock() == clock)
+          close();
+      }
+    });
+  }
 
   @Override
   public void createPartControl(Composite parent) {

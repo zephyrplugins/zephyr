@@ -109,4 +109,9 @@ public class FileView extends EnvironmentView implements Closeable, Restartable 
   public void removeTimed(Clock clock) {
     dispose();
   }
+
+  @Override
+  protected Clock displayedClock() {
+    return logFile == null ? null : logFile.clock();
+  }
 }

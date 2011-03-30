@@ -90,6 +90,7 @@ public abstract class LogFile implements Labeled, Timed {
     return line;
   }
 
+
   private String readLine() {
     String line = null;
     synchronized (reader) {
@@ -97,6 +98,7 @@ public abstract class LogFile implements Labeled, Timed {
         line = reader.readLine();
       } catch (IOException e) {
         e.printStackTrace();
+        close();
       }
     }
     return line;
