@@ -107,6 +107,8 @@ public abstract class EnvironmentView extends ViewPart implements TimedView {
       @SuppressWarnings("synthetic-access")
       @Override
       public void run() {
+        if (parent.isDisposed())
+          return;
         setPartName(viewName);
         setTitleToolTip(tooltip);
         firePropertyChange(org.eclipse.ui.IWorkbenchPart.PROP_TITLE);

@@ -63,7 +63,7 @@ public class AdvertisementInvocationTest {
         hasBeenAdvertised.add((String) eventInfo.info);
       }
     });
-    Zephyr.advertise((Clock) null, advertised);
+    Zephyr.advertise(new Clock(), advertised);
     String[] stringInfos = new String[hasBeenAdvertised.size()];
     hasBeenAdvertised.toArray(stringInfos);
     Assert.assertTrue(Arrays.equals(expected, stringInfos));

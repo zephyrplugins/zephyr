@@ -11,6 +11,7 @@ import org.junit.Test;
 import zephyr.plugin.core.api.Zephyr;
 import zephyr.plugin.core.api.advertisement.Advertisement.Advertised;
 import zephyr.plugin.core.api.signals.Listener;
+import zephyr.plugin.core.api.synchronization.Clock;
 
 public class AdvertisementTest {
   static private final String infoString = "info";
@@ -39,7 +40,7 @@ public class AdvertisementTest {
           advertised.add(String.format("%s[%s]", eventInfo.advertised, eventInfo.info));
       }
     });
-    Zephyr.advertise(null, this, infoString);
+    Zephyr.advertise(new Clock(), this, infoString);
     checkCollection(new String[] { toAd("label01", label01), toAd("label02", label02),
         toAd("labels", labels[0], 0), toAd("labels", labels[1], 1) }, advertised);
   }

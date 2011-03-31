@@ -77,11 +77,11 @@ class HistoryLength {
     historyLength.setDigits(0);
     composite.pack();
     double nbLetters = Math.floor(Math.log10(PlotData.MaximumTimeLength));
-    if (previousHistoryLength != null) {
+    if (previousHistoryLength != null)
       setHistoryLengthValue(previousHistoryLength);
-      historyLength.setSelection(previousHistoryLength);
-    } else
-      setHistoryLengthValue(PlotData.MinimumTimeLength);
+    else
+      setHistoryLengthValue(length());
+    historyLength.setSelection(length());
     historyLength.setLayoutData(new RowData((int) (historyLength.getSize().x / 9.0 * nbLetters),
                                             historyLength.getSize().y));
     historyLength.addSelectionListener(new SelectionListener() {

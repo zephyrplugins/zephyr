@@ -58,7 +58,7 @@ public class AdvertisementParentTest {
       }
     });
     Toto toto = new Toto();
-    Zephyr.advertise((Clock) null, toto);
+    Zephyr.advertise(new Clock(), toto);
     checkCollection(new Object[] { toto, toto, toto.tata, toto, toto.tata, toto.tata.tataField, toto, toto.totoField },
                     hasBeenAdvertised);
   }
