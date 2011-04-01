@@ -2,6 +2,8 @@ package zephyr.plugin.core.api.monitoring.helpers;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
@@ -14,6 +16,12 @@ import zephyr.plugin.core.api.monitoring.wrappers.MonitorWrapper;
 import zephyr.plugin.core.api.monitoring.wrappers.Wrappers;
 
 public class Loggers {
+  static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmm");
+
+  public static String fileNameTimeStamp() {
+    return dateFormat.format(new Date());
+  }
+
   public static void add(DataMonitor logger, String[] elementLabels, double[] data, int level) {
     add(logger, elementLabels, data, null, level);
   }
