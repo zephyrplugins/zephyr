@@ -10,9 +10,9 @@ import org.junit.Test;
 import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.core.api.monitoring.abstracts.MonitorContainer;
 import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
-import zephyr.plugin.core.api.monitoring.annotations.LabelProvider;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 import zephyr.plugin.core.api.monitoring.fileloggers.FileLogger;
+import zephyr.plugin.core.api.parsing.LabelProvider;
 
 
 public class ParserTest01 {

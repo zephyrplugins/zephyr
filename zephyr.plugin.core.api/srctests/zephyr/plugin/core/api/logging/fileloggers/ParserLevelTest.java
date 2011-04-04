@@ -8,11 +8,11 @@ import java.util.Map;
 import org.junit.Assert;
 import org.junit.Test;
 
-import zephyr.plugin.core.api.monitoring.LabelBuilder;
 import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 import zephyr.plugin.core.api.monitoring.helpers.Parser;
+import zephyr.plugin.core.api.parsing.LabelBuilder;
 
 
 public class ParserLevelTest implements DataMonitor {

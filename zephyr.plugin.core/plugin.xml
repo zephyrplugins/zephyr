@@ -64,6 +64,17 @@
             id="zephyr.plugin.core.showclockview"
             name="Show Clock View">
       </command>
+      <command
+            defaultHandler="zephyr.plugin.core.internal.commands.ShowNewView"
+            description="Show a new view"
+            id="zephyr.plugin.core.views.showView"
+            name="ShowNewView">
+         <commandParameter
+               id="org.eclipse.ui.views.showView.viewId"
+               name="View ID"
+               optional="false">
+         </commandParameter>
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.menus">

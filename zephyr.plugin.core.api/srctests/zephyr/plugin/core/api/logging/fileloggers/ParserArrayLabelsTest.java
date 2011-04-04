@@ -5,9 +5,9 @@ import java.io.StringWriter;
 import org.junit.Assert;
 import org.junit.Test;
 
-import zephyr.plugin.core.api.monitoring.annotations.LabelProvider;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 import zephyr.plugin.core.api.monitoring.fileloggers.FileLogger;
+import zephyr.plugin.core.api.parsing.LabelProvider;
 
 
 public class ParserArrayLabelsTest {

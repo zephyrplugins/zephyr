@@ -1,6 +1,6 @@
 package zephyr.plugin.core.api.monitoring.abstracts;
 
-import zephyr.plugin.core.api.monitoring.LabelBuilder;
+import zephyr.plugin.core.api.parsing.LabelBuilder;
 
 public interface DataMonitor {
   void add(Object toAdd);

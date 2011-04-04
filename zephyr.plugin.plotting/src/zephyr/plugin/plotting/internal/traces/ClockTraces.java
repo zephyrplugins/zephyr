@@ -5,10 +5,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 import zephyr.plugin.core.Utils;
-import zephyr.plugin.core.api.monitoring.LabelBuilder;
 import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
 import zephyr.plugin.core.api.monitoring.helpers.Parser;
+import zephyr.plugin.core.api.parsing.LabelBuilder;
 import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.signals.Signal;
 import zephyr.plugin.core.api.synchronization.Clock;

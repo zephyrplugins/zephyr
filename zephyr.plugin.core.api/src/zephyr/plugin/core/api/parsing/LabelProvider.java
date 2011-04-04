@@ -1,4 +1,4 @@
-package zephyr.plugin.core.api.monitoring.annotations;
+package zephyr.plugin.core.api.parsing;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

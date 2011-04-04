@@ -9,8 +9,8 @@ import java.util.Map;
 import zephyr.plugin.core.api.advertisement.Advertise;
 import zephyr.plugin.core.api.advertisement.IgnoreAdvertise;
 import zephyr.plugin.core.api.labels.Labeled;
-import zephyr.plugin.core.api.monitoring.annotations.LabelProvider;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
+import zephyr.plugin.core.api.parsing.LabelProvider;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.api.synchronization.Timed;
 

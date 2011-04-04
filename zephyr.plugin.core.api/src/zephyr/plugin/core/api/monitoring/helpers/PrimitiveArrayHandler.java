@@ -4,11 +4,11 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.List;
 
-import zephyr.plugin.core.api.labels.CollectionLabelBuilder;
 import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.core.api.monitoring.abstracts.FieldHandler;
 import zephyr.plugin.core.api.monitoring.wrappers.MonitorWrapper;
 import zephyr.plugin.core.api.monitoring.wrappers.Wrappers;
+import zephyr.plugin.core.api.parsing.CollectionLabelBuilder;
 
 public class PrimitiveArrayHandler implements FieldHandler, ArrayHandler {
   protected Object array(Field field, Object container) {

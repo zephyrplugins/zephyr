@@ -4,12 +4,15 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.swt.widgets.Display;
 
+import zephyr.plugin.core.api.advertisement.Advertisement.Advertised;
+import zephyr.plugin.core.api.advertisement.DataInfo;
+import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.internal.ZephyrPluginCore;
 import zephyr.plugin.core.utils.Helper;
 
 public class SelectAction<T> extends Action {
   public interface SelectedDisplay<T> {
-    void select(T t);
+    void select(Clock clock, T t, DataInfo info);
   }
 
   private final SelectedDisplay<T> display;
@@ -26,12 +29,9 @@ public class SelectAction<T> extends Action {
   public void run() {
     SelectDialogBox<T> dialogBox = new SelectDialogBox<T>(Display.getDefault().getActiveShell(), selector);
     dialogBox.open();
-    T result = dialogBox.getSelection();
+    Advertised result = dialogBox.getSelection();
     if (result == null)
       return;
-    T casted = selector.provider().cast(result);
-    if (casted == null)
-      return;
-    display.select(result);
+    selector.selectElement(display, result);
   }
 }

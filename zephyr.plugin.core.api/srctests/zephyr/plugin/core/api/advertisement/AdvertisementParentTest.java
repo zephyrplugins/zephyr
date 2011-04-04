@@ -17,7 +17,7 @@ import zephyr.plugin.core.api.synchronization.Clock;
 public class AdvertisementParentTest {
   static public class ParentInfoProvider implements InfoProvider {
     @Override
-    public Object provideInfo(String label, Object advertised, Stack<Object> parents, Object info) {
+    public Object provideInfo(String shortLabel, String fullLabel, Object advertised, Stack<Object> parents, Object info) {
       return new ArrayList<Object>(parents);
     }
   }

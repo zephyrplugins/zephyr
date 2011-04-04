@@ -9,15 +9,19 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 
-import zephyr.plugin.core.api.labels.CollectionLabelBuilder;
-import zephyr.plugin.core.api.monitoring.LabelBuilder;
+import zephyr.plugin.core.api.labels.Labeled;
+import zephyr.plugin.core.api.labels.Labels;
+import zephyr.plugin.core.api.parsing.CollectionLabelBuilder;
+import zephyr.plugin.core.api.parsing.LabeledElement;
+import zephyr.plugin.core.api.parsing.Parsers;
 import zephyr.plugin.core.api.signals.Signal;
 import zephyr.plugin.core.api.synchronization.Clock;
 
 public class Advertisement {
-  static public class Advertised {
+  static public class Advertised implements Labeled {
     public final Object advertised;
     public final Object info;
     public final Clock clock;
@@ -27,12 +31,19 @@ public class Advertisement {
       this.advertised = advertised;
       this.info = info;
     }
+
+    @Override
+    public String label() {
+      if (info == null || !(info instanceof DataInfo))
+        return Labels.label(advertised);
+      return Labels.label(info);
+    }
   }
 
   static public class DefaultInfoProvider implements InfoProvider {
     @Override
-    public Object provideInfo(String label, Object advertised, Stack<Object> parents, Object info) {
-      return info;
+    public Object provideInfo(String shortLabel, String fullLabel, Object advertised, Stack<Object> parents, Object info) {
+      return new DataInfo(shortLabel, fullLabel, parents, info);
     }
   };
 
@@ -47,15 +58,16 @@ public class Advertisement {
     onAdvertiseNode.fire(new Advertised(clock, drawn, info));
   }
 
-  protected Object provideInfo(String label, Stack<Object> parents, Object advertised, Object info, Object infoProvider) {
+  private Object provideInfo(ParserSession session, String advertisedLabel, Object advertised, Object infoProvider) {
+    String label = session.labelBuilder().buildLabel(advertisedLabel);
     if (infoProvider instanceof InfoProvider) {
       InfoProvider castedInfoProvider = (InfoProvider) infoProvider;
-      return castedInfoProvider.provideInfo(label, advertised, parents, info);
+      return castedInfoProvider.provideInfo(advertisedLabel, label, advertised, session.parents(), session.info());
     }
-    List<Object> orderedParents = new ArrayList<Object>(parents);
+    List<Object> orderedParents = new ArrayList<Object>(session.parents());
     Collections.reverse(orderedParents);
     Method[] methods = infoProvider.getClass().getMethods();
-    InfoProviderMethods infoProviderMethods = new InfoProviderMethods(label, advertised, info);
+    InfoProviderMethods infoProviderMethods = new InfoProviderMethods(label, advertised, session.info());
     Method method = infoProviderMethods.findMethod(methods);
     if (method != null)
       return infoProviderMethods.invoke(infoProvider, method);
@@ -66,7 +78,7 @@ public class Advertisement {
         continue;
       return infoProviderMethods.invoke(infoProvider, method);
     }
-    return info;
+    return session.info();
   }
 
   private Object annotationToInfoProvider(Advertise advertise, Object advertised) {
@@ -78,23 +90,25 @@ public class Advertisement {
   }
 
   public void parse(Clock clock, Object advertised, Object info) {
-    Stack<Object> parents = new Stack<Object>();
+    ParserSession session = new ParserSession(clock, info);
     Object infoProvider = annotationToInfoProvider(advertised.getClass().getAnnotation(Advertise.class), advertised);
-    Object providedInfo = provideInfo("", parents, advertised, info, infoProvider);
+    Object providedInfo = provideInfo(session, "", advertised, infoProvider);
     onAdvertiseRoot.fire(new Advertised(clock, advertised, info));
     advertiseInstance(clock, advertised, providedInfo);
-    parents.push(advertised);
-    recursiveParse(clock, new LabelBuilder(), advertised, parents, info);
+    session.push("", advertised);
+    recursiveParse(session, advertised);
   }
 
-  private void recursiveParse(Clock clock, LabelBuilder labelBuilder, Object advertised, Stack<Object> parents,
-      Object info) {
+  private void recursiveParse(ParserSession session, Object advertised) {
+    Map<String, LabeledElement> labelsMap = Parsers.buildLabelMaps(advertised);
+    session.labelBuilder().pushLabelMap(labelsMap);
     Class<?> objectClass = advertised.getClass();
     while (objectClass != null) {
       Advertise classAdvertise = objectClass.getAnnotation(Advertise.class);
-      parseFields(classAdvertise, objectClass, labelBuilder, advertised, parents, clock, info);
+      parseFields(session, classAdvertise, objectClass, advertised);
       objectClass = objectClass.getSuperclass();
     }
+    session.labelBuilder().popLabelMaps();
   }
 
   private static Field[] getFieldList(Class<?> objectClass) {
@@ -108,8 +122,7 @@ public class Advertisement {
     return fields;
   }
 
-  private void parseFields(Advertise classAdvertise, Class<?> advertisedClass, LabelBuilder labelBuilder,
-      Object advertised, Stack<Object> parents, Clock clock, Object info) {
+  private void parseFields(ParserSession session, Advertise classAdvertise, Class<?> advertisedClass, Object advertised) {
     for (Field field : getFieldList(advertisedClass)) {
       if (field.isSynthetic() || field.getType().isPrimitive())
         continue;
@@ -123,56 +136,44 @@ public class Advertisement {
       if (fieldValue == null)
         continue;
       if (field.getType().isArray())
-        advertiseElements(labelBuilder, parents, clock, info, field, fieldValue, classAdvertise);
+        advertiseElements(session, field, fieldValue, classAdvertise);
       else
-        advertiseAndParse(labelBuilder, parents, clock, info, field, fieldValue, classAdvertise);
+        advertiseAndParse(session, field, field.getName(), fieldValue, classAdvertise);
     }
   }
 
-  protected String labelOf(LabelBuilder labelBuilder, Field field) {
-    return labelBuilder.buildLabel(field.getName());
-  }
-
-  protected void advertiseElements(LabelBuilder labelBuilder, Stack<Object> parents, Clock clock, Object info,
-      Field field, Object fieldValue, Advertise classAdvertise) {
+  protected void advertiseElements(ParserSession session, Field field, Object fieldValue, Advertise classAdvertise) {
     if (fieldValue.getClass().getComponentType().isPrimitive())
       return;
     int length = Array.getLength(fieldValue);
-    CollectionLabelBuilder collectionLabelBuilder = new CollectionLabelBuilder(labelBuilder, field, length);
+    CollectionLabelBuilder collectionLabelBuilder = new CollectionLabelBuilder(session.labelBuilder(), field, length,
+                                                                               true);
     for (int i = 0; i < length; i++) {
       String label = collectionLabelBuilder.elementLabel(i);
       Object advertised = Array.get(fieldValue, i);
       if (advertised == null)
         continue;
-      advertiseAndParse(labelBuilder, label, parents, clock, info, field, advertised, classAdvertise);
+      advertiseAndParse(session, field, label, advertised, classAdvertise);
     }
   }
 
-  protected void advertiseAndParse(LabelBuilder labelBuilder, Stack<Object> parents, Clock clock,
-      Object info, Field field, Object advertised, Advertise classAdvertise) {
-    advertiseAndParse(labelBuilder, labelOf(labelBuilder, field), parents, clock, info, field, advertised,
-                      classAdvertise);
+  protected void advertiseAndParse(ParserSession session, Field field, String advertizedLabel, Object advertised,
+      Advertise classAdvertise) {
+    advertiseField(session, field, advertizedLabel, advertised, classAdvertise);
+    session.push(advertizedLabel, advertised);
+    recursiveParse(session, advertised);
+    session.pop(advertizedLabel, advertised);
   }
 
-  protected void advertiseAndParse(LabelBuilder labelBuilder, String label, Stack<Object> parents, Clock clock,
-      Object info, Field field, Object advertised, Advertise classAdvertise) {
-    advertiseField(field, label, parents, advertised, clock, info, classAdvertise);
-    labelBuilder.push(label);
-    parents.push(advertised);
-    recursiveParse(clock, labelBuilder, advertised, parents, info);
-    labelBuilder.pop();
-    parents.pop();
-  }
-
-  private void advertiseField(Field field, String label, Stack<Object> parents, Object advertised,
-      Clock clock, Object info, Advertise classAdvertise) {
+  private void advertiseField(ParserSession session, Field field, String advertizedLabel, Object advertised,
+      Advertise classAdvertise) {
     if (field.isAnnotationPresent(IgnoreAdvertise.class))
       return;
     Advertise advertise = field.isAnnotationPresent(Advertise.class) ?
         field.getAnnotation(Advertise.class) : classAdvertise;
     Object infoProvider = annotationToInfoProvider(advertise, advertised);
-    Object providedInfo = provideInfo(label, parents, advertised, info, infoProvider);
-    advertiseInstance(clock, advertised, providedInfo);
+    Object providedInfo = provideInfo(session, advertizedLabel, advertised, infoProvider);
+    advertiseInstance(session.clock(), advertised, providedInfo);
   }
 
   protected Object newInfoProviderInstance(Class<?> infoProviderClass) {

@@ -68,14 +68,13 @@ abstract public class Plot2DView extends ViewPart implements SyncView, ViewCente
   }
 
   protected void setViewName(final String viewName) {
-    Display.getDefault().syncExec(new Runnable() {
+    Display.getDefault().asyncExec(new Runnable() {
       @SuppressWarnings("synthetic-access")
       @Override
       public void run() {
         setPartName(viewName);
         firePropertyChange(org.eclipse.ui.IWorkbenchPart.PROP_TITLE);
         parent.redraw();
-        parent.update();
       }
     });
   }

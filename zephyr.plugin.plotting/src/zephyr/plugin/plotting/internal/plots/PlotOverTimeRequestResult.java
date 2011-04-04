@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.eclipse.swt.graphics.Point;
 
-import zephyr.plugin.core.api.monitoring.LabelBuilder;
+import zephyr.plugin.core.api.parsing.LabelBuilder;
 import zephyr.plugin.core.api.synchronization.Chrono;
 import zephyr.plugin.plotting.internal.plots.PlotData.HistoryCached;
 import zephyr.plugin.plotting.internal.traces.TraceData;

@@ -1,10 +1,9 @@
-package zephyr.plugin.core.api.monitoring;
+package zephyr.plugin.core.api.parsing;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Stack;
 
-import zephyr.plugin.core.api.labels.LabeledElement;
 
 public class LabelBuilder {
   public static final String DefaultSeparator = "/";
@@ -28,8 +27,8 @@ public class LabelBuilder {
     prefixStack.push(prefix);
   }
 
-  public void pop() {
-    prefixStack.pop();
+  public String pop() {
+    return prefixStack.pop();
   }
 
   public String prefixed(String label) {

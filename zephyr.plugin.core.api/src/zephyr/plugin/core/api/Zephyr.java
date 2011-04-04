@@ -1,9 +1,9 @@
 package zephyr.plugin.core.api;
 
 import zephyr.plugin.core.api.advertisement.Advertisement;
-import zephyr.plugin.core.api.monitoring.LabelBuilder;
 import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
+import zephyr.plugin.core.api.parsing.LabelBuilder;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.api.synchronization.Timed;
 

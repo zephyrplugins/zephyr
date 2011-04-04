@@ -86,7 +86,7 @@
             locationURI="menu:window?before=zephyr.plugin.core.separator.closeview">
          <command
                commandId="zephyr.plugin.plotting.commands.newplotview"
-               label="New Plot"
+               label="New Plot View"
                mnemonic="G"
                style="push">
          </command>
@@ -117,12 +117,6 @@
                visible="true">
          </view>
       </perspectiveExtension>
-   </extension>
-   <extension
-         point="zephyr.startup">
-      <client
-            class="zephyr.plugin.plotting.internal.RegisterRunnableStarted">
-      </client>
    </extension>
    <extension
          point="org.eclipse.ui.commandImages">

@@ -1,7 +1,7 @@
 package zephyr.plugin.core.views.selector;
 
-import zephyr.plugin.core.views.ViewProvider;
-
-public interface ViewCaster<T> extends ViewProvider {
+public interface ViewCaster<T> {
   T cast(Object drawn);
+
+  boolean canCast(Object advertised);
 }

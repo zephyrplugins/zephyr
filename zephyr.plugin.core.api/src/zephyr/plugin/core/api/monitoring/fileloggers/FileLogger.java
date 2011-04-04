@@ -5,10 +5,10 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-import zephyr.plugin.core.api.monitoring.LabelBuilder;
 import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
 import zephyr.plugin.core.api.monitoring.helpers.Parser;
+import zephyr.plugin.core.api.parsing.LabelBuilder;
 
 public class FileLogger extends AbstractFileLogger implements DataMonitor {
   private final List<String> labels = new ArrayList<String>();

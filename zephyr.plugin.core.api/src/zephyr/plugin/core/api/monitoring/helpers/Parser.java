@@ -2,26 +2,23 @@ package zephyr.plugin.core.api.monitoring.helpers;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import zephyr.plugin.core.api.labels.CollectionLabelBuilder;
-import zephyr.plugin.core.api.labels.LabeledElement;
 import zephyr.plugin.core.api.labels.Labels;
 import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.core.api.monitoring.abstracts.FieldHandler;
 import zephyr.plugin.core.api.monitoring.abstracts.MonitorContainer;
 import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
 import zephyr.plugin.core.api.monitoring.annotations.IgnoreMonitor;
-import zephyr.plugin.core.api.monitoring.annotations.LabelProvider;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 import zephyr.plugin.core.api.monitoring.wrappers.MonitorWrapper;
+import zephyr.plugin.core.api.parsing.CollectionLabelBuilder;
+import zephyr.plugin.core.api.parsing.LabeledElement;
+import zephyr.plugin.core.api.parsing.Parsers;
 
 public class Parser {
   public static final int MonitorEverythingLevel = Integer.MAX_VALUE;
@@ -30,7 +27,7 @@ public class Parser {
       int levelRequired) {
     Class<?> objectClass = container.getClass();
     List<FieldHandler> handlers = Handlers.getFieldHandlers();
-    Map<String, LabeledElement> labelsMap = buildLabelMaps(container);
+    Map<String, LabeledElement> labelsMap = Parsers.buildLabelMaps(container);
     logger.labelBuilder().pushLabelMap(labelsMap);
     boolean classIsLogged = false;
     while (objectClass != null) {
@@ -79,43 +76,6 @@ public class Parser {
           break;
         }
     }
-  }
-
-  private static Map<String, LabeledElement> buildLabelMaps(Object container) {
-    Class<?> objectClass = container.getClass();
-    Map<String, LabeledElement> labelsMaps = new LinkedHashMap<String, LabeledElement>();
-    while (objectClass != null) {
-      for (Method method : objectClass.getDeclaredMethods()) {
-        if (!method.isAnnotationPresent(LabelProvider.class))
-          continue;
-        method.setAccessible(true);
-        addLabelMaps(labelsMaps, method, container);
-      }
-      objectClass = objectClass.getSuperclass();
-    }
-    return labelsMaps;
-  }
-
-  private static void addLabelMaps(Map<String, LabeledElement> labelsMap, final Method method,
-      final Object container) {
-    LabeledElement labeledElement = new LabeledElement() {
-      @Override
-      public String label(int index) {
-        try {
-          return (String) method.invoke(container, index);
-        } catch (IllegalArgumentException e) {
-          e.printStackTrace();
-        } catch (IllegalAccessException e) {
-          e.printStackTrace();
-        } catch (InvocationTargetException e) {
-          e.printStackTrace();
-        }
-        return "error";
-      }
-    };
-    LabelProvider annotation = method.getAnnotation(LabelProvider.class);
-    for (String id : annotation.ids())
-      labelsMap.put(id, labeledElement);
   }
 
   private static Field[] getFieldList(Class<?> objectClass) {

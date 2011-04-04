@@ -18,8 +18,8 @@ public class AdvertisementTest {
 
   static public class StringInfoProvider implements InfoProvider {
     @Override
-    public Object provideInfo(String label, Object advertised, Stack<Object> parents, Object info) {
-      return label + "." + (String) info;
+    public Object provideInfo(String shortLabel, String fullLabel, Object advertised, Stack<Object> parents, Object info) {
+      return fullLabel + "." + (String) info;
     }
   }
 
