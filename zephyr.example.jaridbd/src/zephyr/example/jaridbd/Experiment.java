@@ -3,8 +3,8 @@ package zephyr.example.jaridbd;
 import java.util.Random;
 
 import zephyr.plugin.core.api.ZephyrRunnable;
-import zephyr.plugin.core.api.monitoring.annotations.LabelProvider;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
+import zephyr.plugin.core.api.parsing.LabelProvider;
 import zephyr.plugin.core.api.synchronization.Clock;
 
 /**
