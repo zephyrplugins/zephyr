@@ -40,4 +40,9 @@ public class ZephyrSync {
   public static Collection<Clock> getClocks() {
     return ZephyrPluginCore.viewBinder().getClocks();
   }
+
+  public static void suspend(Clock clock) {
+    ZephyrPluginCore.control().suspend(clock);
+  }
+
 }

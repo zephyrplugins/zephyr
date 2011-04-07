@@ -26,16 +26,17 @@ public class Clock {
     info = new ClockInfo(label);
   }
 
-  public void tick() {
+  public boolean tick() {
     if (terminated)
       throw new RuntimeException("Clock is terminated");
-    if (isTerminated()) {
+    if (terminating) {
       terminated = true;
-      return;
+      return false;
     }
     timeStep++;
     updateChrono();
     onTick.fire(this);
+    return true;
   }
 
   private void updateChrono() {

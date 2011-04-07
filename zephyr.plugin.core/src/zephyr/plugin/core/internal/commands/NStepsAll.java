@@ -7,7 +7,7 @@ import zephyr.plugin.core.dialog.NbStepsDialog;
 
 public class NStepsAll extends ControlCommand {
   public NStepsAll() {
-    super("zephyr.plugin.core.commands.nsteps", true);
+    super("zephyr.plugin.core.commands.nsteps");
   }
 
   @Override
@@ -16,5 +16,10 @@ public class NStepsAll extends ControlCommand {
     int nbTimeSteps = dialog.getNumberOfTimeSteps();
     if (nbTimeSteps > 0)
       control.step(nbTimeSteps);
+  }
+
+  @Override
+  public boolean isEnabled() {
+    return control.hasOneClockSuspended();
   }
 }

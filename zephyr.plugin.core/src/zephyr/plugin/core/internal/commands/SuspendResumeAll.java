@@ -12,10 +12,10 @@ public class SuspendResumeAll extends AbstractHandler {
   @Override
   public Object execute(ExecutionEvent event) throws ExecutionException {
     Control control = ZephyrPluginCore.control();
-    if (control.isSuspended())
-      control.resume();
-    else
+    if (control.hasOneClockRunning())
       control.suspend();
+    else
+      control.resume();
     return null;
   }
 }

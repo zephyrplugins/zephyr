@@ -43,13 +43,19 @@ public class Control implements Listener<Clock> {
   }
 
   public void suspend() {
-    assert !isSuspended();
+    assert hasOneClockRunning();
     for (Clock clock : ZephyrPluginCore.viewBinder().getClocks())
       suspendClock(clock);
     onModeChange.fire(this);
   }
 
-  protected void suspendClock(Clock clock) {
+  public void suspend(Clock clock) {
+    suspendClock(clock);
+    onModeChange.fire(this);
+  }
+
+
+  void suspendClock(Clock clock) {
     if (!clock.isSuspendable)
       return;
     Integer previous = suspended.put(clock, 0);
@@ -58,7 +64,7 @@ public class Control implements Listener<Clock> {
   }
 
   public void resume() {
-    assert isSuspended();
+    assert hasOneClockSuspended();
     List<Clock> toWakeUp = getToWakeUp();
     for (Clock clock : toWakeUp)
       clock.onTick.disconnect(this);
@@ -78,10 +84,24 @@ public class Control implements Listener<Clock> {
       }
   }
 
-  public boolean isSuspended() {
+  private boolean isSuspendedValue(Integer authorizedStep) {
+    return authorizedStep != null && authorizedStep == 0;
+  }
+
+  public boolean hasOneClockRunning() {
+    if (suspended.isEmpty())
+      return true;
     List<Integer> authorizedSteps = new ArrayList<Integer>(suspended.values());
     for (Integer authorizedStep : authorizedSteps)
-      if (authorizedStep != null && authorizedStep == 0)
+      if (!isSuspendedValue(authorizedStep))
+        return true;
+    return false;
+  }
+
+  public boolean hasOneClockSuspended() {
+    List<Integer> authorizedSteps = new ArrayList<Integer>(suspended.values());
+    for (Integer authorizedStep : authorizedSteps)
+      if (isSuspendedValue(authorizedStep))
         return true;
     return false;
   }

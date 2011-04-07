@@ -13,10 +13,8 @@ import zephyr.plugin.core.utils.Helper;
 public abstract class ControlCommand extends AbstractHandler implements Listener<Control> {
   protected final Control control = ZephyrPluginCore.control();
   protected final Command command;
-  private final boolean actionWhenSuspended;
 
-  public ControlCommand(String commandID, boolean actionWhenSuspended) {
-    this.actionWhenSuspended = actionWhenSuspended;
+  public ControlCommand(String commandID) {
     command = Helper.getCommand(commandID);
     control.onModeChange.connect(this);
   }
@@ -35,8 +33,5 @@ public abstract class ControlCommand extends AbstractHandler implements Listener
   }
 
   @Override
-  public boolean isEnabled() {
-    final boolean suspended = ZephyrPluginCore.control().isSuspended();
-    return actionWhenSuspended ? suspended : !suspended;
-  }
+  public abstract boolean isEnabled();
 }
