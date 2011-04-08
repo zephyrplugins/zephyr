@@ -9,6 +9,8 @@ import zephyr.plugin.core.internal.ZephyrPluginCore;
 import zephyr.plugin.core.internal.startup.StartupJobs;
 
 public class ZephyrCore {
+  public static final String PluginID = "zephyr.plugin.core";
+
   static public void advertiseInstance(Clock clock, Object drawn, Object info) {
     ZephyrPluginCore.viewBinder().bindViews(clock, drawn, info);
   }

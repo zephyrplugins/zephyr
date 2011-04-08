@@ -44,6 +44,37 @@
             name="Slow drawing"
             restorable="true">
       </view>
+      <view
+            allowMultiple="false"
+            class="zephyr.plugin.tests.treeview.StructureExplorer"
+            icon="icons/class_hi.gif"
+            id="zephyr.plugin.tests.treeview"
+            name="Structure Explorer"
+            restorable="true">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="menu:window?before=zephyr.plugin.core.separator.closeview">
+         <command
+               commandId="org.eclipse.ui.views.showView"
+               icon="icons/class_hi.gif"
+               label="Show Structure Explorer"
+               style="push">
+            <parameter
+                  name="org.eclipse.ui.views.showView.viewId"
+                  value="zephyr.plugin.tests.treeview">
+            </parameter>
+         </command>
+      </menuContribution>
+   </extension>
+   <extension
+         point="zephyr.startup">
+      <client
+            class="zephyr.plugin.tests.treeview.RegisterToAdvertize">
+      </client>
    </extension>
 
 </plugin>

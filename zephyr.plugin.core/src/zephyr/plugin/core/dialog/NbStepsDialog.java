@@ -7,7 +7,7 @@ import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
 
-import zephyr.plugin.core.internal.ZephyrPluginCore;
+import zephyr.ZephyrCore;
 
 public class NbStepsDialog extends InputDialog {
 
@@ -27,7 +27,7 @@ public class NbStepsDialog extends InputDialog {
   static int value = -1;
 
   private static String TimeStepsKey = "defaultNbTimeSteps";
-  private final static IEclipsePreferences instanceScope = new InstanceScope().getNode(ZephyrPluginCore.PLUGIN_ID);
+  private final static IEclipsePreferences instanceScope = new InstanceScope().getNode(ZephyrCore.PluginID);
 
   public NbStepsDialog(Shell parentShell) {
     super(parentShell, "N Steps", "Number of time steps", getTimeStepValue(), validator);

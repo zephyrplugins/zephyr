@@ -4,10 +4,10 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.swt.widgets.Display;
 
+import zephyr.ZephyrCore;
 import zephyr.plugin.core.api.advertisement.Advertisement.Advertised;
 import zephyr.plugin.core.api.advertisement.DataInfo;
 import zephyr.plugin.core.api.synchronization.Clock;
-import zephyr.plugin.core.internal.ZephyrPluginCore;
 import zephyr.plugin.core.utils.Helper;
 
 public class SelectAction<T> extends Action {
@@ -22,7 +22,7 @@ public class SelectAction<T> extends Action {
     super("Select...", IAction.AS_PUSH_BUTTON);
     this.display = display;
     this.selector = selector;
-    setImageDescriptor(Helper.getImageDescriptor(ZephyrPluginCore.PLUGIN_ID, "icons/action_select.png"));
+    setImageDescriptor(Helper.getImageDescriptor(ZephyrCore.PluginID, "icons/action_select.png"));
   }
 
   @Override

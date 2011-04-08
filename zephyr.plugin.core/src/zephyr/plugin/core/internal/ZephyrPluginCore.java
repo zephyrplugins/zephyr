@@ -36,7 +36,6 @@ import zephyr.plugin.core.views.SyncView;
 
 public class ZephyrPluginCore extends AbstractUIPlugin {
   public Signal<Runnable> onRunnableStarted = new Signal<Runnable>();
-  public static final String PLUGIN_ID = "zephyr.plugin.core";
   static private boolean zephyrEnabled = false;
   private static boolean synchronous;
 

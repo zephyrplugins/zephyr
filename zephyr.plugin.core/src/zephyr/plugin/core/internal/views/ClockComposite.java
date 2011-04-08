@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
@@ -20,8 +19,7 @@ import zephyr.ZephyrCore;
 import zephyr.plugin.core.api.synchronization.Chrono;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.api.synchronization.ClockInfo;
-import zephyr.plugin.core.internal.ZephyrPluginCore;
-import zephyr.plugin.core.utils.Helper;
+import zephyr.plugin.core.helpers.ImageManager;
 
 public class ClockComposite {
   static class UpdatableLabelInfo {
@@ -43,6 +41,7 @@ public class ClockComposite {
   private long period = -1;
   private final Group group;
   private final Map<String, UpdatableLabelInfo> captionToLabelInfo = new HashMap<String, UpdatableLabelInfo>();
+  private final ImageManager imageManager = new ImageManager();
 
   public ClockComposite(Composite parent, Clock clock) {
     this.clock = clock;
@@ -83,8 +82,7 @@ public class ClockComposite {
 
   protected Button addButton(Composite parent, String iconPath) {
     Button button = new Button(parent, SWT.FLAT);
-    ImageDescriptor imageDescriptor = Helper.getImageDescriptor(ZephyrPluginCore.PLUGIN_ID, iconPath);
-    button.setImage(imageDescriptor.createImage());
+    button.setImage(imageManager.image(ZephyrCore.PluginID, iconPath));
     return button;
   }
 
@@ -154,5 +152,6 @@ public class ClockComposite {
   public void dispose() {
     group.dispose();
     captionToLabelInfo.clear();
+    imageManager.dispose();
   }
 }

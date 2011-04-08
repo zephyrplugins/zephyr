@@ -1,0 +1,34 @@
+package zephyr.plugin.core.helpers;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.eclipse.swt.graphics.Image;
+
+import zephyr.plugin.core.utils.Helper;
+
+public class ImageManager {
+  private final Map<String, Map<String, Image>> loadedImages = new HashMap<String, Map<String, Image>>();
+
+  synchronized public Image image(String pluginID, String iconPath) {
+    Map<String, Image> pluginImages = loadedImages.get(pluginID);
+    if (pluginImages == null) {
+      pluginImages = new HashMap<String, Image>();
+      loadedImages.put(pluginID, pluginImages);
+    }
+    Image image = pluginImages.get(iconPath);
+    if (image == null) {
+      image = Helper.getImageDescriptor(pluginID, iconPath).createImage();
+      pluginImages.put(iconPath, image);
+    }
+    return image;
+  }
+
+  synchronized public void dispose() {
+    for (Map<String, Image> pluginImages : loadedImages.values()) {
+      for (Image image : pluginImages.values())
+        image.dispose();
+      pluginImages.clear();
+    }
+  }
+}
