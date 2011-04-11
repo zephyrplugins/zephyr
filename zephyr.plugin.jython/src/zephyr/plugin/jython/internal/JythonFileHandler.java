@@ -40,7 +40,7 @@ public class JythonFileHandler implements IFileHandler {
   }
 
   protected String pluginToPythonPath(String pluginPath) {
-    return Helper.getPluginLocation(JythonPlugin.getDefault(), pluginPath);
+    return Helper.getPluginLocation(JythonPlugin.getDefault().getBundle(), pluginPath);
   }
 
   @Override

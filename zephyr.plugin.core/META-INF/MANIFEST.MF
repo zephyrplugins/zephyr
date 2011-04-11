@@ -7,7 +7,8 @@ Bundle-Activator: zephyr.plugin.core.internal.ZephyrPluginCore
 Bundle-Vendor: Thomas
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui,
- zephyr.plugin.core.api;bundle-version="1.0.0"
+ zephyr.plugin.core.api;bundle-version="1.0.0",
+ org.eclipse.core.runtime.compatibility;bundle-version="3.2.100"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: zephyr,
  zephyr.plugin.core;

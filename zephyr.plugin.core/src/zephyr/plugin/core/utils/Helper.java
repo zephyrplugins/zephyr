@@ -6,17 +6,22 @@ import org.eclipse.core.commands.Command;
 import org.eclipse.core.commands.State;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.handlers.RegistryToggleState;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.osgi.framework.Bundle;
 
 public class Helper {
+  static public String getPluginLocation(String bundleID, String pluginRelativePath) {
+    return getPluginLocation(Platform.getBundle(bundleID), pluginRelativePath);
+  }
 
-  static public String getPluginLocation(AbstractUIPlugin plugin, String pluginRelativePath) {
+  static public String getPluginLocation(Bundle bundle, String pluginRelativePath) {
     try {
-      return FileLocator.toFileURL(FileLocator.find(plugin.getBundle(), new Path(pluginRelativePath), null)).getFile();
+      return FileLocator.toFileURL(FileLocator.find(bundle, new Path(pluginRelativePath), null)).getFile();
     } catch (IOException ex) {
       return "";
     }
