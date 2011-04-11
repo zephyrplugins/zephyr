@@ -75,6 +75,16 @@
                optional="false">
          </commandParameter>
       </command>
+      <command
+            defaultHandler="zephyr.plugin.core.internal.commands.StartZephyrRunnable"
+            id="zephyr.plugin.core.command.startrunnable"
+            name="Start a Zephyr runnable">
+         <commandParameter
+               id="zephyr.plugin.core.command.parameter.runnableid"
+               name="Zephyr Runnable ID"
+               optional="false">
+         </commandParameter>
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.menus">

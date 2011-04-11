@@ -27,7 +27,6 @@ import zephyr.plugin.core.api.Zephyr;
 import zephyr.plugin.core.api.advertisement.Advertisement;
 import zephyr.plugin.core.api.advertisement.Advertisement.Advertised;
 import zephyr.plugin.core.api.signals.Listener;
-import zephyr.plugin.core.api.signals.Signal;
 import zephyr.plugin.core.control.Control;
 import zephyr.plugin.core.internal.preferences.PreferenceKeys;
 import zephyr.plugin.core.internal.synchronization.ViewBinder;
@@ -35,7 +34,6 @@ import zephyr.plugin.core.internal.synchronization.tasks.ViewTaskScheduler;
 import zephyr.plugin.core.views.SyncView;
 
 public class ZephyrPluginCore extends AbstractUIPlugin {
-  public Signal<Runnable> onRunnableStarted = new Signal<Runnable>();
   static private boolean zephyrEnabled = false;
   private static boolean synchronous;
 
@@ -75,7 +73,6 @@ public class ZephyrPluginCore extends AbstractUIPlugin {
         Runnable runnable = runnableFactory.createRunnable();
         if (runnable == null)
           return;
-        onRunnableStarted.fire(runnable);
         try {
           runnable.run();
         } catch (Exception e) {

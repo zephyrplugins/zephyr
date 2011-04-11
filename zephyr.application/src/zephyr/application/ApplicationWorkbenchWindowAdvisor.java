@@ -23,7 +23,7 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
     configurer.setInitialSize(new Point(800, 600));
     configurer.setShowCoolBar(true);
     configurer.setShowStatusLine(true);
-    configurer.setShowProgressIndicator(false);
+    configurer.setShowProgressIndicator(true);
     configurer.setTitle("Zephyr");
   }
 }

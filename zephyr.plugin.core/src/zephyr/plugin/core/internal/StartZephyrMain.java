@@ -25,11 +25,15 @@ public class StartZephyrMain implements StartupJob {
       boolean autostart = Boolean.parseBoolean(element.getAttribute("autostart"));
       if (!autostart && !checkForID(args, element.getAttribute("id")))
         continue;
-      ZephyrPluginCore.getDefault().startZephyrMain(createRunnableFactory(element));
+      start(element);
     }
   }
 
-  private RunnableFactory createRunnableFactory(final IConfigurationElement element) {
+  public static void start(IConfigurationElement configurationElement) {
+    ZephyrPluginCore.getDefault().startZephyrMain(createRunnableFactory(configurationElement));
+  }
+
+  static private RunnableFactory createRunnableFactory(final IConfigurationElement element) {
     return new RunnableFactory() {
       @Override
       public Runnable createRunnable() {

@@ -49,8 +49,7 @@ public class Advertisement {
 
   public final Signal<Advertised> onAdvertiseNode = new Signal<Advertised>();
   public final Signal<Advertised> onAdvertiseRoot = new Signal<Advertised>();
-
-  private boolean verbose = false;
+  private boolean verbose;
 
   public void advertiseInstance(Clock clock, Object drawn, Object info) {
     printMessageOut(String.format("Clock: %s, Instance of: %s Info: %s", clock.info().label(), String.valueOf(drawn),
@@ -208,17 +207,21 @@ public class Advertisement {
     return null;
   }
 
-  private void printMessageOut(String message) {
+  public void printMessageOut(String message) {
     if (verbose)
       System.out.println(message);
   }
 
-  private void printMessageErr(String message) {
+  public void printMessageErr(String message) {
     if (verbose)
       System.err.println(message);
   }
 
   public void setVerbose(boolean verbose) {
     this.verbose = verbose;
+  }
+
+  public boolean isVerbose() {
+    return verbose;
   }
 }

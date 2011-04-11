@@ -30,10 +30,13 @@ public class Zephyr {
 
         @Override
         public void add(Object toAdd, int level) {
+          if (advertisement().isVerbose())
+            System.err.println("Zephyr warning: using default data monitor");
         }
 
         @Override
         public void add(Object toAdd) {
+          add(toAdd, 0);
         }
       };
     }

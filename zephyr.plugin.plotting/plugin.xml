@@ -229,4 +229,10 @@
             class="zephyr.plugin.plotting.preferences.PreferenceInitializer">
       </initializer>
    </extension>
+   <extension
+         point="zephyr.startup">
+      <client
+            class="zephyr.plugin.plotting.internal.RegisterPlottingMonitor">
+      </client>
+   </extension>
 </plugin>

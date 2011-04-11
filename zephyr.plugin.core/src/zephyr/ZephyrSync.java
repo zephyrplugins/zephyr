@@ -16,11 +16,6 @@ public class ZephyrSync {
     ZephyrPluginCore.viewBinder().unbind(clock, view);
   }
 
-  public static Signal<Runnable> onRunnableStarted() {
-    return ZephyrPluginCore.getDefault().onRunnableStarted;
-  }
-
-
   public static void declareClock(Clock clock) {
     ZephyrPluginCore.viewBinder().addClock(clock);
   }
