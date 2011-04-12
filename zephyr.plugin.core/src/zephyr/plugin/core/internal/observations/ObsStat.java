@@ -30,7 +30,6 @@ public class ObsStat {
 
   public void updateValue(double[] currentObservation) {
     double newVal = currentObservation[observationIndex];
-
     stdCalc += numSamples * Math.pow(newVal - mean, 2) / (numSamples + 1);
     numSamples++;
     mean += (newVal - mean) / numSamples;

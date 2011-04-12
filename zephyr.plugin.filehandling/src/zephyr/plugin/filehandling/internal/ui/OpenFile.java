@@ -34,7 +34,7 @@ public class OpenFile extends AbstractHandler {
     String defaultExtension = getValue(ExtKey);
     if (defaultExtension != null)
       reorderExtensions(defaultExtension, extensions);
-    fd.setFilterExtensions(extensions);
+    // fd.setFilterExtensions(extensions);
     String defaultFolder = getValue(FolderKey);
     if (defaultFolder != null)
       fd.setFilterPath(defaultFolder);
