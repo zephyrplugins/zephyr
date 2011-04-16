@@ -7,13 +7,16 @@ import java.util.Map;
 
 import zephyr.plugin.core.api.signals.Signal;
 import zephyr.plugin.core.api.synchronization.Clock;
+import zephyr.plugin.tests.codeparser.codetree.ClassNode;
+import zephyr.plugin.tests.codeparser.codetree.ClockNode;
+import zephyr.plugin.tests.codeparser.parsers.CodeParser;
 
-public class CodeParser {
+public class CodeTrees {
   public Signal<ClassNode> onParse = new Signal<ClassNode>();
 
   private final Map<Clock, ClockNode> clockNodes = new LinkedHashMap<Clock, ClockNode>();
 
-  public CodeParser() {
+  public CodeTrees() {
   }
 
   public void parse(Clock clock, Object root) {
@@ -22,7 +25,9 @@ public class CodeParser {
       clockNode = new ClockNode(clock);
       clockNodes.put(clock, clockNode);
     }
-    ClassNode rootClassNode = clockNode.addClassNode(root);
+    CodeParser parser = new CodeParser(clockNode);
+    ClassNode rootClassNode = parser.parse(root);
+    clockNode.addChild(rootClassNode);
     onParse.fire(rootClassNode);
   }
 

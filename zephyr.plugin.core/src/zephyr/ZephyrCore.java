@@ -3,6 +3,17 @@ package zephyr;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.jface.action.IStatusLineManager;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IViewSite;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IWorkbenchPartSite;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
+
 import zephyr.plugin.core.RunnableFactory;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.internal.ZephyrPluginCore;
@@ -57,5 +68,26 @@ public class ZephyrCore {
       clock.terminate();
     for (Clock clock : clocks)
       ZephyrPluginCore.viewBinder().removeClock(clock);
+  }
+
+  public static void sendStatusBarMessage(final String message) {
+    Display.getCurrent().syncExec(new Runnable() {
+      @Override
+      public void run() {
+        IWorkbench wb = PlatformUI.getWorkbench();
+        IWorkbenchWindow window = wb.getActiveWorkbenchWindow();
+        IWorkbenchPage page = window.getActivePage();
+        IWorkbenchPart part = page.getActivePart();
+        IWorkbenchPartSite site = part.getSite();
+        IViewSite vSite = (IViewSite) site;
+        IActionBars actionBars = vSite.getActionBars();
+        if (actionBars == null)
+          return;
+        IStatusLineManager statusLineManager = actionBars.getStatusLineManager();
+        if (statusLineManager == null)
+          return;
+        statusLineManager.setMessage(message);
+      }
+    });
   }
 }

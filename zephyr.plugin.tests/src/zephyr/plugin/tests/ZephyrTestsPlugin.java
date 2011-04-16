@@ -3,15 +3,16 @@ package zephyr.plugin.tests;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
-import zephyr.plugin.tests.codeparser.CodeParser;
+import zephyr.plugin.tests.codeparser.CodeTrees;
 
 
 public class ZephyrTestsPlugin extends AbstractUIPlugin {
+  public static final String PluginID = "zephyr.plugin.tests";
   static private ZephyrTestsPlugin plugin;
-  private final CodeParser codeParser;
+  private final CodeTrees codeParser;
 
   public ZephyrTestsPlugin() {
-    codeParser = new CodeParser();
+    codeParser = new CodeTrees();
   }
 
   @Override
@@ -26,7 +27,7 @@ public class ZephyrTestsPlugin extends AbstractUIPlugin {
     super.stop(context);
   }
 
-  static public CodeParser codeParser() {
+  static public CodeTrees codeParser() {
     return plugin.codeParser;
   }
 }

@@ -47,7 +47,7 @@
       <view
             allowMultiple="false"
             class="zephyr.plugin.tests.treeview.StructureExplorer"
-            icon="icons/class_hi.gif"
+            icon="icons/view_structureexplorer.gif"
             id="zephyr.plugin.tests.treeview"
             name="Structure Explorer"
             restorable="true">
@@ -60,7 +60,7 @@
             locationURI="menu:window?before=zephyr.plugin.core.separator.closeview">
          <command
                commandId="org.eclipse.ui.views.showView"
-               icon="icons/class_hi.gif"
+               icon="icons/view_structureexplorer.gif"
                label="Show Structure Explorer"
                style="push">
             <parameter

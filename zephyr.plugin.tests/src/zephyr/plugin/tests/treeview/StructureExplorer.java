@@ -1,33 +1,35 @@
 package zephyr.plugin.tests.treeview;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
+import org.eclipse.ui.IMemento;
+import org.eclipse.ui.IViewSite;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 
 import zephyr.ZephyrCore;
-import zephyr.plugin.core.api.labels.Labels;
 import zephyr.plugin.core.api.signals.Listener;
-import zephyr.plugin.core.helpers.ImageManager;
 import zephyr.plugin.tests.ZephyrTestsPlugin;
-import zephyr.plugin.tests.codeparser.ClassNode;
-import zephyr.plugin.tests.codeparser.ClockNode;
-import zephyr.plugin.tests.codeparser.CodeNode;
-import zephyr.plugin.tests.codeparser.CodeParser;
+import zephyr.plugin.tests.codeparser.CodeTrees;
+import zephyr.plugin.tests.codeparser.codetree.ClassNode;
+import zephyr.plugin.tests.codeparser.codetree.ClockNode;
+import zephyr.plugin.tests.codeparser.codetree.CodeNode;
+import zephyr.plugin.tests.codeparser.codetree.ParentNode;
 
-public class StructureExplorer extends ViewPart {
-  Tree tree;
-  private final CodeParser codeParser;
-  private final ImageManager imageManager = new ImageManager();
+public class StructureExplorer extends ViewPart implements ItemProvider {
+  protected Tree tree;
+  private final CodeTrees codeParser;
+  private final IconDatabase iconDatabase = new IconDatabase();
   private final Map<ClockNode, TreeItem> clockItems = new HashMap<ClockNode, TreeItem>();
   private final Listener<ClassNode> classNodeListener = new Listener<ClassNode>() {
     @Override
@@ -38,12 +40,24 @@ public class StructureExplorer extends ViewPart {
         @Override
         public void run() {
           registerClassNode(classNode);
-          expandNodes();
+          treeState.expandNodes();
         }
       });
     }
   };
-  private final List<TreeItem> nodesToExpand = new ArrayList<TreeItem>();
+  final TreeState treeState = new TreeState(this);
+  private final SelectionListener selectionListener = new SelectionListener() {
+    @Override
+    public void widgetSelected(SelectionEvent event) {
+      TreeItem treeItem = (TreeItem) event.item;
+      CodeNode codeNode = (CodeNode) treeItem.getData();
+      ZephyrCore.sendStatusBarMessage(codeNode.longLabel());
+    }
+
+    @Override
+    public void widgetDefaultSelected(SelectionEvent event) {
+    }
+  };
 
   public StructureExplorer() {
     codeParser = ZephyrTestsPlugin.codeParser();
@@ -57,38 +71,63 @@ public class StructureExplorer extends ViewPart {
     tree = new Tree(parent, 0);
     tree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
     buildRootNode();
-    expandNodes();
+    tree.addSelectionListener(selectionListener);
+    tree.addTreeListener(treeState);
+    treeState.expandNodes();
   }
 
-  void expandNodes() {
-    for (TreeItem item : nodesToExpand)
-      item.setExpanded(true);
-    nodesToExpand.clear();
+  @Override
+  public void createChildrenItems(TreeItem root) {
+    ParentNode parentNode = (ParentNode) root.getData();
+    for (int i = 0; i < parentNode.nbChildren(); i++) {
+      CodeNode child = parentNode.getChild(i);
+      TreeItem item = nodeToTreeItem(root, child);
+      if (hasChildren(child))
+        new TreeItem(item, 0);
+    }
+  }
+
+  protected TreeItem nodeToTreeItem(TreeItem root, CodeNode codeNode) {
+    return setTreeItem(new TreeItem(root, SWT.NONE), codeNode);
+  }
+
+  protected TreeItem nodeToTreeItem(Tree tree, CodeNode codeNode) {
+    return setTreeItem(new TreeItem(tree, SWT.NONE), codeNode);
+  }
+
+  private TreeItem setTreeItem(TreeItem item, CodeNode codeNode) {
+    item.setText(codeNode.uiLabel());
+    item.setData(codeNode);
+    iconDatabase.setImage(item);
+    treeState.nodeCreated(item);
+    return item;
+  }
+
+  protected boolean hasChildren(CodeNode codeNode) {
+    if (!(codeNode instanceof ParentNode))
+      return false;
+    return ((ParentNode) codeNode).nbChildren() > 0;
   }
 
   private void buildRootNode() {
     for (ClockNode clockNode : codeParser.clockNodes())
-      for (CodeNode codeNode : clockNode.children())
-        registerClassNode((ClassNode) codeNode);
+      for (int i = 0; i < clockNode.nbChildren(); i++)
+        registerClassNode(clockNode.getChild(i));
   }
 
   void registerClassNode(ClassNode classNode) {
     TreeItem clockItem = getClockItem(classNode.root());
-    TreeItem classItem = new TreeItem(clockItem, 0);
-    classItem.setText(classNode.label());
-    classItem.setData(classNode);
-    new TreeItem(classItem, 0);
+    TreeItem classItem = nodeToTreeItem(clockItem, classNode);
+    if (hasChildren(classNode))
+      new TreeItem(classItem, 0);
   }
 
   private TreeItem getClockItem(ClockNode clockNode) {
     TreeItem clockItem = clockItems.get(clockNode);
     if (clockItem == null) {
-      clockItem = new TreeItem(tree, SWT.NONE);
-      clockItem.setText(Labels.label(clockNode));
-      clockItem.setImage(imageManager.image(ZephyrCore.PluginID, "icons/view_clocks.png"));
-      clockItem.setData(clockNode);
-      nodesToExpand.add(clockItem);
+      clockItem = nodeToTreeItem(tree, clockNode);
       clockItems.put(clockNode, clockItem);
+      treeState.nodeCreated(clockItem);
     }
     return clockItem;
   }
@@ -98,10 +137,22 @@ public class StructureExplorer extends ViewPart {
   }
 
   @Override
+  public void init(IViewSite site, IMemento memento) throws PartInitException {
+    super.init(site, memento);
+    treeState.init(memento);
+  }
+
+  @Override
+  public void saveState(IMemento memento) {
+    super.saveState(memento);
+    treeState.saveState(memento);
+  }
+
+  @Override
   public void dispose() {
     codeParser.onParse.disconnect(classNodeListener);
     super.dispose();
-    imageManager.dispose();
+    iconDatabase.dispose();
     tree.dispose();
     clockItems.clear();
   }

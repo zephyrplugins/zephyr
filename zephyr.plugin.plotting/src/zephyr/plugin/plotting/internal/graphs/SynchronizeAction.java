@@ -8,8 +8,8 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 
+import zephyr.ZephyrPlotting;
 import zephyr.plugin.core.utils.Helper;
-import zephyr.plugin.plotting.internal.ZephyrPluginPlotting;
 
 final class SynchronizeAction extends Action {
   private final PlotView plotView;
@@ -35,10 +35,10 @@ final class SynchronizeAction extends Action {
 
   public void setImageDescriptor() {
     if (isChecked())
-      setImageDescriptor(Helper.getImageDescriptor(ZephyrPluginPlotting.PLUGIN_ID,
+      setImageDescriptor(Helper.getImageDescriptor(ZephyrPlotting.PluginID,
                                                    "icons/action_graph_connect.png"));
     else
-      setImageDescriptor(Helper.getImageDescriptor(ZephyrPluginPlotting.PLUGIN_ID,
+      setImageDescriptor(Helper.getImageDescriptor(ZephyrPlotting.PluginID,
                                                    "icons/action_graph_disconnect.png"));
   }
 }

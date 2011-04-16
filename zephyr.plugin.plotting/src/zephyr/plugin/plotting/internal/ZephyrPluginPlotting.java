@@ -11,7 +11,6 @@ import zephyr.plugin.plotting.internal.traces.ClockTracesManager;
  * The activator class controls the plug-in life cycle
  */
 public class ZephyrPluginPlotting extends AbstractUIPlugin {
-  public static final String PLUGIN_ID = "zephyr.plugin.plotting";
   private static ZephyrPluginPlotting plugin;
   private final ClockTracesManager traces = new ClockTracesManager();
 
