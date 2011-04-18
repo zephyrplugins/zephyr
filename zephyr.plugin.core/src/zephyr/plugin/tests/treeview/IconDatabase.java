@@ -7,13 +7,10 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.TreeItem;
 
 import zephyr.ZephyrCore;
-import zephyr.ZephyrPlotting;
+import zephyr.plugin.core.api.codeparser.codetree.ClassNode;
+import zephyr.plugin.core.api.codeparser.codetree.ClockNode;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.helpers.ImageManager;
-import zephyr.plugin.tests.ZephyrTestsPlugin;
-import zephyr.plugin.tests.codeparser.codetree.ClassNode;
-import zephyr.plugin.tests.codeparser.codetree.ClockNode;
-import zephyr.plugin.tests.codeparser.codetree.PrimitiveNode;
 
 public class IconDatabase {
   static interface DataTest {
@@ -54,11 +51,12 @@ public class IconDatabase {
     descriptors.add(new ImageDescriptor(createClockTest(),
                                         ZephyrCore.PluginID, "icons/view_clocks.png"));
     descriptors.add(new ImageDescriptor(createRootTest(),
-                                        ZephyrTestsPlugin.PluginID, "icons/view_structureexplorer.gif"));
-    descriptors.add(new ImageDescriptor(new InstanceOfTest(PrimitiveNode.class),
-                                        ZephyrPlotting.PluginID, "icons/view_plotting.png"));
+                                        ZephyrCore.PluginID, "icons/view_structureexplorer.gif"));
+    // descriptors.add(new ImageDescriptor(new
+    // InstanceOfTest(PrimitiveNode.class),
+    // ZephyrPlotting.PluginID, "icons/view_plotting.png"));
     descriptors.add(new ImageDescriptor(createCollectionTest(),
-                                        ZephyrTestsPlugin.PluginID, "icons/structure_folder.png"));
+                                        ZephyrCore.PluginID, "icons/structure_folder.png"));
   }
 
   protected InstanceOfTest createCollectionTest() {

@@ -16,9 +16,9 @@ public class PrimitiveTypeHandler implements FieldHandler {
       int level, int levelRequired) {
     List<MonitorWrapper> localWrappers = Wrappers.getWrappers(field, wrappers);
     if (field.getType().equals(Boolean.TYPE))
-      Loggers.addMonitored(logger, Parser.labelOf(field), createBooleanLogged(container, field), localWrappers, level);
+      Loggers.addMonitored(logger, Parser.labelOf(field), createBooleanLogged(container, field), localWrappers);
     else
-      Loggers.addMonitored(logger, Parser.labelOf(field), createValueLogged(container, field), localWrappers, level);
+      Loggers.addMonitored(logger, Parser.labelOf(field), createValueLogged(container, field), localWrappers);
   }
 
   private Monitored createValueLogged(final Object container, final Field field) {

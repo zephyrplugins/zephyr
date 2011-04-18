@@ -8,8 +8,11 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
+import zephyr.plugin.core.api.codeparser.codetree.ClassNode;
+import zephyr.plugin.core.api.codeparser.parsers.CodeParser;
 import zephyr.plugin.core.api.labels.Labels;
 import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
+import zephyr.plugin.core.api.monitoring.abstracts.DataTraverser;
 import zephyr.plugin.core.api.monitoring.abstracts.FieldHandler;
 import zephyr.plugin.core.api.monitoring.abstracts.MonitorContainer;
 import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
@@ -94,7 +97,7 @@ public class Parser {
     if (child == null)
       return;
     if (child instanceof MonitorContainer)
-      ((MonitorContainer) child).addToMonitor(level, logger);
+      ((MonitorContainer) child).addToMonitor(null, logger);
     findAnnotations(logger, child, wrappers, level, levelRequired);
   }
 
@@ -126,11 +129,22 @@ public class Parser {
     findAnnotations(logger, container, new ArrayList<MonitorWrapper>(), Integer.MIN_VALUE, levelRequired);
   }
 
-  public static void parse(DataMonitor dataMonitor, Object toParse, int levelRequired) {
+  public static void parseBackup(DataMonitor dataMonitor, Object toParse, int levelRequired) {
     if (toParse instanceof Monitored)
-      dataMonitor.add(Labels.label(toParse), (Monitored) toParse, 0);
+      dataMonitor.add(Labels.label(toParse), (Monitored) toParse);
     if (toParse instanceof MonitorContainer)
-      ((MonitorContainer) toParse).addToMonitor(0, dataMonitor);
+      ((MonitorContainer) toParse).addToMonitor(null, dataMonitor);
     findAnnotations(dataMonitor, toParse, levelRequired);
+  }
+
+  public static void parse(DataMonitor dataMonitor, Object toParse, int levelRequired) {
+    DataTraverser traverser = new DataTraverser(dataMonitor);
+    if (toParse instanceof Monitored)
+      dataMonitor.add(Labels.label(toParse), (Monitored) toParse);
+    if (toParse instanceof MonitorContainer)
+      ((MonitorContainer) toParse).addToMonitor(traverser, dataMonitor);
+    CodeParser codeParser = new CodeParser();
+    ClassNode classNode = codeParser.parse(toParse);
+    CodeParser.traverse(traverser, classNode);
   }
 }

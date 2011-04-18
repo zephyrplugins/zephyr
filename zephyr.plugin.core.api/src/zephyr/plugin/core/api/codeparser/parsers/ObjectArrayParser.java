@@ -1,8 +1,8 @@
-package zephyr.plugin.tests.codeparser.parsers;
+package zephyr.plugin.core.api.codeparser.parsers;
 
 import java.lang.reflect.Array;
 
-public class ObjectArrayParser extends CollectionParser<Object> {
+public class ObjectArrayParser extends AbstractCollectionParser<Object> {
   @Override
   public boolean canParse(Object fieldValue) {
     if (!fieldValue.getClass().isArray())

@@ -1,4 +1,4 @@
-package zephyr.plugin.tests.codeparser.codetree;
+package zephyr.plugin.core.api.codeparser.codetree;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -8,10 +8,9 @@ public abstract class AbstractParentNode extends AbstractCodeNode implements Par
   private final List<CodeNode> children = new ArrayList<CodeNode>();
 
   protected AbstractParentNode(String label, ParentNode parent, Field parentField) {
-    super(label, parent, parentField);
+    super(label, parent);
   }
 
-  @Override
   public void addChild(CodeNode child) {
     children.add(child);
   }

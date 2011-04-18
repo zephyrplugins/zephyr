@@ -1,13 +1,13 @@
-package zephyr.plugin.tests.codeparser.parsers;
+package zephyr.plugin.core.api.codeparser.parsers;
 
 import java.lang.reflect.Field;
 
+import zephyr.plugin.core.api.codeparser.codetree.ClassNode;
+import zephyr.plugin.core.api.codeparser.codetree.CollectionObjectNode;
 import zephyr.plugin.core.api.parsing.CollectionLabelBuilder;
 import zephyr.plugin.core.api.parsing.LabelBuilder;
-import zephyr.plugin.tests.codeparser.codetree.ClassNode;
-import zephyr.plugin.tests.codeparser.codetree.CollectionNode;
 
-public abstract class CollectionParser<T> implements Parser {
+public abstract class AbstractCollectionParser<T> implements Parser {
   @Override
   public void parse(CodeParser codeParser, ClassNode parentNode, Field field, Object fieldValue) {
     boolean includeIndex = true;
@@ -17,9 +17,9 @@ public abstract class CollectionParser<T> implements Parser {
     int nbChildren = nbChildren(container);
     String label = field.getName();
     String id = label;
-    CollectionLabelBuilder labelBuilder = new CollectionLabelBuilder(labelBuilderParent, nbChildren, label, id,
+    CollectionLabelBuilder labelBuilder = new CollectionLabelBuilder(labelBuilderParent, nbChildren, "", id,
                                                                      includeIndex);
-    ClassNode collectionNode = new CollectionNode(label, parentNode, fieldValue, field);
+    ClassNode collectionNode = new CollectionObjectNode(label, parentNode, fieldValue, field);
     parentNode.addChild(collectionNode);
     for (int i = 0; i < nbChildren; i++) {
       Object element = getElement(container, i);

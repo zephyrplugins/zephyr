@@ -49,12 +49,8 @@ public class FileLogger extends AbstractFileLogger implements DataMonitor {
       labels.add("LocalTime");
   }
 
-  public void add(String label, Monitored logged) {
-    add(label, logged, Parser.MonitorEverythingLevel);
-  }
-
   @Override
-  public void add(String label, Monitored logged, int level) {
+  public void add(String label, Monitored logged) {
     String loggedLabel = labelBuilder.buildLabel(label);
     labels.add(loggedLabel);
     loggeds.add(logged);

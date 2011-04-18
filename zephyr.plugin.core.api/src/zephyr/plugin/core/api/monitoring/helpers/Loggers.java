@@ -22,12 +22,12 @@ public class Loggers {
     return dateFormat.format(new Date());
   }
 
-  public static void add(DataMonitor logger, String[] elementLabels, double[] data, int level) {
-    add(logger, elementLabels, data, null, level);
+  public static void add(DataMonitor logger, String[] elementLabels, double[] data) {
+    add(logger, elementLabels, data, null);
   }
 
   public static void add(DataMonitor logger, String[] elementLabels, final double[] data,
-      List<MonitorWrapper> wrappers, int level) {
+      List<MonitorWrapper> wrappers) {
     assert elementLabels.length == data.length;
     for (int i = 0; i < data.length; i++) {
       final int elementIndex = i;
@@ -36,12 +36,11 @@ public class Loggers {
         public double monitoredValue(long stepTime) {
           return data[elementIndex];
         }
-      }, wrappers, level);
+      }, wrappers);
     }
   }
 
-  public static void add(DataMonitor logger, String[] elementLabels, final int[] data, List<MonitorWrapper> wrappers,
-      int level) {
+  public static void add(DataMonitor logger, String[] elementLabels, final int[] data, List<MonitorWrapper> wrappers) {
     assert elementLabels.length == data.length;
     for (int i = 0; i < data.length; i++) {
       final int elementIndex = i;
@@ -50,12 +49,11 @@ public class Loggers {
         public double monitoredValue(long stepTime) {
           return data[elementIndex];
         }
-      }, wrappers, level);
+      }, wrappers);
     }
   }
 
-  public static void add(DataMonitor logger, String[] elementLabels, final float[] data, List<MonitorWrapper> wrappers,
-      int level) {
+  public static void add(DataMonitor logger, String[] elementLabels, final float[] data, List<MonitorWrapper> wrappers) {
     assert elementLabels.length == data.length;
     for (int i = 0; i < data.length; i++) {
       final int elementIndex = i;
@@ -64,17 +62,16 @@ public class Loggers {
         public double monitoredValue(long stepTime) {
           return data[elementIndex];
         }
-      }, wrappers, level);
+      }, wrappers);
     }
   }
 
-  public static void addMonitored(DataMonitor logger, String label, Monitored monitored, List<MonitorWrapper> wrappers,
-      int level) {
-    logger.add(label, monitored, level);
+  public static void addMonitored(DataMonitor logger, String label, Monitored monitored, List<MonitorWrapper> wrappers) {
+    logger.add(label, monitored);
     if (wrappers == null)
       return;
     for (MonitorWrapper wrapper : wrappers)
-      logger.add(label + Wrappers.wrapperLabel(wrapper), wrapper.createMonitored(monitored), 0);
+      logger.add(label + Wrappers.wrapperLabel(wrapper), wrapper.createMonitored(monitored));
   }
 
   public static boolean isIndexIncluded(Field field) {

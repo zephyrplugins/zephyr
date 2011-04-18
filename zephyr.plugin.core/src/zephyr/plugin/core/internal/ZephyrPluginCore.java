@@ -23,6 +23,7 @@ import org.osgi.framework.BundleContext;
 
 import zephyr.ZephyrCore;
 import zephyr.plugin.core.RunnableFactory;
+import zephyr.plugin.core.SyncCode;
 import zephyr.plugin.core.api.Zephyr;
 import zephyr.plugin.core.api.advertisement.Advertisement;
 import zephyr.plugin.core.api.advertisement.Advertisement.Advertised;
@@ -38,6 +39,7 @@ public class ZephyrPluginCore extends AbstractUIPlugin {
   private static boolean synchronous;
 
   final ViewBinder viewBinder = new ViewBinder();
+  final SyncCode syncCode = new SyncCode();
   final private ViewTaskScheduler viewTaskScheduler = new ViewTaskScheduler();
   private static ZephyrPluginCore plugin;
   private final ThreadGroup threadGroup = new ThreadGroup("ZephyrRunnable");
@@ -49,6 +51,12 @@ public class ZephyrPluginCore extends AbstractUIPlugin {
       @Override
       public ZephyrClassLoaderInternal run() {
         return new ZephyrClassLoaderInternal();
+      }
+    });
+    Zephyr.advertisement().onAdvertiseRoot.connect(new Listener<Advertisement.Advertised>() {
+      @Override
+      public void listen(Advertised eventInfo) {
+        syncCode.parse(eventInfo.clock, eventInfo.advertised);
       }
     });
   }
@@ -213,6 +221,10 @@ public class ZephyrPluginCore extends AbstractUIPlugin {
         activitySupport.setEnabledActivityIds(definedActivities);
       }
     });
+  }
+
+  static public SyncCode syncCode() {
+    return plugin.syncCode;
   }
 
   public static boolean isZephyrEnabled() {

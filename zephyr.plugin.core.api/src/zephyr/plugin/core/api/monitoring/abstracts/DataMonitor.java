@@ -7,7 +7,7 @@ public interface DataMonitor {
 
   void add(Object toAdd, int level);
 
-  void add(String label, Monitored logged, int level);
+  void add(String label, Monitored logged);
 
   LabelBuilder labelBuilder();
 }

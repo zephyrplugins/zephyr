@@ -1,10 +1,10 @@
-package zephyr.plugin.tests.codeparser.parsers;
+package zephyr.plugin.core.api.codeparser.parsers;
 
 import java.util.Collection;
 import java.util.List;
 
 
-public class ObjectCollectionParser extends CollectionParser<List<?>> {
+public class ObjectListParser extends AbstractCollectionParser<List<?>> {
   @Override
   public boolean canParse(Object fieldValue) {
     if (!(fieldValue instanceof Collection))

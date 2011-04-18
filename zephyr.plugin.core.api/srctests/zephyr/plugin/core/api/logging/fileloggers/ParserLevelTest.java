@@ -90,9 +90,8 @@ public class ParserLevelTest implements DataMonitor {
   }
 
   @Override
-  public void add(String label, Monitored logged, int level) {
+  public void add(String label, Monitored logged) {
     String fullLabel = labelBuilder.buildLabel(label);
-    Assert.assertEquals((int) labelToLevel.get(fullLabel), level);
     labels.add(fullLabel);
   }
 

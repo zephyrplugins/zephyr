@@ -1,6 +1,7 @@
-package zephyr.plugin.core.api.logging.fileloggers;
+package zephyr.plugin.core.api.codeparser.parsers;
 
 import java.io.StringWriter;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -16,7 +17,7 @@ import zephyr.plugin.core.api.monitoring.fileloggers.FileLogger;
 import zephyr.plugin.core.api.parsing.LabelProvider;
 
 
-public class ParserTest01 {
+public class CodeParserTest01 {
   static protected final String logged01AddedFromInterface = "logged01AddedFromInterface";
   static protected final String log01LabelInt = "logged03LabelInt";
   static protected final String log01LabelFloat = "logged04LabelFloat";
@@ -93,6 +94,10 @@ public class ParserTest01 {
     FileLogger logger = new FileLogger(new StringWriter());
     TestAddLog01 logged01 = new TestAddLog01();
     logger.add(logged01);
+    int toRemove;
+    System.out.println(Arrays.toString(expectedLabels));
+    System.out.println(Arrays.toString(logger.getLabels()));
     Assert.assertArrayEquals(expectedLabels, logger.getLabels());
+    Assert.assertFalse(true);
   }
 }

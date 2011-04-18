@@ -1,8 +1,8 @@
-package zephyr.plugin.tests.codeparser.parsers;
+package zephyr.plugin.core.api.codeparser.parsers;
 
 import java.lang.reflect.Field;
 
-import zephyr.plugin.tests.codeparser.codetree.ClassNode;
+import zephyr.plugin.core.api.codeparser.codetree.ClassNode;
 
 
 public class ObjectParser implements Parser {

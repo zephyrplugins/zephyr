@@ -1,8 +1,6 @@
-package zephyr.plugin.tests.codeparser.codetree;
+package zephyr.plugin.core.api.codeparser.codetree;
 
 public interface ParentNode extends CodeNode {
-  void addChild(CodeNode child);
-
   CodeNode getChild(int index);
 
   int nbChildren();

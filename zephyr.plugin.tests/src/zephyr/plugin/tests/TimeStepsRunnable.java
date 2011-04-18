@@ -15,13 +15,13 @@ public class TimeStepsRunnable implements Runnable {
       public double monitoredValue(long stepTime) {
         return stepTime;
       }
-    }, 0);
+    });
     ZephyrPlotting.createMonitor(clock02).add("clock02", new Monitored() {
       @Override
       public double monitoredValue(long stepTime) {
         return stepTime;
       }
-    }, 0);
+    });
   }
 
   @Override

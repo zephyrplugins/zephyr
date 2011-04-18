@@ -206,6 +206,16 @@
       <menuContribution
             locationURI="menu:window">
          <command
+               commandId="org.eclipse.ui.views.showView"
+               icon="icons/view_structureexplorer.gif"
+               label="Show Structure Explorer"
+               style="push">
+            <parameter
+                  name="org.eclipse.ui.views.showView.viewId"
+                  value="zephyr.plugin.tests.treeview">
+            </parameter>
+         </command>
+         <command
                commandId="zephyr.plugin.core.showclockview"
                label="Show Clocks"
                mnemonic="k"
@@ -356,6 +366,14 @@
             icon="icons/view_clocks.png"
             id="zephyr.plugin.core.clocksview"
             name="Clocks"
+            restorable="true">
+      </view>
+      <view
+            allowMultiple="false"
+            class="zephyr.plugin.tests.treeview.StructureExplorer"
+            icon="icons/view_structureexplorer.gif"
+            id="zephyr.plugin.tests.treeview"
+            name="Structure Explorer"
             restorable="true">
       </view>
    </extension>

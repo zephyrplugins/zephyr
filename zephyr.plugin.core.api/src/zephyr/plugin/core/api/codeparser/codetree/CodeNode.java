@@ -1,4 +1,4 @@
-package zephyr.plugin.tests.codeparser.codetree;
+package zephyr.plugin.core.api.codeparser.codetree;
 
 import zephyr.plugin.core.api.synchronization.Clock;
 
@@ -9,11 +9,9 @@ public interface CodeNode {
 
   Clock clock();
 
-  String path();
+  String[] path();
 
   String id();
 
-  String uiLabel();
-
-  String longLabel();
+  String label();
 }

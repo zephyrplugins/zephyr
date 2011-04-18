@@ -10,8 +10,8 @@ import org.eclipse.swt.events.TreeListener;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.IMemento;
 
-import zephyr.plugin.tests.codeparser.codetree.ClockNode;
-import zephyr.plugin.tests.codeparser.codetree.CodeNode;
+import zephyr.plugin.core.api.codeparser.codetree.ClockNode;
+import zephyr.plugin.core.api.codeparser.codetree.CodeNode;
 
 public class TreeState implements TreeListener {
   static final private String MementoRootType = "Expanded";
@@ -29,16 +29,23 @@ public class TreeState implements TreeListener {
   public void treeCollapsed(TreeEvent event) {
     CodeNode codeNode = (CodeNode) ((TreeItem) event.item).getData();
     for (String identifier : new ArrayList<String>(expanded)) {
-      if (identifier.startsWith(codeNode.path()))
+      if (identifier.startsWith(pathToId(codeNode.path())))
         expanded.remove(identifier);
     }
+  }
+
+  private String pathToId(String[] path) {
+    StringBuilder id = new StringBuilder();
+    for (String e : path)
+      id.append(e);
+    return id.toString();
   }
 
   @Override
   public void treeExpanded(TreeEvent event) {
     final TreeItem root = (TreeItem) event.item;
     CodeNode codeNode = (CodeNode) root.getData();
-    expanded.add(codeNode.path());
+    expanded.add(pathToId(codeNode.path()));
     buildChildrenIFN(root);
     expandNodes();
   }
@@ -54,7 +61,7 @@ public class TreeState implements TreeListener {
 
   public void nodeCreated(TreeItem treeItem) {
     CodeNode codeNode = (CodeNode) treeItem.getData();
-    String nodeIdentifier = codeNode.path();
+    String nodeIdentifier = pathToId(codeNode.path());
     for (String identifier : expanded)
       if (identifier.startsWith(nodeIdentifier)) {
         nodeToExpand(treeItem);

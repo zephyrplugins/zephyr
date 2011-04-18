@@ -1,31 +1,27 @@
-package zephyr.plugin.tests.codeparser.parsers;
+package zephyr.plugin.core.api.codeparser.parsers;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.LinkedList;
 
+import zephyr.plugin.core.api.codeparser.codetree.ClassNode;
+import zephyr.plugin.core.api.codeparser.codetree.CodeNode;
+import zephyr.plugin.core.api.codeparser.codetree.ParentNode;
+import zephyr.plugin.core.api.codeparser.traverser.Traverser;
 import zephyr.plugin.core.api.monitoring.annotations.IgnoreMonitor;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
-import zephyr.plugin.tests.codeparser.codetree.ClassNode;
-import zephyr.plugin.tests.codeparser.codetree.ClockNode;
 
 public class CodeParser {
   static private LinkedList<Parser> parsers = new LinkedList<Parser>();
 
   static {
     registerParser(new ObjectParser());
-    registerParser(new ObjectCollectionParser());
+    registerParser(new ObjectListParser());
     registerParser(new ObjectArrayParser());
     registerParser(new PrimitiveArrayParser());
-    registerParser(new PrimitiveCollectionParser());
+    registerParser(new PrimitiveListParser());
     registerParser(new PrimitiveParser());
-  }
-
-  private final ClockNode clockNode;
-
-  public CodeParser(ClockNode clockNode) {
-    this.clockNode = clockNode;
   }
 
   static public Object getValueFromField(Field field, Object parentInstance) {
@@ -89,13 +85,26 @@ public class CodeParser {
   }
 
   public ClassNode parse(Object root) {
-    String label = root.getClass().getSimpleName();
-    ClassNode classNode = new ClassNode(label, clockNode, root, null);
+    return parse(null, root);
+  }
+
+  public ClassNode parse(ParentNode parent, Object root) {
+    ClassNode classNode = new ClassNode("", parent, root, null);
     parseChildren(classNode);
     return classNode;
   }
 
   static public void registerParser(Parser parser) {
     parsers.addFirst(parser);
+  }
+
+  static public void traverse(Traverser traverser, CodeNode root) {
+    boolean visitChildren = traverser.inNode(root);
+    if (visitChildren && root instanceof ParentNode) {
+      ParentNode parent = (ParentNode) root;
+      for (int i = 0; i < parent.nbChildren(); i++)
+        traverse(traverser, parent.getChild(i));
+    }
+    traverser.outNode(root);
   }
 }

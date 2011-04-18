@@ -15,6 +15,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
 import zephyr.plugin.core.RunnableFactory;
+import zephyr.plugin.core.SyncCode;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.internal.ZephyrPluginCore;
 import zephyr.plugin.core.internal.startup.StartupJobs;
@@ -89,5 +90,9 @@ public class ZephyrCore {
         statusLineManager.setMessage(message);
       }
     });
+  }
+
+  public static SyncCode syncCode() {
+    return ZephyrPluginCore.syncCode();
   }
 }

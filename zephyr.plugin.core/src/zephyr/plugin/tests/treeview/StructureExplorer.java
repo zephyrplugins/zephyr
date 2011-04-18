@@ -18,17 +18,16 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 
 import zephyr.ZephyrCore;
+import zephyr.plugin.core.SyncCode;
+import zephyr.plugin.core.api.codeparser.codetree.ClassNode;
+import zephyr.plugin.core.api.codeparser.codetree.ClockNode;
+import zephyr.plugin.core.api.codeparser.codetree.CodeNode;
+import zephyr.plugin.core.api.codeparser.codetree.ParentNode;
 import zephyr.plugin.core.api.signals.Listener;
-import zephyr.plugin.tests.ZephyrTestsPlugin;
-import zephyr.plugin.tests.codeparser.CodeTrees;
-import zephyr.plugin.tests.codeparser.codetree.ClassNode;
-import zephyr.plugin.tests.codeparser.codetree.ClockNode;
-import zephyr.plugin.tests.codeparser.codetree.CodeNode;
-import zephyr.plugin.tests.codeparser.codetree.ParentNode;
 
 public class StructureExplorer extends ViewPart implements ItemProvider {
   protected Tree tree;
-  private final CodeTrees codeParser;
+  private final SyncCode codeParser;
   private final IconDatabase iconDatabase = new IconDatabase();
   private final Map<ClockNode, TreeItem> clockItems = new HashMap<ClockNode, TreeItem>();
   private final Listener<ClassNode> classNodeListener = new Listener<ClassNode>() {
@@ -51,7 +50,7 @@ public class StructureExplorer extends ViewPart implements ItemProvider {
     public void widgetSelected(SelectionEvent event) {
       TreeItem treeItem = (TreeItem) event.item;
       CodeNode codeNode = (CodeNode) treeItem.getData();
-      ZephyrCore.sendStatusBarMessage(codeNode.longLabel());
+      ZephyrCore.sendStatusBarMessage(codeNode.label());
     }
 
     @Override
@@ -60,7 +59,7 @@ public class StructureExplorer extends ViewPart implements ItemProvider {
   };
 
   public StructureExplorer() {
-    codeParser = ZephyrTestsPlugin.codeParser();
+    codeParser = ZephyrCore.syncCode();
     codeParser.onParse.connect(classNodeListener);
   }
 
@@ -96,7 +95,10 @@ public class StructureExplorer extends ViewPart implements ItemProvider {
   }
 
   private TreeItem setTreeItem(TreeItem item, CodeNode codeNode) {
-    item.setText(codeNode.uiLabel());
+    if (codeNode.parent() instanceof ClockNode)
+      item.setText(((ClassNode) codeNode).instance().getClass().getSimpleName());
+    else
+      item.setText(codeNode.label());
     item.setData(codeNode);
     iconDatabase.setImage(item);
     treeState.nodeCreated(item);

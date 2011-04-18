@@ -1,4 +1,4 @@
-package zephyr.plugin.tests.codeparser.codetree;
+package zephyr.plugin.core.api.codeparser.codetree;
 
 import zephyr.plugin.core.api.synchronization.Clock;
 

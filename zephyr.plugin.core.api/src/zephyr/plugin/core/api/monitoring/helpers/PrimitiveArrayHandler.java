@@ -45,11 +45,11 @@ public class PrimitiveArrayHandler implements FieldHandler, ArrayHandler {
       elementLabels[i] = labelBuilder.elementLabel(i);
 
     if (array.getClass().getComponentType().equals(double.class))
-      Loggers.add(logger, elementLabels, (double[]) array, wrappers, level);
+      Loggers.add(logger, elementLabels, (double[]) array, wrappers);
     else if (array.getClass().getComponentType().equals(float.class))
-      Loggers.add(logger, elementLabels, (float[]) array, wrappers, level);
+      Loggers.add(logger, elementLabels, (float[]) array, wrappers);
     if (array.getClass().getComponentType().equals(int.class))
-      Loggers.add(logger, elementLabels, (int[]) array, wrappers, level);
+      Loggers.add(logger, elementLabels, (int[]) array, wrappers);
   }
 
   @Override

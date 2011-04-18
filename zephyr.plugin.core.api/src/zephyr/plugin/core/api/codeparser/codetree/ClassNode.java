@@ -1,4 +1,4 @@
-package zephyr.plugin.tests.codeparser.codetree;
+package zephyr.plugin.core.api.codeparser.codetree;
 
 import java.lang.reflect.Field;
 
@@ -21,10 +21,5 @@ public class ClassNode extends AbstractParentNode {
 
   public Object instance() {
     return instance;
-  }
-
-  @Override
-  public String longLabel() {
-    return String.format("%s %s", path(), String.valueOf(instance));
   }
 }

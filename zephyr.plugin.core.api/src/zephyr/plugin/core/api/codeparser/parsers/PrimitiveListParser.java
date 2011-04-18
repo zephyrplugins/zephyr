@@ -1,12 +1,12 @@
-package zephyr.plugin.tests.codeparser.parsers;
+package zephyr.plugin.core.api.codeparser.parsers;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
 
-import zephyr.plugin.tests.codeparser.codetree.ClassNode;
+import zephyr.plugin.core.api.codeparser.codetree.ClassNode;
 
 
-public class PrimitiveCollectionParser implements Parser {
+public class PrimitiveListParser implements Parser {
   @Override
   public boolean canParse(Object fieldValue) {
     return fieldValue instanceof Collection;

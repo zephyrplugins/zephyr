@@ -25,7 +25,7 @@ public class Zephyr {
         }
 
         @Override
-        public void add(String label, Monitored logged, int level) {
+        public void add(String label, Monitored logged) {
         }
 
         @Override
