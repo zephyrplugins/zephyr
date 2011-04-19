@@ -3,9 +3,6 @@ package zephyr.plugin.core.api;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
-import zephyr.plugin.core.api.advertisement.AdvertisementInvocationTest;
-import zephyr.plugin.core.api.advertisement.AdvertisementParentTest;
-import zephyr.plugin.core.api.advertisement.AdvertisementTest;
 import zephyr.plugin.core.api.codeparser.parsers.ParserArray2DTest;
 import zephyr.plugin.core.api.codeparser.parsers.ParserArrayLabelsTest;
 import zephyr.plugin.core.api.codeparser.parsers.ParserBooleanTest;
@@ -28,8 +25,7 @@ import zephyr.plugin.core.api.synchronization.ChronoTest;
 @Suite.SuiteClasses({ SignalTest.class, ChronoTest.class, LoggerRowTest.class, FileLoggerTest.class,
     ParserTest01.class, ParserTest02.class,
     ParserArrayLabelsTest.class, ParserArray2DTest.class, ParserTest03.class,
-    ParserBooleanTest.class, ParserWrappersTest.class, ParserLevelTest.class, AdvertisementTest.class,
-    AdvertisementParentTest.class, AdvertisementInvocationTest.class, TextLogFileTest.class, GZippedLogFileTest.class,
-    ZippedLogFileTest.class, BZippedLogFileTest.class })
+    ParserBooleanTest.class, ParserWrappersTest.class, ParserLevelTest.class, TextLogFileTest.class,
+    GZippedLogFileTest.class, ZippedLogFileTest.class, BZippedLogFileTest.class })
 public class UtilsTests {
 }

@@ -1,5 +1,7 @@
 package zephyr.plugin.core.views;
 
+import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
+
 public interface ViewProvider {
   /**
    * Ask to this provider if it can provide the ID of a view able to display an
@@ -10,10 +12,5 @@ public interface ViewProvider {
    * @return true if this is able to provide the ID of a view able to display
    *         'drawn', else false
    */
-  boolean canViewDraw(Object drawn);
-
-  /**
-   * @return true if Zephyr is allowed to create a new view, else false
-   */
-  boolean allowNewView();
+  boolean canViewDraw(CodeNode codeNode);
 }

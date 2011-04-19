@@ -13,23 +13,23 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 
 import zephyr.ZephyrSync;
+import zephyr.plugin.core.api.codeparser.codetree.ClassNode;
+import zephyr.plugin.core.api.codeparser.codetree.ClockNode;
+import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.synchronization.Clock;
-import zephyr.plugin.core.internal.ZephyrPluginCore;
-import zephyr.plugin.core.internal.preferences.PreferenceKeys;
 import zephyr.plugin.core.views.SyncView;
 import zephyr.plugin.core.views.ViewProvider;
 
 public class ClocksView extends ViewPart implements SyncView {
   static public class Provider implements ViewProvider {
     @Override
-    public boolean canViewDraw(Object drawn) {
-      return true;
-    }
-
-    @Override
-    public boolean allowNewView() {
-      return ZephyrPluginCore.getDefault().getPreferenceStore().getBoolean(PreferenceKeys.OpenClockViewKey);
+    public boolean canViewDraw(CodeNode codeNode) {
+      if (codeNode instanceof ClockNode)
+        return true;
+      if (!(codeNode instanceof ClassNode))
+        return false;
+      return ((ClassNode) codeNode).instance() instanceof Clock;
     }
   }
 

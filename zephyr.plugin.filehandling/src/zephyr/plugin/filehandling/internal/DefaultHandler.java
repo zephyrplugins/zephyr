@@ -22,7 +22,7 @@ public class DefaultHandler implements IFileHandler {
 
   public static void handle(String filepath) {
     LogFile logfile = LogFile.load(filepath);
-    Zephyr.advertise(logfile);
+    Zephyr.advertise(logfile.clock(), logfile);
     while (!logfile.eof())
       logfile.step();
     logfile.close();

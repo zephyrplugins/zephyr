@@ -20,7 +20,7 @@ public class SyncCode {
   public SyncCode() {
   }
 
-  public void parse(Clock clock, Object root) {
+  public ClassNode parse(Clock clock, Object root) {
     ClockNode clockNode = clockNodes.get(clock);
     if (clockNode == null) {
       clockNode = new ClockNode(clock);
@@ -30,6 +30,7 @@ public class SyncCode {
     ClassNode rootClassNode = parser.parse(clockNode, root);
     clockNode.addChild(rootClassNode);
     onParse.fire(rootClassNode);
+    return rootClassNode;
   }
 
   public List<ClockNode> clockNodes() {

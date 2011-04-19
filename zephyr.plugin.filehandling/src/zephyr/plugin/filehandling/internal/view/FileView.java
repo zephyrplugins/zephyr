@@ -7,6 +7,8 @@ import org.eclipse.jface.action.IToolBarManager;
 import zephyr.ZephyrCore;
 import zephyr.plugin.core.actions.RestartAction;
 import zephyr.plugin.core.actions.TerminateAction;
+import zephyr.plugin.core.api.codeparser.codetree.ClassNode;
+import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.logfiles.LogFile;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.api.synchronization.Closeable;
@@ -68,9 +70,10 @@ public class FileView extends EnvironmentView implements Closeable, Restartable 
   }
 
   @Override
-  public boolean addTimed(Clock clock, Object drawn, Object info) {
+  public boolean addTimed(Clock clock, CodeNode codeNode) {
     if (logFile != null)
       return false;
+    Object drawn = ((ClassNode) codeNode).instance();
     logFile = (LogFile) drawn;
     restartAction.setEnabled(drawn instanceof LogFile);
     terminateAction.setEnabled(true);

@@ -61,4 +61,14 @@ public class CodeTrees {
       return 0;
     return annotation.level();
   }
+
+  public static ClassNode findParent(CodeNode codeNode, Class<?> target) {
+    CodeNode currentNode = codeNode;
+    while (currentNode != null) {
+      if (currentNode instanceof ClassNode && target.isInstance(((ClassNode) currentNode).instance()))
+        return (ClassNode) currentNode;
+      currentNode = codeNode.parent();
+    }
+    return null;
+  }
 }

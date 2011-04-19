@@ -5,16 +5,15 @@ import java.util.Random;
 import zephyr.plugin.core.api.Zephyr;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 import zephyr.plugin.core.api.synchronization.Clock;
-import zephyr.plugin.core.api.synchronization.Timed;
 
-public class RandomData2D implements Runnable, Timed {
+public class RandomData2D implements Runnable {
   @Monitor
   protected final float[] data = new float[3];
   private final Clock clock = new Clock("Random2D");
   private final Random random = new Random(0);
 
   public RandomData2D() {
-    Zephyr.advertise(this);
+    Zephyr.advertise(clock, this);
   }
 
   @Override
@@ -26,8 +25,4 @@ public class RandomData2D implements Runnable, Timed {
     }
   }
 
-  @Override
-  public Clock clock() {
-    return clock;
-  }
 }

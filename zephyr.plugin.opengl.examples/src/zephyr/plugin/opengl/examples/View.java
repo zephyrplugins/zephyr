@@ -4,6 +4,8 @@ import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GL2GL3;
 
+import zephyr.plugin.core.api.codeparser.codetree.ClassNode;
+import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.helpers.ClassViewProvider;
 import zephyr.plugin.core.views.TimedView;
@@ -74,10 +76,10 @@ public class View extends OpenGLView implements TimedView {
   }
 
   @Override
-  public boolean addTimed(Clock clock, Object drawn, Object info) {
+  public boolean addTimed(Clock clock, CodeNode codeNode) {
     if (model != null)
       return false;
-    model = (Model) drawn;
+    model = (Model) ((ClassNode) codeNode).instance();
     return true;
   }
 

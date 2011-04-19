@@ -1,18 +1,28 @@
 package zephyr.plugin.core.api;
 
-import zephyr.plugin.core.api.advertisement.Advertisement;
 import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
 import zephyr.plugin.core.api.parsing.LabelBuilder;
+import zephyr.plugin.core.api.signals.Signal;
 import zephyr.plugin.core.api.synchronization.Clock;
-import zephyr.plugin.core.api.synchronization.Timed;
 
 public class Zephyr {
   static public interface DataMonitorProvider {
     DataMonitor createDataMonitor(Clock clock);
   }
 
-  static private Advertisement advertisement = new Advertisement();
+  static public class AdvertisementInfo {
+    public final Clock clock;
+    public final Object advertised;
+
+    AdvertisementInfo(Clock clock, Object advertised) {
+      this.clock = clock;
+      this.advertised = advertised;
+    }
+  }
+
+  static public final Signal<AdvertisementInfo> onAdvertised = new Signal<AdvertisementInfo>();
+
   static private DataMonitorProvider dataMonitorProvider = new DataMonitorProvider() {
     @Override
     public DataMonitor createDataMonitor(Clock clock) {
@@ -30,8 +40,7 @@ public class Zephyr {
 
         @Override
         public void add(Object toAdd, int level) {
-          if (advertisement().isVerbose())
-            System.err.println("Zephyr warning: using default data monitor");
+          System.err.println("Zephyr warning: using default data monitor");
         }
 
         @Override
@@ -42,27 +51,12 @@ public class Zephyr {
     }
   };
 
-  static public Advertisement advertisement() {
-    return advertisement;
+  static public void advertise(Clock clock, Object advertised) {
+    onAdvertised.fire(new AdvertisementInfo(clock, advertised));
+    createMonitor(clock).add(advertised);
   }
 
-  static public void advertise(Timed timed) {
-    advertise(timed, null);
-  }
-
-  static public void advertise(Timed timed, Object info) {
-    advertise(timed.clock(), timed, info);
-  }
-
-  static public void advertise(Clock clock, Object drawn) {
-    advertise(clock, drawn, null);
-  }
-
-  static public void advertise(Clock clock, Object drawn, Object info) {
-    advertisement.parse(clock, drawn, info);
-  }
-
-  public static DataMonitor createMonitor(Clock clock) {
+  private static DataMonitor createMonitor(Clock clock) {
     return dataMonitorProvider.createDataMonitor(clock);
   }
 

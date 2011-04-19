@@ -21,17 +21,19 @@ import org.eclipse.ui.activities.IWorkbenchActivitySupport;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
-import zephyr.ZephyrCore;
 import zephyr.plugin.core.RunnableFactory;
 import zephyr.plugin.core.SyncCode;
 import zephyr.plugin.core.api.Zephyr;
-import zephyr.plugin.core.api.advertisement.Advertisement;
-import zephyr.plugin.core.api.advertisement.Advertisement.Advertised;
+import zephyr.plugin.core.api.Zephyr.AdvertisementInfo;
+import zephyr.plugin.core.api.codeparser.codetree.ClassNode;
+import zephyr.plugin.core.api.codeparser.codetree.CodeTrees;
 import zephyr.plugin.core.api.signals.Listener;
+import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.control.Control;
 import zephyr.plugin.core.internal.preferences.PreferenceKeys;
 import zephyr.plugin.core.internal.synchronization.ViewBinder;
 import zephyr.plugin.core.internal.synchronization.tasks.ViewTaskScheduler;
+import zephyr.plugin.core.internal.views.PopupViewTraverser;
 import zephyr.plugin.core.views.SyncView;
 
 public class ZephyrPluginCore extends AbstractUIPlugin {
@@ -53,10 +55,12 @@ public class ZephyrPluginCore extends AbstractUIPlugin {
         return new ZephyrClassLoaderInternal();
       }
     });
-    Zephyr.advertisement().onAdvertiseRoot.connect(new Listener<Advertisement.Advertised>() {
+    Zephyr.onAdvertised.connect(new Listener<AdvertisementInfo>() {
       @Override
-      public void listen(Advertised eventInfo) {
-        syncCode.parse(eventInfo.clock, eventInfo.advertised);
+      public void listen(AdvertisementInfo eventInfo) {
+        Clock clock = eventInfo.clock;
+        ClassNode rootNode = syncCode.parse(clock, eventInfo.advertised);
+        CodeTrees.traverse(new PopupViewTraverser(clock), rootNode);
       }
     });
   }
@@ -97,12 +101,6 @@ public class ZephyrPluginCore extends AbstractUIPlugin {
   public void start(BundleContext context) throws Exception {
     super.start(context);
     plugin = this;
-    Zephyr.advertisement().onAdvertiseNode.connect(new Listener<Advertisement.Advertised>() {
-      @Override
-      public void listen(Advertised eventInfo) {
-        ZephyrCore.advertiseInstance(eventInfo.clock, eventInfo.advertised, eventInfo.info);
-      }
-    });
   }
 
   @Override

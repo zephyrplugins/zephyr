@@ -2,6 +2,8 @@ package zephyr.plugin.tests.plot2d;
 
 import org.eclipse.swt.graphics.GC;
 
+import zephyr.plugin.core.api.codeparser.codetree.ClassNode;
+import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.canvas.AbstractCanvasView;
 import zephyr.plugin.core.helpers.ClassViewProvider;
@@ -42,10 +44,10 @@ public class PlotRandomData2D extends AbstractCanvasView implements TimedView {
   }
 
   @Override
-  public boolean addTimed(Clock clock, Object drawn, Object info) {
+  public boolean addTimed(Clock clock, CodeNode codeNode) {
     if (this.drawn != null)
       return false;
-    this.drawn = (RandomData2D) drawn;
+    this.drawn = (RandomData2D) ((ClassNode) codeNode).instance();
     data = new Data2D("Random", this.drawn.data.length);
     for (int i = 0; i < data.nbPoints; i++)
       data.xdata[i] = i;

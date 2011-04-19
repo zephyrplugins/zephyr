@@ -11,6 +11,7 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 
+import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.synchronization.Chrono;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.canvas.BackgroundCanvas;
@@ -68,7 +69,7 @@ public class SlowDrawingView extends ViewPart implements TimedView, Painter {
   }
 
   @Override
-  public boolean addTimed(Clock clock, Object drawn, Object info) {
+  public boolean addTimed(Clock clock, CodeNode codeNode) {
     return true;
   }
 

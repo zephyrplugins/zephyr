@@ -12,6 +12,7 @@ import org.eclipse.ui.IViewReference;
 
 import zephyr.ZephyrSync;
 import zephyr.plugin.core.Utils;
+import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.signals.Signal;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.internal.ZephyrPluginCore;
@@ -27,16 +28,16 @@ public class ViewBinder {
   protected final Map<Clock, ClockViews> clockToView = Collections.synchronizedMap(new HashMap<Clock, ClockViews>());
   private final ViewProviders viewProviders = new ViewProviders();
 
-  private void bindWithNewView(Clock clock, Object drawn, Object info, ViewFinder viewFinder) {
+  private void bindWithNewView(Clock clock, CodeNode codeNode, ViewFinder viewFinder) {
     ViewReference viewRef = viewFinder.provideNewView();
-    if (viewRef != null && viewRef.addTimed(clock, drawn, info))
+    if (viewRef != null && viewRef.addTimed(clock, codeNode))
       uiRunBindView(clock, viewRef.view());
   }
 
-  private boolean bindWithOpenedViews(Clock clock, Object drawn, Object info, ViewFinder viewFinder) {
+  private boolean bindWithOpenedViews(Clock clock, CodeNode codeNode, ViewFinder viewFinder) {
     for (IViewReference reference : viewFinder.existingViews()) {
       ViewReference view = viewFinder.showView(reference);
-      if (view != null && view.addTimed(clock, drawn, info)) {
+      if (view != null && view.addTimed(clock, codeNode)) {
         uiRunBindView(clock, view.view());
         return true;
       }
@@ -44,14 +45,15 @@ public class ViewBinder {
     return false;
   }
 
-  protected void displayAndBindView(Clock clock, Object drawn, Object info, String viewID, boolean openView) {
+  // displayAndBindView need to call the ViewBinder from within
+  // a UI thread inside a syncExec. Therefore, this method cannot be
+  // synchronized
+  public void displayAndBindView(Clock clock, CodeNode codeNode, String viewID) {
     ViewFinder viewFinder = new ViewFinder(viewID);
-    boolean binded = bindWithOpenedViews(clock, drawn, info, viewFinder);
+    boolean binded = bindWithOpenedViews(clock, codeNode, viewFinder);
     if (binded)
       return;
-    if (!openView)
-      return;
-    bindWithNewView(clock, drawn, info, viewFinder);
+    bindWithNewView(clock, codeNode, viewFinder);
   }
 
   private void uiRunBindView(final Clock clock, final SyncView view) {
@@ -67,13 +69,8 @@ public class ViewBinder {
       Display.getDefault().asyncExec(bindViewRunnable);
   }
 
-  // displayAndBindView need to call the ViewBinder from within
-  // a UI thread inside a syncExec. Therefore, this method cannot be
-  // synchronized
-  public void bindViews(Clock clock, Object drawn, Object info) {
-    List<ViewProviderReference> providers = viewProviders.findViews(drawn);
-    for (ViewProviderReference provider : providers)
-      displayAndBindView(clock, drawn, info, provider.viewID(), provider.allowNewView());
+  public List<ViewProviderReference> findViewProviders(CodeNode codeNode) {
+    return viewProviders.findViews(codeNode);
   }
 
   public ClockViews addClock(Clock clock) {

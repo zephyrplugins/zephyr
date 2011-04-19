@@ -24,4 +24,11 @@ public class ViewProviderReference {
   public boolean allowNewView() {
     return true;
   }
+
+  public boolean popUpView() {
+    String attribute = element.getAttribute("popup");
+    if (attribute == null)
+      return true;
+    return Boolean.parseBoolean(attribute);
+  }
 }
