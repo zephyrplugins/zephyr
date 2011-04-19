@@ -21,11 +21,10 @@ import zephyr.plugin.filehandling.internal.DefaultHandler;
 public class FileView extends EnvironmentView implements Closeable, Restartable {
   static public class Provider extends ClassViewProvider {
     public Provider() {
-      super(LogFile.class, FileView.ID);
+      super(LogFile.class);
     }
   }
 
-  public static final String ID = "zephyr.plugin.filehandling.internal.view.fileview";
   protected LogFile logFile = null;
   private final TerminateAction terminateAction;
   private final RestartAction restartAction;

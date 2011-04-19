@@ -1,4 +1,4 @@
-package zephyr.plugin.tests.treeview;
+package zephyr.plugin.core.internal.treeview;
 
 import org.eclipse.swt.widgets.TreeItem;
 

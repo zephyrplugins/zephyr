@@ -13,7 +13,7 @@ import zephyr.plugin.plotting.plot2d.Plot2D;
 public class PlotRandomData2D extends AbstractCanvasView implements TimedView {
   public static class Provider extends ClassViewProvider {
     public Provider() {
-      super(RandomData2D.class, "zephyr.plugin.tests.plot2d.plotrandomplot2d");
+      super(RandomData2D.class);
     }
   }
 

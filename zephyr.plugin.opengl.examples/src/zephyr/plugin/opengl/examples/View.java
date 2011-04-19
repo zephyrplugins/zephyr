@@ -17,11 +17,10 @@ import zephyr.plugin.opengl.OpenGLView;
 public class View extends OpenGLView implements TimedView {
   static public class Provider extends ClassViewProvider {
     public Provider() {
-      super(Model.class, id);
+      super(Model.class);
     }
   }
 
-  static private final String id = "zephyr.plugin.opengl.example.view";
   private Model model;
   private long time;
   private float insideRadius;

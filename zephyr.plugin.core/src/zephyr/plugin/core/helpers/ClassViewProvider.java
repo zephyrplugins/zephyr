@@ -3,18 +3,10 @@ package zephyr.plugin.core.helpers;
 import zephyr.plugin.core.views.ViewProvider;
 
 public class ClassViewProvider implements ViewProvider {
-
-  private final String viewID;
   protected final Class<?> drawnClass;
 
-  public ClassViewProvider(Class<?> drawnClass, String viewID) {
-    this.viewID = viewID;
+  public ClassViewProvider(Class<?> drawnClass) {
     this.drawnClass = drawnClass;
-  }
-
-  @Override
-  public String viewID() {
-    return viewID;
   }
 
   @Override

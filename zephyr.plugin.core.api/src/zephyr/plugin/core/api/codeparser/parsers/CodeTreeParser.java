@@ -158,6 +158,6 @@ public class CodeTreeParser implements CodeParser {
     }
     if (field != null && id.isEmpty())
       id = field.getName();
-    return new CollectionLabelBuilder(getLabeledElement(id), "", length, includeIndex);
+    return new CollectionLabelBuilder(getLabeledElement(id), ":", length, includeIndex);
   }
 }

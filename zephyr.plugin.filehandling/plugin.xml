@@ -52,7 +52,9 @@
    <extension
          point="zephyr.viewprovider">
       <client
-            class="zephyr.plugin.filehandling.internal.view.FileView$Provider">
+            class="zephyr.plugin.filehandling.internal.view.FileView$Provider"
+            name="Data View"
+            viewid="zephyr.plugin.filehandling.internal.view.fileview">
       </client>
    </extension>
 </plugin>

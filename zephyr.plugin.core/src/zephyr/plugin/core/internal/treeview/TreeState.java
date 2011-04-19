@@ -1,4 +1,4 @@
-package zephyr.plugin.tests.treeview;
+package zephyr.plugin.core.internal.treeview;
 
 import java.util.ArrayList;
 import java.util.HashSet;

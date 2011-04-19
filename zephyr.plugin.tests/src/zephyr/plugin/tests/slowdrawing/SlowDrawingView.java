@@ -22,7 +22,7 @@ import zephyr.plugin.core.views.TimedView;
 public class SlowDrawingView extends ViewPart implements TimedView, Painter {
   public static class Provider extends ClassViewProvider {
     public Provider() {
-      super(SlowDrawingRunnable.class, "zephyr.plugin.tests.slowdrawing");
+      super(SlowDrawingRunnable.class);
     }
   }
 

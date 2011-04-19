@@ -15,10 +15,11 @@ import zephyr.plugin.core.Utils;
 import zephyr.plugin.core.api.signals.Signal;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.internal.ZephyrPluginCore;
+import zephyr.plugin.core.internal.synchronization.providers.ViewProviderReference;
+import zephyr.plugin.core.internal.synchronization.providers.ViewProviders;
 import zephyr.plugin.core.internal.synchronization.tasks.ViewReference;
 import zephyr.plugin.core.internal.synchronization.viewfinder.ViewFinder;
 import zephyr.plugin.core.views.SyncView;
-import zephyr.plugin.core.views.ViewProvider;
 
 public class ViewBinder {
   public Signal<Clock> onClockAdded = new Signal<Clock>();
@@ -70,8 +71,8 @@ public class ViewBinder {
   // a UI thread inside a syncExec. Therefore, this method cannot be
   // synchronized
   public void bindViews(Clock clock, Object drawn, Object info) {
-    List<ViewProvider> providers = viewProviders.findViews(drawn);
-    for (ViewProvider provider : providers)
+    List<ViewProviderReference> providers = viewProviders.findViews(drawn);
+    for (ViewProviderReference provider : providers)
       displayAndBindView(clock, drawn, info, provider.viewID(), provider.allowNewView());
   }
 

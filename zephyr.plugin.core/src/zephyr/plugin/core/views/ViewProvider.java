@@ -2,11 +2,6 @@ package zephyr.plugin.core.views;
 
 public interface ViewProvider {
   /**
-   * @return the ID of the Eclipse view provided by this instance
-   */
-  String viewID();
-
-  /**
    * Ask to this provider if it can provide the ID of a view able to display an
    * object
    * 

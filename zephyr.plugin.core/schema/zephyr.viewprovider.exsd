@@ -3,10 +3,10 @@
 <schema targetNamespace="zephyr.plugin.core" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="zephyr.plugin.core" id="zephyr.plugin.core.views.timedlistener" name="Timed Listener"/>
+         <meta.schema plugin="zephyr.plugin.core" id="zephyr.plugin.core.views.viewprovider" name="View Provider"/>
       </appinfo>
       <documentation>
-         Timed Listener that is going to be called every time a Timed instance is advertised.
+         Provide a view for an object
       </documentation>
    </annotation>
 
@@ -27,23 +27,6 @@
                </documentation>
             </annotation>
          </attribute>
-         <attribute name="id" type="string">
-            <annotation>
-               <documentation>
-                  
-               </documentation>
-            </annotation>
-         </attribute>
-         <attribute name="name" type="string">
-            <annotation>
-               <documentation>
-                  
-               </documentation>
-               <appinfo>
-                  <meta.attribute translatable="true"/>
-               </appinfo>
-            </annotation>
-         </attribute>
       </complexType>
    </element>
 
@@ -57,6 +40,33 @@
                <appinfo>
                   <meta.attribute kind="java" basedOn=":zephyr.plugin.core.views.ViewProvider"/>
                </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="viewid" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="identifier" basedOn="org.eclipse.ui.views/view/@id"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="icon" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="resource"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
             </annotation>
          </attribute>
       </complexType>

@@ -22,7 +22,9 @@
    <extension
          point="zephyr.viewprovider">
       <client
-            class="zephyr.plugin.opengl.examples.View$Provider">
+            class="zephyr.plugin.opengl.examples.View$Provider"
+            name="OpenGL"
+            viewid="zephyr.plugin.opengl.example.view">
       </client>
    </extension>
 

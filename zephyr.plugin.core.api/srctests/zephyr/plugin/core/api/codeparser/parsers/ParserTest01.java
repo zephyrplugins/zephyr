@@ -72,7 +72,7 @@ public class ParserTest01 {
 
     @LabelProvider(ids = { "logged10ArrayLabeled", "elementLabeled" })
     private String labelOf(int index) {
-      return ":element" + index;
+      return "element" + index;
     }
   }
 

@@ -22,10 +22,14 @@
    <extension
          point="zephyr.viewprovider">
       <client
-            class="zephyr.plugin.tests.plot2d.PlotRandomData2D$Provider">
+            class="zephyr.plugin.tests.plot2d.PlotRandomData2D$Provider"
+            name="RandomPlot2D"
+            viewid="zephyr.plugin.tests.plot2d.plotrandomplot2d">
       </client>
       <client
-            class="zephyr.plugin.tests.slowdrawing.SlowDrawingView$Provider">
+            class="zephyr.plugin.tests.slowdrawing.SlowDrawingView$Provider"
+            name="SlowDrawing"
+            viewid="zephyr.plugin.tests.slowdrawing">
       </client>
    </extension>
    <extension

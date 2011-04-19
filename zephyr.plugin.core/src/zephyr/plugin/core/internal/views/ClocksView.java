@@ -10,10 +10,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
 import zephyr.ZephyrSync;
@@ -25,14 +21,7 @@ import zephyr.plugin.core.views.SyncView;
 import zephyr.plugin.core.views.ViewProvider;
 
 public class ClocksView extends ViewPart implements SyncView {
-  static final public String ViewID = "zephyr.plugin.core.clocksview";
-
   static public class Provider implements ViewProvider {
-    @Override
-    public String viewID() {
-      return ViewID;
-    }
-
     @Override
     public boolean canViewDraw(Object drawn) {
       return true;
@@ -75,19 +64,6 @@ public class ClocksView extends ViewPart implements SyncView {
         addComposite(clock);
       }
     });
-    activateView();
-  }
-
-  private void activateView() {
-    IWorkbenchWindow activeWorkbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-    if (activeWorkbenchWindow == null)
-      return;
-    IWorkbenchPage activePage = activeWorkbenchWindow.getActivePage();
-    try {
-      activePage.showView(ViewID, null, IWorkbenchPage.VIEW_ACTIVATE);
-    } catch (PartInitException e) {
-      e.printStackTrace();
-    }
   }
 
   private boolean isViewActive() {
