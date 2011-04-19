@@ -118,7 +118,7 @@ public class StructureExplorer extends ViewPart implements ItemProvider {
   }
 
   void registerClassNode(ClassNode classNode) {
-    TreeItem clockItem = getClockItem(classNode.root());
+    TreeItem clockItem = getClockItem((ClockNode) classNode.parent());
     TreeItem classItem = nodeToTreeItem(clockItem, classNode);
     if (hasChildren(classNode))
       new TreeItem(classItem, 0);

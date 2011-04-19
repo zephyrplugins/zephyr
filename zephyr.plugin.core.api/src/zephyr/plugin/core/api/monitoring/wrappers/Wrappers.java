@@ -27,7 +27,9 @@ public class Wrappers {
     Monitor monitorAnnotation = field.getAnnotation(Monitor.class);
     if (monitorAnnotation == null)
       return parentWrappers;
-    List<MonitorWrapper> result = new ArrayList<MonitorWrapper>(parentWrappers);
+    List<MonitorWrapper> result = new ArrayList<MonitorWrapper>();
+    if (parentWrappers != null)
+      result.addAll(parentWrappers);
     String[] wrapperIDs = monitorAnnotation.wrappers();
     for (String id : wrapperIDs) {
       MonitorWrapper wrapper = wrappers.get(id);

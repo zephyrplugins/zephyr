@@ -13,8 +13,8 @@ public class PrimitiveCollectionNode extends AbstractCodeNode implements Monitor
   final CollectionLabelBuilder collectionLabelBuilder;
 
   public PrimitiveCollectionNode(String label, ParentNode parent, List<?> array,
-      CollectionLabelBuilder collectionLabelBuilder) {
-    super(label, parent);
+      CollectionLabelBuilder collectionLabelBuilder, int level) {
+    super(label, parent, level);
     this.array = array;
     this.collectionLabelBuilder = collectionLabelBuilder;
   }

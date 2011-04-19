@@ -7,18 +7,12 @@ public class ClockNode extends AbstractParentNode {
   private final Clock clock;
 
   public ClockNode(Clock clock) {
-    super(clock.info().label(), null, null);
+    super(clock.info().label(), null, 0);
     this.clock = clock;
   }
 
-  @Override
   public Clock clock() {
     return clock;
-  }
-
-  @Override
-  public ClockNode root() {
-    return this;
   }
 
   @Override

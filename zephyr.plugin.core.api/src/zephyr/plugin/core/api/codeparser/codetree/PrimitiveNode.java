@@ -7,25 +7,29 @@ import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.core.api.monitoring.abstracts.MonitorContainer;
 import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
 
-public class PrimitiveFieldNode extends AbstractCodeNode implements MonitorContainer {
-  final Object container;
-  final Field field;
+public class PrimitiveNode extends AbstractCodeNode implements MonitorContainer {
+  private final Monitored monitored;
 
-  public PrimitiveFieldNode(String label, ParentNode parent, Field field, Object container) {
-    super(label, parent);
-    this.field = field;
-    this.container = container;
+  public PrimitiveNode(String label, ParentNode parent, Field field, Object container, int level) {
+    this(label, parent, createMonitored(field, container), level);
   }
 
-  public Field field() {
-    return field;
+  public PrimitiveNode(String label, ParentNode parent, Monitored monitored, int level) {
+    super(label, parent, level);
+    this.monitored = monitored;
   }
 
-  public Object container() {
-    return container;
+  public Monitored monitored() {
+    return monitored;
   }
 
-  private Monitored createValueLogged() {
+  static private Monitored createMonitored(Field field, Object container) {
+    if (field.getType().equals(Boolean.TYPE))
+      return createBooleanLogged(field, container);
+    return createValueLogged(field, container);
+  }
+
+  static private Monitored createValueLogged(final Field field, final Object container) {
     return new Monitored() {
       @Override
       public double monitoredValue(long stepTime) {
@@ -41,7 +45,7 @@ public class PrimitiveFieldNode extends AbstractCodeNode implements MonitorConta
     };
   }
 
-  private Monitored createBooleanLogged() {
+  static private Monitored createBooleanLogged(final Field field, final Object container) {
     return new Monitored() {
       @Override
       public double monitoredValue(long stepTime) {
@@ -59,7 +63,6 @@ public class PrimitiveFieldNode extends AbstractCodeNode implements MonitorConta
 
   @Override
   public void addToMonitor(DataMonitor monitor) {
-    Monitored monitored = field.getType().equals(Boolean.TYPE) ? createBooleanLogged() : createValueLogged();
     monitor.add(path(), monitored);
   }
 }

@@ -27,10 +27,12 @@ public class PrimitiveCollectionParser implements FieldParser {
 
   @Override
   public void parse(CodeParser codeParser, MutableParentNode parentNode, Field field, Object fieldValue) {
+    int level = CodeTrees.levelOf(field);
     String label = CodeTrees.labelOf(field);
     List<?> list = (List<?>) fieldValue;
     CollectionLabelBuilder labelBuilder = codeParser.newCollectionLabelBuilder(field, list.size());
-    PrimitiveCollectionNode arrayPrimitiveNode = new PrimitiveCollectionNode(label, parentNode, list, labelBuilder);
+    PrimitiveCollectionNode arrayPrimitiveNode = new PrimitiveCollectionNode(label, parentNode, list, labelBuilder,
+                                                                             level);
     parentNode.addChild(arrayPrimitiveNode);
   }
 }

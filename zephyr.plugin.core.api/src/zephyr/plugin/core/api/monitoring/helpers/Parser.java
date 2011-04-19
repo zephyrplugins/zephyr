@@ -140,7 +140,7 @@ public class Parser {
   }
 
   public static void parse(DataMonitor dataMonitor, Object toParse, int levelRequired) {
-    DataTraverser traverser = new DataTraverser(dataMonitor);
+    DataTraverser traverser = new DataTraverser(dataMonitor, levelRequired);
     if (toParse instanceof Monitored)
       dataMonitor.add(Labels.label(toParse), (Monitored) toParse);
     if (toParse instanceof MonitorContainer)

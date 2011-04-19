@@ -83,7 +83,7 @@ public class CodeTreeParser implements CodeParser {
   }
 
   private boolean isMonitored(ClassNode classNode, Field field) {
-    if (field.isAnnotationPresent(IgnoreMonitor.class))
+    if (field.isSynthetic() || field.isAnnotationPresent(IgnoreMonitor.class))
       return false;
     if (classNode.isClassAnnotated())
       return true;

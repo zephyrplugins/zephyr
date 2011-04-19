@@ -15,8 +15,8 @@ public class PrimitiveArrayNode extends AbstractCodeNode implements MonitorConta
   final Object array;
   final CollectionLabelBuilder collectionLabelBuilder;
 
-  public PrimitiveArrayNode(String label, ParentNode parent, Object array, CollectionLabelBuilder collectionLabelBuilder) {
-    super(label, parent);
+  public PrimitiveArrayNode(String label, ParentNode parent, Object array, CollectionLabelBuilder collectionLabelBuilder, int level) {
+    super(label, parent, level);
     this.array = array;
     this.collectionLabelBuilder = collectionLabelBuilder;
   }

@@ -26,8 +26,8 @@ public class ParserLevelTest implements DataMonitor {
     protected int b;
   }
 
-  static final String[] labelLevel0 = new String[] { "a0a", "b0b", "i0" };
-  static final String[] labelLevel4 = new String[] { "a0a", "a4a", "b0b", "b4b", "i0", "i4" };
+  static final String[] labelLevel0 = new String[] { "a0/a", "b0/b", "i0" };
+  static final String[] labelLevel4 = new String[] { "a0/a", "a4/a", "b0/b", "b4/b", "i0", "i4" };
   static final private Map<String, Integer> labelToLevel = new LinkedHashMap<String, Integer>();
   static {
     labelToLevel.put("a0a", 0);

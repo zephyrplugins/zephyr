@@ -53,4 +53,12 @@ public class CodeTrees {
     return label;
   }
 
+  public static int levelOf(Field field) {
+    if (field == null)
+      return 0;
+    Monitor annotation = field.getAnnotation(Monitor.class);
+    if (annotation == null)
+      return 0;
+    return annotation.level();
+  }
 }

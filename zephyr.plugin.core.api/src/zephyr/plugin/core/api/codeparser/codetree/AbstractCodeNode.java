@@ -2,31 +2,27 @@ package zephyr.plugin.core.api.codeparser.codetree;
 
 import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.codeparser.interfaces.ParentNode;
-import zephyr.plugin.core.api.synchronization.Clock;
 
 public abstract class AbstractCodeNode implements CodeNode {
   private final ParentNode parent;
   private final String label;
   private String path = null;
+  private final int level;
 
-  protected AbstractCodeNode(String label, ParentNode parent) {
+  protected AbstractCodeNode(String label, ParentNode parent, int level) {
     this.parent = parent;
     this.label = label;
+    this.level = level;
   }
 
   @Override
-  public ClockNode root() {
-    return parent.root();
+  public int level() {
+    return level;
   }
 
   @Override
   public ParentNode parent() {
     return parent;
-  }
-
-  @Override
-  public Clock clock() {
-    return parent.clock();
   }
 
   @Override

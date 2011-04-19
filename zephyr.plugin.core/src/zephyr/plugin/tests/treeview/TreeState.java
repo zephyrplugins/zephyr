@@ -29,23 +29,16 @@ public class TreeState implements TreeListener {
   public void treeCollapsed(TreeEvent event) {
     CodeNode codeNode = (CodeNode) ((TreeItem) event.item).getData();
     for (String identifier : new ArrayList<String>(expanded)) {
-      if (identifier.startsWith(pathToId(codeNode.path())))
+      if (identifier.startsWith(codeNode.path()))
         expanded.remove(identifier);
     }
-  }
-
-  private String pathToId(String[] path) {
-    StringBuilder id = new StringBuilder();
-    for (String e : path)
-      id.append(e);
-    return id.toString();
   }
 
   @Override
   public void treeExpanded(TreeEvent event) {
     final TreeItem root = (TreeItem) event.item;
     CodeNode codeNode = (CodeNode) root.getData();
-    expanded.add(pathToId(codeNode.path()));
+    expanded.add(codeNode.path());
     buildChildrenIFN(root);
     expandNodes();
   }
@@ -61,7 +54,7 @@ public class TreeState implements TreeListener {
 
   public void nodeCreated(TreeItem treeItem) {
     CodeNode codeNode = (CodeNode) treeItem.getData();
-    String nodeIdentifier = pathToId(codeNode.path());
+    String nodeIdentifier = codeNode.path();
     for (String identifier : expanded)
       if (identifier.startsWith(nodeIdentifier)) {
         nodeToExpand(treeItem);
