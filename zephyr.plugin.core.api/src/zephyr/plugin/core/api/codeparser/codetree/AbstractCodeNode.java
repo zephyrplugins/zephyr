@@ -30,11 +30,6 @@ public abstract class AbstractCodeNode implements CodeNode {
   }
 
   @Override
-  public String id() {
-    return label;
-  }
-
-  @Override
   public String label() {
     return label;
   }

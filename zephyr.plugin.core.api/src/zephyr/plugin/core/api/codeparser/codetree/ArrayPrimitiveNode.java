@@ -5,29 +5,27 @@ import java.util.List;
 
 import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.core.api.monitoring.abstracts.MonitorContainer;
-import zephyr.plugin.core.api.monitoring.abstracts.MonitorParser;
 import zephyr.plugin.core.api.monitoring.helpers.Loggers;
 import zephyr.plugin.core.api.monitoring.wrappers.MonitorWrapper;
 import zephyr.plugin.core.api.parsing.CollectionLabelBuilder;
-import zephyr.plugin.core.api.parsing.LabelBuilder;
 
 
 public class ArrayPrimitiveNode extends AbstractCodeNode implements MonitorContainer {
   final Object array;
-  final CollectionLabelBuilder labelBuilder;
+  final CollectionLabelBuilder collectionLabelBuilder;
 
-  public ArrayPrimitiveNode(String label, ParentNode parent, Object array) {
+  public ArrayPrimitiveNode(String label, ParentNode parent, Object array, CollectionLabelBuilder collectionLabelBuilder) {
     super(label, parent);
     this.array = array;
-    labelBuilder = new CollectionLabelBuilder(new LabelBuilder(), Array.getLength(array), "", "", true);
+    this.collectionLabelBuilder = collectionLabelBuilder;
   }
 
   @Override
-  public void addToMonitor(MonitorParser parser, DataMonitor monitor) {
+  public void addToMonitor(DataMonitor monitor) {
     int length = Array.getLength(array);
     String[] elementLabels = new String[length];
     for (int i = 0; i < elementLabels.length; i++)
-      elementLabels[i] = label() + labelBuilder.elementLabel(i);
+      elementLabels[i] = label() + collectionLabelBuilder.elementLabel(i);
 
     List<MonitorWrapper> wrappers = null;
     if (array.getClass().getComponentType().equals(double.class))

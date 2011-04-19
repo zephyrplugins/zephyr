@@ -11,7 +11,5 @@ public interface CodeNode {
 
   String[] path();
 
-  String id();
-
   String label();
 }

@@ -9,7 +9,15 @@ import zephyr.plugin.core.api.codeparser.codetree.ClassNode;
 public class PrimitiveListParser implements Parser {
   @Override
   public boolean canParse(Object fieldValue) {
-    return fieldValue instanceof Collection;
+    if (!(fieldValue instanceof Collection))
+      return false;
+    Collection<?> collection = (Collection<?>) fieldValue;
+    if (collection.size() == 0)
+      return false;
+    Object firstElement = collection.iterator().next();
+    if (firstElement == null)
+      return false;
+    return firstElement.getClass().isPrimitive();
   }
 
   @Override

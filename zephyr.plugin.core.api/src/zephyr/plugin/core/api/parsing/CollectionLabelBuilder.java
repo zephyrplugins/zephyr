@@ -27,6 +27,14 @@ public class CollectionLabelBuilder {
     this.includeIndex = includeIndex;
   }
 
+  public CollectionLabelBuilder(LabeledElement labeledElement, String elementLabelSeparator, int size,
+      boolean includeIndex) {
+    collectionPattern = Labels.collectionPattern("", size, includeIndex);
+    this.labeledElement = labeledElement;
+    this.elementLabelSeparator = elementLabelSeparator;
+    this.includeIndex = includeIndex;
+  }
+
   public String elementLabel(int index) {
     String suffix = labeledElement == null ? null : labeledElement.label(index);
     if (includeIndex && suffix != null)

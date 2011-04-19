@@ -1,4 +1,4 @@
-package zephyr.plugin.core.api.logging.fileloggers;
+package zephyr.plugin.core.api.codeparser.parsers;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;

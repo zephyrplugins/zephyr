@@ -1,10 +1,11 @@
 package zephyr.plugin.core.api.codeparser.parsers;
 
 import java.util.Collection;
-import java.util.List;
 
 
-public class ObjectListParser extends AbstractCollectionParser<List<?>> {
+public class ObjectCollectionParser extends AbstractCollectionParser<Collection<?>> {
+  private Object[] elements;
+
   @Override
   public boolean canParse(Object fieldValue) {
     if (!(fieldValue instanceof Collection))
@@ -19,12 +20,23 @@ public class ObjectListParser extends AbstractCollectionParser<List<?>> {
   }
 
   @Override
-  protected int nbChildren(List<?> container) {
+  protected int nbChildren(Collection<?> container) {
     return container.size();
   }
 
   @Override
-  protected Object getElement(List<?> container, int index) {
-    return container.get(index);
+  protected void beginChildrenParse(Collection<?> container) {
+    elements = container.toArray();
+  }
+
+  @Override
+  protected void endChildrenParse() {
+    elements = null;
+  }
+
+
+  @Override
+  protected Object getElement(Collection<?> container, int index) {
+    return elements[index];
   }
 }

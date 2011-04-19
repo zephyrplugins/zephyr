@@ -18,7 +18,7 @@ public class DataTraverser implements Traverser, MonitorParser {
       return true;
     }
     if (codeNode instanceof MonitorContainer)
-      ((MonitorContainer) codeNode).addToMonitor(this, monitor);
+      ((MonitorContainer) codeNode).addToMonitor(monitor);
     return false;
   }
 

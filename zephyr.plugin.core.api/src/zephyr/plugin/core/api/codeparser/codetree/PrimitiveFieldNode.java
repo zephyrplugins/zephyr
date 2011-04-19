@@ -4,7 +4,6 @@ import java.lang.reflect.Field;
 
 import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.core.api.monitoring.abstracts.MonitorContainer;
-import zephyr.plugin.core.api.monitoring.abstracts.MonitorParser;
 import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
 
 public class PrimitiveFieldNode extends AbstractCodeNode implements MonitorContainer {
@@ -58,7 +57,7 @@ public class PrimitiveFieldNode extends AbstractCodeNode implements MonitorConta
   }
 
   @Override
-  public void addToMonitor(MonitorParser parser, DataMonitor monitor) {
+  public void addToMonitor(DataMonitor monitor) {
     Monitored monitored = field.getType().equals(Boolean.TYPE) ? createBooleanLogged() : createValueLogged();
     monitor.add(label(), monitored);
   }

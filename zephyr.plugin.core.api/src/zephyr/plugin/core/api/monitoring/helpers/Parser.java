@@ -97,7 +97,7 @@ public class Parser {
     if (child == null)
       return;
     if (child instanceof MonitorContainer)
-      ((MonitorContainer) child).addToMonitor(null, logger);
+      ((MonitorContainer) child).addToMonitor(logger);
     findAnnotations(logger, child, wrappers, level, levelRequired);
   }
 
@@ -133,7 +133,7 @@ public class Parser {
     if (toParse instanceof Monitored)
       dataMonitor.add(Labels.label(toParse), (Monitored) toParse);
     if (toParse instanceof MonitorContainer)
-      ((MonitorContainer) toParse).addToMonitor(null, dataMonitor);
+      ((MonitorContainer) toParse).addToMonitor(dataMonitor);
     findAnnotations(dataMonitor, toParse, levelRequired);
   }
 
@@ -142,7 +142,7 @@ public class Parser {
     if (toParse instanceof Monitored)
       dataMonitor.add(Labels.label(toParse), (Monitored) toParse);
     if (toParse instanceof MonitorContainer)
-      ((MonitorContainer) toParse).addToMonitor(traverser, dataMonitor);
+      ((MonitorContainer) toParse).addToMonitor(dataMonitor);
     CodeParser codeParser = new CodeParser();
     ClassNode classNode = codeParser.parse(toParse);
     CodeParser.traverse(traverser, classNode);

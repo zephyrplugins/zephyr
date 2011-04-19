@@ -1,4 +1,4 @@
-package zephyr.plugin.core.api.logging.fileloggers;
+package zephyr.plugin.core.api.codeparser.parsers;
 
 import java.io.StringWriter;
 import java.util.Collection;
@@ -9,7 +9,6 @@ import org.junit.Test;
 
 import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.core.api.monitoring.abstracts.MonitorContainer;
-import zephyr.plugin.core.api.monitoring.abstracts.MonitorParser;
 import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 import zephyr.plugin.core.api.monitoring.fileloggers.FileLogger;
@@ -62,7 +61,7 @@ public class ParserTest01 {
     }
 
     @Override
-    public void addToMonitor(MonitorParser parser, DataMonitor monitor) {
+    public void addToMonitor(DataMonitor monitor) {
       monitor.add(logged01AddedFromInterface, new Monitored() {
         @Override
         public double monitoredValue(long stepTime) {
