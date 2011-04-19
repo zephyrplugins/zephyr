@@ -1,5 +1,6 @@
 package zephyr.plugin.core.api.codeparser.codetree;
 
+import zephyr.plugin.core.api.codeparser.interfaces.ParentNode;
 import zephyr.plugin.core.api.synchronization.Clock;
 
 public class ClockNode extends AbstractParentNode {

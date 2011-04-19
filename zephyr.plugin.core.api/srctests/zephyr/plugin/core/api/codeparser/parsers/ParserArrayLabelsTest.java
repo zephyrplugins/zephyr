@@ -12,7 +12,7 @@ import zephyr.plugin.core.api.parsing.LabelProvider;
 
 public class ParserArrayLabelsTest {
   static final String[] expectedLabels = new String[] { "logged01[]", "logged01[]", "logged02[a]",
-      "logged02[b]", "logged03[]data01" };
+      "logged02[b]", "logged03[]/data01" };
 
   static public class TestObjectMonitored {
     @Monitor

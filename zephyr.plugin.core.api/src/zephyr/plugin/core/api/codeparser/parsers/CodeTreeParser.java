@@ -11,17 +11,19 @@ import java.util.Map;
 import java.util.Stack;
 
 import zephyr.plugin.core.api.codeparser.codetree.ClassNode;
-import zephyr.plugin.core.api.codeparser.codetree.CodeNode;
-import zephyr.plugin.core.api.codeparser.codetree.ParentNode;
-import zephyr.plugin.core.api.codeparser.traverser.Traverser;
+import zephyr.plugin.core.api.codeparser.codetree.CodeTrees;
+import zephyr.plugin.core.api.codeparser.interfaces.CodeParser;
+import zephyr.plugin.core.api.codeparser.interfaces.FieldParser;
+import zephyr.plugin.core.api.codeparser.interfaces.MutableParentNode;
+import zephyr.plugin.core.api.codeparser.interfaces.ParentNode;
 import zephyr.plugin.core.api.monitoring.annotations.IgnoreMonitor;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 import zephyr.plugin.core.api.parsing.CollectionLabelBuilder;
 import zephyr.plugin.core.api.parsing.LabelProvider;
 import zephyr.plugin.core.api.parsing.LabeledElement;
 
-public class CodeParser {
-  static private LinkedList<Parser> parsers = new LinkedList<Parser>();
+public class CodeTreeParser implements CodeParser {
+  static private LinkedList<FieldParser> parsers = new LinkedList<FieldParser>();
   private final Stack<Map<String, LabeledElement>> labelsMapStack = new Stack<Map<String, LabeledElement>>();
 
   static {
@@ -29,19 +31,8 @@ public class CodeParser {
     registerParser(new ObjectCollectionParser());
     registerParser(new ObjectArrayParser());
     registerParser(new PrimitiveArrayParser());
-    registerParser(new PrimitiveListParser());
+    registerParser(new PrimitiveCollectionParser());
     registerParser(new PrimitiveParser());
-  }
-
-  static public Object getValueFromField(Field field, Object parentInstance) {
-    try {
-      return field.get(parentInstance);
-    } catch (IllegalArgumentException e) {
-      e.printStackTrace();
-    } catch (IllegalAccessException e) {
-      e.printStackTrace();
-    }
-    return null;
   }
 
   static private Field[] getFieldList(Class<?> objectClass) {
@@ -101,9 +92,9 @@ public class CodeParser {
     return false;
   }
 
-  private void parseField(ClassNode parentNode, Field field) {
-    Object fieldValue = getValueFromField(field, parentNode.instance());
-    for (Parser parser : parsers) {
+  @Override
+  public void recursiveParseInstance(MutableParentNode parentNode, Field field, Object fieldValue) {
+    for (FieldParser parser : parsers) {
       if (parser.canParse(fieldValue)) {
         parser.parse(this, parentNode, field, fieldValue);
         return;
@@ -111,8 +102,8 @@ public class CodeParser {
     }
   }
 
-  public void parseChildren(ClassNode classNode) {
-    Object container = classNode.instance();
+  @Override
+  public void recursiveParseClass(ClassNode classNode, Object container) {
     labelsMapStack.push(buildLabelMaps(container));
     Class<?> objectClass = container.getClass();
     while (objectClass != null) {
@@ -121,36 +112,30 @@ public class CodeParser {
         if (field.getName().equals("serialVersionUID"))
           continue;
         field.setAccessible(true);
-        if (isMonitored(classNode, field))
-          parseField(classNode, field);
+        if (isMonitored(classNode, field)) {
+          Object fieldValue = CodeTrees.getValueFromField(field, classNode.instance());
+          recursiveParseInstance(classNode, field, fieldValue);
+        }
       }
       objectClass = objectClass.getSuperclass();
     }
     labelsMapStack.pop();
   }
 
+  @Override
   public ClassNode parse(Object root) {
     return parse(null, root);
   }
 
+  @Override
   public ClassNode parse(ParentNode parent, Object root) {
     ClassNode classNode = new ClassNode("", parent, root, null);
-    parseChildren(classNode);
+    recursiveParseClass(classNode, classNode.instance());
     return classNode;
   }
 
-  static public void registerParser(Parser parser) {
+  static public void registerParser(FieldParser parser) {
     parsers.addFirst(parser);
-  }
-
-  static public void traverse(Traverser traverser, CodeNode root) {
-    boolean visitChildren = traverser.inNode(root);
-    if (visitChildren && root instanceof ParentNode) {
-      ParentNode parent = (ParentNode) root;
-      for (int i = 0; i < parent.nbChildren(); i++)
-        traverse(traverser, parent.getChild(i));
-    }
-    traverser.outNode(root);
   }
 
   private LabeledElement getLabeledElement(String id) {
@@ -162,15 +147,16 @@ public class CodeParser {
     return null;
   }
 
+  @Override
   public CollectionLabelBuilder newCollectionLabelBuilder(Field field, int length) {
     String id = "";
     boolean includeIndex = true;
-    if (field.isAnnotationPresent(Monitor.class)) {
+    if (field != null && field.isAnnotationPresent(Monitor.class)) {
       Monitor annotation = field.getAnnotation(Monitor.class);
       id = annotation.id();
       includeIndex = annotation.arrayIndexLabeled();
     }
-    if (id.isEmpty())
+    if (field != null && id.isEmpty())
       id = field.getName();
     return new CollectionLabelBuilder(getLabeledElement(id), "", length, includeIndex);
   }

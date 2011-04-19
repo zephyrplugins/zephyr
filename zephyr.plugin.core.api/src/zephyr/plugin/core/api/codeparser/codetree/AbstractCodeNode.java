@@ -1,13 +1,13 @@
 package zephyr.plugin.core.api.codeparser.codetree;
 
-import java.util.Arrays;
-
+import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
+import zephyr.plugin.core.api.codeparser.interfaces.ParentNode;
 import zephyr.plugin.core.api.synchronization.Clock;
 
 public abstract class AbstractCodeNode implements CodeNode {
   private final ParentNode parent;
   private final String label;
-  private String[] path;
+  private String path = null;
 
   protected AbstractCodeNode(String label, ParentNode parent) {
     this.parent = parent;
@@ -35,11 +35,15 @@ public abstract class AbstractCodeNode implements CodeNode {
   }
 
   @Override
-  public String[] path() {
+  public String path() {
     if (path == null) {
-      String[] parentPath = parent != null ? parent.path() : new String[] {};
-      path = Arrays.copyOf(parentPath, parentPath.length + 1);
-      path[path.length - 1] = label;
+      String parentPath = "";
+      if (parent != null) {
+        parentPath = parent.path();
+        if (!(parent instanceof ObjectCollectionNode) && !parentPath.isEmpty() && !label().isEmpty())
+          parentPath += "/";
+      }
+      path = parentPath + label;
     }
     return path;
   }

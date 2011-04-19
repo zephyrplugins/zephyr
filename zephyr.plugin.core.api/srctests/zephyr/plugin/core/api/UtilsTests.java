@@ -10,6 +10,8 @@ import zephyr.plugin.core.api.codeparser.parsers.ParserArray2DTest;
 import zephyr.plugin.core.api.codeparser.parsers.ParserArrayLabelsTest;
 import zephyr.plugin.core.api.codeparser.parsers.ParserBooleanTest;
 import zephyr.plugin.core.api.codeparser.parsers.ParserLevelTest;
+import zephyr.plugin.core.api.codeparser.parsers.ParserTest01;
+import zephyr.plugin.core.api.codeparser.parsers.ParserTest02;
 import zephyr.plugin.core.api.codeparser.parsers.ParserTest03;
 import zephyr.plugin.core.api.codeparser.parsers.ParserWrappersTest;
 import zephyr.plugin.core.api.logfiles.BZippedLogFileTest;
@@ -24,6 +26,7 @@ import zephyr.plugin.core.api.synchronization.ChronoTest;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({ SignalTest.class, ChronoTest.class, LoggerRowTest.class, FileLoggerTest.class,
+    ParserTest01.class, ParserTest02.class,
     ParserArrayLabelsTest.class, ParserArray2DTest.class, ParserTest03.class,
     ParserBooleanTest.class, ParserWrappersTest.class, ParserLevelTest.class, AdvertisementTest.class,
     AdvertisementParentTest.class, AdvertisementInvocationTest.class, TextLogFileTest.class, GZippedLogFileTest.class,

@@ -9,7 +9,9 @@ import java.util.List;
 import java.util.Map;
 
 import zephyr.plugin.core.api.codeparser.codetree.ClassNode;
-import zephyr.plugin.core.api.codeparser.parsers.CodeParser;
+import zephyr.plugin.core.api.codeparser.codetree.CodeTrees;
+import zephyr.plugin.core.api.codeparser.interfaces.CodeParser;
+import zephyr.plugin.core.api.codeparser.parsers.CodeTreeParser;
 import zephyr.plugin.core.api.labels.Labels;
 import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.core.api.monitoring.abstracts.DataTraverser;
@@ -104,7 +106,7 @@ public class Parser {
   public static String labelOf(Field field) {
     Monitor annotation = field.getAnnotation(Monitor.class);
     String label = annotation != null ? annotation.label() : "";
-    if (label.isEmpty() && (annotation == null || !annotation.skipLabel()))
+    if (label.isEmpty() && (annotation == null || !annotation.emptyLabel()))
       label = field.getName();
     return label;
   }
@@ -143,8 +145,8 @@ public class Parser {
       dataMonitor.add(Labels.label(toParse), (Monitored) toParse);
     if (toParse instanceof MonitorContainer)
       ((MonitorContainer) toParse).addToMonitor(dataMonitor);
-    CodeParser codeParser = new CodeParser();
+    CodeParser codeParser = new CodeTreeParser();
     ClassNode classNode = codeParser.parse(toParse);
-    CodeParser.traverse(traverser, classNode);
+    CodeTrees.traverse(traverser, classNode);
   }
 }

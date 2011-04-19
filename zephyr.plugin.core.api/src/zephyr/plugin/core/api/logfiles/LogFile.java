@@ -20,7 +20,7 @@ public abstract class LogFile implements Labeled, Timed {
   @IgnoreAdvertise
   protected BufferedReader reader;
   final public String filepath;
-  @Monitor(skipLabel = true)
+  @Monitor(emptyLabel = true)
   private final double[] current;
   private final String[] labels;
 

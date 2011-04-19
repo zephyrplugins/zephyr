@@ -1,11 +1,9 @@
 package zephyr.plugin.core.api.codeparser.codetree;
 
-import java.lang.reflect.Field;
 import java.util.List;
 
 import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
-import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 import zephyr.plugin.core.api.monitoring.wrappers.MonitorWrapper;
 import zephyr.plugin.core.api.monitoring.wrappers.Wrappers;
 
@@ -59,13 +57,5 @@ public class Monitoring {
         }
       }, wrappers, level);
     }
-  }
-
-  public static String labelOf(Field field) {
-    Monitor annotation = field.getAnnotation(Monitor.class);
-    String label = annotation != null ? annotation.label() : "";
-    if (label.isEmpty() && (annotation == null || !annotation.skipLabel()))
-      label = field.getName();
-    return label;
   }
 }

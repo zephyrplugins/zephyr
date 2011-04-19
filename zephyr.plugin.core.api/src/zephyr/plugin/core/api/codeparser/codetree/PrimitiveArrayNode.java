@@ -3,6 +3,7 @@ package zephyr.plugin.core.api.codeparser.codetree;
 import java.lang.reflect.Array;
 import java.util.List;
 
+import zephyr.plugin.core.api.codeparser.interfaces.ParentNode;
 import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.core.api.monitoring.abstracts.MonitorContainer;
 import zephyr.plugin.core.api.monitoring.helpers.Loggers;
@@ -10,11 +11,11 @@ import zephyr.plugin.core.api.monitoring.wrappers.MonitorWrapper;
 import zephyr.plugin.core.api.parsing.CollectionLabelBuilder;
 
 
-public class ArrayPrimitiveNode extends AbstractCodeNode implements MonitorContainer {
+public class PrimitiveArrayNode extends AbstractCodeNode implements MonitorContainer {
   final Object array;
   final CollectionLabelBuilder collectionLabelBuilder;
 
-  public ArrayPrimitiveNode(String label, ParentNode parent, Object array, CollectionLabelBuilder collectionLabelBuilder) {
+  public PrimitiveArrayNode(String label, ParentNode parent, Object array, CollectionLabelBuilder collectionLabelBuilder) {
     super(label, parent);
     this.array = array;
     this.collectionLabelBuilder = collectionLabelBuilder;
@@ -25,7 +26,7 @@ public class ArrayPrimitiveNode extends AbstractCodeNode implements MonitorConta
     int length = Array.getLength(array);
     String[] elementLabels = new String[length];
     for (int i = 0; i < elementLabels.length; i++)
-      elementLabels[i] = label() + collectionLabelBuilder.elementLabel(i);
+      elementLabels[i] = path() + collectionLabelBuilder.elementLabel(i);
 
     List<MonitorWrapper> wrappers = null;
     if (array.getClass().getComponentType().equals(double.class))

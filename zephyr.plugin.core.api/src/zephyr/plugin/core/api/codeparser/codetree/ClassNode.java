@@ -2,6 +2,7 @@ package zephyr.plugin.core.api.codeparser.codetree;
 
 import java.lang.reflect.Field;
 
+import zephyr.plugin.core.api.codeparser.interfaces.ParentNode;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
 

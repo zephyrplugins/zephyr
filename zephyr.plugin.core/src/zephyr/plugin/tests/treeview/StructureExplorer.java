@@ -21,8 +21,8 @@ import zephyr.ZephyrCore;
 import zephyr.plugin.core.SyncCode;
 import zephyr.plugin.core.api.codeparser.codetree.ClassNode;
 import zephyr.plugin.core.api.codeparser.codetree.ClockNode;
-import zephyr.plugin.core.api.codeparser.codetree.CodeNode;
-import zephyr.plugin.core.api.codeparser.codetree.ParentNode;
+import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
+import zephyr.plugin.core.api.codeparser.interfaces.ParentNode;
 import zephyr.plugin.core.api.signals.Listener;
 
 public class StructureExplorer extends ViewPart implements ItemProvider {

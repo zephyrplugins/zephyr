@@ -2,6 +2,7 @@ package zephyr.plugin.core.api.codeparser.codetree;
 
 import java.lang.reflect.Field;
 
+import zephyr.plugin.core.api.codeparser.interfaces.ParentNode;
 import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.core.api.monitoring.abstracts.MonitorContainer;
 import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
@@ -10,10 +11,10 @@ public class PrimitiveFieldNode extends AbstractCodeNode implements MonitorConta
   final Object container;
   final Field field;
 
-  public PrimitiveFieldNode(String label, ClassNode parent, Field field) {
+  public PrimitiveFieldNode(String label, ParentNode parent, Field field, Object container) {
     super(label, parent);
     this.field = field;
-    this.container = parent.instance();
+    this.container = container;
   }
 
   public Field field() {
@@ -59,6 +60,6 @@ public class PrimitiveFieldNode extends AbstractCodeNode implements MonitorConta
   @Override
   public void addToMonitor(DataMonitor monitor) {
     Monitored monitored = field.getType().equals(Boolean.TYPE) ? createBooleanLogged() : createValueLogged();
-    monitor.add(label(), monitored);
+    monitor.add(path(), monitored);
   }
 }

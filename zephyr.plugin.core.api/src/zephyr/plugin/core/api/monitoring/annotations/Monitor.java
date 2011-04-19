@@ -12,7 +12,7 @@ public @interface Monitor {
 
   String id() default "";
 
-  boolean skipLabel() default false;
+  boolean emptyLabel() default false;
 
   int level() default 0;
 

@@ -22,7 +22,7 @@ public class ParserTest03 {
   }
 
   static public class TestIgnoreLabel {
-    @Monitor(skipLabel = true)
+    @Monitor(emptyLabel = true)
     protected double myFieldNameIsIgnored;
   }
 

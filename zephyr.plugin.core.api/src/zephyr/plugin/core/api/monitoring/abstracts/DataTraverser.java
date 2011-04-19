@@ -1,7 +1,7 @@
 package zephyr.plugin.core.api.monitoring.abstracts;
 
-import zephyr.plugin.core.api.codeparser.codetree.CodeNode;
-import zephyr.plugin.core.api.codeparser.codetree.ParentNode;
+import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
+import zephyr.plugin.core.api.codeparser.interfaces.ParentNode;
 import zephyr.plugin.core.api.codeparser.traverser.Traverser;
 
 public class DataTraverser implements Traverser, MonitorParser {
@@ -14,7 +14,7 @@ public class DataTraverser implements Traverser, MonitorParser {
   @Override
   public boolean inNode(CodeNode codeNode) {
     if (codeNode instanceof ParentNode) {
-      monitor.labelBuilder().push(codeNode.label());
+      // monitor.labelBuilder().push(codeNode.label());
       return true;
     }
     if (codeNode instanceof MonitorContainer)
@@ -24,7 +24,7 @@ public class DataTraverser implements Traverser, MonitorParser {
 
   @Override
   public void outNode(CodeNode codeNode) {
-    if (codeNode instanceof ParentNode)
-      monitor.labelBuilder().pop();
+    // if (codeNode instanceof ParentNode)
+    // monitor.labelBuilder().pop();
   }
 }

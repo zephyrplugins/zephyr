@@ -7,7 +7,8 @@ import java.util.Map;
 
 import zephyr.plugin.core.api.codeparser.codetree.ClassNode;
 import zephyr.plugin.core.api.codeparser.codetree.ClockNode;
-import zephyr.plugin.core.api.codeparser.parsers.CodeParser;
+import zephyr.plugin.core.api.codeparser.interfaces.CodeParser;
+import zephyr.plugin.core.api.codeparser.parsers.CodeTreeParser;
 import zephyr.plugin.core.api.signals.Signal;
 import zephyr.plugin.core.api.synchronization.Clock;
 
@@ -25,7 +26,7 @@ public class SyncCode {
       clockNode = new ClockNode(clock);
       clockNodes.put(clock, clockNode);
     }
-    CodeParser parser = new CodeParser();
+    CodeParser parser = new CodeTreeParser();
     ClassNode rootClassNode = parser.parse(clockNode, root);
     clockNode.addChild(rootClassNode);
     onParse.fire(rootClassNode);

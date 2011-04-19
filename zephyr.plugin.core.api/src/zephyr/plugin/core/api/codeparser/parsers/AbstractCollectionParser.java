@@ -3,18 +3,21 @@ package zephyr.plugin.core.api.codeparser.parsers;
 import java.lang.reflect.Field;
 
 import zephyr.plugin.core.api.codeparser.codetree.ClassNode;
-import zephyr.plugin.core.api.codeparser.codetree.CollectionObjectNode;
+import zephyr.plugin.core.api.codeparser.codetree.ObjectCollectionNode;
+import zephyr.plugin.core.api.codeparser.interfaces.CodeParser;
+import zephyr.plugin.core.api.codeparser.interfaces.FieldParser;
+import zephyr.plugin.core.api.codeparser.interfaces.MutableParentNode;
 import zephyr.plugin.core.api.parsing.CollectionLabelBuilder;
 
-public abstract class AbstractCollectionParser<T> implements Parser {
+public abstract class AbstractCollectionParser<T> implements FieldParser {
   @Override
-  public void parse(CodeParser codeParser, ClassNode parentNode, Field field, Object fieldValue) {
+  public void parse(CodeParser codeParser, MutableParentNode parentNode, Field field, Object fieldValue) {
     @SuppressWarnings("unchecked")
     T container = (T) fieldValue;
     int nbChildren = nbChildren(container);
     String label = field.getName();
     CollectionLabelBuilder labelBuilder = codeParser.newCollectionLabelBuilder(field, nbChildren);
-    ClassNode collectionNode = new CollectionObjectNode(label, parentNode, fieldValue, field);
+    ClassNode collectionNode = new ObjectCollectionNode(label, parentNode, fieldValue, field);
     parentNode.addChild(collectionNode);
     beginChildrenParse(container);
     for (int i = 0; i < nbChildren; i++) {
@@ -33,11 +36,17 @@ public abstract class AbstractCollectionParser<T> implements Parser {
   protected void endChildrenParse() {
   }
 
-  private void parseElement(CodeParser codeParser, ClassNode parentNode, String elementLabel, Object element,
+  private void parseElement(CodeParser codeParser, MutableParentNode parentNode, String elementLabel, Object element,
       Field field) {
-    ClassNode node = new ClassNode(elementLabel, parentNode, element, field);
-    parentNode.addChild(node);
-    codeParser.parseChildren(node);
+    ClassNode childNode;
+    if (element.getClass().isArray()) {
+      childNode = new ObjectCollectionNode(elementLabel, parentNode, element, field);
+      codeParser.recursiveParseInstance(childNode, null, element);
+    } else {
+      childNode = new ClassNode(elementLabel, parentNode, element, field);
+      codeParser.recursiveParseClass(childNode, element);
+    }
+    parentNode.addChild(childNode);
   }
 
   abstract protected int nbChildren(T container);

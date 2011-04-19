@@ -15,7 +15,7 @@ public class ObjectTypeHandler implements FieldHandler {
   public void addField(DataMonitor logger, Object container, Field field, List<MonitorWrapper> wrappers, int level,
       int levelRequired) {
     Monitor annotation = field.getAnnotation(Monitor.class);
-    boolean skipLabel = annotation != null ? annotation.skipLabel() : false;
+    boolean skipLabel = annotation != null ? annotation.emptyLabel() : false;
     if (!skipLabel)
       logger.labelBuilder().push(Parser.labelOf(field));
     Object child = null;

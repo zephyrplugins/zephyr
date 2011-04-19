@@ -20,12 +20,12 @@ public class ParserTest01 {
   static protected final String log01LabelInt = "logged03LabelInt";
   static protected final String log01LabelFloat = "logged04LabelFloat";
   static final String[] expectedLabels = new String[] { logged01AddedFromInterface, "logged02FieldName",
-      log01LabelInt, log01LabelFloat, "logged05Child01logged", "logged06ArrayDouble[0]", "logged06ArrayDouble[1]",
+      log01LabelInt, log01LabelFloat, "logged05Child01/logged", "logged06ArrayDouble[0]", "logged06ArrayDouble[1]",
       "logged07ArrayInt[0]", "logged07ArrayInt[1]", "logged08ArrayFloat[0]", "logged08ArrayFloat[1]",
-      "logged09ArrayObject[0]logged", "logged09ArrayObject[1]logged", "logged10ArrayLabeled[0:element0]",
-      "logged10ArrayLabeled[1:element1]", "logged11ArrayLabeled[0:element0]logged",
-      "logged11ArrayLabeled[1:element1]logged", "logged11CollectionLabeled[0:element0]logged",
-      "logged11CollectionLabeled[1:element1]logged", "logged12ClassLoggedlogged" };
+      "logged09ArrayObject[0]/logged", "logged09ArrayObject[1]/logged", "logged10ArrayLabeled[0:element0]",
+      "logged10ArrayLabeled[1:element1]", "logged11ArrayLabeled[0:element0]/logged",
+      "logged11ArrayLabeled[1:element1]/logged", "logged11CollectionLabeled[0:element0]/logged",
+      "logged11CollectionLabeled[1:element1]/logged", "logged12ClassLogged/logged" };
 
   @SuppressWarnings("unused")
   static public class TestAddLog01 implements MonitorContainer {
@@ -93,5 +93,6 @@ public class ParserTest01 {
     TestAddLog01 logged01 = new TestAddLog01();
     logger.add(logged01);
     Assert.assertArrayEquals(expectedLabels, logger.getLabels());
+    logger.update(0);
   }
 }

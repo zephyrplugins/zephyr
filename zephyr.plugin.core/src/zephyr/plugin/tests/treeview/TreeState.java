@@ -11,7 +11,7 @@ import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.IMemento;
 
 import zephyr.plugin.core.api.codeparser.codetree.ClockNode;
-import zephyr.plugin.core.api.codeparser.codetree.CodeNode;
+import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
 
 public class TreeState implements TreeListener {
   static final private String MementoRootType = "Expanded";

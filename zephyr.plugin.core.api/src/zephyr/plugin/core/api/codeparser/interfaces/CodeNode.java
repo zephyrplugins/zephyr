@@ -1,5 +1,6 @@
-package zephyr.plugin.core.api.codeparser.codetree;
+package zephyr.plugin.core.api.codeparser.interfaces;
 
+import zephyr.plugin.core.api.codeparser.codetree.ClockNode;
 import zephyr.plugin.core.api.synchronization.Clock;
 
 public interface CodeNode {
@@ -9,7 +10,7 @@ public interface CodeNode {
 
   Clock clock();
 
-  String[] path();
+  String path();
 
   String label();
 }

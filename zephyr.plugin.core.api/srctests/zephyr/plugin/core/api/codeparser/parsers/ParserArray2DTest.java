@@ -1,7 +1,6 @@
 package zephyr.plugin.core.api.codeparser.parsers;
 
 import java.io.StringWriter;
-import java.util.Arrays;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -21,9 +20,6 @@ public class ParserArray2DTest {
   public void testAddLog() {
     FileLogger logger = new FileLogger(new StringWriter());
     logger.add(this);
-    int coucou;
-    System.out.println(Arrays.toString(expectedLabels));
-    System.out.println(Arrays.toString(logger.getLabels()));
     Assert.assertArrayEquals(expectedLabels, logger.getLabels());
   }
 }
