@@ -18,17 +18,17 @@ public class Plot2D implements MouseSearchable {
   private final Axes axes = new Axes();
   private final Set<Data2D> datas = new HashSet<Data2D>();
 
-  public void clear(GC gc) {
+  synchronized public void clear(GC gc) {
     datas.clear();
     gc.setBackground(colors.color(gc, Colors.COLOR_WHITE));
     gc.fillRectangle(gc.getClipping());
   }
 
-  public void draw(GC gc, Data2D data) {
+  synchronized public void draw(GC gc, Data2D data) {
     draw(gc, Drawers.Lines, data);
   }
 
-  public void draw(GC gc, Drawer2D drawer, Data2D data) {
+  synchronized public void draw(GC gc, Drawer2D drawer, Data2D data) {
     datas.add(data);
     float[] xdata = data.xdata;
     float[] ydata = data.ydata;
@@ -53,7 +53,7 @@ public class Plot2D implements MouseSearchable {
   }
 
   @Override
-  public RequestResult search(Point mousePosition) {
+  synchronized public RequestResult search(Point mousePosition) {
     Point2D.Double dataPoint = axes.toD(mousePosition);
     Data2D bestData = null;
     int xIndex = -1;
@@ -73,7 +73,7 @@ public class Plot2D implements MouseSearchable {
   }
 
   @Override
-  public boolean emptySearch() {
+  synchronized public boolean emptySearch() {
     return datas.isEmpty();
   }
 

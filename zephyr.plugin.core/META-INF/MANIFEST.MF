@@ -24,6 +24,5 @@ Export-Package: zephyr,
  zephyr.plugin.core.observations,
  zephyr.plugin.core.startup,
  zephyr.plugin.core.utils;uses:="org.eclipse.jface.resource,org.eclipse.ui.plugin,org.eclipse.swt.graphics",
- zephyr.plugin.core.views,
- zephyr.plugin.core.views.selector
+ zephyr.plugin.core.views
 Bundle-ActivationPolicy: lazy
