@@ -7,11 +7,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IViewReference;
 
 import zephyr.ZephyrSync;
-import zephyr.plugin.core.Utils;
 import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.signals.Signal;
 import zephyr.plugin.core.api.synchronization.Clock;
@@ -28,45 +26,57 @@ public class ViewBinder {
   protected final Map<Clock, ClockViews> clockToView = Collections.synchronizedMap(new HashMap<Clock, ClockViews>());
   private final ViewProviders viewProviders = new ViewProviders();
 
-  private void bindWithNewView(Clock clock, CodeNode codeNode, ViewFinder viewFinder) {
-    ViewReference viewRef = viewFinder.provideNewView();
-    if (viewRef != null && viewRef.addTimed(clock, codeNode))
-      uiRunBindView(clock, viewRef.view());
+  private void bindWithNewView(CodeNode[] codeNodes, ViewFinder viewFinder) {
+    CodeNode[] remainToDisplay = codeNodes;
+    while (remainToDisplay.length > 0) {
+      ViewReference viewRef = viewFinder.provideNewView();
+      if (viewRef == null)
+        return;
+      boolean[] displayed = viewRef.provide(remainToDisplay);
+      int nbToDisplay = remainToDisplay.length;
+      remainToDisplay = removeDisplayed(displayed, remainToDisplay);
+      if (nbToDisplay == remainToDisplay.length)
+        break;
+    }
   }
 
-  private boolean bindWithOpenedViews(Clock clock, CodeNode codeNode, ViewFinder viewFinder) {
+  private CodeNode[] bindWithOpenedViews(CodeNode[] codeNodes, ViewFinder viewFinder) {
+    CodeNode[] remainToDisplay = codeNodes;
     for (IViewReference reference : viewFinder.existingViews()) {
-      ViewReference view = viewFinder.showView(reference);
-      if (view != null && view.addTimed(clock, codeNode)) {
-        uiRunBindView(clock, view.view());
-        return true;
-      }
+      ViewReference viewRef = viewFinder.showView(reference);
+      if (viewRef == null)
+        continue;
+      boolean[] displayed = viewRef.provide(remainToDisplay);
+      remainToDisplay = removeDisplayed(displayed, remainToDisplay);
+      if (remainToDisplay.length == 0)
+        break;
     }
-    return false;
+    return remainToDisplay;
+  }
+
+  private CodeNode[] removeDisplayed(boolean[] displayed, CodeNode[] codeNodes) {
+    List<CodeNode> remainToDisplay = new ArrayList<CodeNode>();
+    for (int i = 0; i < codeNodes.length; i++)
+      if (!displayed[i])
+        remainToDisplay.add(codeNodes[i]);
+    CodeNode[] result = new CodeNode[remainToDisplay.size()];
+    remainToDisplay.toArray(result);
+    return result;
   }
 
   // displayAndBindView need to call the ViewBinder from within
   // a UI thread inside a syncExec. Therefore, this method cannot be
   // synchronized
-  public void displayAndBindView(Clock clock, CodeNode codeNode, String viewID) {
+  public void displayAndBindView(CodeNode[] codeNodes, String viewID) {
     ViewFinder viewFinder = new ViewFinder(viewID);
-    boolean binded = bindWithOpenedViews(clock, codeNode, viewFinder);
-    if (binded)
+    CodeNode[] remainToDisplay = bindWithOpenedViews(codeNodes, viewFinder);
+    if (remainToDisplay.length == 0)
       return;
-    bindWithNewView(clock, codeNode, viewFinder);
+    bindWithNewView(codeNodes, viewFinder);
   }
 
-  private void uiRunBindView(final Clock clock, final SyncView view) {
-    Runnable bindViewRunnable = new Runnable() {
-      @Override
-      public void run() {
-        bind(clock, view);
-      }
-    };
-    if (Utils.isUIThread())
-      bindViewRunnable.run();
-    else
-      Display.getDefault().asyncExec(bindViewRunnable);
+  public void displayAndBindView(CodeNode codeNodes, String viewID) {
+    displayAndBindView(new CodeNode[] { codeNodes }, viewID);
   }
 
   public List<ViewProviderReference> findViewProviders(CodeNode codeNode) {

@@ -9,7 +9,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-import zephyr.plugin.plotting.internal.graphs.PlotView;
+import zephyr.plugin.plotting.internal.view.PlotView;
 
 public class NewPlotView extends AbstractHandler {
 

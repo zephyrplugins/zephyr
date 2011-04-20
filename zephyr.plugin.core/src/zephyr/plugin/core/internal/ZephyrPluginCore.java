@@ -60,7 +60,7 @@ public class ZephyrPluginCore extends AbstractUIPlugin {
       public void listen(AdvertisementInfo eventInfo) {
         Clock clock = eventInfo.clock;
         ClassNode rootNode = syncCode.parse(clock, eventInfo.advertised);
-        CodeTrees.traverse(new PopupViewTraverser(clock), rootNode);
+        CodeTrees.traverse(new PopupViewTraverser(), rootNode);
       }
     });
   }

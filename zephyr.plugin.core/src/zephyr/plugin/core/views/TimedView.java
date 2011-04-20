@@ -4,7 +4,7 @@ import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.synchronization.Clock;
 
 public interface TimedView extends SyncView {
-  boolean addTimed(Clock clock, CodeNode codeNode);
+  boolean[] provide(CodeNode[] codeNode);
 
-  void removeTimed(Clock clock);
+  void removeClock(Clock clock);
 }

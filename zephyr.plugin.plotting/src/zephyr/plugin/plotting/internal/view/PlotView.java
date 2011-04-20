@@ -1,4 +1,4 @@
-package zephyr.plugin.plotting.internal.graphs;
+package zephyr.plugin.plotting.internal.view;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -21,13 +21,13 @@ import zephyr.plugin.core.canvas.BackgroundCanvas;
 import zephyr.plugin.core.views.SyncView;
 import zephyr.plugin.plotting.actions.CenterPlotAction;
 import zephyr.plugin.plotting.actions.CenterPlotAction.ViewCenterable;
-import zephyr.plugin.plotting.internal.graphs.actions.AddTracesAction;
-import zephyr.plugin.plotting.internal.graphs.actions.SelectTracesAction;
 import zephyr.plugin.plotting.internal.plots.PlotData;
 import zephyr.plugin.plotting.internal.plots.PlotOverTime;
 import zephyr.plugin.plotting.internal.plots.PlotSelection;
 import zephyr.plugin.plotting.internal.traces.ClockTracesManager;
 import zephyr.plugin.plotting.internal.traces.TracesSelection.TraceSelector;
+import zephyr.plugin.plotting.internal.view.actions.AddTracesAction;
+import zephyr.plugin.plotting.internal.view.actions.SelectTracesAction;
 import zephyr.plugin.plotting.mousesearch.MouseSearch;
 import zephyr.plugin.plotting.mousesearch.MouseSearchable;
 import zephyr.plugin.plotting.mousesearch.RequestResult;

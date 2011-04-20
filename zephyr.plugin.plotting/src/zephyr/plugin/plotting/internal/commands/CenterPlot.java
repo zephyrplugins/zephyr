@@ -1,6 +1,6 @@
 package zephyr.plugin.plotting.internal.commands;
 
-import zephyr.plugin.plotting.internal.graphs.PlotView;
+import zephyr.plugin.plotting.internal.view.PlotView;
 
 public class CenterPlot extends PlotViewCommandHandler {
   @Override

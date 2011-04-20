@@ -16,7 +16,7 @@ import org.eclipse.swt.widgets.Label;
 
 import zephyr.plugin.core.canvas.Overlay;
 import zephyr.plugin.core.utils.Colors;
-import zephyr.plugin.plotting.internal.graphs.PlotView;
+import zephyr.plugin.plotting.internal.view.PlotView;
 
 public class MouseSearch extends Job implements Overlay {
   protected Label valueLabel;

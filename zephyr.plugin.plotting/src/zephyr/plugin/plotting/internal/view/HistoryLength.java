@@ -1,4 +1,4 @@
-package zephyr.plugin.plotting.internal.graphs;
+package zephyr.plugin.plotting.internal.view;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;

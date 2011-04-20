@@ -7,9 +7,9 @@ import org.eclipse.jface.window.Window;
 
 import zephyr.ZephyrSync;
 import zephyr.plugin.plotting.internal.dialogbox.SelectDataDialog;
-import zephyr.plugin.plotting.internal.graphs.PlotView;
 import zephyr.plugin.plotting.internal.plots.PlotSelection;
 import zephyr.plugin.plotting.internal.traces.Trace;
+import zephyr.plugin.plotting.internal.view.PlotView;
 
 public class AddTraces extends PlotViewCommandHandler {
   @Override

@@ -43,7 +43,7 @@ public class StructureExplorer extends ViewPart implements ItemProvider {
   public void createPartControl(Composite parent) {
     GridLayout parentLayout = new GridLayout(1, false);
     parent.setLayout(parentLayout);
-    tree = new Tree(parent, 0);
+    tree = new Tree(parent, SWT.MULTI);
     tree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
     buildRootNode();
     tree.addSelectionListener(selectionListener);

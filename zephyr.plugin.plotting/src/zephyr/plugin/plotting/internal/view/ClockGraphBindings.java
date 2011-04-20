@@ -1,4 +1,4 @@
-package zephyr.plugin.plotting.internal.graphs;
+package zephyr.plugin.plotting.internal.view;
 
 import java.util.ArrayList;
 import java.util.HashSet;

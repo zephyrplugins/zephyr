@@ -7,7 +7,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-import zephyr.plugin.plotting.internal.graphs.PlotView;
+import zephyr.plugin.plotting.internal.view.PlotView;
 
 public abstract class PlotViewCommandHandler extends AbstractHandler {
 

@@ -1,8 +1,8 @@
 package zephyr.plugin.core.internal.synchronization.tasks;
 
-import zephyr.ZephyrSync;
 import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.synchronization.Clock;
+import zephyr.plugin.core.helpers.TimedViews;
 import zephyr.plugin.core.views.SyncView;
 import zephyr.plugin.core.views.TimedView;
 
@@ -21,19 +21,15 @@ public class ViewReference {
     view.repaint();
   }
 
-  public synchronized boolean addTimed(Clock clock, CodeNode codeNode) {
-    if (view instanceof TimedView) {
-      boolean viewAdded = ((TimedView) view).addTimed(clock, codeNode);
-      if (viewAdded)
-        ZephyrSync.submitView(view);
-      return viewAdded;
-    }
-    return false;
+  public synchronized boolean[] provide(CodeNode[] codeNodes) {
+    if (view instanceof TimedView)
+      return ((TimedView) view).provide(codeNodes);
+    return TimedViews.toBooleans(codeNodes, -1);
   }
 
   synchronized public void removeTimed(Clock clock) {
     if (view instanceof TimedView)
-      ((TimedView) view).removeTimed(clock);
+      ((TimedView) view).removeClock(clock);
   }
 
   public SyncView view() {

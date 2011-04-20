@@ -5,7 +5,7 @@
          point="org.eclipse.ui.views">
       <view
             allowMultiple="true"
-            class="zephyr.plugin.plotting.internal.graphs.PlotView"
+            class="zephyr.plugin.plotting.internal.view.PlotView"
             icon="icons/view_plotting.png"
             id="zephyr.plugin.plotting.view.plot"
             name="Plot"
@@ -233,6 +233,16 @@
          point="zephyr.startup">
       <client
             class="zephyr.plugin.plotting.internal.RegisterPlottingMonitor">
+      </client>
+   </extension>
+   <extension
+         point="zephyr.viewprovider">
+      <client
+            class="zephyr.plugin.plotting.internal.view.PlotViewProvider"
+            icon="icons/view_plotting.png"
+            name="Plot View"
+            popup="false"
+            viewid="zephyr.plugin.plotting.view.plot">
       </client>
    </extension>
 </plugin>

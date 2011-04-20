@@ -1,7 +1,7 @@
 /**
  * 
  */
-package zephyr.plugin.plotting.internal.graphs;
+package zephyr.plugin.plotting.internal.view;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;

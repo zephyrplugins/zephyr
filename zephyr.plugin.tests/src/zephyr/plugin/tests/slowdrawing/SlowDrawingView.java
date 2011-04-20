@@ -69,12 +69,12 @@ public class SlowDrawingView extends ViewPart implements TimedView, Painter {
   }
 
   @Override
-  public boolean addTimed(Clock clock, CodeNode codeNode) {
-    return true;
+  public boolean[] provide(CodeNode[] codeNode) {
+    return new boolean[] { true };
   }
 
   @Override
-  public void removeTimed(Clock clock) {
+  public void removeClock(Clock clock) {
     dispose();
   }
 

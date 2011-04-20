@@ -1,4 +1,4 @@
-package zephyr.plugin.plotting.internal.graphs.actions;
+package zephyr.plugin.plotting.internal.view.actions;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
@@ -6,7 +6,7 @@ import org.eclipse.jface.action.IAction;
 import zephyr.ZephyrPlotting;
 import zephyr.plugin.core.utils.Helper;
 import zephyr.plugin.plotting.internal.commands.SelectTraces;
-import zephyr.plugin.plotting.internal.graphs.PlotView;
+import zephyr.plugin.plotting.internal.view.PlotView;
 
 public class SelectTracesAction extends Action {
   private final PlotView view;
