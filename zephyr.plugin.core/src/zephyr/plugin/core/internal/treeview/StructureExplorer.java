@@ -4,12 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.IMemento;
@@ -26,40 +24,18 @@ import zephyr.plugin.core.api.codeparser.interfaces.ParentNode;
 import zephyr.plugin.core.api.signals.Listener;
 
 public class StructureExplorer extends ViewPart implements ItemProvider {
-  protected Tree tree;
+  private Tree tree;
   private final SyncCode codeParser;
   private final IconDatabase iconDatabase = new IconDatabase();
   private final Map<ClockNode, TreeItem> clockItems = new HashMap<ClockNode, TreeItem>();
-  private final Listener<ClassNode> classNodeListener = new Listener<ClassNode>() {
-    @Override
-    public void listen(final ClassNode classNode) {
-      if (tree == null)
-        return;
-      Display.getDefault().asyncExec(new Runnable() {
-        @Override
-        public void run() {
-          registerClassNode(classNode);
-          treeState.expandNodes();
-        }
-      });
-    }
-  };
+  private final Listener<ClassNode> classNodeListener;
   final TreeState treeState = new TreeState(this);
-  private final SelectionListener selectionListener = new SelectionListener() {
-    @Override
-    public void widgetSelected(SelectionEvent event) {
-      TreeItem treeItem = (TreeItem) event.item;
-      CodeNode codeNode = (CodeNode) treeItem.getData();
-      ZephyrCore.sendStatusBarMessage(codeNode.label());
-    }
-
-    @Override
-    public void widgetDefaultSelected(SelectionEvent event) {
-    }
-  };
+  private final SelectionListener selectionListener = new SelectionTreeListener();
+  private final MouseTreeListener mouseListener = new MouseTreeListener();
 
   public StructureExplorer() {
     codeParser = ZephyrCore.syncCode();
+    classNodeListener = new RootClassNodeListener(this);
     codeParser.onParse.connect(classNodeListener);
   }
 
@@ -72,6 +48,7 @@ public class StructureExplorer extends ViewPart implements ItemProvider {
     buildRootNode();
     tree.addSelectionListener(selectionListener);
     tree.addTreeListener(treeState);
+    tree.addMouseListener(mouseListener);
     treeState.expandNodes();
   }
 
@@ -86,11 +63,11 @@ public class StructureExplorer extends ViewPart implements ItemProvider {
     }
   }
 
-  protected TreeItem nodeToTreeItem(TreeItem root, CodeNode codeNode) {
+  private TreeItem nodeToTreeItem(TreeItem root, CodeNode codeNode) {
     return setTreeItem(new TreeItem(root, SWT.NONE), codeNode);
   }
 
-  protected TreeItem nodeToTreeItem(Tree tree, CodeNode codeNode) {
+  private TreeItem nodeToTreeItem(Tree tree, CodeNode codeNode) {
     return setTreeItem(new TreeItem(tree, SWT.NONE), codeNode);
   }
 
@@ -105,7 +82,7 @@ public class StructureExplorer extends ViewPart implements ItemProvider {
     return item;
   }
 
-  protected boolean hasChildren(CodeNode codeNode) {
+  private boolean hasChildren(CodeNode codeNode) {
     if (!(codeNode instanceof ParentNode))
       return false;
     return ((ParentNode) codeNode).nbChildren() > 0;
@@ -148,6 +125,14 @@ public class StructureExplorer extends ViewPart implements ItemProvider {
   public void saveState(IMemento memento) {
     super.saveState(memento);
     treeState.saveState(memento);
+  }
+
+  public Tree tree() {
+    return tree;
+  }
+
+  public TreeState treeState() {
+    return treeState;
   }
 
   @Override

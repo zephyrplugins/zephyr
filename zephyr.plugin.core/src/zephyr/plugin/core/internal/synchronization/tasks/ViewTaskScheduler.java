@@ -31,10 +31,14 @@ public class ViewTaskScheduler {
       task.refreshIFN(defaultExecutor);
   }
 
-  public void scheduleRemoveTimed(final SyncView view, final Clock clock) {
+  public void schedule(Runnable runnable) {
     if (defaultExecutor.isShutdown())
       return;
-    defaultExecutor.execute(new Runnable() {
+    defaultExecutor.execute(runnable);
+  }
+
+  public void scheduleRemoveTimed(final SyncView view, final Clock clock) {
+    schedule(new Runnable() {
       @Override
       public void run() {
         task(view).viewRef().removeTimed(clock);

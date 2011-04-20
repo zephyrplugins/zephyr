@@ -72,7 +72,9 @@ public class ClockViews implements Listener<ViewTaskExecutor> {
   }
 
   public void addView(SyncView view) {
-    viewTasks.add(ZephyrPluginCore.viewScheduler().task(view));
+    ViewTask task = ZephyrPluginCore.viewScheduler().task(view);
+    if (!viewTasks.contains(task))
+      viewTasks.add(task);
   }
 
   public void removeView(SyncView view) {

@@ -61,6 +61,8 @@ public abstract class AbstractCanvasView extends ViewPart implements SyncView {
 
   @Override
   public void repaint() {
+    if (canvas.isDisposed())
+      return;
     canvas.getDisplay().syncExec(drawOnCanvas);
   }
 

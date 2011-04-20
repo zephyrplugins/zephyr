@@ -21,14 +21,18 @@ public class ViewProviderReference {
     return provider;
   }
 
-  public boolean allowNewView() {
-    return true;
-  }
-
   public boolean popUpView() {
     String attribute = element.getAttribute("popup");
     if (attribute == null)
       return true;
     return Boolean.parseBoolean(attribute);
+  }
+
+  public String pluginID() {
+    return element.getContributor().getName();
+  }
+
+  public String iconPath() {
+    return element.getAttribute("icon");
   }
 }

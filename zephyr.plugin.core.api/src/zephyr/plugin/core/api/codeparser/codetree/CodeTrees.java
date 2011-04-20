@@ -6,6 +6,7 @@ import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.codeparser.interfaces.ParentNode;
 import zephyr.plugin.core.api.codeparser.traverser.Traverser;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
+import zephyr.plugin.core.api.synchronization.Clock;
 
 public class CodeTrees {
   static private Class<?>[] primitives = { Double.class, Float.class, Byte.class, Boolean.class, Integer.class,
@@ -67,7 +68,17 @@ public class CodeTrees {
     while (currentNode != null) {
       if (currentNode instanceof ClassNode && target.isInstance(((ClassNode) currentNode).instance()))
         return (ClassNode) currentNode;
-      currentNode = codeNode.parent();
+      currentNode = currentNode.parent();
+    }
+    return null;
+  }
+
+  public static Clock clockOf(CodeNode codeNode) {
+    CodeNode currentNode = codeNode;
+    while (currentNode != null) {
+      if (currentNode instanceof ClockNode)
+        return ((ClockNode) currentNode).clock();
+      currentNode = currentNode.parent();
     }
     return null;
   }
