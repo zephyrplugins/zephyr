@@ -45,6 +45,7 @@ public class StructureExplorer extends ViewPart implements ItemProvider {
     parent.setLayout(parentLayout);
     tree = new Tree(parent, SWT.MULTI);
     tree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+    new ExplorerDragSource().setTree(tree);
     buildRootNode();
     tree.addSelectionListener(selectionListener);
     tree.addTreeListener(treeState);
@@ -142,5 +143,13 @@ public class StructureExplorer extends ViewPart implements ItemProvider {
     iconDatabase.dispose();
     tree.dispose();
     clockItems.clear();
+  }
+
+  static public CodeNode[] getSelection(Tree tree) {
+    TreeItem[] treeItems = tree.getSelection();
+    CodeNode[] codeNodes = new CodeNode[treeItems.length];
+    for (int i = 0; i < codeNodes.length; i++)
+      codeNodes[i] = (CodeNode) treeItems[i].getData();
+    return codeNodes;
   }
 }

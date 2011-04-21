@@ -8,7 +8,6 @@ import java.util.Set;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.widgets.Tree;
-import org.eclipse.swt.widgets.TreeItem;
 
 import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.internal.ZephyrPluginCore;
@@ -19,10 +18,7 @@ public class MouseTreeListener implements MouseListener {
   @Override
   public void mouseDoubleClick(MouseEvent event) {
     Tree tree = (Tree) event.widget;
-    TreeItem[] treeItems = tree.getSelection();
-    CodeNode[] codeNodes = new CodeNode[treeItems.length];
-    for (int i = 0; i < codeNodes.length; i++)
-      codeNodes[i] = (CodeNode) treeItems[i].getData();
+    CodeNode[] codeNodes = StructureExplorer.getSelection(tree);
     Set<ViewProviderReference> providers = buildProviders(codeNodes);
     for (ViewProviderReference reference : providers) {
       final String viewID = reference.viewID();

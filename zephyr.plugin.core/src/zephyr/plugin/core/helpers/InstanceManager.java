@@ -54,18 +54,22 @@ public class InstanceManager<T> {
     instance = (T) ((ClassNode) codeNode).instance();
     this.codeNode = codeNode;
     this.clock = CodeTrees.clockOf(codeNode);
+    view.setInstance();
     ZephyrSync.bind(clock, view);
   }
 
-  public boolean[] provide(CodeNode[] codeNode) {
-    int displayedIndex = findNodeToDisplay(codeNode);
+  public void drop(CodeNode[] codeNodes) {
+    if (!isDisplayed(codeNodes[0]))
+      set(codeNodes[0]);
+  }
+
+  public boolean[] provide(CodeNode[] codeNodes) {
+    int displayedIndex = findNodeToDisplay(codeNodes);
     if (displayedIndex == -1)
-      return TimedViews.toBooleans(codeNode, displayedIndex);
-    if (!isDisplayed(codeNode[displayedIndex])) {
-      set(codeNode[displayedIndex]);
-      view.setInstance();
-    }
-    return TimedViews.toBooleans(codeNode, displayedIndex);
+      return TimedViews.toBooleans(codeNodes, displayedIndex);
+    if (!isDisplayed(codeNodes[displayedIndex]))
+      set(codeNodes[displayedIndex]);
+    return TimedViews.toBooleans(codeNodes, displayedIndex);
   }
 
   private boolean isDisplayed(CodeNode codeNode) {
