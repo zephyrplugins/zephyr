@@ -6,16 +6,14 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.part.ViewPart;
 
 import zephyr.ZephyrSync;
 import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.internal.observations.LineLayout;
-import zephyr.plugin.core.views.TimedView;
+import zephyr.plugin.core.views.helpers.ClassTypeView;
 
-public abstract class EnvironmentView extends ViewPart implements TimedView {
-  protected Composite parent;
+public abstract class EnvironmentView<T> extends ClassTypeView<T> {
   ObsLayout obsLayout;
   private final Runnable repaintWidgets = new Runnable() {
     @Override
@@ -26,24 +24,25 @@ public abstract class EnvironmentView extends ViewPart implements TimedView {
         widget.repaint();
     }
   };
+  protected T environment = null;
+  protected Clock clock = null;
   private String defaultViewName = "EnvironmentView";
-
-  abstract protected Clock displayedClock();
 
   public EnvironmentView() {
     ZephyrSync.onClockRemoved().connect(new Listener<Clock>() {
+      @SuppressWarnings("synthetic-access")
       @Override
       public void listen(Clock clock) {
-        if (displayedClock() == clock)
-          close();
+        if (instance.clock() == clock)
+          unset();
       }
     });
   }
 
   @Override
   public void createPartControl(Composite parent) {
+    super.createPartControl(parent);
     defaultViewName = getPartName();
-    this.parent = parent;
     setToolbar(getViewSite().getActionBars().getToolBarManager());
   }
 
@@ -52,7 +51,7 @@ public abstract class EnvironmentView extends ViewPart implements TimedView {
 
   abstract protected ObsLayout getObservationLayout();
 
-  public void createLayout() {
+  protected void createLayout() {
     Display.getDefault().asyncExec(new Runnable() {
       @Override
       public void run() {
@@ -92,34 +91,24 @@ public abstract class EnvironmentView extends ViewPart implements TimedView {
   }
 
   @Override
-  public void repaint() {
+  protected void repaintView() {
     if (obsLayout == null)
       return;
     parent.getDisplay().syncExec(repaintWidgets);
   }
 
   @Override
-  public void setFocus() {
+  protected void set(T current) {
+    environment = current;
+    clock = instance.clock();
+    createLayout();
   }
 
-  protected void setViewName(final String viewName, final String tooltip) {
-    Display.getDefault().asyncExec(new Runnable() {
-      @SuppressWarnings("synthetic-access")
-      @Override
-      public void run() {
-        if (parent.isDisposed())
-          return;
-        setPartName(viewName);
-        setTitleToolTip(tooltip);
-        firePropertyChange(org.eclipse.ui.IWorkbenchPart.PROP_TITLE);
-        parent.redraw();
-      }
-    });
-  }
-
-  public void close() {
+  @Override
+  protected void unset() {
     obsLayout = null;
     Display.getDefault().asyncExec(new Runnable() {
+      @SuppressWarnings("synthetic-access")
       @Override
       public void run() {
         if (parent.isDisposed())

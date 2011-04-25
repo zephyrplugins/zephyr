@@ -2,7 +2,6 @@ package zephyr.plugin.tests.plot2d;
 
 import org.eclipse.swt.graphics.GC;
 
-import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.helpers.ClassViewProvider;
 import zephyr.plugin.core.views.helpers.ForegroundCanvasView;
 import zephyr.plugin.plotting.plot2d.Data2D;
@@ -11,8 +10,6 @@ import zephyr.plugin.plotting.plot2d.Plot2D;
 
 public class PlotRandomData2D extends ForegroundCanvasView<RandomData2D> {
   public static class Provider extends ClassViewProvider {
-    static public final Provider instance = new Provider();
-
     public Provider() {
       super(RandomData2D.class);
     }
@@ -48,15 +45,15 @@ public class PlotRandomData2D extends ForegroundCanvasView<RandomData2D> {
   }
 
   @Override
-  public boolean isSupported(CodeNode codeNode) {
-    return Provider.instance.canViewDraw(codeNode);
-  }
-
-  @Override
   protected void set(RandomData2D current) {
     drawn = current;
     data = new Data2D("Random", this.drawn.data.length);
     for (int i = 0; i < data.nbPoints; i++)
       data.xdata[i] = i;
+  }
+
+  @Override
+  protected Class<?> classSupported() {
+    return RandomData2D.class;
   }
 }

@@ -9,6 +9,7 @@ import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 
+import zephyr.plugin.core.api.codeparser.codetree.ClassNode;
 import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.helpers.InstanceManager;
@@ -20,7 +21,7 @@ import zephyr.plugin.core.views.TimedView;
 public abstract class ClassTypeView<T> extends ViewPart implements TimedView, SetableView, DropTargetView {
   private final Semaphore viewLock = new Semaphore(1, true);
   protected final InstanceManager<T> instance;
-  private Composite parent;
+  protected Composite parent;
 
   public ClassTypeView() {
     instance = new InstanceManager<T>(this);
@@ -33,7 +34,7 @@ public abstract class ClassTypeView<T> extends ViewPart implements TimedView, Se
   }
 
   @Override
-  public void drop(CodeNode[] supported) {
+  final public void drop(CodeNode[] supported) {
     instance.drop(supported);
   }
 
@@ -42,7 +43,7 @@ public abstract class ClassTypeView<T> extends ViewPart implements TimedView, Se
   }
 
   @Override
-  public boolean[] provide(CodeNode[] codeNode) {
+  final public boolean[] provide(CodeNode[] codeNode) {
     return instance.provide(codeNode);
   }
 
@@ -78,7 +79,8 @@ public abstract class ClassTypeView<T> extends ViewPart implements TimedView, Se
         setPartName(viewName);
         setTitleToolTip(toolTip);
         firePropertyChange(org.eclipse.ui.IWorkbenchPart.PROP_TITLE);
-        parent.redraw();
+        if (parent != null && !parent.isDisposed())
+          parent.redraw();
       }
     });
   }
@@ -96,14 +98,14 @@ public abstract class ClassTypeView<T> extends ViewPart implements TimedView, Se
   }
 
   @Override
-  public void setInstance() {
+  final public void setInstance() {
     acquireViewLock();
     set(instance.current());
     releaseViewLock();
   }
 
   @Override
-  public boolean synchronize(Clock clock) {
+  final public boolean synchronize(Clock clock) {
     acquireViewLock();
     boolean result = synchronize();
     releaseViewLock();
@@ -111,17 +113,28 @@ public abstract class ClassTypeView<T> extends ViewPart implements TimedView, Se
   }
 
   @Override
-  public void repaint() {
+  final public void repaint() {
     acquireViewLock();
     repaintView();
     releaseViewLock();
   }
 
   @Override
-  public void unsetInstance() {
+  final public void unsetInstance() {
     acquireViewLock();
     unset();
     releaseViewLock();
+  }
+
+  @Override
+  public boolean isSupported(CodeNode codeNode) {
+    if (!(codeNode instanceof ClassNode))
+      return false;
+    return classSupported().isInstance(((ClassNode) codeNode).instance());
+  }
+
+  protected Class<?> classSupported() {
+    return Object.class;
   }
 
   abstract protected void set(T current);

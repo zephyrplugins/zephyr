@@ -7,10 +7,7 @@ import org.eclipse.jface.action.IToolBarManager;
 import zephyr.ZephyrCore;
 import zephyr.plugin.core.actions.RestartAction;
 import zephyr.plugin.core.actions.TerminateAction;
-import zephyr.plugin.core.api.codeparser.codetree.ClassNode;
-import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.logfiles.LogFile;
-import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.api.synchronization.Closeable;
 import zephyr.plugin.core.helpers.ClassViewProvider;
 import zephyr.plugin.core.observations.EnvironmentView;
@@ -20,7 +17,7 @@ import zephyr.plugin.core.observations.SensorGroup;
 import zephyr.plugin.core.views.Restartable;
 import zephyr.plugin.filehandling.internal.DefaultHandler;
 
-public class FileView extends EnvironmentView implements Closeable, Restartable {
+public class FileView extends EnvironmentView<LogFile> implements Closeable, Restartable {
   static public class Provider extends ClassViewProvider {
     public Provider() {
       super(LogFile.class);
@@ -62,40 +59,6 @@ public class FileView extends EnvironmentView implements Closeable, Restartable 
   }
 
   @Override
-  public boolean synchronize(Clock clock) {
-    if (logFile == null)
-      return false;
-    synchronize(logFile.currentLine());
-    return true;
-  }
-
-  @Override
-  public boolean[] provide(CodeNode[] codeNode) {
-    if (logFile != null)
-      return new boolean[] { false };
-    Object drawn = ((ClassNode) codeNode[0]).instance();
-    logFile = (LogFile) drawn;
-    restartAction.setEnabled(drawn instanceof LogFile);
-    terminateAction.setEnabled(true);
-    createLayout();
-    setViewName(new File(logFile.filepath).getName(), logFile.filepath);
-    return new boolean[] { true };
-  }
-
-  @Override
-  public void close() {
-    restartAction.setEnabled(false);
-    terminateAction.setEnabled(false);
-    if (logFile != null) {
-      logFile.clock().terminate();
-      ZephyrCore.removeClock(logFile.clock());
-      logFile.close();
-      logFile = null;
-    }
-    super.close();
-  }
-
-  @Override
   public void restart() {
     final String filepath = logFile.filepath;
     close();
@@ -108,7 +71,34 @@ public class FileView extends EnvironmentView implements Closeable, Restartable 
   }
 
   @Override
-  protected Clock displayedClock() {
-    return logFile == null ? null : logFile.clock();
+  protected Class<?> classSupported() {
+    return LogFile.class;
+  }
+
+  @Override
+  protected void set(LogFile current) {
+    logFile = current;
+    restartAction.setEnabled(true);
+    terminateAction.setEnabled(true);
+    setViewName(new File(logFile.filepath).getName(), logFile.filepath);
+  }
+
+  @Override
+  protected void unset() {
+    restartAction.setEnabled(false);
+    terminateAction.setEnabled(false);
+    super.unset();
+  }
+
+  @Override
+  protected boolean synchronize() {
+    double[] currentLine = logFile.currentLine();
+    synchronize(currentLine);
+    return currentLine != null;
+  }
+
+  @Override
+  public void close() {
+    instance.unset();
   }
 }

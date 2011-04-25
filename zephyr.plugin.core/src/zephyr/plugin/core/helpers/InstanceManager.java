@@ -35,6 +35,8 @@ public class InstanceManager<T> {
   }
 
   public void unset() {
+    if (isNull())
+      return;
     ZephyrPluginCore.viewScheduler().schedule(new Runnable() {
       @Override
       public void run() {
