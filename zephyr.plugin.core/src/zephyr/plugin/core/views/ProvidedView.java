@@ -2,6 +2,6 @@ package zephyr.plugin.core.views;
 
 import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
 
-public interface TimedView extends SyncView {
+public interface ProvidedView extends SyncView {
   boolean[] provide(CodeNode[] codeNode);
 }

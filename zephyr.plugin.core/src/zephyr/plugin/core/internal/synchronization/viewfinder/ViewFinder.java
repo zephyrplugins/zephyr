@@ -16,12 +16,12 @@ import org.eclipse.ui.views.IViewRegistry;
 import zephyr.plugin.core.Utils;
 import zephyr.plugin.core.internal.ZephyrPluginCore;
 import zephyr.plugin.core.internal.synchronization.tasks.ViewReference;
-import zephyr.plugin.core.views.TimedView;
+import zephyr.plugin.core.views.ProvidedView;
 
 public class ViewFinder {
   final String viewID;
   private final List<IViewReference> existingViews;
-  TimedView showViewResult = null;
+  ProvidedView showViewResult = null;
 
   public ViewFinder(String viewID) {
     this.viewID = viewID;
@@ -57,8 +57,8 @@ public class ViewFinder {
       public void run() {
         try {
           IViewPart viewPart = page.showView(viewID, secondaryID, IWorkbenchPage.VIEW_ACTIVATE);
-          if (viewPart instanceof TimedView)
-            showViewResult = (TimedView) viewPart;
+          if (viewPart instanceof ProvidedView)
+            showViewResult = (ProvidedView) viewPart;
         } catch (PartInitException e) {
           e.printStackTrace();
         }

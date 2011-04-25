@@ -16,9 +16,9 @@ import zephyr.plugin.core.helpers.InstanceManager;
 import zephyr.plugin.core.helpers.InstanceManager.SetableView;
 import zephyr.plugin.core.helpers.SyncViewDropTarget;
 import zephyr.plugin.core.views.DropTargetView;
-import zephyr.plugin.core.views.TimedView;
+import zephyr.plugin.core.views.ProvidedView;
 
-public abstract class ClassTypeView<T> extends ViewPart implements TimedView, SetableView, DropTargetView {
+public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView, SetableView, DropTargetView {
   private final Semaphore viewLock = new Semaphore(1, true);
   protected final InstanceManager<T> instance;
   protected Composite parent;

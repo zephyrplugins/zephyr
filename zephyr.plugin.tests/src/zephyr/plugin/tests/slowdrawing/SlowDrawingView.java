@@ -18,9 +18,9 @@ import zephyr.plugin.core.canvas.BackgroundCanvas;
 import zephyr.plugin.core.canvas.Painter;
 import zephyr.plugin.core.helpers.ClassViewProvider;
 import zephyr.plugin.core.utils.Colors;
-import zephyr.plugin.core.views.TimedView;
+import zephyr.plugin.core.views.ProvidedView;
 
-public class SlowDrawingView extends ViewPart implements TimedView, Painter {
+public class SlowDrawingView extends ViewPart implements ProvidedView, Painter {
   public static class Provider extends ClassViewProvider {
     public Provider() {
       super(SlowDrawingRunnable.class);

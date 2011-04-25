@@ -8,7 +8,7 @@ import zephyr.plugin.core.api.codeparser.codetree.ClassNode;
 import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.helpers.ClassViewProvider;
-import zephyr.plugin.core.views.TimedView;
+import zephyr.plugin.core.views.ProvidedView;
 import zephyr.plugin.opengl.OpenGLView;
 
 /*
@@ -16,7 +16,7 @@ import zephyr.plugin.opengl.OpenGLView;
  * SWT OpenGL snippet: use JOGL to draw to an SWT GLCanvas
  *
  */
-public class View extends OpenGLView implements TimedView {
+public class View extends OpenGLView implements ProvidedView {
   static public class Provider extends ClassViewProvider {
     public Provider() {
       super(Model.class);
