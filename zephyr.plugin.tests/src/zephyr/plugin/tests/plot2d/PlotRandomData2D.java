@@ -2,18 +2,17 @@ package zephyr.plugin.tests.plot2d;
 
 import org.eclipse.swt.graphics.GC;
 
-import zephyr.plugin.core.api.codeparser.codetree.ClassNode;
 import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
-import zephyr.plugin.core.api.synchronization.Clock;
-import zephyr.plugin.core.canvas.AbstractCanvasView;
 import zephyr.plugin.core.helpers.ClassViewProvider;
-import zephyr.plugin.core.views.TimedView;
+import zephyr.plugin.core.views.helpers.ForegroundCanvasView;
 import zephyr.plugin.plotting.plot2d.Data2D;
 import zephyr.plugin.plotting.plot2d.Plot2D;
 
 
-public class PlotRandomData2D extends AbstractCanvasView implements TimedView {
+public class PlotRandomData2D extends ForegroundCanvasView<RandomData2D> {
   public static class Provider extends ClassViewProvider {
+    static public final Provider instance = new Provider();
+
     public Provider() {
       super(RandomData2D.class);
     }
@@ -28,7 +27,7 @@ public class PlotRandomData2D extends AbstractCanvasView implements TimedView {
   }
 
   @Override
-  public boolean synchronize(Clock clock) {
+  public boolean synchronize() {
     System.arraycopy(drawn.data, 0, data.ydata, 0, data.nbPoints);
     return true;
   }
@@ -44,18 +43,20 @@ public class PlotRandomData2D extends AbstractCanvasView implements TimedView {
   }
 
   @Override
-  public boolean[] provide(CodeNode[] codeNode) {
-    if (this.drawn != null)
-      return new boolean[] { false };
-    this.drawn = (RandomData2D) ((ClassNode) codeNode[0]).instance();
-    data = new Data2D("Random", this.drawn.data.length);
-    for (int i = 0; i < data.nbPoints; i++)
-      data.xdata[i] = i;
-    return new boolean[] { true };
+  public void unset() {
+    this.drawn = null;
   }
 
   @Override
-  public void removeClock(Clock clock) {
-    dispose();
+  public boolean isSupported(CodeNode codeNode) {
+    return Provider.instance.canViewDraw(codeNode);
+  }
+
+  @Override
+  protected void set(RandomData2D current) {
+    drawn = current;
+    data = new Data2D("Random", this.drawn.data.length);
+    for (int i = 0; i < data.nbPoints; i++)
+      data.xdata[i] = i;
   }
 }

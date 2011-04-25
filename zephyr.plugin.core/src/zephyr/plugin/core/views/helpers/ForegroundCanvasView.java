@@ -1,4 +1,4 @@
-package zephyr.plugin.core.canvas;
+package zephyr.plugin.core.views.helpers;
 
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
@@ -9,14 +9,9 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.part.ViewPart;
 
-import zephyr.plugin.core.views.SyncView;
-
-public abstract class AbstractCanvasView extends ViewPart implements SyncView {
+public abstract class ForegroundCanvasView<T> extends ClassTypeView<T> {
   protected Canvas canvas = null;
-  protected Composite parent = null;
   protected Runnable drawOnCanvas = new Runnable() {
     @Override
     public void run() {
@@ -27,12 +22,9 @@ public abstract class AbstractCanvasView extends ViewPart implements SyncView {
     }
   };
 
-  public AbstractCanvasView() {
-  }
-
   @Override
   public void createPartControl(final Composite parent) {
-    this.parent = parent;
+    super.createPartControl(parent);
     canvas = new Canvas(parent, SWT.DOUBLE_BUFFERED);
     GridLayout gridLayout = new GridLayout(1, false);
     canvas.getParent().setLayout(gridLayout);
@@ -56,26 +48,9 @@ public abstract class AbstractCanvasView extends ViewPart implements SyncView {
   }
 
   @Override
-  public void setFocus() {
-  }
-
-  @Override
-  public void repaint() {
+  public void repaintView() {
     if (canvas.isDisposed())
       return;
     canvas.getDisplay().syncExec(drawOnCanvas);
-  }
-
-  protected void setViewName(final String viewName) {
-    Display.getDefault().syncExec(new Runnable() {
-      @SuppressWarnings("synthetic-access")
-      @Override
-      public void run() {
-        setPartName(viewName);
-        firePropertyChange(org.eclipse.ui.IWorkbenchPart.PROP_TITLE);
-        parent.redraw();
-        parent.update();
-      }
-    });
   }
 }

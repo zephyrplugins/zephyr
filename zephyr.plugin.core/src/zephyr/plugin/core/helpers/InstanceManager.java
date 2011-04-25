@@ -7,6 +7,7 @@ import zephyr.plugin.core.api.codeparser.codetree.ClassNode;
 import zephyr.plugin.core.api.codeparser.codetree.CodeTrees;
 import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.synchronization.Clock;
+import zephyr.plugin.core.internal.ZephyrPluginCore;
 import zephyr.plugin.core.views.SyncView;
 
 public class InstanceManager<T> {
@@ -34,13 +35,24 @@ public class InstanceManager<T> {
   }
 
   public void unset() {
+    ZephyrPluginCore.viewScheduler().schedule(new Runnable() {
+      @Override
+      public void run() {
+        syncUnset();
+      }
+    });
+  }
+
+  void syncUnset() {
     if (clock == null)
       return;
     view.unsetInstance();
-    ZephyrSync.unbind(clock, view);
+    Clock previousClock = clock;
     instance = null;
     codeNode = null;
     clock = null;
+    ZephyrSync.unbind(previousClock, view);
+    ZephyrSync.submitView(view);
   }
 
   public T current() {
@@ -48,9 +60,9 @@ public class InstanceManager<T> {
   }
 
   @SuppressWarnings("unchecked")
-  private void set(CodeNode codeNode) {
+  void set(CodeNode codeNode) {
     if (instance != null)
-      unset();
+      syncUnset();
     instance = (T) ((ClassNode) codeNode).instance();
     this.codeNode = codeNode;
     this.clock = CodeTrees.clockOf(codeNode);
@@ -58,9 +70,18 @@ public class InstanceManager<T> {
     ZephyrSync.bind(clock, view);
   }
 
+  private void asyncSet(final CodeNode codeNode) {
+    ZephyrPluginCore.viewScheduler().schedule(new Runnable() {
+      @Override
+      public void run() {
+        set(codeNode);
+      }
+    });
+  }
+
   public void drop(CodeNode[] codeNodes) {
     if (!isDisplayed(codeNodes[0]))
-      set(codeNodes[0]);
+      asyncSet(codeNodes[0]);
   }
 
   public boolean[] provide(CodeNode[] codeNodes) {
@@ -68,7 +89,7 @@ public class InstanceManager<T> {
     if (displayedIndex == -1)
       return TimedViews.toBooleans(codeNodes, displayedIndex);
     if (!isDisplayed(codeNodes[displayedIndex]))
-      set(codeNodes[displayedIndex]);
+      asyncSet(codeNodes[displayedIndex]);
     return TimedViews.toBooleans(codeNodes, displayedIndex);
   }
 
@@ -80,12 +101,16 @@ public class InstanceManager<T> {
     for (int i = 0; i < codeNodes.length; i++)
       if (codeNodes[i] == codeNode)
         return i;
-    return instance == null ? 0 : -1;
+    return isNull() ? 0 : -1;
   }
 
   public void parseMemento(IMemento memento) {
   }
 
   public void saveState(IMemento memento) {
+  }
+
+  public boolean isNull() {
+    return instance == null;
   }
 }

@@ -74,11 +74,6 @@ public class SlowDrawingView extends ViewPart implements TimedView, Painter {
   }
 
   @Override
-  public void removeClock(Clock clock) {
-    dispose();
-  }
-
-  @Override
   public void dispose() {
     backgroundCanvas.dispose();
     super.dispose();

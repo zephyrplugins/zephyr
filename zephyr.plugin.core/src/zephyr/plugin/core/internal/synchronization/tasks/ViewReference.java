@@ -27,11 +27,6 @@ public class ViewReference {
     return TimedViews.toBooleans(codeNodes, -1);
   }
 
-  synchronized public void removeTimed(Clock clock) {
-    if (view instanceof TimedView)
-      ((TimedView) view).removeClock(clock);
-  }
-
   public SyncView view() {
     return view;
   }

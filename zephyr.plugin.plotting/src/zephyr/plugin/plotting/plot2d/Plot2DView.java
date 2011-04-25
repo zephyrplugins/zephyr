@@ -2,31 +2,18 @@ package zephyr.plugin.plotting.plot2d;
 
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.part.ViewPart;
 
-import zephyr.plugin.core.canvas.BackgroundCanvas;
-import zephyr.plugin.core.canvas.Painter;
-import zephyr.plugin.core.views.SyncView;
+import zephyr.plugin.core.views.helpers.BackgroundCanvasView;
 import zephyr.plugin.plotting.actions.CenterPlotAction;
 import zephyr.plugin.plotting.actions.CenterPlotAction.ViewCenterable;
 import zephyr.plugin.plotting.mousesearch.MouseSearch;
 
-abstract public class Plot2DView extends ViewPart implements SyncView, ViewCenterable, Painter {
-
-  private BackgroundCanvas backgroundCanvas;
+abstract public class Plot2DView<T> extends BackgroundCanvasView<T> implements ViewCenterable {
   protected final Plot2D plot = new Plot2D();
-  private Composite parent;
   private MouseSearch mouseSearch;
-
-  @Override
-  public void repaint() {
-    backgroundCanvas.paint();
-  }
 
   @Override
   public void center() {
@@ -35,13 +22,7 @@ abstract public class Plot2DView extends ViewPart implements SyncView, ViewCente
 
   @Override
   public void createPartControl(Composite parent) {
-    this.parent = parent;
-    GridLayout gridLayout = new GridLayout(1, false);
-    gridLayout.marginHeight = 0;
-    gridLayout.marginWidth = 0;
-    parent.setLayout(gridLayout);
-    backgroundCanvas = new BackgroundCanvas(parent, this);
-    backgroundCanvas.setFillLayout();
+    super.createPartControl(parent);
     Control canvas = backgroundCanvas.canvas();
     mouseSearch = new MouseSearch(plot, canvas);
     backgroundCanvas.addOverlay(mouseSearch);
@@ -61,21 +42,5 @@ abstract public class Plot2DView extends ViewPart implements SyncView, ViewCente
 
   protected void setupToolbar(IToolBarManager toolBarManager) {
     toolBarManager.add(new CenterPlotAction(this));
-  }
-
-  @Override
-  public void setFocus() {
-  }
-
-  protected void setViewName(final String viewName) {
-    Display.getDefault().asyncExec(new Runnable() {
-      @SuppressWarnings("synthetic-access")
-      @Override
-      public void run() {
-        setPartName(viewName);
-        firePropertyChange(org.eclipse.ui.IWorkbenchPart.PROP_TITLE);
-        parent.redraw();
-      }
-    });
   }
 }

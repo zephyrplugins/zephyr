@@ -82,9 +82,4 @@ public class View extends OpenGLView implements TimedView {
     model = (Model) ((ClassNode) codeNode[0]).instance();
     return new boolean[] { true };
   }
-
-  @Override
-  public void removeClock(Clock clock) {
-    dispose();
-  }
 }
