@@ -4,11 +4,16 @@ import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.codeparser.interfaces.ParentNode;
 import zephyr.plugin.core.api.codeparser.traverser.Traverser;
 
-public class DataTraverser implements Traverser, MonitorParser {
+public class MonitoredDataTraverser implements Traverser, MonitorParser {
   private final DataMonitor monitor;
   private final int levelRequired;
+  public static final int MonitorEverythingLevel = Integer.MAX_VALUE;
 
-  public DataTraverser(DataMonitor monitor, int levelRequired) {
+  public MonitoredDataTraverser(DataMonitor monitor) {
+    this(monitor, MonitorEverythingLevel);
+  }
+
+  public MonitoredDataTraverser(DataMonitor monitor, int levelRequired) {
     this.monitor = monitor;
     this.levelRequired = levelRequired;
   }

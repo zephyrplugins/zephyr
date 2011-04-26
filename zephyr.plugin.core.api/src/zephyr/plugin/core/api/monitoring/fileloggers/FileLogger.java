@@ -7,8 +7,8 @@ import java.util.List;
 
 import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
+import zephyr.plugin.core.api.monitoring.abstracts.MonitoredDataTraverser;
 import zephyr.plugin.core.api.monitoring.helpers.Parser;
-import zephyr.plugin.core.api.parsing.LabelBuilder;
 
 public class FileLogger extends AbstractFileLogger implements DataMonitor {
   private final List<String> labels = new ArrayList<String>();
@@ -16,7 +16,6 @@ public class FileLogger extends AbstractFileLogger implements DataMonitor {
   private final List<Boolean> atLeastOneInfinite = new ArrayList<Boolean>();
   private final List<Boolean> atLeastOneNaN = new ArrayList<Boolean>();
   private final List<FileLogger> newclocks = new ArrayList<FileLogger>();
-  private final LabelBuilder labelBuilder = new LabelBuilder("", "");
   private final boolean timeStamps;
   private boolean legendWrote = false;
 
@@ -51,19 +50,16 @@ public class FileLogger extends AbstractFileLogger implements DataMonitor {
 
   @Override
   public void add(String label, Monitored logged) {
-    String loggedLabel = labelBuilder.buildLabel(label);
-    labels.add(loggedLabel);
+    labels.add(label);
     loggeds.add(logged);
     atLeastOneInfinite.add(false);
     atLeastOneNaN.add(false);
   }
 
-  @Override
   public void add(Object toAdd) {
-    add(toAdd, Parser.MonitorEverythingLevel);
+    add(toAdd, MonitoredDataTraverser.MonitorEverythingLevel);
   }
 
-  @Override
   public void add(Object toAdd, int levelRequired) {
     Parser.parse(this, toAdd, levelRequired);
   }
@@ -113,11 +109,6 @@ public class FileLogger extends AbstractFileLogger implements DataMonitor {
     if (legend.length() == 0)
       return "";
     return legend.toString().substring(0, legend.length() - 1);
-  }
-
-  @Override
-  public LabelBuilder labelBuilder() {
-    return labelBuilder;
   }
 
   @Override

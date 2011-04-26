@@ -11,6 +11,13 @@
             name="Plot"
             restorable="true">
       </view>
+      <view
+            class="zephyr.plugin.plotting.internal.view.MonitoredView"
+            icon="icons/view_monitored.png"
+            id="zephyr.plugin.plotting.view.monitored"
+            name="Monitored"
+            restorable="true">
+      </view>
    </extension>
    <extension
          point="org.eclipse.ui.commands">
@@ -18,14 +25,6 @@
             defaultHandler="zephyr.plugin.plotting.internal.commands.NewPlotView"
             id="zephyr.plugin.plotting.commands.newplotview"
             name="New Window">
-      </command>
-      <command
-            defaultHandler="zephyr.plugin.plotting.internal.commands.EnableAllTraces"
-            id="zephyr.plugin.plotting.commands.enablealltraces"
-            name="Enable all traces">
-         <state id="org.eclipse.ui.commands.toggleState"
-               class="org.eclipse.ui.handlers.RegistryToggleState">
-         </state>
       </command>
       <command
             id="zephyr.plugin.plotting.selecttrace"
@@ -74,16 +73,20 @@
                   name="zephyr.plugin.plotting.separator3"
                   visible="true">
             </separator>
-            <command
-                  commandId="zephyr.plugin.plotting.commands.enablealltraces"
-                  label="Enable All Traces"
-                  mnemonic="E"
-                  style="toggle">
-            </command>
          </menu>
       </menuContribution>
       <menuContribution
             locationURI="menu:window?before=zephyr.plugin.core.separator.closeview">
+         <command
+               commandId="org.eclipse.ui.views.showView"
+               icon="icons/view_monitored.png"
+               label="Show Monitored"
+               style="push">
+            <parameter
+                  name="org.eclipse.ui.views.showView.viewId"
+                  value="zephyr.plugin.plotting.view.monitored">
+            </parameter>
+         </command>
          <command
                commandId="zephyr.plugin.plotting.commands.newplotview"
                label="New Plot View"
@@ -228,12 +231,6 @@
       <initializer
             class="zephyr.plugin.plotting.preferences.PreferenceInitializer">
       </initializer>
-   </extension>
-   <extension
-         point="zephyr.startup">
-      <client
-            class="zephyr.plugin.plotting.internal.RegisterPlottingMonitor">
-      </client>
    </extension>
    <extension
          point="zephyr.viewprovider">

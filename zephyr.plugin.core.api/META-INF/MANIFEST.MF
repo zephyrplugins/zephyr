@@ -6,7 +6,6 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: Thomas
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: zephyr.plugin.core.api,
- zephyr.plugin.core.api.advertisement,
  zephyr.plugin.core.api.bz2,
  zephyr.plugin.core.api.codeparser.codetree,
  zephyr.plugin.core.api.codeparser.interfaces,

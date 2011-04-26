@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
+import zephyr.plugin.core.api.monitoring.abstracts.MonitoredDataTraverser;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 import zephyr.plugin.core.api.monitoring.helpers.Parser;
 import zephyr.plugin.core.api.parsing.LabelBuilder;
@@ -79,12 +80,10 @@ public class ParserLevelTest implements DataMonitor {
     return result;
   }
 
-  @Override
   public void add(Object toAdd) {
-    add(toAdd, Parser.MonitorEverythingLevel);
+    add(toAdd, MonitoredDataTraverser.MonitorEverythingLevel);
   }
 
-  @Override
   public void add(Object toAdd, int levelRequired) {
     Parser.parse(this, toAdd, levelRequired);
   }
@@ -93,10 +92,5 @@ public class ParserLevelTest implements DataMonitor {
   public void add(String label, Monitored logged) {
     String fullLabel = labelBuilder.buildLabel(label);
     labels.add(fullLabel);
-  }
-
-  @Override
-  public LabelBuilder labelBuilder() {
-    return labelBuilder;
   }
 }

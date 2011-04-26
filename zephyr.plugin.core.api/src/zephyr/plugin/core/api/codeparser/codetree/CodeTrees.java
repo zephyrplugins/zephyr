@@ -1,6 +1,10 @@
 package zephyr.plugin.core.api.codeparser.codetree;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.codeparser.interfaces.ParentNode;
@@ -81,5 +85,19 @@ public class CodeTrees {
       currentNode = currentNode.parent();
     }
     return null;
+  }
+
+  public static Map<Clock, Collection<CodeNode>> sortByClock(CodeNode[] supported) {
+    Map<Clock, Collection<CodeNode>> result = new HashMap<Clock, Collection<CodeNode>>();
+    for (CodeNode codeNode : supported) {
+      Clock clockNode = clockOf(codeNode);
+      Collection<CodeNode> nodes = result.get(clockNode);
+      if (nodes == null) {
+        nodes = new ArrayList<CodeNode>();
+        result.put(clockNode, nodes);
+      }
+      nodes.add(codeNode);
+    }
+    return result;
   }
 }

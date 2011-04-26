@@ -12,11 +12,10 @@ import zephyr.ZephyrPlotting;
 import zephyr.plugin.core.utils.Helper;
 
 final class SynchronizeAction extends Action {
-  private final PlotView plotView;
+  private boolean synchronizedData;
 
-  public SynchronizeAction(PlotView plotView) {
+  public SynchronizeAction() {
     super("Synchronize", IAction.AS_CHECK_BOX);
-    this.plotView = plotView;
     addPropertyChangeListener(new IPropertyChangeListener() {
       @Override
       public void propertyChange(PropertyChangeEvent event) {
@@ -30,7 +29,7 @@ final class SynchronizeAction extends Action {
 
   @Override
   public void run() {
-    plotView.synchronizeData = isChecked();
+    synchronizedData = !synchronizedData;
   }
 
   public void setImageDescriptor() {
@@ -40,5 +39,9 @@ final class SynchronizeAction extends Action {
     else
       setImageDescriptor(Helper.getImageDescriptor(ZephyrPlotting.PluginID,
                                                    "icons/action_graph_disconnect.png"));
+  }
+
+  public boolean synchronizedData() {
+    return synchronizedData;
   }
 }

@@ -6,18 +6,14 @@ import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import zephyr.plugin.core.api.advertisement.Advertise;
-import zephyr.plugin.core.api.advertisement.IgnoreAdvertise;
 import zephyr.plugin.core.api.labels.Labeled;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 import zephyr.plugin.core.api.parsing.LabelProvider;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.api.synchronization.Timed;
 
-@Advertise
 public abstract class LogFile implements Labeled, Timed {
   public final Clock clock;
-  @IgnoreAdvertise
   protected BufferedReader reader;
   final public String filepath;
   @Monitor(emptyLabel = true)
