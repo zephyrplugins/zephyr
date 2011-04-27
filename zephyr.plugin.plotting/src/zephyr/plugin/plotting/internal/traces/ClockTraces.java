@@ -7,8 +7,8 @@ import java.util.List;
 import zephyr.plugin.core.Utils;
 import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
+import zephyr.plugin.core.api.monitoring.abstracts.MonitoredDataTraverser;
 import zephyr.plugin.core.api.monitoring.helpers.Parser;
-import zephyr.plugin.core.api.parsing.LabelBuilder;
 import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.signals.Signal;
 import zephyr.plugin.core.api.synchronization.Clock;
@@ -19,7 +19,6 @@ public class ClockTraces implements DataMonitor {
   public final Clock clock;
 
   protected final TracesSelection selection;
-  private final LabelBuilder labelBuilder = new LabelBuilder();
   private final List<Trace> traces = new LinkedList<Trace>();
   private final Listener<Clock> onTickClockListener = new Listener<Clock>() {
     @Override
@@ -35,7 +34,6 @@ public class ClockTraces implements DataMonitor {
   protected ClockTraces(String clockLabel, Clock clock) {
     this.clock = clock;
     this.clockLabel = clockLabel;
-    labelBuilder.push(clockLabel);
     selection = new TracesSelection(this);
     clock.onTick.connect(onTickClockListener);
   }
@@ -58,7 +56,7 @@ public class ClockTraces implements DataMonitor {
   @Override
   synchronized public void add(String label, Monitored logged) {
     assert checkThread();
-    Trace trace = new Trace(this, labelBuilder.buildLabel(label), logged);
+    Trace trace = new Trace(this, label, logged);
     traces.add(trace);
     if (nbProcessAddingTrace == 0)
       onTraceAdded.fire(Utils.asList(trace));
@@ -70,21 +68,14 @@ public class ClockTraces implements DataMonitor {
     return modelThread == Thread.currentThread();
   }
 
-  @Override
   public void add(Object toAdd) {
-    add(toAdd, Parser.MonitorEverythingLevel);
+    add(toAdd, MonitoredDataTraverser.MonitorEverythingLevel);
   }
 
-  @Override
   public void add(Object toAdd, int level) {
     startAddingTrace();
     Parser.parse(this, toAdd, level);
     endAddingTrace();
-  }
-
-  @Override
-  public LabelBuilder labelBuilder() {
-    return labelBuilder;
   }
 
   synchronized public List<Trace> getTraces() {
@@ -102,5 +93,9 @@ public class ClockTraces implements DataMonitor {
 
   public TracesSelection selection() {
     return selection;
+  }
+
+  public List<Trace> traces() {
+    return traces;
   }
 }

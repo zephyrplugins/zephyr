@@ -1,7 +1,11 @@
 package zephyr.plugin.plotting.internal.traces;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 import zephyr.plugin.plotting.internal.histories.AveragedHistory;
 import zephyr.plugin.plotting.internal.histories.History;
+import zephyr.plugin.plotting.internal.traces.TracesSelection.TraceSelector;
 
 public class TraceData {
   static public class DataTimeInfo {
@@ -16,6 +20,7 @@ public class TraceData {
 
   final public Trace trace;
   final protected History[] histories;
+  final private Set<TraceSelector> selectors = new LinkedHashSet<TraceSelector>();
 
   protected TraceData(Trace trace) {
     this.trace = trace;
@@ -32,6 +37,20 @@ public class TraceData {
         histories[timeScale] = new AveragedHistory((int) Math.pow(10, timeScale) / HistoryLength,
                                                    HistoryLength);
     return histories;
+  }
+
+  protected void addSelector(TraceSelector selector) {
+    assert !selectors.contains(selector);
+    selectors.add(selector);
+  }
+
+  protected void removeSelector(TraceSelector selector) {
+    assert selectors.contains(selector);
+    selectors.remove(selector);
+  }
+
+  protected boolean isSelected() {
+    return !selectors.isEmpty();
   }
 
   protected void update(long stepTime) {
@@ -53,7 +72,7 @@ public class TraceData {
   public void history(double historyTimeLength, float[] values, DataTimeInfo timeInfo) {
     final History history = histories[toHistoryIndex(historyTimeLength)];
     history.toArray(values);
-    timeInfo.synchronizationTime = trace.clock.timeStep();
+    timeInfo.synchronizationTime = trace.clockTraces.clock.timeStep();
     if (history instanceof AveragedHistory) {
       AveragedHistory averageHistory = (AveragedHistory) history;
       timeInfo.bufferedData = averageHistory.nbBufferedData() - 1;
@@ -68,7 +87,7 @@ public class TraceData {
     return (int) Math.floor(Math.log10(historyTimeLength)) + 1;
   }
 
-  static public int computeArrayLength(int currentHistoryLength) {
+  public static int computeArrayLength(int currentHistoryLength) {
     int historyIndex = Math.max(baseHistoryIndex, toHistoryIndex(currentHistoryLength));
     double timeDiff = Math.log10(currentHistoryLength) - historyIndex;
     double logArrayLength = Math.log10(HistoryLength) + timeDiff;

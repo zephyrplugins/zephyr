@@ -23,7 +23,6 @@ import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.ui.dialogs.FilteredItemsSelectionDialog;
 
 import zephyr.plugin.plotting.internal.ZephyrPluginPlotting;
-import zephyr.plugin.plotting.internal.traces.ClockTracesManager;
 import zephyr.plugin.plotting.internal.traces.Trace;
 import zephyr.plugin.plotting.internal.traces.Traces;
 
@@ -121,7 +120,7 @@ public class SelectDataDialog extends FilteredItemsSelectionDialog {
   @Override
   protected void fillContentProvider(AbstractContentProvider contentProvider, ItemsFilter itemsFilter,
       IProgressMonitor progressMonitor) throws CoreException {
-    List<Trace> allTraces = Traces.getAllTraces(ClockTracesManager.manager());
+    List<Trace> allTraces = Traces.getAllTraces();
     progressMonitor.beginTask("Looking...", allTraces.size());
     for (Trace trace : allTraces) {
       contentProvider.add(trace, itemsFilter);

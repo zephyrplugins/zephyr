@@ -2,11 +2,15 @@ package zephyr.plugin.plotting.internal.traces;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import zephyr.plugin.core.api.synchronization.Clock;
+import zephyr.plugin.plotting.internal.ZephyrPluginPlotting;
 
 public class Traces {
 
@@ -30,10 +34,20 @@ public class Traces {
     return orderTraces(traces);
   }
 
-  public static List<Trace> getAllTraces(ClockTracesManager tracesManager) {
+  public static List<Trace> getAllTraces() {
+    ClockTracesManager tracesManager = ZephyrPluginPlotting.tracesManager();
     List<Trace> allTraces = new ArrayList<Trace>();
     for (ClockTraces clockTraces : tracesManager.getClockTraces())
       allTraces.addAll(clockTraces.getTraces());
     return allTraces;
+  }
+
+  public static Set<Trace> labelToTraces(Clock clock, Set<String> labels) {
+    ClockTraces clockTraces = ZephyrPluginPlotting.tracesManager().dataMonitor(clock);
+    Set<Trace> traces = new HashSet<Trace>();
+    for (Trace trace : clockTraces.traces())
+      if (labels.contains(trace.label))
+        traces.add(trace);
+    return traces;
   }
 }

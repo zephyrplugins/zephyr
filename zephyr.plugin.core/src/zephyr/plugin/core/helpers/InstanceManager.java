@@ -89,10 +89,10 @@ public class InstanceManager<T> {
   public boolean[] provide(CodeNode[] codeNodes) {
     int displayedIndex = findNodeToDisplay(codeNodes);
     if (displayedIndex == -1)
-      return TimedViews.toBooleans(codeNodes, displayedIndex);
+      return CodeTrees.toBooleans(codeNodes, displayedIndex);
     if (!isDisplayed(codeNodes[displayedIndex]))
       asyncSet(codeNodes[displayedIndex]);
-    return TimedViews.toBooleans(codeNodes, displayedIndex);
+    return CodeTrees.toBooleans(codeNodes, displayedIndex);
   }
 
   private boolean isDisplayed(CodeNode codeNode) {

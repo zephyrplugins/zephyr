@@ -1,17 +1,16 @@
 package zephyr.plugin.plotting.internal.traces;
 
 import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
-import zephyr.plugin.core.api.synchronization.Clock;
 
 public class Trace {
+  public final ClockTraces clockTraces;
   public final String label;
   public final Monitored logged;
-  public final Clock clock;
 
-  public Trace(Clock clock, String label, Monitored logged) {
+  public Trace(ClockTraces clockTraces, String label, Monitored logged) {
+    this.clockTraces = clockTraces;
     this.label = label;
     this.logged = logged;
-    this.clock = clock;
   }
 
   @Override

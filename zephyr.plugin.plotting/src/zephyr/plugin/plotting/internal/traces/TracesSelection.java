@@ -10,6 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.synchronization.Clock;
+import zephyr.plugin.plotting.internal.ZephyrPluginPlotting;
 
 public class TracesSelection {
   public static interface TraceSelector {
@@ -36,7 +37,7 @@ public class TracesSelection {
     this.clockTraces = clockTraces;
     clockTraces.onTraceAdded.connect(traceAddedListener);
     clockTraces.onTraceRemoved.connect(traceRemovedListener);
-    setForceEnabled(ClockTracesManager.manager().forceEnabled());
+    setForceEnabled(ZephyrPluginPlotting.tracesManager().forceEnabled());
   }
 
   private TraceData enableTrace(Trace trace) {

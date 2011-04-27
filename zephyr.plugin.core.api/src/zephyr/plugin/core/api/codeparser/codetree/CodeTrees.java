@@ -2,13 +2,19 @@ package zephyr.plugin.core.api.codeparser.codetree;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.codeparser.interfaces.ParentNode;
 import zephyr.plugin.core.api.codeparser.traverser.Traverser;
+import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
+import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
+import zephyr.plugin.core.api.monitoring.abstracts.MonitoredDataTraverser;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 import zephyr.plugin.core.api.synchronization.Clock;
 
@@ -99,5 +105,32 @@ public class CodeTrees {
       nodes.add(codeNode);
     }
     return result;
+  }
+
+  public static boolean[] toBooleans(CodeNode[] codeNodes, int displayedIndex) {
+    boolean[] result = new boolean[codeNodes.length];
+    Arrays.fill(result, false);
+    if (displayedIndex != -1)
+      result[displayedIndex] = true;
+    return result;
+  }
+
+  public static boolean[] toBooleansAsTrue(CodeNode[] codeNodes) {
+    boolean[] result = new boolean[codeNodes.length];
+    Arrays.fill(result, true);
+    return result;
+  }
+
+  public static Set<String> parseLabels(CodeNode codeNode) {
+    final Set<String> labels = new HashSet<String>();
+    DataMonitor monitor = new DataMonitor() {
+      @Override
+      public void add(String label, Monitored monitored) {
+        labels.add(label);
+      }
+    };
+    MonitoredDataTraverser traverser = new MonitoredDataTraverser(monitor);
+    CodeTrees.traverse(traverser, codeNode);
+    return labels;
   }
 }

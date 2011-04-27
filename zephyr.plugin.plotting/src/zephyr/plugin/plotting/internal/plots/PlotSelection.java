@@ -62,7 +62,7 @@ public class PlotSelection implements TraceSelector {
   public void init(Set<String> initialSelection) {
     if (initialSelection != null)
       persistentSelection.addAll(initialSelection);
-    checkNewTrace(Traces.getAllTraces(tracesManager));
+    checkNewTrace(Traces.getAllTraces());
     tracesManager.onTraceAdded.connect(addedTraceListener);
     tracesManager.onTraceRemoved.connect(removedTraceListener);
   }

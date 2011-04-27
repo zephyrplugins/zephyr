@@ -1,5 +1,6 @@
 package zephyr.plugin.plotting.internal.view;
 
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -16,15 +17,22 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 
 import zephyr.ZephyrSync;
+import zephyr.plugin.core.api.codeparser.codetree.CodeTrees;
+import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.canvas.BackgroundCanvas;
-import zephyr.plugin.core.views.SyncView;
+import zephyr.plugin.core.helpers.SyncViewDropTarget;
+import zephyr.plugin.core.views.DropTargetView;
+import zephyr.plugin.core.views.ProvidedView;
 import zephyr.plugin.plotting.actions.CenterPlotAction;
 import zephyr.plugin.plotting.actions.CenterPlotAction.ViewCenterable;
+import zephyr.plugin.plotting.internal.ZephyrPluginPlotting;
 import zephyr.plugin.plotting.internal.plots.PlotData;
 import zephyr.plugin.plotting.internal.plots.PlotOverTime;
 import zephyr.plugin.plotting.internal.plots.PlotSelection;
 import zephyr.plugin.plotting.internal.traces.ClockTracesManager;
+import zephyr.plugin.plotting.internal.traces.Trace;
+import zephyr.plugin.plotting.internal.traces.Traces;
 import zephyr.plugin.plotting.internal.traces.TracesSelection.TraceSelector;
 import zephyr.plugin.plotting.internal.view.actions.AddTracesAction;
 import zephyr.plugin.plotting.internal.view.actions.SelectTracesAction;
@@ -32,7 +40,8 @@ import zephyr.plugin.plotting.mousesearch.MouseSearch;
 import zephyr.plugin.plotting.mousesearch.MouseSearchable;
 import zephyr.plugin.plotting.mousesearch.RequestResult;
 
-public class PlotView extends ViewPart implements TraceSelector, SyncView, ViewCenterable, MouseSearchable {
+public class PlotView extends ViewPart implements TraceSelector, ProvidedView, DropTargetView, ViewCenterable,
+    MouseSearchable {
   final public static String ID = "zephyr.plugin.plotting.view.plot";
   final private static String SelectionTypeKey = "selection";
 
@@ -42,19 +51,18 @@ public class PlotView extends ViewPart implements TraceSelector, SyncView, ViewC
   protected HistoryLength historyLength;
   protected MouseSearch mouseSearch;
   protected ClockGraphBindings clockGraphBindings;
-  protected boolean synchronizeData = true;
   private BackgroundCanvas backgroundCanvas;
   private final ClockTracesManager traces;
   private final SynchronizeAction synchronizeAction;
 
   public PlotView() {
-    traces = ClockTracesManager.manager();
+    traces = ZephyrPluginPlotting.tracesManager();
     plotSelection = new PlotSelection(traces);
     plotdata = new PlotData(plotSelection);
     plotOverTime = new PlotOverTime(plotdata);
     historyLength = new HistoryLength(plotdata);
     clockGraphBindings = new ClockGraphBindings(this);
-    synchronizeAction = new SynchronizeAction(this);
+    synchronizeAction = new SynchronizeAction();
   }
 
   @Override
@@ -70,8 +78,8 @@ public class PlotView extends ViewPart implements TraceSelector, SyncView, ViewC
     mouseSearch = new MouseSearch(this, canvas);
     backgroundCanvas.addOverlay(mouseSearch);
     createSettingBar(parent);
-    synchronizeAction.setChecked(synchronizeData);
     setupToolbar(getViewSite().getActionBars().getToolBarManager());
+    new SyncViewDropTarget(this, parent);
   }
 
   private void setupToolbar(IToolBarManager toolBarManager) {
@@ -127,7 +135,7 @@ public class PlotView extends ViewPart implements TraceSelector, SyncView, ViewC
 
   @Override
   public boolean synchronize(Clock clock) {
-    if (!synchronizeData || backgroundCanvas == null)
+    if (!synchronizeAction.synchronizedData() || backgroundCanvas == null)
       return false;
     return plotdata.synchronize();
   }
@@ -166,5 +174,29 @@ public class PlotView extends ViewPart implements TraceSelector, SyncView, ViewC
   @Override
   public boolean emptySearch() {
     return plotSelection.isEmpty();
+  }
+
+  @Override
+  public boolean[] provide(CodeNode[] codeNodes) {
+    if (!plotSelection.isEmpty())
+      return CodeTrees.toBooleans(codeNodes, -1);
+    Set<Trace> labels = new HashSet<Trace>();
+    for (CodeNode codeNode : codeNodes)
+      labels.addAll(Traces.labelToTraces(CodeTrees.clockOf(codeNode), CodeTrees.parseLabels(codeNode)));
+    plotSelection.setCurrentSelection(labels);
+    return CodeTrees.toBooleansAsTrue(codeNodes);
+  }
+
+  @Override
+  public boolean isSupported(CodeNode codeNode) {
+    return true;
+  }
+
+  @Override
+  public void drop(CodeNode[] supported) {
+    Set<Trace> labels = plotSelection.getCurrentTracesSelection();
+    for (CodeNode codeNode : supported)
+      labels.addAll(Traces.labelToTraces(CodeTrees.clockOf(codeNode), CodeTrees.parseLabels(codeNode)));
+    plotSelection.setCurrentSelection(labels);
   }
 }

@@ -12,7 +12,7 @@ import zephyr.ZephyrPlotting;
 import zephyr.plugin.core.utils.Helper;
 
 final class SynchronizeAction extends Action {
-  private boolean synchronizedData;
+  private boolean synchronizedData = true;
 
   public SynchronizeAction() {
     super("Synchronize", IAction.AS_CHECK_BOX);
@@ -25,6 +25,7 @@ final class SynchronizeAction extends Action {
     });
     setImageDescriptor();
     setId("zephyr.plugin.plotting.action.togglesynchronized");
+    setChecked(synchronizedData);
   }
 
   @Override
