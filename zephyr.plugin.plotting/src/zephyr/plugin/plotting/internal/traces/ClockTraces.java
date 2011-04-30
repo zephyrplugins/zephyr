@@ -54,9 +54,9 @@ public class ClockTraces implements DataMonitor {
   }
 
   @Override
-  synchronized public void add(String label, Monitored logged) {
+  synchronized public void add(String label, int level, Monitored logged) {
     assert checkThread();
-    Trace trace = new Trace(this, label, logged);
+    Trace trace = new Trace(this, label, level, logged);
     traces.add(trace);
     if (nbProcessAddingTrace == 0)
       onTraceAdded.fire(Utils.asList(trace));

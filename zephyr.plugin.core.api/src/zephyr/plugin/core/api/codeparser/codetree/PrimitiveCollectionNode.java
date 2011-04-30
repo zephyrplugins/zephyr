@@ -8,7 +8,7 @@ import zephyr.plugin.core.api.monitoring.abstracts.MonitorContainer;
 import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
 import zephyr.plugin.core.api.parsing.CollectionLabelBuilder;
 
-public class PrimitiveCollectionNode extends AbstractCodeNode implements MonitorContainer {
+public class PrimitiveCollectionNode extends AbstractCodeNode implements MonitorContainer, AbstractPrimitives {
   final List<?> array;
   final CollectionLabelBuilder collectionLabelBuilder;
 
@@ -23,7 +23,7 @@ public class PrimitiveCollectionNode extends AbstractCodeNode implements Monitor
   public void addToMonitor(DataMonitor monitor) {
     for (int i = 0; i < array.size(); i++) {
       final int elementIndex = i;
-      monitor.add(path() + collectionLabelBuilder.elementLabel(i), new Monitored() {
+      monitor.add(path() + collectionLabelBuilder.elementLabel(i), level(), new Monitored() {
         @Override
         public double monitoredValue(long stepTime) {
           return (Double) array.get(elementIndex);

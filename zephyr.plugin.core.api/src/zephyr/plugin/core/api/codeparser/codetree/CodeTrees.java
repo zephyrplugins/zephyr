@@ -125,7 +125,7 @@ public class CodeTrees {
     final Set<String> labels = new HashSet<String>();
     DataMonitor monitor = new DataMonitor() {
       @Override
-      public void add(String label, Monitored monitored) {
+      public void add(String label, int level, Monitored monitored) {
         labels.add(label);
       }
     };

@@ -12,10 +12,14 @@ import java.util.Stack;
 
 import zephyr.plugin.core.api.codeparser.codetree.ClassNode;
 import zephyr.plugin.core.api.codeparser.codetree.CodeTrees;
+import zephyr.plugin.core.api.codeparser.codetree.PrimitiveNode;
 import zephyr.plugin.core.api.codeparser.interfaces.CodeParser;
 import zephyr.plugin.core.api.codeparser.interfaces.FieldParser;
 import zephyr.plugin.core.api.codeparser.interfaces.MutableParentNode;
 import zephyr.plugin.core.api.codeparser.interfaces.ParentNode;
+import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
+import zephyr.plugin.core.api.monitoring.abstracts.MonitorContainer;
+import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
 import zephyr.plugin.core.api.monitoring.annotations.IgnoreMonitor;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 import zephyr.plugin.core.api.parsing.CollectionLabelBuilder;
@@ -103,7 +107,7 @@ public class CodeTreeParser implements CodeParser {
   }
 
   @Override
-  public void recursiveParseClass(ClassNode classNode, Object container) {
+  public void recursiveParseClass(final ClassNode classNode, Object container) {
     labelsMapStack.push(buildLabelMaps(container));
     Class<?> objectClass = container.getClass();
     while (objectClass != null) {
@@ -114,11 +118,20 @@ public class CodeTreeParser implements CodeParser {
         field.setAccessible(true);
         if (isMonitored(classNode, field)) {
           Object fieldValue = CodeTrees.getValueFromField(field, classNode.instance());
-          recursiveParseInstance(classNode, field, fieldValue);
+          if (fieldValue != null)
+            recursiveParseInstance(classNode, field, fieldValue);
         }
       }
       objectClass = objectClass.getSuperclass();
     }
+    if (container instanceof MonitorContainer)
+      ((MonitorContainer) container).addToMonitor(new DataMonitor() {
+        @Override
+        public void add(String label, int level, Monitored monitored) {
+          PrimitiveNode child = new PrimitiveNode(label, classNode, monitored, level);
+          classNode.addChild(child);
+        }
+      });
     labelsMapStack.pop();
   }
 

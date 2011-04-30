@@ -11,11 +11,12 @@ import zephyr.plugin.core.api.monitoring.wrappers.MonitorWrapper;
 import zephyr.plugin.core.api.parsing.CollectionLabelBuilder;
 
 
-public class PrimitiveArrayNode extends AbstractCodeNode implements MonitorContainer {
+public class PrimitiveArrayNode extends AbstractCodeNode implements MonitorContainer, AbstractPrimitives {
   final Object array;
   final CollectionLabelBuilder collectionLabelBuilder;
 
-  public PrimitiveArrayNode(String label, ParentNode parent, Object array, CollectionLabelBuilder collectionLabelBuilder, int level) {
+  public PrimitiveArrayNode(String label, ParentNode parent, Object array,
+      CollectionLabelBuilder collectionLabelBuilder, int level) {
     super(label, parent, level);
     this.array = array;
     this.collectionLabelBuilder = collectionLabelBuilder;
@@ -30,10 +31,10 @@ public class PrimitiveArrayNode extends AbstractCodeNode implements MonitorConta
 
     List<MonitorWrapper> wrappers = null;
     if (array.getClass().getComponentType().equals(double.class))
-      Loggers.add(monitor, elementLabels, (double[]) array, wrappers);
+      Loggers.add(monitor, elementLabels, level(), (double[]) array, wrappers);
     else if (array.getClass().getComponentType().equals(float.class))
-      Loggers.add(monitor, elementLabels, (float[]) array, wrappers);
+      Loggers.add(monitor, elementLabels, level(), (float[]) array, wrappers);
     if (array.getClass().getComponentType().equals(int.class))
-      Loggers.add(monitor, elementLabels, (int[]) array, wrappers);
+      Loggers.add(monitor, elementLabels, level(), (int[]) array, wrappers);
   }
 }

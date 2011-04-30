@@ -17,6 +17,7 @@ import org.eclipse.ui.part.ViewPart;
 
 import zephyr.ZephyrCore;
 import zephyr.plugin.core.SyncCode;
+import zephyr.plugin.core.api.codeparser.codetree.AbstractPrimitives;
 import zephyr.plugin.core.api.codeparser.codetree.ClassNode;
 import zephyr.plugin.core.api.codeparser.codetree.ClockNode;
 import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
@@ -73,14 +74,19 @@ public class StructureExplorer extends ViewPart implements ItemProvider {
   }
 
   private TreeItem setTreeItem(TreeItem item, CodeNode codeNode) {
-    if (codeNode.parent() instanceof ClockNode)
-      item.setText(((ClassNode) codeNode).instance().getClass().getSimpleName());
-    else
-      item.setText(codeNode.label());
+    item.setText(itemLabel(codeNode));
     item.setData(codeNode);
     iconDatabase.setImage(item);
     treeState.nodeCreated(item);
     return item;
+  }
+
+  protected String itemLabel(CodeNode codeNode) {
+    if (codeNode.parent() instanceof ClockNode)
+      return ((ClassNode) codeNode).instance().getClass().getSimpleName();
+    if (codeNode instanceof AbstractPrimitives)
+      return codeNode.label() + "[]";
+    return codeNode.label();
   }
 
   private boolean hasChildren(CodeNode codeNode) {

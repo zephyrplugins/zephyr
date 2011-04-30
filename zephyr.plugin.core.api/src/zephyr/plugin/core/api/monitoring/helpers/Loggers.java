@@ -22,16 +22,16 @@ public class Loggers {
     return dateFormat.format(new Date());
   }
 
-  public static void add(DataMonitor logger, String[] elementLabels, double[] data) {
-    add(logger, elementLabels, data, null);
+  public static void add(DataMonitor logger, String[] elementLabels, int level, double[] data) {
+    add(logger, elementLabels, level, data, null);
   }
 
-  public static void add(DataMonitor logger, String[] elementLabels, final double[] data,
-      List<MonitorWrapper> wrappers) {
+  public static void add(DataMonitor logger, String[] elementLabels, int level,
+      final double[] data, List<MonitorWrapper> wrappers) {
     assert elementLabels.length == data.length;
     for (int i = 0; i < data.length; i++) {
       final int elementIndex = i;
-      addMonitored(logger, elementLabels[i], new Monitored() {
+      addMonitored(logger, elementLabels[i], level, new Monitored() {
         @Override
         public double monitoredValue(long stepTime) {
           return data[elementIndex];
@@ -40,11 +40,11 @@ public class Loggers {
     }
   }
 
-  public static void add(DataMonitor logger, String[] elementLabels, final int[] data, List<MonitorWrapper> wrappers) {
+  public static void add(DataMonitor logger, String[] elementLabels, int level, final int[] data, List<MonitorWrapper> wrappers) {
     assert elementLabels.length == data.length;
     for (int i = 0; i < data.length; i++) {
       final int elementIndex = i;
-      addMonitored(logger, elementLabels[i], new Monitored() {
+      addMonitored(logger, elementLabels[i], level, new Monitored() {
         @Override
         public double monitoredValue(long stepTime) {
           return data[elementIndex];
@@ -53,11 +53,11 @@ public class Loggers {
     }
   }
 
-  public static void add(DataMonitor logger, String[] elementLabels, final float[] data, List<MonitorWrapper> wrappers) {
+  public static void add(DataMonitor logger, String[] elementLabels, int level, final float[] data, List<MonitorWrapper> wrappers) {
     assert elementLabels.length == data.length;
     for (int i = 0; i < data.length; i++) {
       final int elementIndex = i;
-      addMonitored(logger, elementLabels[i], new Monitored() {
+      addMonitored(logger, elementLabels[i], level, new Monitored() {
         @Override
         public double monitoredValue(long stepTime) {
           return data[elementIndex];
@@ -66,12 +66,12 @@ public class Loggers {
     }
   }
 
-  public static void addMonitored(DataMonitor logger, String label, Monitored monitored, List<MonitorWrapper> wrappers) {
-    logger.add(label, monitored);
+  public static void addMonitored(DataMonitor logger, String label, int level, Monitored monitored, List<MonitorWrapper> wrappers) {
+    logger.add(label, level, monitored);
     if (wrappers == null)
       return;
     for (MonitorWrapper wrapper : wrappers)
-      logger.add(label + Wrappers.wrapperLabel(wrapper), wrapper.createMonitored(monitored));
+      logger.add(label + Wrappers.wrapperLabel(wrapper), level, wrapper.createMonitored(monitored));
   }
 
   public static boolean isIndexIncluded(Field field) {

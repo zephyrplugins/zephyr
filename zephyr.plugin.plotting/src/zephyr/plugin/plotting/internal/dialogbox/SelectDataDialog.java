@@ -56,6 +56,8 @@ public class SelectDataDialog extends FilteredItemsSelectionDialog {
     @Override
     public boolean matchItem(Object item) {
       Trace trace = (Trace) item;
+      if (trace.level > level)
+        return false;
       return matches(trace.label);
     }
   }

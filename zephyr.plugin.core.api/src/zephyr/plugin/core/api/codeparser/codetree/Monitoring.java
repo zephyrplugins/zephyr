@@ -10,11 +10,11 @@ import zephyr.plugin.core.api.monitoring.wrappers.Wrappers;
 public class Monitoring {
   public static void addMonitored(DataMonitor logger, String label, Monitored monitored, List<MonitorWrapper> wrappers,
       int level) {
-    logger.add(label, monitored);
+    logger.add(label, level, monitored);
     if (wrappers == null)
       return;
     for (MonitorWrapper wrapper : wrappers)
-      logger.add(label + Wrappers.wrapperLabel(wrapper), wrapper.createMonitored(monitored));
+      logger.add(label + Wrappers.wrapperLabel(wrapper), level, wrapper.createMonitored(monitored));
   }
 
   public static void add(DataMonitor logger, String[] elementLabels, final double[] data,

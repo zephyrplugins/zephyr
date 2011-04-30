@@ -12,7 +12,7 @@ public abstract class AbstractCodeNode implements CodeNode {
   protected AbstractCodeNode(String label, ParentNode parent, int level) {
     this.parent = parent;
     this.label = label;
-    this.level = level;
+    this.level = parent != null ? Math.max(level, parent.level()) : level;
   }
 
   @Override

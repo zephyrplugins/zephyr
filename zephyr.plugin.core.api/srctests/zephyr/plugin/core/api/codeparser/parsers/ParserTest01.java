@@ -19,13 +19,13 @@ public class ParserTest01 {
   static protected final String logged01AddedFromInterface = "logged01AddedFromInterface";
   static protected final String log01LabelInt = "logged03LabelInt";
   static protected final String log01LabelFloat = "logged04LabelFloat";
-  static final String[] expectedLabels = new String[] { logged01AddedFromInterface, "logged02FieldName",
+  static final String[] expectedLabels = new String[] { "logged02FieldName",
       log01LabelInt, log01LabelFloat, "logged05Child01/logged", "logged06ArrayDouble[0]", "logged06ArrayDouble[1]",
       "logged07ArrayInt[0]", "logged07ArrayInt[1]", "logged08ArrayFloat[0]", "logged08ArrayFloat[1]",
       "logged09ArrayObject[0]/logged", "logged09ArrayObject[1]/logged", "logged10ArrayLabeled[0:element0]",
       "logged10ArrayLabeled[1:element1]", "logged11ArrayLabeled[0:element0]/logged",
       "logged11ArrayLabeled[1:element1]/logged", "logged11CollectionLabeled[0:element0]/logged",
-      "logged11CollectionLabeled[1:element1]/logged", "logged12ClassLogged/logged" };
+      "logged11CollectionLabeled[1:element1]/logged", "logged12ClassLogged/logged", "logged01AddedFromInterface" };
 
   @SuppressWarnings("unused")
   static public class TestAddLog01 implements MonitorContainer {
@@ -62,7 +62,7 @@ public class ParserTest01 {
 
     @Override
     public void addToMonitor(DataMonitor monitor) {
-      monitor.add(logged01AddedFromInterface, new Monitored() {
+      monitor.add(logged01AddedFromInterface, 0, new Monitored() {
         @Override
         public double monitoredValue(long stepTime) {
           return 0;
