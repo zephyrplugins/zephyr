@@ -12,6 +12,7 @@ import org.eclipse.ui.IMemento;
 
 import zephyr.plugin.core.api.codeparser.codetree.ClockNode;
 import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
+import zephyr.plugin.core.api.codeparser.interfaces.ParentNode;
 
 public class TreeState implements TreeListener {
   static final private String MementoRootType = "Expanded";
@@ -49,6 +50,8 @@ public class TreeState implements TreeListener {
         return;
       item.dispose();
     }
+    if (!(root.getData() instanceof ParentNode))
+      return;
     itemProvider.createChildrenItems(root);
   }
 

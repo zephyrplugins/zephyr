@@ -6,17 +6,17 @@ def _findclock(clock, obj):
         return clock
     return obj.clock() if callable(obj.clock) else obj.clock
 
-def advertise(obj, clock = None, info = None):
-    Zephyr.advertise(_findclock(clock, obj), obj, info)
+def advertise(obj, clock = None):
+    Zephyr.advertise(_findclock(clock, obj), obj)
     
 def monfunc(clock, func, level = 0, name = None):
     logger = ZephyrPlotting.createMonitor(clock)
-    logger.add(func.__name__ if name is None else name, 
-               (lambda steptime: float(func())), level)
+    logger.add(func.__name__ if name is None else name, level, 
+               (lambda steptime: float(func())))
     
 def monattr(obj, name, level = 0, clock = None, label = None):
     logger = ZephyrPlotting.createMonitor(_findclock(clock, obj))
     attr = getattr(obj, name)
     monitored = ((lambda steptime: float(attr())) if callable(attr) 
                  else (lambda steptime: float(getattr(obj, name))))
-    logger.add(name if label is None else label, monitored, level)
+    logger.add(name if label is None else label, level, monitored)
