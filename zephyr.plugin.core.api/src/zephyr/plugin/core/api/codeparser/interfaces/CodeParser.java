@@ -6,9 +6,7 @@ import zephyr.plugin.core.api.codeparser.codetree.ClassNode;
 import zephyr.plugin.core.api.parsing.CollectionLabelBuilder;
 
 public interface CodeParser {
-  ClassNode parse(Object root);
-
-  ClassNode parse(ParentNode clockNode, Object root);
+  void parse(MutableParentNode clockNode, Object root);
 
   void recursiveParseClass(ClassNode node, Object container);
 

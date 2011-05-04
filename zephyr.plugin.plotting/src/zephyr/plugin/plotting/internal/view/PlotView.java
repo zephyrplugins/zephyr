@@ -35,6 +35,7 @@ import zephyr.plugin.plotting.internal.traces.Trace;
 import zephyr.plugin.plotting.internal.traces.Traces;
 import zephyr.plugin.plotting.internal.traces.TracesSelection.TraceSelector;
 import zephyr.plugin.plotting.internal.view.actions.AddTracesAction;
+import zephyr.plugin.plotting.internal.view.actions.RemoveAllTracesAction;
 import zephyr.plugin.plotting.internal.view.actions.SelectTracesAction;
 import zephyr.plugin.plotting.mousesearch.MouseSearch;
 import zephyr.plugin.plotting.mousesearch.MouseSearchable;
@@ -84,6 +85,7 @@ public class PlotView extends ViewPart implements TraceSelector, ProvidedView, D
 
   private void setupToolbar(IToolBarManager toolBarManager) {
     toolBarManager.add(new CenterPlotAction(this));
+    toolBarManager.add(new RemoveAllTracesAction(this));
     toolBarManager.add(new SelectTracesAction(this));
     toolBarManager.add(new AddTracesAction(this));
     toolBarManager.add(synchronizeAction);

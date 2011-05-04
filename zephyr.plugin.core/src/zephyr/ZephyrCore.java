@@ -68,7 +68,7 @@ public class ZephyrCore {
   }
 
   public static void sendStatusBarMessage(final String message) {
-    Display.getCurrent().syncExec(new Runnable() {
+    Display.getDefault().syncExec(new Runnable() {
       @Override
       public void run() {
         IWorkbench wb = PlatformUI.getWorkbench();
@@ -83,7 +83,7 @@ public class ZephyrCore {
         IStatusLineManager statusLineManager = actionBars.getStatusLineManager();
         if (statusLineManager == null)
           return;
-        statusLineManager.setMessage(message);
+        statusLineManager.setMessage(message.replace("\n", ""));
       }
     });
   }

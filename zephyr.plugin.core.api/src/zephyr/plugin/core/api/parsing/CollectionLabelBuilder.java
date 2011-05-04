@@ -4,7 +4,7 @@ import zephyr.plugin.core.api.labels.Labels;
 
 public class CollectionLabelBuilder {
   private final String collectionPattern;
-  private final LabeledElement labeledElement;
+  private final LabeledCollection labeledElement;
   private final String elementLabelSeparator;
   private final boolean includeIndex;
 
@@ -15,7 +15,7 @@ public class CollectionLabelBuilder {
     this.includeIndex = includeIndex;
   }
 
-  public CollectionLabelBuilder(LabeledElement labeledElement, String elementLabelSeparator, int size,
+  public CollectionLabelBuilder(LabeledCollection labeledElement, String elementLabelSeparator, int size,
       boolean includeIndex) {
     collectionPattern = Labels.collectionPattern("", size, includeIndex);
     this.labeledElement = labeledElement;

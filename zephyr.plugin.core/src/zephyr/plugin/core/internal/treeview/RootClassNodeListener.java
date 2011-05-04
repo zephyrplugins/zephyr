@@ -2,10 +2,10 @@ package zephyr.plugin.core.internal.treeview;
 
 import org.eclipse.swt.widgets.Display;
 
-import zephyr.plugin.core.api.codeparser.codetree.ClassNode;
+import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.signals.Listener;
 
-public class RootClassNodeListener implements Listener<ClassNode> {
+public class RootClassNodeListener implements Listener<CodeNode> {
   final StructureExplorer structureExplorer;
 
   public RootClassNodeListener(StructureExplorer structureExplorer) {
@@ -13,13 +13,13 @@ public class RootClassNodeListener implements Listener<ClassNode> {
   }
 
   @Override
-  public void listen(final ClassNode classNode) {
+  public void listen(final CodeNode codeNode) {
     if (structureExplorer.tree() == null)
       return;
     Display.getDefault().asyncExec(new Runnable() {
       @Override
       public void run() {
-        structureExplorer.registerClassNode(classNode);
+        structureExplorer.registerClockChildNode(codeNode);
         structureExplorer.treeState().expandNodes();
       }
     });

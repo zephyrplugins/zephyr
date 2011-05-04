@@ -5,6 +5,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -16,7 +17,6 @@ import zephyr.plugin.core.api.codeparser.codetree.PrimitiveNode;
 import zephyr.plugin.core.api.codeparser.interfaces.CodeParser;
 import zephyr.plugin.core.api.codeparser.interfaces.FieldParser;
 import zephyr.plugin.core.api.codeparser.interfaces.MutableParentNode;
-import zephyr.plugin.core.api.codeparser.interfaces.ParentNode;
 import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.core.api.monitoring.abstracts.MonitorContainer;
 import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
@@ -24,11 +24,11 @@ import zephyr.plugin.core.api.monitoring.annotations.IgnoreMonitor;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 import zephyr.plugin.core.api.parsing.CollectionLabelBuilder;
 import zephyr.plugin.core.api.parsing.LabelProvider;
-import zephyr.plugin.core.api.parsing.LabeledElement;
+import zephyr.plugin.core.api.parsing.LabeledCollection;
 
 public class CodeTreeParser implements CodeParser {
   static private LinkedList<FieldParser> parsers = new LinkedList<FieldParser>();
-  private final Stack<Map<String, LabeledElement>> labelsMapStack = new Stack<Map<String, LabeledElement>>();
+  static private Stack<Map<String, LabeledCollection>> staticLabelsMapStack = new Stack<Map<String, LabeledCollection>>();
 
   static {
     registerParser(new ObjectParser());
@@ -37,6 +37,19 @@ public class CodeTreeParser implements CodeParser {
     registerParser(new PrimitiveArrayParser());
     registerParser(new PrimitiveCollectionParser());
     registerParser(new PrimitiveParser());
+  }
+
+  private final Stack<Map<String, LabeledCollection>> labelsMapStack = new Stack<Map<String, LabeledCollection>>();
+
+  public CodeTreeParser() {
+    labelsMapStack.addAll(staticLabelsMapStack);
+  }
+
+  public static void registerLabeledCollection(LabeledCollection labeledCollection, String... ids) {
+    Map<String, LabeledCollection> map = new HashMap<String, LabeledCollection>();
+    for (String id : ids)
+      map.put(id, labeledCollection);
+    staticLabelsMapStack.push(map);
   }
 
   static private Field[] getFieldList(Class<?> objectClass) {
@@ -50,8 +63,8 @@ public class CodeTreeParser implements CodeParser {
     return fields;
   }
 
-  static private void addLabelMaps(Map<String, LabeledElement> labelsMap, final Method method, final Object container) {
-    LabeledElement labeledElement = new LabeledElement() {
+  static private void addLabelMaps(Map<String, LabeledCollection> labelsMap, final Method method, final Object container) {
+    LabeledCollection labeledElement = new LabeledCollection() {
       @Override
       public String label(int index) {
         try {
@@ -71,9 +84,9 @@ public class CodeTreeParser implements CodeParser {
       labelsMap.put(id, labeledElement);
   }
 
-  static private Map<String, LabeledElement> buildLabelMaps(Object container) {
+  static private Map<String, LabeledCollection> buildLabelMaps(Object container) {
     Class<?> objectClass = container.getClass();
-    Map<String, LabeledElement> labelsMaps = new LinkedHashMap<String, LabeledElement>();
+    Map<String, LabeledCollection> labelsMaps = new LinkedHashMap<String, LabeledCollection>();
     while (objectClass != null) {
       for (Method method : objectClass.getDeclaredMethods()) {
         if (!method.isAnnotationPresent(LabelProvider.class))
@@ -136,24 +149,17 @@ public class CodeTreeParser implements CodeParser {
   }
 
   @Override
-  public ClassNode parse(Object root) {
-    return parse(null, root);
-  }
-
-  @Override
-  public ClassNode parse(ParentNode parent, Object root) {
-    ClassNode classNode = new ClassNode("", parent, root, null);
-    recursiveParseClass(classNode, classNode.instance());
-    return classNode;
+  public void parse(MutableParentNode parent, Object root) {
+    recursiveParseInstance(parent, null, root);
   }
 
   static public void registerParser(FieldParser parser) {
     parsers.addFirst(parser);
   }
 
-  private LabeledElement getLabeledElement(String id) {
-    for (Map<String, LabeledElement> labelsMap : labelsMapStack) {
-      LabeledElement labeledElement = labelsMap.get(id);
+  private LabeledCollection getLabeledElement(String id) {
+    for (Map<String, LabeledCollection> labelsMap : labelsMapStack) {
+      LabeledCollection labeledElement = labelsMap.get(id);
       if (labeledElement != null)
         return labeledElement;
     }

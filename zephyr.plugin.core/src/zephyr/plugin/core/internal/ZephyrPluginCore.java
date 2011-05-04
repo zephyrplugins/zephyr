@@ -25,8 +25,8 @@ import zephyr.plugin.core.RunnableFactory;
 import zephyr.plugin.core.SyncCode;
 import zephyr.plugin.core.api.Zephyr;
 import zephyr.plugin.core.api.Zephyr.AdvertisementInfo;
-import zephyr.plugin.core.api.codeparser.codetree.ClassNode;
 import zephyr.plugin.core.api.codeparser.codetree.CodeTrees;
+import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.control.Control;
@@ -59,8 +59,11 @@ public class ZephyrPluginCore extends AbstractUIPlugin {
       @Override
       public void listen(AdvertisementInfo eventInfo) {
         Clock clock = eventInfo.clock;
-        ClassNode rootNode = syncCode.parse(clock, eventInfo.advertised);
-        CodeTrees.traverse(new PopupViewTraverser(), rootNode);
+        CodeNode[] children = syncCode.parse(clock, eventInfo.advertised);
+        PopupViewTraverser traverser = new PopupViewTraverser();
+        for (CodeNode node : children) {
+          CodeTrees.traverse(traverser, node);
+        }
       }
     });
   }

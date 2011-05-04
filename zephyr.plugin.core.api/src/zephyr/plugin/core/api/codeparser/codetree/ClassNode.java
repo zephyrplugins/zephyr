@@ -10,10 +10,14 @@ public class ClassNode extends AbstractParentNode {
   private final Object instance;
   private final Monitor classAnnotation;
 
+  public ClassNode() {
+    this("", null, null, null);
+  }
+
   public ClassNode(String label, ParentNode parent, Object instance, Field parentField) {
     super(label, parent, CodeTrees.levelOf(parentField));
     this.instance = instance;
-    classAnnotation = instance.getClass().getAnnotation(Monitor.class);
+    classAnnotation = instance != null ? instance.getClass().getAnnotation(Monitor.class) : null;
   }
 
   public boolean isClassAnnotated() {

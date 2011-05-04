@@ -3,6 +3,8 @@ package zephyr.plugin.jython.internal;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
+import zephyr.plugin.core.api.Zephyr;
+
 public class JythonPlugin extends AbstractUIPlugin {
   static private JythonPlugin plugin;
 
@@ -14,6 +16,7 @@ public class JythonPlugin extends AbstractUIPlugin {
   public void start(BundleContext context) throws Exception {
     plugin = this;
     super.start(context);
+    Zephyr.registerParser(new ObjectPyListParser());
   }
 
   @Override

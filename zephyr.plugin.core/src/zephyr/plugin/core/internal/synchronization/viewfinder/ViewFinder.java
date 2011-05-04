@@ -82,7 +82,8 @@ public class ViewFinder {
     IViewRegistry viewRegistry = PlatformUI.getWorkbench().getViewRegistry();
     IViewDescriptor descriptor = viewRegistry.find(viewID);
     if (descriptor == null) {
-      System.err.println("Zephyr warning: no descriptor can be found for view " + viewID);
+      System.err.println("Zephyr warning: the view '" + viewID
+          + "' could not be found. Is the view declared in your plugin.xml with this id?");
       return null;
     }
     if (!descriptor.getAllowMultiple())

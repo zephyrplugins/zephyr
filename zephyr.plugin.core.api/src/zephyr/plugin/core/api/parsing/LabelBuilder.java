@@ -11,7 +11,7 @@ public class LabelBuilder {
 
   private final String separator;
   private final Stack<String> prefixStack = new Stack<String>();
-  private final Stack<Map<String, LabeledElement>> labelsMapStack = new Stack<Map<String, LabeledElement>>();
+  private final Stack<Map<String, LabeledCollection>> labelsMapStack = new Stack<Map<String, LabeledCollection>>();
   private final String elementSeparator;
 
   public LabelBuilder() {
@@ -55,13 +55,13 @@ public class LabelBuilder {
     return labelPrefix + separator + label;
   }
 
-  public void pushLabelMap(Map<String, LabeledElement> labelsMap) {
+  public void pushLabelMap(Map<String, LabeledCollection> labelsMap) {
     labelsMapStack.push(labelsMap);
   }
 
   public void pushLabelMap(String id, final String[] labels) {
-    Map<String, LabeledElement> labelsMap = new LinkedHashMap<String, LabeledElement>();
-    labelsMap.put(id, new LabeledElement() {
+    Map<String, LabeledCollection> labelsMap = new LinkedHashMap<String, LabeledCollection>();
+    labelsMap.put(id, new LabeledCollection() {
       @Override
       public String label(int index) {
         return labels[index];
@@ -74,9 +74,9 @@ public class LabelBuilder {
     labelsMapStack.pop();
   }
 
-  public LabeledElement getLabeledElement(String id) {
-    for (Map<String, LabeledElement> labelsMap : labelsMapStack) {
-      LabeledElement labeledElement = labelsMap.get(id);
+  public LabeledCollection getLabeledElement(String id) {
+    for (Map<String, LabeledCollection> labelsMap : labelsMapStack) {
+      LabeledCollection labeledElement = labelsMap.get(id);
       if (labeledElement != null)
         return labeledElement;
     }

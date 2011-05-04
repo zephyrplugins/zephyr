@@ -15,7 +15,7 @@ public abstract class AbstractCollectionParser<T> implements FieldParser {
     @SuppressWarnings("unchecked")
     T container = (T) fieldValue;
     int nbChildren = nbChildren(container);
-    String label = field.getName();
+    String label = field != null ? field.getName() : "";
     CollectionLabelBuilder labelBuilder = codeParser.newCollectionLabelBuilder(field, nbChildren);
     ClassNode collectionNode = new ObjectCollectionNode(label, parentNode, fieldValue, field);
     parentNode.addChild(collectionNode);

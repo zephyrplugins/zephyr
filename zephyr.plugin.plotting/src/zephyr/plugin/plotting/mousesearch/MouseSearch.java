@@ -14,6 +14,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 
+import zephyr.ZephyrCore;
 import zephyr.plugin.core.canvas.Overlay;
 import zephyr.plugin.core.utils.Colors;
 
@@ -59,6 +60,8 @@ public class MouseSearch extends Job implements Overlay {
   }
 
   private void refreshDisplay() {
+    if (requestResult != null)
+      ZephyrCore.sendStatusBarMessage(requestResult.tooltipLabel());
     Display.getDefault().syncExec(new Runnable() {
       @Override
       public void run() {

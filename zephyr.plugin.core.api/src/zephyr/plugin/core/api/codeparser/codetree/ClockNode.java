@@ -19,9 +19,4 @@ public class ClockNode extends AbstractParentNode {
   public ParentNode parent() {
     return null;
   }
-
-  @Override
-  public ClassNode getChild(int index) {
-    return (ClassNode) super.getChild(index);
-  }
 }

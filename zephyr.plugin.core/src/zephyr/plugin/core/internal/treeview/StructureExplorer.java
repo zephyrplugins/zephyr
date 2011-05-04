@@ -29,7 +29,7 @@ public class StructureExplorer extends ViewPart implements ItemProvider {
   private final SyncCode codeParser;
   private final IconDatabase iconDatabase = new IconDatabase();
   private final Map<ClockNode, TreeItem> clockItems = new HashMap<ClockNode, TreeItem>();
-  private final Listener<ClassNode> classNodeListener;
+  private final Listener<CodeNode> classNodeListener;
   final TreeState treeState = new TreeState(this);
   private final SelectionListener selectionListener = new SelectionTreeListener();
   private final MouseTreeListener mouseListener = new MouseTreeListener();
@@ -98,13 +98,13 @@ public class StructureExplorer extends ViewPart implements ItemProvider {
   private void buildRootNode() {
     for (ClockNode clockNode : codeParser.clockNodes())
       for (int i = 0; i < clockNode.nbChildren(); i++)
-        registerClassNode(clockNode.getChild(i));
+        registerClockChildNode(clockNode.getChild(i));
   }
 
-  void registerClassNode(ClassNode classNode) {
-    TreeItem clockItem = getClockItem((ClockNode) classNode.parent());
-    TreeItem classItem = nodeToTreeItem(clockItem, classNode);
-    if (hasChildren(classNode))
+  void registerClockChildNode(CodeNode childNode) {
+    TreeItem clockItem = getClockItem((ClockNode) childNode.parent());
+    TreeItem classItem = nodeToTreeItem(clockItem, childNode);
+    if (hasChildren(childNode))
       new TreeItem(classItem, 0);
   }
 

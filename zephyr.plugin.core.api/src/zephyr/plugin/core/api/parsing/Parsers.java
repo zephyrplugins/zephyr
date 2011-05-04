@@ -7,9 +7,9 @@ import java.util.Map;
 
 public class Parsers {
 
-  private static void addLabelMaps(Map<String, LabeledElement> labelsMap, final Method method,
+  private static void addLabelMaps(Map<String, LabeledCollection> labelsMap, final Method method,
       final Object container) {
-    LabeledElement labeledElement = new LabeledElement() {
+    LabeledCollection labeledElement = new LabeledCollection() {
       @Override
       public String label(int index) {
         try {
@@ -29,9 +29,9 @@ public class Parsers {
       labelsMap.put(id, labeledElement);
   }
 
-  public static Map<String, LabeledElement> buildLabelMaps(Object container) {
+  public static Map<String, LabeledCollection> buildLabelMaps(Object container) {
     Class<?> objectClass = container.getClass();
-    Map<String, LabeledElement> labelsMaps = new LinkedHashMap<String, LabeledElement>();
+    Map<String, LabeledCollection> labelsMaps = new LinkedHashMap<String, LabeledCollection>();
     while (objectClass != null) {
       for (Method method : objectClass.getDeclaredMethods()) {
         if (!method.isAnnotationPresent(LabelProvider.class))

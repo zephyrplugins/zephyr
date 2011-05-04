@@ -5,32 +5,36 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import zephyr.plugin.core.api.codeparser.codetree.ClassNode;
 import zephyr.plugin.core.api.codeparser.codetree.ClockNode;
+import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.codeparser.interfaces.CodeParser;
 import zephyr.plugin.core.api.codeparser.parsers.CodeTreeParser;
 import zephyr.plugin.core.api.signals.Signal;
 import zephyr.plugin.core.api.synchronization.Clock;
 
 public class SyncCode {
-  public Signal<ClassNode> onParse = new Signal<ClassNode>();
+  public Signal<CodeNode> onParse = new Signal<CodeNode>();
 
   private final Map<Clock, ClockNode> clockNodes = new LinkedHashMap<Clock, ClockNode>();
 
   public SyncCode() {
   }
 
-  public ClassNode parse(Clock clock, Object root) {
+  public CodeNode[] parse(Clock clock, Object root) {
     ClockNode clockNode = clockNodes.get(clock);
     if (clockNode == null) {
       clockNode = new ClockNode(clock);
       clockNodes.put(clock, clockNode);
     }
+    int nbChildrenBefore = clockNode.nbChildren();
     CodeParser parser = new CodeTreeParser();
-    ClassNode rootClassNode = parser.parse(clockNode, root);
-    clockNode.addChild(rootClassNode);
-    onParse.fire(rootClassNode);
-    return rootClassNode;
+    parser.parse(clockNode, root);
+    CodeNode[] children = new CodeNode[clockNode.nbChildren() - nbChildrenBefore];
+    for (int i = nbChildrenBefore; i < clockNode.nbChildren(); i++) {
+      children[i - nbChildrenBefore] = clockNode.getChild(i);
+      onParse.fire(children[i - nbChildrenBefore]);
+    }
+    return children;
   }
 
   public List<ClockNode> clockNodes() {

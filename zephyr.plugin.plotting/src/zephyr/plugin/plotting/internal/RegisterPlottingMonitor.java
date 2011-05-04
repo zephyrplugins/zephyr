@@ -1,8 +1,8 @@
 package zephyr.plugin.plotting.internal;
 
 import zephyr.ZephyrCore;
-import zephyr.plugin.core.api.codeparser.codetree.ClassNode;
 import zephyr.plugin.core.api.codeparser.codetree.CodeTrees;
+import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.core.api.monitoring.abstracts.MonitoredDataTraverser;
 import zephyr.plugin.core.api.signals.Listener;
@@ -18,14 +18,14 @@ public class RegisterPlottingMonitor implements StartupJob {
 
   @Override
   public void run() {
-    ZephyrCore.syncCode().onParse.connect(new Listener<ClassNode>() {
+    ZephyrCore.syncCode().onParse.connect(new Listener<CodeNode>() {
       @Override
-      public void listen(ClassNode classNode) {
+      public void listen(CodeNode codeNode) {
         ClockTracesManager manager = ZephyrPluginPlotting.tracesManager();
-        Clock clock = CodeTrees.clockOf(classNode);
+        Clock clock = CodeTrees.clockOf(codeNode);
         DataMonitor dataMonitor = manager.dataMonitor(clock);
         MonitoredDataTraverser traverser = new MonitoredDataTraverser(dataMonitor);
-        CodeTrees.traverse(traverser, classNode.parent());
+        CodeTrees.traverse(traverser, codeNode);
       }
     });
   }
