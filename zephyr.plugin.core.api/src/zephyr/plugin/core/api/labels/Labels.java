@@ -8,21 +8,22 @@ public class Labels {
     return object.toString();
   }
 
-  public static String collectionPattern(String collectionLabel, int size, boolean includeIndex) {
-    if (!includeIndex)
-      return collectionLabel + "[";
+  public static String collectionPattern(String collectionLabel, int size, boolean arrayDecoration) {
+    if (!arrayDecoration)
+      return collectionLabel;
     if (size < 10)
       return String.format("%s[%%d", collectionLabel);
     return String.format("%s[%%0%dd", collectionLabel, (int) Math.ceil(Math.log10(size)));
   }
 
-  public static String collectionLabel(String collectionPattern, int index, String suffix, boolean includeIndex) {
-    StringBuilder result = includeIndex ?
+  public static String collectionLabel(String collectionPattern, int index, String suffix, boolean arrayDecoration) {
+    StringBuilder result = arrayDecoration ?
         new StringBuilder(String.format(collectionPattern, index)) :
         new StringBuilder(collectionPattern);
     if (suffix != null)
       result.append(suffix);
-    result.append("]");
+    if (arrayDecoration)
+      result.append("]");
     return result.toString();
   }
 

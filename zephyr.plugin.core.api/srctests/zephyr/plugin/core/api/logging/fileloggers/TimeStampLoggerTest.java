@@ -13,14 +13,14 @@ public class TimeStampLoggerTest {
   protected double a = 0.0;
   protected Monitored logA = new Monitored() {
     @Override
-    public double monitoredValue(long stepTime) {
+    public double monitoredValue() {
       return a;
     }
   };
   protected double b = 0.0;
   protected Monitored logB = new Monitored() {
     @Override
-    public double monitoredValue(long stepTime) {
+    public double monitoredValue() {
       return b;
     }
   };

@@ -1,8 +1,14 @@
 package zephyr.plugin.plotting.internal;
 
+import org.eclipse.core.commands.Command;
+import org.eclipse.core.commands.State;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.commands.ICommandService;
+import org.eclipse.ui.handlers.RegistryToggleState;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
+import zephyr.plugin.plotting.internal.commands.EnableAllTraces;
 import zephyr.plugin.plotting.internal.traces.ClockTracesManager;
 
 /**
@@ -19,6 +25,10 @@ public class ZephyrPluginPlotting extends AbstractUIPlugin {
   public void start(BundleContext context) throws Exception {
     super.start(context);
     plugin = this;
+    ICommandService commandService = (ICommandService) PlatformUI.getWorkbench().getService(ICommandService.class);
+    Command command = commandService.getCommand(EnableAllTraces.ID);
+    State state = command.getState(RegistryToggleState.STATE_ID);
+    traces.setForceEnabled((Boolean) state.getValue());
   }
 
   @Override

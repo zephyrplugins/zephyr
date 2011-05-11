@@ -169,14 +169,14 @@ public class CodeTreeParser implements CodeParser {
   @Override
   public CollectionLabelBuilder newCollectionLabelBuilder(Field field, int length) {
     String id = "";
-    boolean includeIndex = true;
+    boolean arrayDecoration = true;
     if (field != null && field.isAnnotationPresent(Monitor.class)) {
       Monitor annotation = field.getAnnotation(Monitor.class);
       id = annotation.id();
-      includeIndex = annotation.arrayIndexLabeled();
+      arrayDecoration = annotation.arrayDecoration();
     }
     if (field != null && id.isEmpty())
       id = field.getName();
-    return new CollectionLabelBuilder(getLabeledElement(id), ":", length, includeIndex);
+    return new CollectionLabelBuilder(getLabeledElement(id), ":", length, arrayDecoration);
   }
 }

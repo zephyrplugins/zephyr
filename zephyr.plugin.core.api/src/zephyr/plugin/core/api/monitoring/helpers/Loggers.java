@@ -33,7 +33,7 @@ public class Loggers {
       final int elementIndex = i;
       addMonitored(logger, elementLabels[i], level, new Monitored() {
         @Override
-        public double monitoredValue(long stepTime) {
+        public double monitoredValue() {
           return data[elementIndex];
         }
       }, wrappers);
@@ -46,7 +46,7 @@ public class Loggers {
       final int elementIndex = i;
       addMonitored(logger, elementLabels[i], level, new Monitored() {
         @Override
-        public double monitoredValue(long stepTime) {
+        public double monitoredValue() {
           return data[elementIndex];
         }
       }, wrappers);
@@ -59,7 +59,7 @@ public class Loggers {
       final int elementIndex = i;
       addMonitored(logger, elementLabels[i], level, new Monitored() {
         @Override
-        public double monitoredValue(long stepTime) {
+        public double monitoredValue() {
           return data[elementIndex];
         }
       }, wrappers);
@@ -85,7 +85,7 @@ public class Loggers {
   private static boolean isIndexIncluded(Monitor dataLogged) {
     if (dataLogged == null)
       return true;
-    return dataLogged.arrayIndexLabeled();
+    return dataLogged.arrayDecoration();
   }
 
   static public TimedFileLogger newLoggerWithTime(String filepath) {

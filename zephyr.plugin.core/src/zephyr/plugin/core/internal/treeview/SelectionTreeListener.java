@@ -5,7 +5,7 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.TreeItem;
 
 import zephyr.ZephyrCore;
-import zephyr.plugin.core.api.codeparser.codetree.ClassNode;
+import zephyr.plugin.core.api.codeparser.codetree.CodeTrees;
 import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
 
 public class SelectionTreeListener implements SelectionListener {
@@ -19,19 +19,15 @@ public class SelectionTreeListener implements SelectionListener {
       ZephyrCore.sendStatusBarMessage(buildDescriptiveLabel(codeNode));
   }
 
-  protected String buildDescriptiveLabel(CodeNode codeNode) {
+  static protected String buildDescriptiveLabel(CodeNode codeNode) {
     StringBuilder label = new StringBuilder(codeNode.path());
-    if (codeNode instanceof ClassNode) {
-      String className = ((ClassNode) codeNode).instance().getClass().getSimpleName();
-      appendSuffix(label, className);
+    String nodeInfo = CodeTrees.nodeInfo(codeNode);
+    if (!nodeInfo.isEmpty()) {
+      label.append("[");
+      label.append(nodeInfo);
+      label.append("]");
     }
     return label.toString();
-  }
-
-  protected void appendSuffix(StringBuilder label, String suffix) {
-    label.append("[");
-    label.append(suffix);
-    label.append("]");
   }
 
   @Override

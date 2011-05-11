@@ -32,7 +32,7 @@ public class PrimitiveNode extends AbstractCodeNode implements MonitorContainer 
   static private Monitored createValueLogged(final Field field, final Object container) {
     return new Monitored() {
       @Override
-      public double monitoredValue(long stepTime) {
+      public double monitoredValue() {
         try {
           return field.getDouble(container);
         } catch (IllegalArgumentException e) {
@@ -48,7 +48,7 @@ public class PrimitiveNode extends AbstractCodeNode implements MonitorContainer 
   static private Monitored createBooleanLogged(final Field field, final Object container) {
     return new Monitored() {
       @Override
-      public double monitoredValue(long stepTime) {
+      public double monitoredValue() {
         try {
           return field.getBoolean(container) ? 1 : 0;
         } catch (IllegalArgumentException e) {
@@ -64,5 +64,9 @@ public class PrimitiveNode extends AbstractCodeNode implements MonitorContainer 
   @Override
   public void addToMonitor(DataMonitor monitor) {
     monitor.add(path(), level(), monitored);
+  }
+
+  public double value() {
+    return monitored.monitoredValue();
   }
 }

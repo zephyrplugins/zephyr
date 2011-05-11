@@ -25,7 +25,7 @@ public class PrimitiveCollectionNode extends AbstractCodeNode implements Monitor
       final int elementIndex = i;
       monitor.add(path() + collectionLabelBuilder.elementLabel(i), level(), new Monitored() {
         @Override
-        public double monitoredValue(long stepTime) {
+        public double monitoredValue() {
           return (Double) array.get(elementIndex);
         }
       });

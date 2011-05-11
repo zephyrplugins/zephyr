@@ -11,19 +11,19 @@ import zephyr.plugin.core.api.parsing.LabelProvider;
 
 
 public class ParserArrayLabelsTest {
-  static final String[] expectedLabels = new String[] { "logged01[]", "logged01[]", "logged02[a]",
-      "logged02[b]", "logged03[]/data01" };
+  static final String[] expectedLabels = new String[] { "logged01", "logged01", "logged02a",
+      "logged02b", "logged03/data01" };
 
   static public class TestObjectMonitored {
     @Monitor
     protected double data01;
   }
 
-  @Monitor(arrayIndexLabeled = false)
+  @Monitor(arrayDecoration = false)
   protected final double[] logged01 = new double[2];
-  @Monitor(arrayIndexLabeled = false)
+  @Monitor(arrayDecoration = false)
   protected final double[] logged02 = new double[2];
-  @Monitor(arrayIndexLabeled = false)
+  @Monitor(arrayDecoration = false)
   protected final TestObjectMonitored[] logged03 = { new TestObjectMonitored() };
 
   @LabelProvider(ids = { "logged02" })

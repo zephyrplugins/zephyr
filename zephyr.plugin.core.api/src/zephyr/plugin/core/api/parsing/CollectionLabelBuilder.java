@@ -6,27 +6,27 @@ public class CollectionLabelBuilder {
   private final String collectionPattern;
   private final LabeledCollection labeledElement;
   private final String elementLabelSeparator;
-  private final boolean includeIndex;
+  private final boolean arrayDecoration;
 
-  public CollectionLabelBuilder(LabelBuilder labelBuilder, int size, String label, String id, boolean includeIndex) {
-    collectionPattern = Labels.collectionPattern(label, size, includeIndex);
+  public CollectionLabelBuilder(LabelBuilder labelBuilder, int size, String label, String id, boolean arrayDecoration) {
+    collectionPattern = Labels.collectionPattern(label, size, arrayDecoration);
     labeledElement = labelBuilder.getLabeledElement(id);
     elementLabelSeparator = labelBuilder.elementLabelSeparator();
-    this.includeIndex = includeIndex;
+    this.arrayDecoration = arrayDecoration;
   }
 
   public CollectionLabelBuilder(LabeledCollection labeledElement, String elementLabelSeparator, int size,
-      boolean includeIndex) {
-    collectionPattern = Labels.collectionPattern("", size, includeIndex);
+      boolean arrayDecoration) {
+    collectionPattern = Labels.collectionPattern("", size, arrayDecoration);
     this.labeledElement = labeledElement;
     this.elementLabelSeparator = elementLabelSeparator;
-    this.includeIndex = includeIndex;
+    this.arrayDecoration = arrayDecoration;
   }
 
   public String elementLabel(int index) {
     String suffix = labeledElement == null ? null : labeledElement.label(index);
-    if (includeIndex && suffix != null)
+    if (arrayDecoration && suffix != null)
       suffix = elementLabelSeparator + suffix;
-    return Labels.collectionLabel(collectionPattern, index, suffix, includeIndex);
+    return Labels.collectionLabel(collectionPattern, index, suffix, arrayDecoration);
   }
 }

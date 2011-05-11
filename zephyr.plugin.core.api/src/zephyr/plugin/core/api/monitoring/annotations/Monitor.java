@@ -18,5 +18,5 @@ public @interface Monitor {
 
   String[] wrappers() default {};
 
-  boolean arrayIndexLabeled() default true;
+  boolean arrayDecoration() default true;
 }

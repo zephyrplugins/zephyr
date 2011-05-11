@@ -51,6 +51,7 @@ public class StructureExplorer extends ViewPart implements ItemProvider {
     tree.addSelectionListener(selectionListener);
     tree.addTreeListener(treeState);
     tree.addMouseListener(mouseListener);
+    new TooltipManager(tree);
     treeState.expandNodes();
   }
 

@@ -24,7 +24,7 @@ public class Monitoring {
       final int elementIndex = i;
       addMonitored(logger, elementLabels[i], new Monitored() {
         @Override
-        public double monitoredValue(long stepTime) {
+        public double monitoredValue() {
           return data[elementIndex];
         }
       }, wrappers, level);
@@ -38,7 +38,7 @@ public class Monitoring {
       final int elementIndex = i;
       addMonitored(logger, elementLabels[i], new Monitored() {
         @Override
-        public double monitoredValue(long stepTime) {
+        public double monitoredValue() {
           return data[elementIndex];
         }
       }, wrappers, level);
@@ -52,7 +52,7 @@ public class Monitoring {
       final int elementIndex = i;
       addMonitored(logger, elementLabels[i], new Monitored() {
         @Override
-        public double monitoredValue(long stepTime) {
+        public double monitoredValue() {
           return data[elementIndex];
         }
       }, wrappers, level);

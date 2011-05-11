@@ -9,8 +9,8 @@ public class Squared implements MonitorWrapper {
   public Monitored createMonitored(final Monitored logged) {
     return new Monitored() {
       @Override
-      public double monitoredValue(long stepTime) {
-        double value = logged.monitoredValue(stepTime);
+      public double monitoredValue() {
+        double value = logged.monitoredValue();
         return value * value;
       }
     };
