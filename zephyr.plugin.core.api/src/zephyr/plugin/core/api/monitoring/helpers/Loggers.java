@@ -1,7 +1,11 @@
 package zephyr.plugin.core.api.monitoring.helpers;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -117,5 +121,22 @@ public class Loggers {
       e.printStackTrace();
     }
     return null;
+  }
+
+  public static void copyFile(File sourceFile, File destFile) throws IOException {
+    if (!destFile.exists() && !destFile.createNewFile())
+      throw new RuntimeException("Error creating the new jar file: " + destFile.getAbsolutePath());
+    FileChannel source = null;
+    FileChannel destination = null;
+    try {
+      source = new FileInputStream(sourceFile).getChannel();
+      destination = new FileOutputStream(destFile).getChannel();
+      destination.transferFrom(source, 0, source.size());
+    } finally {
+      if (source != null)
+        source.close();
+      if (destination != null)
+        destination.close();
+    }
   }
 }

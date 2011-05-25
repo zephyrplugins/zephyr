@@ -1,10 +1,7 @@
 package zephyr.plugin.core.internal.commands;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.channels.FileChannel;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -16,6 +13,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
+
+import zephyr.plugin.core.api.monitoring.helpers.Loggers;
 
 public class ExtractZephyrJar extends AbstractHandler {
   private final File jarFile;
@@ -38,23 +37,6 @@ public class ExtractZephyrJar extends AbstractHandler {
     return path;
   }
 
-  public static void copyFile(File sourceFile, File destFile) throws IOException {
-    if (!destFile.exists() && !destFile.createNewFile())
-      throw new RuntimeException("Error creating the new jar file: " + destFile.getAbsolutePath());
-    FileChannel source = null;
-    FileChannel destination = null;
-    try {
-      source = new FileInputStream(sourceFile).getChannel();
-      destination = new FileOutputStream(destFile).getChannel();
-      destination.transferFrom(source, 0, source.size());
-    } finally {
-      if (source != null)
-        source.close();
-      if (destination != null)
-        destination.close();
-    }
-  }
-
   @Override
   public Object execute(ExecutionEvent event) throws ExecutionException {
     Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
@@ -71,7 +53,7 @@ public class ExtractZephyrJar extends AbstractHandler {
     if (selected == null)
       return null;
     try {
-      copyFile(jarFile, new File(selected));
+      Loggers.copyFile(jarFile, new File(selected));
     } catch (IOException e) {
       e.printStackTrace();
     }

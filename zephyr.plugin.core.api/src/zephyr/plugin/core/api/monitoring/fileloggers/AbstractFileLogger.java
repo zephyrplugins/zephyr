@@ -8,6 +8,8 @@ import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.zip.GZIPOutputStream;
 
+import zephyr.plugin.core.api.monitoring.helpers.Loggers;
+
 public class AbstractFileLogger {
   public static final String TEMP = ".tmp";
   public static final String GZEXT = ".gz";
@@ -44,22 +46,61 @@ public class AbstractFileLogger {
     filepath = null;
   }
 
-  static public boolean exist(String filepath) {
-    String[] possibilities = new String[] { filepath, filepath + TEMP, filepath + GZEXT, filepath + GZEXT + TEMP };
-    for (String possibility : possibilities)
-      if (new File(possibility).canRead())
-        return true;
-    return false;
-  }
-
   public void close() {
     file.flush();
     file.close();
     file = null;
     if (temporaryFile) {
-      File finalFile = new File(filepath + TEMP);
-      if (!finalFile.renameTo(new File(filepath)))
-        throw new RuntimeException("Error renaming to " + filepath);
+      finaliseFile(filepath);
     }
+  }
+
+  static private File currentFilename(String filepath) {
+    String[] possibilities = new String[] { filepath + TEMP, filepath, filepath +
+        GZEXT + TEMP, filepath + GZEXT };
+    for (String possibility : possibilities) {
+      File possibleFile = new File(possibility);
+      if (possibleFile.canRead())
+        return possibleFile;
+    }
+    return null;
+  }
+
+  static public boolean exist(String filepath) {
+    return currentFilename(filepath) != null;
+  }
+
+  static public boolean isTemporary(String filepath) {
+    File possibleFile = currentFilename(filepath);
+    if (possibleFile == null)
+      return false;
+    return possibleFile.getAbsolutePath().endsWith(TEMP);
+  }
+
+  public static String makeTemporary(String filepath) throws IOException {
+    assert !isTemporary(filepath);
+    File currentFileName = currentFilename(filepath);
+    if (currentFileName == null) {
+      String temporaryFilepath = filepath + TEMP;
+      File temporaryFile = new File(temporaryFilepath);
+      File parentFolder = new File(temporaryFile.getParent());
+      if (!parentFolder.canRead())
+        parentFolder.mkdirs();
+      if (!temporaryFile.createNewFile())
+        throw new RuntimeException("Error creating " + temporaryFilepath);
+      return temporaryFilepath;
+    }
+    File resultFile = new File(currentFileName.getAbsolutePath() + TEMP);
+    Loggers.copyFile(currentFileName, resultFile);
+    return resultFile.getAbsolutePath();
+  }
+
+  static public void finaliseFile(String filepath) {
+    File currentFile = currentFilename(filepath);
+    String path = currentFile.getAbsolutePath();
+    assert path.endsWith(TEMP);
+    File finalFile = new File(path.substring(0, path.length() - TEMP.length()));
+    if (!currentFile.renameTo(finalFile))
+      throw new RuntimeException("Error renaming to " + filepath);
   }
 }
