@@ -23,9 +23,8 @@ public class SelectionTreeListener implements SelectionListener {
     StringBuilder label = new StringBuilder(codeNode.path());
     String nodeInfo = CodeTrees.nodeInfo(codeNode);
     if (!nodeInfo.isEmpty()) {
-      label.append("[");
+      label.append(": ");
       label.append(nodeInfo);
-      label.append("]");
     }
     return label.toString();
   }

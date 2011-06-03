@@ -12,11 +12,11 @@ import zephyr.plugin.core.api.parsing.LabelProvider;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.api.synchronization.Timed;
 
+@Monitor
 public abstract class LogFile implements Labeled, Timed {
   public final Clock clock;
   protected BufferedReader reader;
   final public String filepath;
-  @Monitor(emptyLabel = true)
   private final double[] current;
   private final String[] labels;
 

@@ -49,7 +49,7 @@ public class TooltipManager implements Listener {
       if (tip == null)
         break;
       TreeItem item = tree.getItem(new Point(event.x, event.y));
-      if (item != null) {
+      if (item != null && label != null && !label.isDisposed()) {
         Object data = item.getData();
         if (data == label.getData("_TOOLTIP"))
           break;
@@ -70,7 +70,7 @@ public class TooltipManager implements Listener {
         Object data = item.getData();
         if (data != null) {
           String tooltip = CodeTrees.nodeInfo((CodeNode) data);
-          if (tooltip != null) {
+          if (tooltip != null && !tooltip.isEmpty()) {
             tip = new Shell(tree.getShell(), SWT.ON_TOP | SWT.TOOL);
             FillLayout fillLayout = new FillLayout();
             fillLayout.marginHeight = 1;

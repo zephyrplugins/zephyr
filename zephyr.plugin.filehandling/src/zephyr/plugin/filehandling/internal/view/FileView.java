@@ -24,7 +24,6 @@ public class FileView extends EnvironmentView<LogFile> implements Closeable, Res
     }
   }
 
-  protected LogFile logFile = null;
   private final TerminateAction terminateAction;
   private final RestartAction restartAction;
 
@@ -37,7 +36,7 @@ public class FileView extends EnvironmentView<LogFile> implements Closeable, Res
 
   @Override
   protected ObsLayout getObservationLayout() {
-    String[] labels = logFile.labels();
+    String[] labels = environment.labels();
     int nbLine = (int) Math.sqrt(labels.length);
     int nbItems = labels.length / nbLine;
     ObsWidget[][] widgets = new ObsWidget[nbLine][];
@@ -60,7 +59,7 @@ public class FileView extends EnvironmentView<LogFile> implements Closeable, Res
 
   @Override
   public void restart() {
-    final String filepath = logFile.filepath;
+    final String filepath = environment.filepath;
     close();
     ZephyrCore.start(new Runnable() {
       @Override
@@ -77,10 +76,10 @@ public class FileView extends EnvironmentView<LogFile> implements Closeable, Res
 
   @Override
   protected void set(LogFile current) {
-    logFile = current;
+    super.set(current);
     restartAction.setEnabled(true);
     terminateAction.setEnabled(true);
-    setViewName(new File(logFile.filepath).getName(), logFile.filepath);
+    setViewName(new File(environment.filepath).getName(), environment.filepath);
   }
 
   @Override
@@ -92,7 +91,7 @@ public class FileView extends EnvironmentView<LogFile> implements Closeable, Res
 
   @Override
   protected boolean synchronize() {
-    double[] currentLine = logFile.currentLine();
+    double[] currentLine = environment.currentLine();
     synchronize(currentLine);
     return currentLine != null;
   }

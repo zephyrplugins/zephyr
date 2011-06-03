@@ -135,8 +135,12 @@ public class CodeTrees {
   }
 
   public static String nodeInfo(CodeNode codeNode) {
-    if (codeNode instanceof ClassNode)
-      return ((ClassNode) codeNode).instance().getClass().getSimpleName();
+    if (codeNode instanceof ClassNode) {
+      Object instance = ((ClassNode) codeNode).instance();
+      if (instance instanceof String)
+        return "'" + instance + "'";
+      return instance.getClass().getSimpleName();
+    }
     if (codeNode instanceof PrimitiveNode)
       return String.valueOf(((PrimitiveNode) codeNode).value());
     return "";

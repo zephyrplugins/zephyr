@@ -44,7 +44,8 @@ public class Loggers {
     }
   }
 
-  public static void add(DataMonitor logger, String[] elementLabels, int level, final int[] data, List<MonitorWrapper> wrappers) {
+  public static void add(DataMonitor logger, String[] elementLabels, int level, final int[] data,
+      List<MonitorWrapper> wrappers) {
     assert elementLabels.length == data.length;
     for (int i = 0; i < data.length; i++) {
       final int elementIndex = i;
@@ -57,7 +58,8 @@ public class Loggers {
     }
   }
 
-  public static void add(DataMonitor logger, String[] elementLabels, int level, final float[] data, List<MonitorWrapper> wrappers) {
+  public static void add(DataMonitor logger, String[] elementLabels, int level, final float[] data,
+      List<MonitorWrapper> wrappers) {
     assert elementLabels.length == data.length;
     for (int i = 0; i < data.length; i++) {
       final int elementIndex = i;
@@ -70,7 +72,8 @@ public class Loggers {
     }
   }
 
-  public static void addMonitored(DataMonitor logger, String label, int level, Monitored monitored, List<MonitorWrapper> wrappers) {
+  public static void addMonitored(DataMonitor logger, String label, int level, Monitored monitored,
+      List<MonitorWrapper> wrappers) {
     logger.add(label, level, monitored);
     if (wrappers == null)
       return;
@@ -125,7 +128,7 @@ public class Loggers {
 
   public static void copyFile(File sourceFile, File destFile) throws IOException {
     if (!destFile.exists() && !destFile.createNewFile())
-      throw new RuntimeException("Error creating the new jar file: " + destFile.getAbsolutePath());
+      throw new RuntimeException("Error creating the new file: " + destFile.getAbsolutePath());
     FileChannel source = null;
     FileChannel destination = null;
     try {
@@ -138,5 +141,13 @@ public class Loggers {
       if (destination != null)
         destination.close();
     }
+  }
+
+  public static void checkFolder(String filepath) {
+    File file = new File(filepath);
+    File folder = file.getParentFile();
+    if (!folder.canRead())
+      if (!folder.mkdirs())
+        throw new RuntimeException("Error creating the folder: " + folder.getAbsolutePath());
   }
 }
