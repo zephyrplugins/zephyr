@@ -75,15 +75,19 @@ public class TracesSelection {
       purgeIFN();
       return;
     }
-    for (Trace trace : clockTraces.getTraces())
-      enableTrace(trace);
+    autoEnableTraces(clockTraces.getTraces());
   }
 
   synchronized protected void addTraces(List<Trace> traces) {
     if (!forceEnabled)
       return;
+    autoEnableTraces(traces);
+  }
+
+  private void autoEnableTraces(List<Trace> traces) {
     for (Trace trace : traces)
-      enableTrace(trace);
+      if (trace.level <= 1)
+        enableTrace(trace);
   }
 
   synchronized protected void removeTraces(List<Trace> traces) {
