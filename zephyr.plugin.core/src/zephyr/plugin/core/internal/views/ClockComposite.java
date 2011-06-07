@@ -13,14 +13,18 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 
 import zephyr.ZephyrCore;
+import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.synchronization.Chrono;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.api.synchronization.ClockInfo;
+import zephyr.plugin.core.control.Control;
 import zephyr.plugin.core.helpers.ImageManager;
+import zephyr.plugin.core.internal.ZephyrPluginCore;
 
 public class ClockComposite {
   static class UpdatableLabelInfo {
@@ -42,7 +46,8 @@ public class ClockComposite {
   private long period = -1;
   private final Group group;
   private final Map<String, UpdatableLabelInfo> captionToLabelInfo = new LinkedHashMap<String, UpdatableLabelInfo>();
-  private final ImageManager imageManager = new ImageManager();
+  final ImageManager imageManager = new ImageManager();
+  private Listener<Control> pauseResumeListener;
 
   public ClockComposite(Composite parent, Clock clock) {
     this.clock = clock;
@@ -67,10 +72,45 @@ public class ClockComposite {
     buttonsLayout.marginBottom = 0;
     // addButton(buttons, "icons/action_suspend.gif");
     // addButton(buttons, "icons/action_restart.gif");
+    addSuspendButton(buttons);
     addTerminateButton(buttons);
   }
 
+  private void addSuspendButton(Composite buttons) {
+    if (!clock.info().isSuspendable)
+      return;
+    final Control control = ZephyrPluginCore.control();
+    final Button button = addButton(buttons, suspendResumeIcon());
+    button.addMouseListener(new MouseAdapter() {
+      @Override
+      public void mouseUp(MouseEvent e) {
+        if (control.isSuspended(clock))
+          control.resume(clock);
+        else
+          control.suspend(clock);
+      }
+    });
+    pauseResumeListener = new Listener<Control>() {
+      @Override
+      public void listen(Control eventInfo) {
+        Display.getDefault().asyncExec(new Runnable() {
+          @Override
+          public void run() {
+            button.setImage(imageManager.image(ZephyrCore.PluginID, suspendResumeIcon()));
+          }
+        });
+      }
+    };
+    control.onModeChange.connect(pauseResumeListener);
+  }
+
+  protected String suspendResumeIcon() {
+    return ZephyrPluginCore.control().isSuspended(clock) ? "icons/action_resume.gif" : "icons/action_suspend.gif";
+  }
+
   private void addTerminateButton(Composite buttons) {
+    if (!clock.info().isTerminable)
+      return;
     Button button = addButton(buttons, "icons/action_terminate.gif");
     button.addMouseListener(new MouseAdapter() {
       @Override
@@ -151,6 +191,8 @@ public class ClockComposite {
   }
 
   public void dispose() {
+    if (pauseResumeListener != null)
+      ZephyrPluginCore.control().onModeChange.disconnect(pauseResumeListener);
     group.dispose();
     captionToLabelInfo.clear();
     imageManager.dispose();

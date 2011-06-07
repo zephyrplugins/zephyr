@@ -5,7 +5,6 @@ import zephyr.plugin.core.api.signals.Signal;
 
 public class Clock {
   public final Signal<Clock> onTick = new Signal<Clock>();
-  public final boolean isSuspendable;
   private long timeStep = -1;
   private long lastUpdate = System.nanoTime();
   private long lastPeriod = 0;
@@ -14,16 +13,15 @@ public class Clock {
   private final ClockInfo info;
 
   public Clock() {
-    this("NoName", true);
+    this("NoName");
   }
 
   public Clock(String label) {
-    this(label, true);
+    this(label, true, true);
   }
 
-  public Clock(String label, boolean isSuspendable) {
-    this.isSuspendable = isSuspendable;
-    info = new ClockInfo(label);
+  public Clock(String label, boolean isSuspendable, boolean isTerminable) {
+    info = new ClockInfo(label, isSuspendable, isTerminable);
   }
 
   public boolean tick() {

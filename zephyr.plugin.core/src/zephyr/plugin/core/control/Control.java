@@ -56,7 +56,7 @@ public class Control implements Listener<Clock> {
 
 
   void suspendClock(Clock clock) {
-    if (!clock.isSuspendable)
+    if (!clock.info().isSuspendable)
       return;
     Integer previous = suspended.put(clock, 0);
     if (previous == null)
@@ -65,11 +65,14 @@ public class Control implements Listener<Clock> {
 
   public void resume() {
     assert hasOneClockSuspended();
-    List<Clock> toWakeUp = getToWakeUp();
-    for (Clock clock : toWakeUp)
-      clock.onTick.disconnect(this);
-    suspended.clear();
-    notifyAll(toWakeUp);
+    for (Clock clock : getToWakeUp())
+      resume(clock);
+  }
+
+  public void resume(Clock clock) {
+    clock.onTick.disconnect(this);
+    suspended.remove(clock);
+    notifyClock(clock);
     onModeChange.fire(this);
   }
 
@@ -79,9 +82,13 @@ public class Control implements Listener<Clock> {
 
   private void notifyAll(List<Clock> toWakeUp) {
     for (Clock clock : toWakeUp)
-      synchronized (clock) {
-        clock.notifyAll();
-      }
+      notifyClock(clock);
+  }
+
+  protected void notifyClock(Clock clock) {
+    synchronized (clock) {
+      clock.notifyAll();
+    }
   }
 
   private boolean isSuspendedValue(Integer authorizedStep) {

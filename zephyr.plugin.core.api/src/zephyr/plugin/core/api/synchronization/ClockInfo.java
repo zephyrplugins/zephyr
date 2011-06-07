@@ -12,9 +12,13 @@ public class ClockInfo implements Labeled {
   private final String label;
   private final Map<String, String> captionToValue = new LinkedHashMap<String, String>();
   private final Map<String, String> captionToInfo = new LinkedHashMap<String, String>();
+  public final boolean isSuspendable;
+  public final boolean isTerminable;
 
-  public ClockInfo(String label) {
+  public ClockInfo(String label, boolean isSuspendable, boolean isTerminable) {
     this.label = label;
+    this.isSuspendable = isSuspendable;
+    this.isTerminable = isTerminable;
   }
 
   @Override
