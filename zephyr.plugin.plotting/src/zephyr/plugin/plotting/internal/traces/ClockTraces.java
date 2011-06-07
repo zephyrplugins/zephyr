@@ -38,11 +38,11 @@ public class ClockTraces implements DataMonitor {
     clock.onTick.connect(onTickClockListener);
   }
 
-  private void startAddingTrace() {
+  public void startAddingTrace() {
     nbProcessAddingTrace++;
   }
 
-  private void endAddingTrace() {
+  public void endAddingTrace() {
     assert nbProcessAddingTrace > 0;
     nbProcessAddingTrace--;
     if (nbProcessAddingTrace > 0)

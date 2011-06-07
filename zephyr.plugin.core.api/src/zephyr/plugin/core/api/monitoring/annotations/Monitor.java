@@ -19,4 +19,6 @@ public @interface Monitor {
   String[] wrappers() default {};
 
   boolean arrayDecoration() default true;
+
+  boolean advertize() default true;
 }

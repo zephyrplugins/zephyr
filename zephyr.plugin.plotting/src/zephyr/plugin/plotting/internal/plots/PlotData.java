@@ -3,6 +3,7 @@ package zephyr.plugin.plotting.internal.plots;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Semaphore;
 
 import org.eclipse.swt.graphics.Point;
 
@@ -22,6 +23,44 @@ public class PlotData {
     }
   }
 
+  class SyncHistory {
+    final List<HistoryCached> histories = new ArrayList<HistoryCached>();
+    private final Semaphore semaphore = new Semaphore(1);
+
+    List<HistoryCached> lockHistory(List<TraceData> selection) {
+      lock();
+      if (histories.size() != selection.size() || selectionChanged)
+        prepareHistories(selection);
+      return histories;
+    }
+
+    private void lock() {
+      try {
+        semaphore.acquire();
+      } catch (InterruptedException e) {
+      }
+    }
+
+    private void prepareHistories(List<TraceData> selection) {
+      selectionChanged = false;
+      historyArrayLength = TraceData.computeArrayLength(currentHistoryLength);
+      histories.clear();
+      for (int i = 0; i < selection.size(); i++)
+        histories.add(new HistoryCached(historyArrayLength));
+    }
+
+    void unlock() {
+      semaphore.release();
+    }
+
+    List<HistoryCached> getHistories() {
+      lock();
+      ArrayList<PlotData.HistoryCached> result = new ArrayList<PlotData.HistoryCached>(histories);
+      unlock();
+      return result;
+    }
+  }
+
   public static final int MinimumTimeLength = 10;
   public static final int MaximumTimeLength = (int) TraceData.MaxTimeLength;
 
@@ -37,50 +76,46 @@ public class PlotData {
       selectionChanged();
     }
   };
-  final PlotSelection selection;
-  final List<HistoryCached> histories = new ArrayList<HistoryCached>();
+  final PlotSelection plotSelection;
   int currentHistoryLength = 80;
-  private int historyArrayLength = 0;
+  int historyArrayLength = 0;
+  boolean selectionChanged = false;
+  private final SyncHistory syncHistory = new SyncHistory();
 
   public PlotData(PlotSelection selection) {
-    this.selection = selection;
+    this.plotSelection = selection;
     selection.onSelectedTracesChanged.connect(selectionListener);
     selection.onHistoryChanged.connect(historyListener);
   }
 
   protected void selectionChanged() {
-    histories.clear();
+    selectionChanged = true;
   }
 
-  synchronized public boolean synchronize() {
+  public boolean synchronize() {
+    List<TraceData> selection = plotSelection.getSelection();
     if (selection.isEmpty())
       return false;
-    if (histories.isEmpty())
-      prepareHistories();
+    List<HistoryCached> histories = syncHistory.lockHistory(selection);
     for (int i = 0; i < selection.size(); i++) {
       TraceData traceData = selection.get(i);
       HistoryCached history = histories.get(i);
       traceData.history(currentHistoryLength, history.values, history.timeInfo);
     }
+    syncHistory.unlock();
     return true;
   }
 
-  private void prepareHistories() {
-    historyArrayLength = TraceData.computeArrayLength(currentHistoryLength);
-    for (int i = 0; i < selection.size(); i++)
-      histories.add(new HistoryCached(historyArrayLength));
+  public List<HistoryCached> getHistories() {
+    return syncHistory.getHistories();
   }
 
-  synchronized public List<HistoryCached> getHistories() {
-    if (histories.isEmpty())
-      synchronize();
-    return new ArrayList<HistoryCached>(histories);
-  }
-
-  synchronized public RequestResult search(Axes axes, Point mousePosition) {
+  public RequestResult search(Axes axes, Point mousePosition) {
     Point2D.Double dataPoint = axes.toD(mousePosition);
     double yRes = axes.scaleToDY(1);
-    if (histories.isEmpty())
+    List<HistoryCached> histories = syncHistory.getHistories();
+    List<TraceData> selection = plotSelection.getSelection();
+    if (histories.isEmpty() || selection.size() != histories.size())
       return null;
     int closestTraceIndex = -1;
     double closestDistance = 0;
@@ -108,29 +143,21 @@ public class PlotData {
     return new PlotOverTimeRequestResult(axes, selection, histories, closestTraceIndex, x, secondaryResults);
   }
 
-  synchronized public boolean setHistoryLengthIFN(int historyLength) {
+  public boolean setHistoryLengthIFN(int historyLength) {
     if (historyLength == currentHistoryLength ||
         historyLength >= TraceData.MaxTimeLength ||
         historyLength <= 0)
       return false;
     currentHistoryLength = historyLength;
-    selection.onHistoryChanged.fire(currentHistoryLength);
+    plotSelection.onHistoryChanged.fire(currentHistoryLength);
     return true;
   }
 
   public PlotSelection selection() {
-    return selection;
+    return plotSelection;
   }
 
   public int historyLength() {
     return currentHistoryLength;
-  }
-
-  public boolean isEmpty() {
-    return selection.isEmpty();
-  }
-
-  public int size() {
-    return selection.size();
   }
 }

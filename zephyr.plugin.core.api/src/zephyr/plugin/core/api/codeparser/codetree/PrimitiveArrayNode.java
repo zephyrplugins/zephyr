@@ -37,4 +37,9 @@ public class PrimitiveArrayNode extends AbstractCodeNode implements MonitorConta
     if (array.getClass().getComponentType().equals(int.class))
       Loggers.add(monitor, elementLabels, level(), (int[]) array, wrappers);
   }
+
+  @Override
+  public int size() {
+    return Array.getLength(array);
+  }
 }

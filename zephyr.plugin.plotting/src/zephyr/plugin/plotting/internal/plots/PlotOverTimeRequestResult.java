@@ -24,7 +24,7 @@ public class PlotOverTimeRequestResult implements RequestResult {
   private final TraceData traceData;
   private final Axes axes;
 
-  protected PlotOverTimeRequestResult(Axes axes, PlotSelection selection, List<HistoryCached> histories,
+  protected PlotOverTimeRequestResult(Axes axes, List<TraceData> selection, List<HistoryCached> histories,
       int traceIndex, int x, List<Integer> secondaryResults) {
     history = histories.get(traceIndex);
     this.x = x;
@@ -59,9 +59,15 @@ public class PlotOverTimeRequestResult implements RequestResult {
   @Override
   public String tooltipLabel() {
     StringBuilder tooltipLabel = new StringBuilder(String.format("T: %d Val: %f\n%s", dataAge, y, label));
+    int nbLabels = 0;
     for (String secondaryLabel : secondaryLabels) {
       tooltipLabel.append("\n");
+      if (nbLabels > 20) {
+        tooltipLabel.append("...");
+        break;
+      }
       tooltipLabel.append(secondaryLabel);
+      nbLabels++;
     }
     return tooltipLabel.toString();
   }

@@ -40,26 +40,14 @@ public class PlotSelection implements TraceSelector {
     this.tracesManager = tracesManager;
   }
 
-  public boolean isEmpty() {
-    return selected == null || selected.isEmpty();
-  }
-
-  public Set<String> getLabelsToSave() {
+  synchronized public Set<String> getLabelsToSave() {
     Set<String> labelsToSave = new LinkedHashSet<String>();
     labelsToSave.addAll(persistentSelection);
     labelsToSave.addAll(currentSelection);
     return labelsToSave;
   }
 
-  public int size() {
-    return selected.size();
-  }
-
-  public TraceData get(int i) {
-    return selected.get(i);
-  }
-
-  public void init(Set<String> initialSelection) {
+  synchronized public void init(Set<String> initialSelection) {
     if (initialSelection != null)
       persistentSelection.addAll(initialSelection);
     checkNewTrace(Traces.getAllTraces());
@@ -67,7 +55,7 @@ public class PlotSelection implements TraceSelector {
     tracesManager.onTraceRemoved.connect(removedTraceListener);
   }
 
-  void checkNewTrace(List<Trace> traces) {
+  synchronized void checkNewTrace(List<Trace> traces) {
     List<Trace> tracesAdded = new ArrayList<Trace>();
     for (Trace trace : traces) {
       if (!persistentSelection.contains(trace.label))
@@ -83,7 +71,7 @@ public class PlotSelection implements TraceSelector {
     setCurrentSelection(selectedTraces);
   }
 
-  protected void checkRemovedTrace(List<Trace> traces) {
+  synchronized protected void checkRemovedTrace(List<Trace> traces) {
     Set<Trace> currentSelection = getCurrentTracesSelection();
     boolean oneTraceRemoved = false;
     for (Trace trace : traces) {
@@ -97,7 +85,7 @@ public class PlotSelection implements TraceSelector {
       setCurrentSelection(currentSelection);
   }
 
-  public void setCurrentSelection(Set<Trace> newSelection) {
+  synchronized public void setCurrentSelection(Set<Trace> newSelection) {
     Map<ClockTraces, Set<Trace>> orderedNewTraces = Traces.orderTraces(newSelection);
     Map<ClockTraces, Set<Trace>> orderedOldTraces = Traces.orderTraces(selected);
     selected.clear();
@@ -119,10 +107,18 @@ public class PlotSelection implements TraceSelector {
     onSelectedTracesChanged.fire(selected);
   }
 
-  public Set<Trace> getCurrentTracesSelection() {
+  synchronized public List<TraceData> getSelection() {
+    return new ArrayList<TraceData>(selected);
+  }
+
+  synchronized public Set<Trace> getCurrentTracesSelection() {
     Set<Trace> traceSelected = new LinkedHashSet<Trace>();
     for (TraceData traceData : selected)
       traceSelected.add(traceData.trace);
     return traceSelected;
+  }
+
+  synchronized public boolean isEmpty() {
+    return selected.isEmpty();
   }
 }

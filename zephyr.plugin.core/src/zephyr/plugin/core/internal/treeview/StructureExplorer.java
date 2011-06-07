@@ -86,7 +86,7 @@ public class StructureExplorer extends ViewPart implements ItemProvider {
     if (codeNode.parent() instanceof ClockNode)
       return ((ClassNode) codeNode).instance().getClass().getSimpleName();
     if (codeNode instanceof AbstractPrimitives)
-      return codeNode.label() + "[]";
+      return codeNode.label() + "[" + ((AbstractPrimitives) codeNode).size() + "]";
     return codeNode.label();
   }
 

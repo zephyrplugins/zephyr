@@ -39,17 +39,29 @@ public class TooltipManager implements Listener {
     tree.addListener(SWT.KeyDown, this);
     tree.addListener(SWT.MouseMove, this);
     tree.addListener(SWT.MouseHover, this);
+    tree.addListener(SWT.MouseHorizontalWheel, this);
+    tree.addListener(SWT.MouseVerticalWheel, this);
     tree.addListener(SWT.MouseExit, this);
   }
 
   @Override
   public void handleEvent(Event event) {
     switch (event.type) {
+    case SWT.MouseHorizontalWheel:
+      disposeTooltip();
+      break;
+    case SWT.MouseVerticalWheel:
+      disposeTooltip();
+      break;
     case SWT.MouseMove: {
       if (tip == null)
         break;
       TreeItem item = tree.getItem(new Point(event.x, event.y));
-      if (item != null && label != null && !label.isDisposed()) {
+      if (item == null) {
+        disposeTooltip();
+        break;
+      }
+      if (label != null && !label.isDisposed()) {
         Object data = item.getData();
         if (data == label.getData("_TOOLTIP"))
           break;

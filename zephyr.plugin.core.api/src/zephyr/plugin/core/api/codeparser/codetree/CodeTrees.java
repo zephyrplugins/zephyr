@@ -143,6 +143,8 @@ public class CodeTrees {
     }
     if (codeNode instanceof PrimitiveNode)
       return String.valueOf(((PrimitiveNode) codeNode).value());
+    if (codeNode instanceof AbstractPrimitives)
+      return String.valueOf(((AbstractPrimitives) codeNode).size());
     return "";
   }
 }

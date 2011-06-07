@@ -31,4 +31,9 @@ public class PrimitiveCollectionNode extends AbstractCodeNode implements Monitor
       });
     }
   }
+
+  @Override
+  public int size() {
+    return array.size();
+  }
 }
