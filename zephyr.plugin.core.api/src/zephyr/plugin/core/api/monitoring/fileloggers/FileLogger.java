@@ -20,7 +20,7 @@ public class FileLogger extends AbstractFileLogger implements DataMonitor {
   private boolean legendWrote = false;
 
   public FileLogger(String filepath) throws IOException {
-    this(filepath, false, false, false);
+    this(filepath, false, false);
   }
 
   public FileLogger(StringWriter writer) {
@@ -34,11 +34,7 @@ public class FileLogger extends AbstractFileLogger implements DataMonitor {
   }
 
   public FileLogger(String filepath, boolean timeStamps, boolean temporaryFile) throws IOException {
-    this(filepath, timeStamps, temporaryFile, false);
-  }
-
-  public FileLogger(String filepath, boolean timeStamps, boolean temporaryFile, boolean compress) throws IOException {
-    super(filepath, temporaryFile, compress);
+    super(filepath, temporaryFile);
     this.timeStamps = timeStamps;
     init();
   }

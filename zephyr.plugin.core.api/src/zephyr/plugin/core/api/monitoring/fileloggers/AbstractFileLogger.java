@@ -17,18 +17,18 @@ public class AbstractFileLogger {
   protected PrintWriter file;
   protected final boolean temporaryFile;
 
-  public AbstractFileLogger(String filepath, boolean temporaryFile, boolean compress) throws IOException {
-    this.filepath = compress ? filepath + GZEXT : filepath;
+  public AbstractFileLogger(String filepath, boolean temporaryFile) throws IOException {
+    this.filepath = filepath;
     checkFolders();
     this.temporaryFile = temporaryFile;
     String fileCreatedPath = temporaryFile ? this.filepath + TEMP : this.filepath;
-    OutputStream outputStream = createOutputStream(fileCreatedPath, compress);
+    OutputStream outputStream = createOutputStream(fileCreatedPath);
     file = new PrintWriter(outputStream, true);
   }
 
-  protected OutputStream createOutputStream(String fileCreatedPath, boolean compress) throws IOException {
+  protected OutputStream createOutputStream(String fileCreatedPath) throws IOException {
     OutputStream fileOutputStream = new FileOutputStream(fileCreatedPath);
-    if (!compress)
+    if (!fileCreatedPath.endsWith(GZEXT))
       return fileOutputStream;
     return new GZIPOutputStream(fileOutputStream);
   }
@@ -56,8 +56,7 @@ public class AbstractFileLogger {
   }
 
   static private File currentFilename(String filepath) {
-    String[] possibilities = new String[] { filepath + TEMP, filepath, filepath +
-        GZEXT + TEMP, filepath + GZEXT };
+    String[] possibilities = new String[] { filepath + TEMP, filepath };
     for (String possibility : possibilities) {
       File possibleFile = new File(possibility);
       if (possibleFile.canRead())

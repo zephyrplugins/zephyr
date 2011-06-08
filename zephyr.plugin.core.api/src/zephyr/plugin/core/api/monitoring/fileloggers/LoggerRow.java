@@ -9,11 +9,7 @@ public class LoggerRow extends AbstractFileLogger {
   }
 
   public LoggerRow(String filepath, boolean temporaryFile) throws IOException {
-    this(filepath, temporaryFile, false);
-  }
-
-  public LoggerRow(String filepath, boolean temporaryFile, boolean compress) throws IOException {
-    super(filepath, temporaryFile, compress);
+    super(filepath, temporaryFile);
   }
 
   public LoggerRow(Writer writer) {

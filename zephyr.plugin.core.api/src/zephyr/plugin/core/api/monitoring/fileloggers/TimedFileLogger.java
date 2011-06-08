@@ -13,11 +13,7 @@ public class TimedFileLogger extends FileLogger {
   }
 
   public TimedFileLogger(String filepath, boolean temporaryFile) throws IOException {
-    this(filepath, temporaryFile, false);
-  }
-
-  public TimedFileLogger(String filepath, boolean temporaryFile, boolean compress) throws IOException {
-    super(filepath, true, temporaryFile, compress);
+    super(filepath, true, temporaryFile);
   }
 
   public void update() {

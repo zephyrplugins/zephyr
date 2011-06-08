@@ -119,7 +119,7 @@ public class Loggers {
 
   public static TimedFileLogger newLoggerWithTime(String filepath, boolean compress) {
     try {
-      return new TimedFileLogger(filepath, false, compress);
+      return new TimedFileLogger(filepath, false);
     } catch (IOException e) {
       e.printStackTrace();
     }
