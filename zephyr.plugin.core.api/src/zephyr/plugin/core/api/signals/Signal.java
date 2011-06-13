@@ -35,7 +35,7 @@ public class Signal<T> {
       listener.listen(eventInfo);
   }
 
-  synchronized private ArrayList<Listener<T>> getListeners() {
+  public synchronized ArrayList<Listener<T>> getListeners() {
     return new ArrayList<Listener<T>>(listeners);
   }
 

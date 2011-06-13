@@ -53,9 +53,8 @@ public class PlotData {
       semaphore.release();
     }
 
-    List<HistoryCached> getHistories() {
-      lock();
-      ArrayList<PlotData.HistoryCached> result = new ArrayList<PlotData.HistoryCached>(histories);
+    List<HistoryCached> getHistories(List<TraceData> selection) {
+      ArrayList<PlotData.HistoryCached> result = new ArrayList<PlotData.HistoryCached>(lockHistory(selection));
       unlock();
       return result;
     }
@@ -107,14 +106,14 @@ public class PlotData {
   }
 
   public List<HistoryCached> getHistories() {
-    return syncHistory.getHistories();
+    return syncHistory.getHistories(plotSelection.getSelection());
   }
 
   public RequestResult search(Axes axes, Point mousePosition) {
     Point2D.Double dataPoint = axes.toD(mousePosition);
     double yRes = axes.scaleToDY(1);
-    List<HistoryCached> histories = syncHistory.getHistories();
     List<TraceData> selection = plotSelection.getSelection();
+    List<HistoryCached> histories = syncHistory.getHistories(selection);
     if (histories.isEmpty() || selection.size() != histories.size())
       return null;
     int closestTraceIndex = -1;
@@ -149,6 +148,7 @@ public class PlotData {
         historyLength <= 0)
       return false;
     currentHistoryLength = historyLength;
+    selectionChanged();
     plotSelection.onHistoryChanged.fire(currentHistoryLength);
     return true;
   }
