@@ -54,8 +54,8 @@ public class TraceData {
   }
 
   protected void update(long stepTime) {
-    double value = trace.logged.monitoredValue();
-    if (Double.isNaN(value))
+    float value = (float) trace.logged.monitoredValue();
+    if (Float.isNaN(value))
       value = 0;
     for (int i = baseHistoryIndex; i < histories.length; i++)
       histories[i].append(value);

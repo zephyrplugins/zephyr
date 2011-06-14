@@ -4,7 +4,7 @@ package zephyr.plugin.plotting.internal.histories;
 public class AveragedHistory extends LazyHistory {
   public final int period;
   private int cumPeriod = 0;
-  private double sum = 0.0;
+  private float sum = 0.0f;
 
   public AveragedHistory(int period, int length) {
     super(length);
@@ -12,7 +12,7 @@ public class AveragedHistory extends LazyHistory {
   }
 
   @Override
-  public void append(double value) {
+  public void append(float value) {
     cumPeriod += 1;
     sum += value;
     if (cumPeriod % period == 0) {

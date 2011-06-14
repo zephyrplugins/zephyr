@@ -1,6 +1,7 @@
 package zephyr.plugin.plotting.internal.plots;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -88,6 +89,9 @@ public class PlotSelection implements TraceSelector {
   synchronized public void setCurrentSelection(Set<Trace> newSelection) {
     Map<ClockTraces, Set<Trace>> orderedNewTraces = Traces.orderTraces(newSelection);
     Map<ClockTraces, Set<Trace>> orderedOldTraces = Traces.orderTraces(selected);
+    for (ClockTraces clockTrace : orderedOldTraces.keySet())
+      if (!orderedNewTraces.containsKey(clockTrace))
+        orderedNewTraces.put(clockTrace, new HashSet<Trace>());
     selected.clear();
     currentSelection.clear();
     for (Map.Entry<ClockTraces, Set<Trace>> entry : orderedNewTraces.entrySet()) {
@@ -120,5 +124,9 @@ public class PlotSelection implements TraceSelector {
 
   synchronized public boolean isEmpty() {
     return selected.isEmpty();
+  }
+
+  public void dispose() {
+    setCurrentSelection(new HashSet<Trace>());
   }
 }

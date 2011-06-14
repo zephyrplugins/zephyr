@@ -19,10 +19,10 @@ public class History {
     return new float[length];
   }
 
-  public void append(double value) {
+  public void append(float value) {
     int index = index(shift);
     updateSum(history[index], value);
-    history[index] = (float) value;
+    history[index] = value;
     shift += 1;
   }
 
@@ -58,16 +58,16 @@ public class History {
     return toArray(new float[length]);
   }
 
-  public void fill(double value) {
+  public void fill(float value) {
     for (int i = 0; i < length; i++)
       append(value);
   }
 
-  public double get(int x) {
+  public float get(int x) {
     return history[index(shift + x)];
   }
 
-  public double capacity() {
+  public int capacity() {
     return history.length;
   }
 

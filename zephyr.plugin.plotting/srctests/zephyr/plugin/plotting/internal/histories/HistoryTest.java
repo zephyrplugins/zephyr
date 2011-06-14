@@ -14,13 +14,13 @@ public class HistoryTest {
   public void testHistory() {
     History h = new History(3);
     assertEquals(hist00, h.toArray());
-    h.append(1.0);
+    h.append(1.0f);
     assertEquals(hist01, h.toArray());
-    h.append(2.0);
+    h.append(2.0f);
     assertEquals(hist02, h.toArray());
-    h.append(3.0);
+    h.append(3.0f);
     assertEquals(hist03, h.toArray());
-    h.append(4.0);
+    h.append(4.0f);
     assertEquals(hist04, h.toArray());
   }
 
@@ -28,13 +28,13 @@ public class HistoryTest {
   public void testLazyHistory01() {
     History h = new LazyHistory(3);
     assertEquals(hist00, h.toArray());
-    h.append(1.0);
+    h.append(1.0f);
     assertEquals(hist01, h.toArray());
-    h.append(2.0);
+    h.append(2.0f);
     assertEquals(hist02, h.toArray());
-    h.append(3.0);
+    h.append(3.0f);
     assertEquals(hist03, h.toArray());
-    h.append(4.0);
+    h.append(4.0f);
     assertEquals(hist04, h.toArray());
   }
 
@@ -57,13 +57,13 @@ public class HistoryTest {
   public void testAveragedHistoryWithPeriod01() {
     History h = new AveragedHistory(1, 3);
     assertEquals(hist00, h.toArray());
-    h.append(1.0);
+    h.append(1.0f);
     assertEquals(hist01, h.toArray());
-    h.append(2.0);
+    h.append(2.0f);
     assertEquals(hist02, h.toArray());
-    h.append(3.0);
+    h.append(3.0f);
     assertEquals(hist03, h.toArray());
-    h.append(4.0);
+    h.append(4.0f);
     assertEquals(hist04, h.toArray());
   }
 
@@ -72,24 +72,24 @@ public class HistoryTest {
     History h = new AveragedHistory(2, 3);
     assertEquals(hist00, h.toArray());
 
-    h.append(0.0);
+    h.append(0.0f);
     assertEquals(hist00, h.toArray());
-    h.append(2.0);
+    h.append(2.0f);
     assertEquals(hist01, h.toArray());
 
-    h.append(2.0);
+    h.append(2.0f);
     assertEquals(hist01, h.toArray());
-    h.append(2.0);
+    h.append(2.0f);
     assertEquals(hist02, h.toArray());
 
-    h.append(1.0);
+    h.append(1.0f);
     assertEquals(hist02, h.toArray());
-    h.append(5.0);
+    h.append(5.0f);
     assertEquals(hist03, h.toArray());
 
-    h.append(2.0);
+    h.append(2.0f);
     assertEquals(hist03, h.toArray());
-    h.append(6.0);
+    h.append(6.0f);
     assertEquals(hist04, h.toArray());
   }
 

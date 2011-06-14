@@ -2,6 +2,7 @@ package zephyr.example.simpleclient;
 
 import java.util.Random;
 
+import zephyr.plugin.core.api.Zephyr;
 import zephyr.plugin.core.api.ZephyrRunnable;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 import zephyr.plugin.core.api.synchronization.Clock;
@@ -19,6 +20,7 @@ public class SimpleClient implements ZephyrRunnable {
   private final Clock clock = new Clock("SimpleClient");
 
   public SimpleClient() {
+    Zephyr.advertise(clock, this);
   }
 
   @Override

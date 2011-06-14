@@ -1,6 +1,7 @@
 package zephyr.plugin.plotting.internal.traces;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +26,7 @@ public class TracesSelection {
   private final Listener<List<Trace>> traceRemovedListener = new Listener<List<Trace>>() {
     @Override
     public void listen(List<Trace> traces) {
-      removeTraces(traces);
+      removeTraces(null, traces);
     }
   };
 
@@ -56,7 +57,7 @@ public class TracesSelection {
       TraceData traceData = entry.getValue();
       Trace trace = entry.getKey();
       if (!traceData.isSelected())
-        enabledTrace.remove(trace);
+        removeTrace(null, trace);
     }
   }
 
@@ -90,9 +91,18 @@ public class TracesSelection {
         enableTrace(trace);
   }
 
-  synchronized protected void removeTraces(List<Trace> traces) {
+  synchronized protected void removeTraces(TraceSelector selector, Collection<Trace> traces) {
     for (Trace trace : traces)
-      enabledTrace.remove(trace);
+      removeTrace(selector, trace);
+  }
+
+  private void removeTrace(TraceSelector selector, Trace trace) {
+    enabledTrace.remove(trace);
+    if (selector != null) {
+      TraceData traceData = enabledTrace.get(trace);
+      if (traceData != null)
+        traceData.removeSelector(selector);
+    }
   }
 
   synchronized public List<TraceData> selectTraces(TraceSelector selector, Set<Trace> oldSelection,
@@ -100,11 +110,7 @@ public class TracesSelection {
     if (oldSelection != null) {
       Set<Trace> toRemove = new HashSet<Trace>(oldSelection);
       toRemove.removeAll(newSelection);
-      for (Trace trace : toRemove) {
-        TraceData traceData = enabledTrace.get(trace);
-        if (traceData != null)
-          traceData.removeSelector(selector);
-      }
+      removeTraces(selector, toRemove);
     }
     List<TraceData> traceDatas = new ArrayList<TraceData>();
     for (Trace trace : newSelection) {

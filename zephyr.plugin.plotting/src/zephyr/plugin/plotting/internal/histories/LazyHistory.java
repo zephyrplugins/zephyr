@@ -24,7 +24,7 @@ public class LazyHistory extends History {
   }
 
   @Override
-  public void append(double value) {
+  public void append(float value) {
     allocateIFN();
     super.append(value);
   }

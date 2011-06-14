@@ -144,6 +144,7 @@ public class PlotView extends ViewPart implements TraceSelector, ProvidedView, D
 
   @Override
   public void dispose() {
+    plotSelection.dispose();
     clockGraphBindings.unBindAll();
     backgroundCanvas.dispose();
     historyLength.dispose();
