@@ -76,7 +76,7 @@ public class TraceData {
     if (history instanceof AveragedHistory) {
       AveragedHistory averageHistory = (AveragedHistory) history;
       timeInfo.bufferedData = averageHistory.nbBufferedData() - 1;
-      timeInfo.period = averageHistory.period;
+      timeInfo.period = averageHistory.period > 0 ? averageHistory.period : 1;
     } else {
       timeInfo.bufferedData = 0;
       timeInfo.period = 1;

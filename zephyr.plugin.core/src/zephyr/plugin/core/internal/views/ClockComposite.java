@@ -96,7 +96,8 @@ public class ClockComposite {
         Display.getDefault().asyncExec(new Runnable() {
           @Override
           public void run() {
-            button.setImage(imageManager.image(ZephyrCore.PluginID, suspendResumeIcon()));
+            if (!button.isDisposed())
+              button.setImage(imageManager.image(ZephyrCore.PluginID, suspendResumeIcon()));
           }
         });
       }
