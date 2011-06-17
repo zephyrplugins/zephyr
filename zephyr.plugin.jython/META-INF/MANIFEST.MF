@@ -14,3 +14,4 @@ Bundle-ClassPath: .,
  jython2.5.2rc3/jython.jar
 Bundle-Activator: zephyr.plugin.jython.internal.JythonPlugin
 Bundle-ActivationPolicy: lazy
+Export-Package: zephyr.plugin.jython

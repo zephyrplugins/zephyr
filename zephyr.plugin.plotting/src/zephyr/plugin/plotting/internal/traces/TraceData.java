@@ -9,7 +9,7 @@ import zephyr.plugin.plotting.internal.traces.TracesSelection.TraceSelector;
 
 public class TraceData {
   static public class DataTimeInfo {
-    public int period;
+    public int period = 1;
     public long synchronizationTime;
     public int bufferedData;
   }

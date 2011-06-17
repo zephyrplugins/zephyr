@@ -18,6 +18,10 @@ public class JythonFileHandler implements IFileHandler {
 
   @Override
   public void handle(String filepath, String[] fileargs) throws IOException {
+    runFile(filepath, fileargs);
+  }
+
+  static public void runFile(String filepath, String[] fileargs) {
     PyDictionary table = new PyDictionary();
     PySystemState state = new PySystemState();
     state.argv = buildArgumentList(fileargs);
@@ -28,18 +32,18 @@ public class JythonFileHandler implements IFileHandler {
     interpreter.execfile(filepath);
   }
 
-  private PyList buildArgumentList(String[] fileargs) {
+  static private PyList buildArgumentList(String[] fileargs) {
     PyList result = new PyList();
     for (String arg : fileargs)
       result.add(new PyString(arg));
     return result;
   }
 
-  private String[] getPluginPythonPath() {
+  static private String[] getPluginPythonPath() {
     return new String[] { "pysrc", JythonRoot + "/Lib", JythonRoot + "/Lib/site-packages", JythonRoot + "/jython.jar" };
   }
 
-  protected String pluginToPythonPath(String pluginPath) {
+  static protected String pluginToPythonPath(String pluginPath) {
     return Helper.getPluginLocation(JythonPlugin.getDefault().getBundle(), pluginPath);
   }
 
