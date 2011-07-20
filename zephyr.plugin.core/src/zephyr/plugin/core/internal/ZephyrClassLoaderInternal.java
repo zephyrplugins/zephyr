@@ -19,7 +19,6 @@ public class ZephyrClassLoaderInternal extends ClassLoader {
     return null;
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   protected Class<?> findClass(String name) throws ClassNotFoundException {
     Class<? extends Object> result = superFindSystemClass(name);

@@ -104,7 +104,7 @@ public class Sleak {
   }
 
   void refreshLabel() {
-    int colors = 0, cursors = 0, fonts = 0, gcs = 0, images = 0, regions = 0;
+    int colors = 0, cursors = 0, fonts = 0, gcs = 0, images = 0;
     for (Object object : objects) {
       if (object instanceof Color)
         colors++;
@@ -116,8 +116,8 @@ public class Sleak {
         gcs++;
       if (object instanceof Image)
         images++;
-      if (object instanceof Region)
-        regions++;
+      if (object instanceof Region) {
+      }
     }
     String string = "";
     if (colors != 0)

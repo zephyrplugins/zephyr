@@ -36,8 +36,6 @@ public class BackgroundCanvas implements PainterMonitor {
   private final List<Overlay> overlays = new LinkedList<Overlay>();
   private boolean showProgress = true;
   private final Chrono chrono = new Chrono();
-  private long numBackgroundDrawing = 0;
-  private long numForegroundDrawing = 0;
 
   public BackgroundCanvas(Composite parent, Painter painter) {
     canvas = new Canvas(parent, SWT.NO_BACKGROUND);
@@ -63,7 +61,6 @@ public class BackgroundCanvas implements PainterMonitor {
     paintingImage.releaseImage(gc);
     paintingImage.swap();
     updateForegroundCanvas();
-    numBackgroundDrawing++;
   }
 
   private void updateForegroundCanvas() {
@@ -72,7 +69,6 @@ public class BackgroundCanvas implements PainterMonitor {
   }
 
   void drawForeground(GC gc) {
-    numForegroundDrawing++;
     paintingImage.paintCanvas(gc);
     for (Overlay overlay : overlays)
       overlay.drawOverlay(gc);

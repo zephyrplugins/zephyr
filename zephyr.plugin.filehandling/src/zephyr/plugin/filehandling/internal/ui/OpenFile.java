@@ -17,6 +17,7 @@ public class OpenFile extends AbstractHandler {
   private static String ExtKey = "defaultExtension";
   private static String FolderKey = "defaultFolder";
 
+  @SuppressWarnings("deprecation")
   private final IEclipsePreferences instanceScope = new InstanceScope().getNode(FileLoader.PluginID);
 
   public OpenFile() {

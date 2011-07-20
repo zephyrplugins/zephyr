@@ -128,7 +128,6 @@ public class ZephyrPluginCore extends AbstractUIPlugin {
     return plugin;
   }
 
-  @SuppressWarnings("unchecked")
   public Class<? extends Object> loadClass(String className) throws ClassNotFoundException {
     return plugin.getBundle().loadClass(className);
   }
