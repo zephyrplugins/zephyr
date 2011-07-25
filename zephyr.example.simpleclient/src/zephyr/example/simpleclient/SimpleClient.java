@@ -3,12 +3,11 @@ package zephyr.example.simpleclient;
 import java.util.Random;
 
 import zephyr.plugin.core.api.Zephyr;
-import zephyr.plugin.core.api.ZephyrRunnable;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 import zephyr.plugin.core.api.synchronization.Clock;
 
 @Monitor
-public class SimpleClient implements ZephyrRunnable {
+public class SimpleClient implements Runnable {
   private final Random random = new Random(0);
   /**
    * This array will be monitored by Zephyr because the class is annotated with @Monitor
@@ -32,10 +31,5 @@ public class SimpleClient implements ZephyrRunnable {
       // We call tick() to tell Zephyr that the data can be collected now
       clock.tick();
     }
-  }
-
-  @Override
-  public Clock clock() {
-    return clock;
   }
 }

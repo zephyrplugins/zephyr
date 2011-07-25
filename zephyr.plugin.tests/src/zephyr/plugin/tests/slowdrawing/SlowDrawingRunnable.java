@@ -1,10 +1,9 @@
 package zephyr.plugin.tests.slowdrawing;
 
 import zephyr.plugin.core.api.Zephyr;
-import zephyr.plugin.core.api.ZephyrRunnable;
 import zephyr.plugin.core.api.synchronization.Clock;
 
-public class SlowDrawingRunnable implements ZephyrRunnable {
+public class SlowDrawingRunnable implements Runnable {
   private final Clock clock = new Clock("SlowDrawing");
 
   public SlowDrawingRunnable() {
@@ -15,10 +14,5 @@ public class SlowDrawingRunnable implements ZephyrRunnable {
   public void run() {
     while (!clock.isTerminated())
       clock.tick();
-  }
-
-  @Override
-  public Clock clock() {
-    return clock;
   }
 }
