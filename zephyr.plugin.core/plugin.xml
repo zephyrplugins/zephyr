@@ -256,7 +256,7 @@
       </activity>
       <activityPatternBinding
             activityId="zephyr.plugin.core.activity"
-            pattern="zephyr.plugin.*">
+            pattern="zephyr.*">
       </activityPatternBinding>
       <activity
             id="zephyr.ui.editors.activity"

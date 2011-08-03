@@ -3,6 +3,7 @@ package zephyr.plugin.core.helpers;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 
 import zephyr.plugin.core.utils.Helper;
@@ -18,7 +19,10 @@ public class ImageManager {
     }
     Image image = pluginImages.get(iconPath);
     if (image == null) {
-      image = Helper.getImageDescriptor(pluginID, iconPath).createImage();
+      ImageDescriptor imageDescriptor = Helper.getImageDescriptor(pluginID, iconPath);
+      if (imageDescriptor == null)
+        return null;
+      image = imageDescriptor.createImage();
       pluginImages.put(iconPath, image);
     }
     return image;
