@@ -7,9 +7,6 @@ import java.util.List;
 import java.util.jar.Manifest;
 
 import zephyr.plugin.core.Utils;
-import zephyr.plugin.core.api.Zephyr;
-import zephyr.plugin.core.api.synchronization.Clock;
-import zephyr.plugin.core.api.synchronization.Timed;
 import zephyr.plugin.filehandling.IFileHandler;
 
 public class JarFileHandler implements IFileHandler {
@@ -38,17 +35,9 @@ public class JarFileHandler implements IFileHandler {
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
-    if (!(mainObject instanceof Timed))
-      throw new RuntimeException(mainObject.getClass().getCanonicalName() + " must implement "
-          + Timed.class.getCanonicalName());
     if (!(mainObject instanceof Runnable))
       throw new RuntimeException(mainObject.getClass().getCanonicalName() + " must implement "
           + Runnable.class.getCanonicalName());
-    Clock clock = ((Timed) mainObject).clock();
-    clock.info().put("Class", mainObject.getClass().getSimpleName(),
-                              mainObject.getClass().getCanonicalName());
-    clock.info().putFile(filepath);
-    Zephyr.advertise(clock, mainObject);
     ((Runnable) mainObject).run();
   }
 
