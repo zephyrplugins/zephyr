@@ -1,11 +1,13 @@
 package zephyr.plugin.core.api.signals;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 
-public class Signal<T> {
+public class Signal<T> implements Serializable {
+  private static final long serialVersionUID = -8879732560976561426L;
 
   static public interface EventInfoGenerator<T> {
     T generate();

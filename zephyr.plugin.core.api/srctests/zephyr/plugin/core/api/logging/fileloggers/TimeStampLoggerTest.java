@@ -33,6 +33,7 @@ public class TimeStampLoggerTest {
     logger = new FileLogger(writer, true);
     logger.add("a", logA);
     logger.add("b", logB);
+    logger.printLegend();
   }
 
   private void testOutput(int stepTime, double a, double b, boolean legendIncluded) {

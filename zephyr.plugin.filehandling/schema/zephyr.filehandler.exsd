@@ -17,7 +17,7 @@
          </appinfo>
       </annotation>
       <complexType>
-         <choice>
+         <choice minOccurs="1" maxOccurs="unbounded">
             <element ref="client"/>
          </choice>
          <attribute name="point" type="string" use="required">

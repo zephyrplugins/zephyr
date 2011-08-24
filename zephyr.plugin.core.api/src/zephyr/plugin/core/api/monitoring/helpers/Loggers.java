@@ -143,9 +143,12 @@ public class Loggers {
     }
   }
 
-  public static void checkFolder(String filepath) {
-    File file = new File(filepath);
-    File folder = file.getParentFile();
+  public static void checkParentFolder(String filepath) {
+    checkFolder(new File(filepath).getParentFile().getAbsolutePath());
+  }
+
+  public static void checkFolder(String folderPath) {
+    File folder = new File(folderPath);
     if (!folder.canRead())
       if (!folder.mkdirs())
         throw new RuntimeException("Error creating the folder: " + folder.getAbsolutePath());

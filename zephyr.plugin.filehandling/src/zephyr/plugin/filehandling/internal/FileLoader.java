@@ -24,9 +24,9 @@ public class FileLoader {
   private static List<IFileHandler> fileHandlers = null;
   private static IFileHandler defaultHandler = new DefaultHandler();
   private static byte[] types = { Character.DECIMAL_DIGIT_NUMBER, Character.UPPERCASE_LETTER,
-                                  Character.LOWERCASE_LETTER, Character.START_PUNCTUATION, Character.END_PUNCTUATION,
-                                  Character.OTHER_PUNCTUATION, Character.MATH_SYMBOL, Character.DASH_PUNCTUATION,
-                                  Character.CURRENCY_SYMBOL, Character.MODIFIER_SYMBOL };
+      Character.LOWERCASE_LETTER, Character.START_PUNCTUATION, Character.END_PUNCTUATION,
+      Character.OTHER_PUNCTUATION, Character.MATH_SYMBOL, Character.DASH_PUNCTUATION,
+      Character.CURRENCY_SYMBOL, Character.MODIFIER_SYMBOL, Character.CONNECTOR_PUNCTUATION };
 
   private FileLoader() {
   }

@@ -1,7 +1,7 @@
 package zephyr.plugin.core.api.monitoring.fileloggers;
 
 import java.io.IOException;
-import java.io.StringWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,14 +23,15 @@ public class FileLogger extends AbstractFileLogger implements DataMonitor {
     this(filepath, false, false);
   }
 
-  public FileLogger(StringWriter writer) {
+  public FileLogger(Writer writer) {
     this(writer, false);
   }
 
-  public FileLogger(StringWriter writer, boolean timeStamps) {
+  public FileLogger(Writer writer, boolean timeStamps) {
     super(writer);
     this.timeStamps = timeStamps;
     init();
+    legendWrote = true;
   }
 
   public FileLogger(String filepath, boolean timeStamps, boolean temporaryFile) throws IOException {
@@ -66,10 +67,14 @@ public class FileLogger extends AbstractFileLogger implements DataMonitor {
 
   public void update(long stepTime) {
     if (!legendWrote) {
-      file.println(getLegend());
+      printLegend();
       legendWrote = true;
     }
     printValues(stepTime);
+  }
+
+  public void printLegend() {
+    file.println(getLegend());
   }
 
   private void printValues(long stepTime) {
