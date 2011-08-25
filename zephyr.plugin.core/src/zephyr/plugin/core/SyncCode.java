@@ -9,6 +9,7 @@ import zephyr.plugin.core.api.codeparser.codetree.ClockNode;
 import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.codeparser.interfaces.CodeParser;
 import zephyr.plugin.core.api.codeparser.parsers.CodeTreeParser;
+import zephyr.plugin.core.api.monitoring.abstracts.MonitoredDataTraverser;
 import zephyr.plugin.core.api.signals.Signal;
 import zephyr.plugin.core.api.synchronization.Clock;
 
@@ -27,7 +28,7 @@ public class SyncCode {
       clockNodes.put(clock, clockNode);
     }
     int nbChildrenBefore = clockNode.nbChildren();
-    CodeParser parser = new CodeTreeParser();
+    CodeParser parser = new CodeTreeParser(MonitoredDataTraverser.MonitorEverythingLevel);
     parser.parse(clockNode, root);
     CodeNode[] children = new CodeNode[clockNode.nbChildren() - nbChildrenBefore];
     for (int i = nbChildrenBefore; i < clockNode.nbChildren(); i++) {

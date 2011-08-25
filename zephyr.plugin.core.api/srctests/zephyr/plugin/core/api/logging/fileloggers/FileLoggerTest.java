@@ -47,6 +47,8 @@ public class FileLoggerTest {
     final String legend = "a b\n";
     this.a = a;
     this.b = b;
+    if (stepTime == 0 && legendIncluded)
+      logger.printLegend();
     logger.update(stepTime);
     String expectedLogged = expected;
     if (legendIncluded)

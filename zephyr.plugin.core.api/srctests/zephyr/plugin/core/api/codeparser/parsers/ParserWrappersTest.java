@@ -22,6 +22,7 @@ public class ParserWrappersTest {
     StringWriter writer = new StringWriter();
     FileLogger logger = new FileLogger(writer);
     logger.add(this);
+    logger.printLegend();
     Assert.assertArrayEquals(expectedLabels, logger.getLabels());
     logger.update(0);
     Assert.assertEquals("data01 data01Squared data01Abs\n-2.0 4.0 2.0\n", writer.toString());

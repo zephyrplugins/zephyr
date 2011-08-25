@@ -19,6 +19,7 @@ public class ParserBooleanTest {
     StringWriter writer = new StringWriter();
     FileLogger logger = new FileLogger(writer);
     logger.add(this);
+    logger.printLegend();
     Assert.assertArrayEquals(expectedLabels, logger.getLabels());
     data01 = false;
     logger.update(0);

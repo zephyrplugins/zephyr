@@ -40,9 +40,11 @@ public class CodeTreeParser implements CodeParser {
   }
 
   private final Stack<Map<String, LabeledCollection>> labelsMapStack = new Stack<Map<String, LabeledCollection>>();
+  private final int requiredLevel;
 
-  public CodeTreeParser() {
+  public CodeTreeParser(int requiredLevel) {
     labelsMapStack.addAll(staticLabelsMapStack);
+    this.requiredLevel = requiredLevel;
   }
 
   public static void registerLabeledCollection(LabeledCollection labeledCollection, String... ids) {
@@ -102,11 +104,12 @@ public class CodeTreeParser implements CodeParser {
   private boolean isMonitored(ClassNode classNode, Field field) {
     if (field.isSynthetic() || field.isAnnotationPresent(IgnoreMonitor.class))
       return false;
-    if (field.getDeclaringClass().isAnnotationPresent(Monitor.class))
-      return true;
+    Monitor monitor = field.getDeclaringClass().getAnnotation(Monitor.class);
     if (field.isAnnotationPresent(Monitor.class))
-      return true;
-    return false;
+      monitor = field.getAnnotation(Monitor.class);
+    if (monitor == null)
+      return false;
+    return monitor.level() <= requiredLevel;
   }
 
   @Override

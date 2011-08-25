@@ -10,7 +10,7 @@ import zephyr.plugin.core.api.monitoring.abstracts.MonitoredDataTraverser;
 public class Parser {
   public static void parse(DataMonitor dataMonitor, Object toParse, int levelRequired) {
     MonitoredDataTraverser traverser = new MonitoredDataTraverser(dataMonitor, levelRequired);
-    CodeParser codeParser = new CodeTreeParser();
+    CodeParser codeParser = new CodeTreeParser(levelRequired);
     ClassNode classNode = new ClassNode();
     codeParser.parse(classNode, toParse);
     CodeTrees.traverse(traverser, classNode);
