@@ -19,16 +19,10 @@ import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 import zephyr.plugin.core.api.synchronization.Clock;
 
 public class CodeTrees {
-  static private Class<?>[] primitives = { Double.class, Float.class, Byte.class, Boolean.class, Integer.class,
-      Short.class };
-
   static public boolean isPrimitive(Class<? extends Object> fieldClass) {
     if (fieldClass.isPrimitive())
       return true;
-    for (Class<?> c : primitives)
-      if (c.equals(fieldClass))
-        return true;
-    return false;
+    return Number.class.isAssignableFrom(fieldClass);
   }
 
   static public Object getValueFromField(Field field, Object parentInstance) {

@@ -1,5 +1,6 @@
 package zephyr.plugin.core.api.monitoring.fileloggers;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -27,10 +28,10 @@ public class AbstractFileLogger {
   }
 
   protected OutputStream createOutputStream(String fileCreatedPath) throws IOException {
-    OutputStream fileOutputStream = new FileOutputStream(fileCreatedPath);
-    if (!fileCreatedPath.endsWith(GZEXT))
-      return fileOutputStream;
-    return new GZIPOutputStream(fileOutputStream);
+    OutputStream out = new FileOutputStream(fileCreatedPath);
+    if (fileCreatedPath.endsWith(GZEXT))
+      out = new GZIPOutputStream(out);
+    return new BufferedOutputStream(out);
   }
 
   private void checkFolders() {

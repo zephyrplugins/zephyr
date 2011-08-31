@@ -22,14 +22,15 @@ public class PrimitiveCollectionParser implements FieldParser {
     Object firstElement = collection.get(0);
     if (firstElement == null)
       return false;
-    return CodeTrees.isPrimitive(firstElement.getClass());
+    return Number.class.isAssignableFrom(firstElement.getClass());
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public void parse(CodeParser codeParser, MutableParentNode parentNode, Field field, Object fieldValue) {
     int level = CodeTrees.levelOf(field);
     String label = CodeTrees.labelOf(field);
-    List<?> list = (List<?>) fieldValue;
+    List<? extends Number> list = ((List<? extends Number>) fieldValue);
     CollectionLabelBuilder labelBuilder = codeParser.newCollectionLabelBuilder(field, list.size());
     PrimitiveCollectionNode arrayPrimitiveNode = new PrimitiveCollectionNode(label, parentNode, list, labelBuilder,
                                                                              level);

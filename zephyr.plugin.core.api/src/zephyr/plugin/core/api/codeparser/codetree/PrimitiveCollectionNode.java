@@ -9,10 +9,10 @@ import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
 import zephyr.plugin.core.api.parsing.CollectionLabelBuilder;
 
 public class PrimitiveCollectionNode extends AbstractCodeNode implements MonitorContainer, AbstractPrimitives {
-  final List<?> array;
+  final List<? extends Number> array;
   final CollectionLabelBuilder collectionLabelBuilder;
 
-  public PrimitiveCollectionNode(String label, ParentNode parent, List<?> array,
+  public PrimitiveCollectionNode(String label, ParentNode parent, List<? extends Number> array,
       CollectionLabelBuilder collectionLabelBuilder, int level) {
     super(label, parent, level);
     this.array = array;
@@ -26,7 +26,7 @@ public class PrimitiveCollectionNode extends AbstractCodeNode implements Monitor
       monitor.add(path() + collectionLabelBuilder.elementLabel(i), level(), new Monitored() {
         @Override
         public double monitoredValue() {
-          return (Double) array.get(elementIndex);
+          return array.get(elementIndex).doubleValue();
         }
       });
     }
