@@ -366,6 +366,14 @@
             name="Structure Explorer"
             restorable="true">
       </view>
+      <view
+            allowMultiple="true"
+            class="zephyr.plugin.core.internal.video.VideoView"
+            icon="icons/film.png"
+            id="zephyr.plugin.core.videoview"
+            name="Video"
+            restorable="true">
+      </view>
    </extension>
    <extension
          point="zephyr.viewprovider">
@@ -374,6 +382,13 @@
             icon="icons/view_clocks.png"
             name="Clocks View"
             viewid="zephyr.plugin.core.clocksview">
+      </client>
+      <client
+            class="zephyr.plugin.core.internal.video.VideoView$VideoViewProvider"
+            icon="icons/film.png"
+            name="Video"
+            popup="false"
+            viewid="zephyr.plugin.core.videoview">
       </client>
    </extension>
    <extension
