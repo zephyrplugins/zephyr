@@ -6,6 +6,7 @@ import java.util.List;
 import zephyr.plugin.core.Utils;
 import zephyr.plugin.core.api.Zephyr;
 import zephyr.plugin.core.api.logfiles.LogFile;
+import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.filehandling.IFileHandler;
 
 public class DefaultHandler implements IFileHandler {
@@ -22,8 +23,9 @@ public class DefaultHandler implements IFileHandler {
 
   public static void handle(String filepath) {
     LogFile logfile = LogFile.load(filepath);
-    Zephyr.advertise(logfile.clock(), logfile);
-    while (!logfile.eof())
+    Clock clock = new Clock(filepath);
+    Zephyr.advertise(clock, logfile);
+    while (clock.tick() && !logfile.eof())
       logfile.step();
     logfile.close();
   }

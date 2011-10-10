@@ -33,6 +33,8 @@ public class Signal<T> implements Serializable {
   }
 
   public final void fire(T eventInfo) {
+    if (listeners.isEmpty())
+      return;
     for (Listener<T> listener : getListeners())
       listener.listen(eventInfo);
   }

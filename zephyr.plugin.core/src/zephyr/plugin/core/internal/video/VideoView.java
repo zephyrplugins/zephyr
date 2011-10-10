@@ -12,6 +12,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.PaletteData;
 import org.eclipse.swt.graphics.RGB;
+import org.eclipse.swt.widgets.Display;
 
 import zephyr.plugin.core.api.video.ImageProvider;
 import zephyr.plugin.core.helpers.ClassViewProvider;
@@ -58,8 +59,7 @@ public class VideoView extends ForegroundCanvasView<ImageProvider> {
       image.dispose();
       image = null;
     }
-    // TODO getDisplay parent can be disposed
-    image = new Image(parent.getDisplay(), convertToSWT(bufferedImage));
+    image = new Image(Display.getDefault(), convertToSWT(bufferedImage));
     return true;
   }
 

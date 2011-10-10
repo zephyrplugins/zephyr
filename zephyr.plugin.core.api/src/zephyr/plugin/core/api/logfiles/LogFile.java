@@ -9,12 +9,9 @@ import java.util.Map;
 import zephyr.plugin.core.api.labels.Labeled;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 import zephyr.plugin.core.api.parsing.LabelProvider;
-import zephyr.plugin.core.api.synchronization.Clock;
-import zephyr.plugin.core.api.synchronization.Timed;
 
 @Monitor
-public abstract class LogFile implements Labeled, Timed {
-  public final Clock clock;
+public abstract class LogFile implements Labeled {
   protected BufferedReader reader;
   final public String filepath;
   private final double[] current;
@@ -25,8 +22,6 @@ public abstract class LogFile implements Labeled, Timed {
     reader = getReader(filepath);
     labels = readLabels();
     current = new double[labels.length];
-    clock = new Clock(label());
-    clock.info().putFile(filepath);
   }
 
   @LabelProvider(ids = { "current" })
@@ -36,8 +31,6 @@ public abstract class LogFile implements Labeled, Timed {
 
   public boolean eof() {
     if (reader == null)
-      return true;
-    if (clock.isTerminated())
       return true;
     boolean isReady = false;
     synchronized (reader) {
@@ -106,7 +99,6 @@ public abstract class LogFile implements Labeled, Timed {
       line = readDataLine();
     if (line != null)
       lineToData(line);
-    clock.tick();
   }
 
   private void lineToData(String line) {
@@ -154,11 +146,6 @@ public abstract class LogFile implements Labeled, Timed {
     if (extensionIndex == -1)
       return fileName;
     return fileName.substring(0, extensionIndex);
-  }
-
-  @Override
-  public Clock clock() {
-    return clock;
   }
 
   public double[] currentLine() {
