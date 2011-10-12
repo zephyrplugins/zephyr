@@ -2,7 +2,7 @@ package zephyr.example.jaridbd;
 
 import java.util.Random;
 
-import zephyr.plugin.core.api.ZephyrRunnable;
+import zephyr.plugin.core.api.Zephyr;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 import zephyr.plugin.core.api.parsing.LabelProvider;
 import zephyr.plugin.core.api.synchronization.Clock;
@@ -13,14 +13,13 @@ import zephyr.plugin.core.api.synchronization.Clock;
  * 
  */
 @Monitor
-public class Experiment implements ZephyrRunnable {
+public class Experiment {
   final static private int numTotalInputs = 20;
   final static private int numRelevantInputs = 5;
 
   /**
    * Instance used to synchronize the data with Zephyr
    */
-  final private Clock clock = new Clock("IDBDExample");
   final private Problem problem = new Problem(new Random(0), numTotalInputs, numRelevantInputs);
   final private LMS lms = new LMS(numTotalInputs, .1 / numTotalInputs);
   final private IDBD idbd = new IDBD(numTotalInputs, 0.01, .1 / numTotalInputs);
@@ -41,23 +40,12 @@ public class Experiment implements ZephyrRunnable {
     return i < numRelevantInputs ? "Relevant" : "Irrelevant";
   }
 
-  @Override
-  public void run() {
-    // While clock is not terminated, we can continue to generate data
-    while (!clock.isTerminated()) {
-      // We tell Zephyr that now is the right time to collect data
-      clock.tick();
-      double[] inputs = problem.computeInputs();
-      double target = problem.computeTarget(inputs);
-      lms.update(inputs, target);
-      idbd.update(inputs, target);
-      problem.updateWeights();
-    }
-  }
-
-  @Override
-  public Clock clock() {
-    return clock;
+  private void step() {
+    double[] inputs = problem.computeInputs();
+    double target = problem.computeTarget(inputs);
+    lms.update(inputs, target);
+    idbd.update(inputs, target);
+    problem.updateWeights();
   }
 
   /**
@@ -65,6 +53,13 @@ public class Experiment implements ZephyrRunnable {
    * class by Java directly, without Zephyr.
    */
   public static void main(String[] args) {
-    new Experiment().run();
+    Experiment experiment = new Experiment();
+    Clock clock = new Clock("Experiment");
+    Zephyr.advertise(clock, experiment);
+    // While clock is not terminated when we tick it, we can continue to
+    // generate data
+    // Note that data is also collected when we call this method
+    while (clock.tick())
+      experiment.step();
   }
 }
