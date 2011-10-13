@@ -3,25 +3,9 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry exported="true" kind="lib" path="/Users/thomas/Codes/Research/zephyr/zephyr.plugin.opengl/libs/jogl.all.jar">
-		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="zephyr.plugin.opengl/libs"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="/Users/thomas/Codes/Research/zephyr/zephyr.plugin.opengl/libs/newt.all.jar">
-		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="zephyr.plugin.opengl/libs"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="/Users/thomas/Codes/Research/zephyr/zephyr.plugin.opengl/libs/gluegen-rt.jar">
-		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="zephyr.plugin.opengl/libs"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="/Users/thomas/Codes/Research/zephyr/zephyr.plugin.opengl/libs/nativewindow.all.jar">
-		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="zephyr.plugin.opengl/libs"/>
-		</attributes>
-	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="libs/gluegen-rt.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/jogl.all.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/nativewindow.all.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/newt.all.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
