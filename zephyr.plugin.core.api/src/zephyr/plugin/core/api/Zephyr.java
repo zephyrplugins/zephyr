@@ -2,6 +2,8 @@ package zephyr.plugin.core.api;
 
 import zephyr.plugin.core.api.codeparser.interfaces.FieldParser;
 import zephyr.plugin.core.api.codeparser.parsers.CodeTreeParser;
+import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
+import zephyr.plugin.core.api.monitoring.abstracts.MonitorRegistry;
 import zephyr.plugin.core.api.parsing.LabeledCollection;
 import zephyr.plugin.core.api.signals.Signal;
 import zephyr.plugin.core.api.synchronization.Clock;
@@ -18,6 +20,10 @@ public class Zephyr {
   }
 
   static public final Signal<AdvertisementInfo> onAdvertised = new Signal<AdvertisementInfo>();
+
+  static public DataMonitor getSynchronizedMonitor(Clock clock) {
+    return MonitorRegistry.getSynchronizedMonitor(clock);
+  }
 
   static public void advertise(Clock clock, Object advertised) {
     onAdvertised.fire(new AdvertisementInfo(clock, advertised));

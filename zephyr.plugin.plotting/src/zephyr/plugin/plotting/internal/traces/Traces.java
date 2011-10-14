@@ -43,7 +43,7 @@ public class Traces {
   }
 
   public static Set<Trace> labelToTraces(Clock clock, Set<String> labels) {
-    ClockTraces clockTraces = ZephyrPluginPlotting.tracesManager().dataMonitor(clock);
+    ClockTraces clockTraces = ZephyrPluginPlotting.tracesManager().getSyncMonitor(clock);
     Set<Trace> traces = new HashSet<Trace>();
     for (Trace trace : clockTraces.traces())
       if (labels.contains(trace.label))

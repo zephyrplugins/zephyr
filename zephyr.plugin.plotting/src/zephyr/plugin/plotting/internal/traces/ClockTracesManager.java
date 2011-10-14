@@ -6,11 +6,12 @@ import java.util.List;
 import java.util.Map;
 
 import zephyr.ZephyrSync;
+import zephyr.plugin.core.api.monitoring.abstracts.MonitorSynchronizer;
 import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.signals.Signal;
 import zephyr.plugin.core.api.synchronization.Clock;
 
-public class ClockTracesManager {
+public class ClockTracesManager implements MonitorSynchronizer {
   private boolean forceEnabled = false;
 
   public final Signal<List<Trace>> onTraceAdded = new Signal<List<Trace>>();
@@ -26,12 +27,13 @@ public class ClockTracesManager {
     });
   }
 
-  synchronized public ClockTraces dataMonitor(Clock clock) {
+  @Override
+  synchronized public ClockTraces getSyncMonitor(Clock clock) {
     String clockLabel = clock.info().label();
-    ZephyrSync.declareClock(clock);
     ClockTraces clockTraces = clocks.get(clock);
     if (clockTraces != null)
       return clockTraces;
+    ZephyrSync.declareClock(clock);
     clockTraces = new ClockTraces(clockLabel, clock);
     assert !clocks.containsKey(clock);
     clocks.put(clock, clockTraces);

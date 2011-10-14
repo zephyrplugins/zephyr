@@ -23,7 +23,7 @@ public class RegisterPlottingMonitor implements StartupJob {
       public void listen(CodeNode codeNode) {
         ClockTracesManager manager = ZephyrPluginPlotting.tracesManager();
         Clock clock = CodeTrees.clockOf(codeNode);
-        ClockTraces dataMonitor = manager.dataMonitor(clock);
+        ClockTraces dataMonitor = manager.getSyncMonitor(clock);
         dataMonitor.startAddingTrace();
         MonitoredDataTraverser traverser = new MonitoredDataTraverser(dataMonitor);
         CodeTrees.traverse(traverser, codeNode);

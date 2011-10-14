@@ -8,6 +8,7 @@ import org.eclipse.ui.handlers.RegistryToggleState;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
+import zephyr.plugin.core.api.monitoring.abstracts.MonitorRegistry;
 import zephyr.plugin.plotting.internal.commands.EnableAllTraces;
 import zephyr.plugin.plotting.internal.traces.ClockTracesManager;
 
@@ -29,10 +30,12 @@ public class ZephyrPluginPlotting extends AbstractUIPlugin {
     Command command = commandService.getCommand(EnableAllTraces.ID);
     State state = command.getState(RegistryToggleState.STATE_ID);
     traces.setForceEnabled((Boolean) state.getValue());
+    MonitorRegistry.registerFactory(traces);
   }
 
   @Override
   public void stop(BundleContext context) throws Exception {
+    MonitorRegistry.unregisterFactory(traces);
     plugin = null;
     super.stop(context);
   }
