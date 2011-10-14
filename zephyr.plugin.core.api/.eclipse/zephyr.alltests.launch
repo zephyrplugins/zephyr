@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <launchConfiguration type="org.eclipse.jdt.junit.launchconfig">
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
-<listEntry value="/zephyr.plugin.core.api/srctests/zephyr/plugin/core/api/UtilsTests.java"/>
+<listEntry value="/zephyr.plugin.core.api/srctests/zephyr/plugin/core/api/ZephyrTests.java"/>
 </listAttribute>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
 <listEntry value="1"/>
@@ -10,7 +10,7 @@
 <booleanAttribute key="org.eclipse.jdt.junit.KEEPRUNNING_ATTR" value="false"/>
 <stringAttribute key="org.eclipse.jdt.junit.TESTNAME" value=""/>
 <stringAttribute key="org.eclipse.jdt.junit.TEST_KIND" value="org.eclipse.jdt.junit.loader.junit4"/>
-<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="zephyr.plugin.core.api.UtilsTests"/>
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="zephyr.plugin.core.api.ZephyrTests"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="zephyr.plugin.core.api"/>
 <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-ea"/>
 </launchConfiguration>

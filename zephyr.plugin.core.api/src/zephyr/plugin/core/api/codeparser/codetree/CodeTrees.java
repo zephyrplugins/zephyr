@@ -22,6 +22,8 @@ public class CodeTrees {
   static public boolean isPrimitive(Class<? extends Object> fieldClass) {
     if (fieldClass.isPrimitive())
       return true;
+    if (Boolean.class.equals(fieldClass))
+      return true;
     return Number.class.isAssignableFrom(fieldClass);
   }
 

@@ -23,9 +23,8 @@ import zephyr.plugin.core.api.synchronization.ChronoTest;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({ SignalTest.class, ChronoTest.class, LoggerRowTest.class, FileLoggerTest.class,
-    ParserTest01.class, ParserTest02.class,
-    ParserArrayLabelsTest.class, ParserArray2DTest.class, ParserTest03.class,
+    ParserTest01.class, ParserTest02.class, ParserArrayLabelsTest.class, ParserArray2DTest.class, ParserTest03.class,
     ParserBooleanTest.class, ParserWrappersTest.class, ParserLevelTest.class, TextLogFileTest.class,
     GZippedLogFileTest.class, ZippedLogFileTest.class, BZippedLogFileTest.class })
-public class UtilsTests {
+public class ZephyrTests {
 }
