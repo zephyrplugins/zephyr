@@ -1,0 +1,17 @@
+(ns simple)
+
+(import zephyr.plugin.core.api.synchronization.Clock)
+(import zephyr.plugin.core.api.monitoring.abstracts.Monitored)
+
+(defn toZephyrMonitored [fun]
+  (reify Monitored 
+    (^double monitoredValue [_] (fun))))
+
+(defn main [args]
+  (def clock (new zephyr.plugin.core.api.synchronization.Clock "Simple"))
+  (def monitor (.. zephyr.ZephyrPlotting (createMonitor clock)))
+  (def monitoredValue 0)
+  (. monitor add "monitoredValue" 0 (toZephyrMonitored (fn [] monitoredValue)))
+  (. monitor add "monitoredValueNegative" 0 (toZephyrMonitored (fn [] (* -1 monitoredValue))))
+  (while (. clock tick)
+    (def monitoredValue (mod (inc monitoredValue) 10))))
