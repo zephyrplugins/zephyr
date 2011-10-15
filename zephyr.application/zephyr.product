@@ -131,8 +131,8 @@ This Agreement is governed by the laws of the State of New York and the intellec
    </plugins>
 
    <features>
-      <feature id="zephyr.feature.main"/>
       <feature id="zephyr.feature.platform"/>
+      <feature id="zephyr.feature.main"/>
    </features>
 
 

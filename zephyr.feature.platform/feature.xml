@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="zephyr.feature.platform"
-      label="zephyr.feature.platform"
-      version="1.0.0.qualifier">
+      label="Platform"
+      version="1.0.0.qualifier"
+      provider-name="Thomas">
 
    <description url="http://critterbot.rl-community.org/softwares/zephyr">
       Feature including platform plugins for Zephyr
