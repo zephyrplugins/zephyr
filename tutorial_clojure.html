@@ -1,0 +1,29 @@
+--- 
+title: Tutorial Clojure 
+layout: tutorials 
+---
+
+<h1>Tutorial Clojure:</h1>
+
+<ul>
+	<li><a href="download.html">Download</a> and install the
+		standalone application</li>
+	<li>Monitor data in a Clojure program by:
+		<ul>
+			<li>create a clock instance:<br /> <span class='code'>(def
+					clock (new zephyr.plugin.core.api.synchronization.Clock "Simple"))</span></li>
+			<li>create a monitor binded with the clock:<br /> <span
+				class='code'>(def monitor (.. zephyr.plugin.core.api.Zephyr
+					(getSynchronizedMonitor clock)))</span></li>
+			<li>monitor data by creating instance implementing the <span class='code'>zephyr.plugin.core.api.monitoring.abstracts.Monitored</span>
+				interface and add the instance to the monitor</li>
+		</ul>
+	</li>
+	<li>Start Zephyr then open the file with <span class="menu">File-&gt;Open
+			File...</span></li>
+	<li>Data from the file is displayed and can be plot at different
+		time scale using a Plot View</li>
+	<li>An example is available in Zephyr source code: <a
+		href='https://github.com/ThomasDegris/Zephyr/tree/master/zephyr.example.scripts/simple.clj'>simple.clj</a></li>
+</ul>
+

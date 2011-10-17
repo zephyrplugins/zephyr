@@ -1,0 +1,35 @@
+--- 
+title: Tutorial Jython 
+layout: tutorials 
+---
+
+<h1>Tutorial Jython:</h1>
+
+<ul>
+	<li><a href="download.html">Download</a> and install the
+		standalone application</li>
+	<li>Use the module <a
+		href='https://github.com/ThomasDegris/Zephyr/blob/master/zephyr.plugin.jython/pysrc/zepy.py'>zepy.py</a> to specify to Zephyr what attributes and
+		functions to monitor:
+		<ul>
+			<li>Function <span class='code'>clock</span>: create a new
+				instance of <span class='code'>Clock</span></li>
+			<li>Function <span class='code'>advertise</span>: request Zephyr
+				to look for data to monitor in an instance
+			</li>
+			<li>Function <span class='code'>monfunc</span>: declare a
+				function to monitor in Zephyr
+			</li>
+			<li>Function <span class='code'>monattr</span>: declare an
+				attribute to monitor in Zephyr
+			</li>
+		</ul>
+	</li>
+	<li>Start Zephyr then open the file with <span class="menu">File-&gt;Open
+			File...</span></li>
+	<li>Data from the file is displayed and can be plot at different
+		time scale using a Plot View</li>
+	<li>An example is available in Zephyr source code: <a
+		href='https://github.com/ThomasDegris/Zephyr/tree/master/zephyr.example.scripts/simple.py'>simple.py</a></li>
+</ul>
+

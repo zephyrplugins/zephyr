@@ -1,0 +1,110 @@
+--- title: Using Zephyr Plugins layout: tutorials ---
+
+<h1>Using Zephyr Plugins</h1>
+
+This tutorial is for people that would like to run Zephyr directly from
+Eclipse or embed Zephyr in a Eclipse application.
+
+<h3>1. Requirements installation</h3>
+<ul>
+	<li>See the <a href="download.html">download</a> page to install
+		Zephyr plug-ins for Eclipse
+	</li>
+	<li>Make sure the plugins for Eclipse for RCP and RAP Developers
+		are installed</li>
+</ul>
+
+<h3>2. Having an Eclipse Plug-in Project:</h3>
+
+The first thing you need to do is to contribute to Zephyr (with your
+code generating the data you want to plot) is an Eclipse Plug-in
+Project. The first way is to create a new project:
+<ul>
+	<li><span class='menu'>File -&gt; New -&gt; Other...</span></li>
+	<li>Select Plug-in Project (in Plug-in Development) then push Next</li>
+	<li>Give the project a name then push Next and then Finish</li>
+</ul>
+The second way is to transform an existing Java Project in your Eclipse
+into a Eclipse Plug-in Project:
+<ul>
+	<li>Right-click on your Java project and then <span class='menu'>Configure
+			-&gt; Convert to Plug-in Projects...</span></li>
+	<li>Select your project and then click Finish</li>
+</ul>
+
+
+
+<h3>3. Making your project work with Zephyr:</h3>
+
+When Zephyr starts, it needs to know what to run in your code. To this
+purpose, we use the Extension framework of Eclipse:
+<ul>
+	<li>Open the file META-INF/MANIFEST.MF (this file should exist for
+		every Eclipse Plug-in Project)</li>
+	<li>Click on the tab Dependencies then click Add... then select <i>zephyr.plugin.core</i>
+		and <i>zephyr.plugin.core.api</i> then click Ok<br>
+	</li>
+	<li>Click on the tab Extensions then click Add... then select <i>zephyr.runnable
+	</i>then<i> </i>click Finish<br>
+	</li>
+	<li>Click right on the extension then New -&gt; client</li>
+	<li>Click on the new client and set a class (click on the link <i>class</i>
+		to create a new one or browse to select an existing one). This class
+		must implement the interface <span class="code">java.lang.Runnable</span></li>
+	<li>Save the file</li>
+</ul>
+
+If the attribute
+<span class="code">autostart</span>
+is set to
+<span class="code">true</span>, Zephyr will run your client at startup in its own thread. When
+autostart is set to false, then you need to pass the
+<span class="code">id</span>
+of the client at the command line for Zephyr to start it up.
+<br>
+<br>
+When Zephyr starts, it requests to Eclipse every clients in plugins that provide
+<span class="code">zephyr.runnable</span>
+extension and then start each client provided by the extension in its own thread.
+
+<br>
+<br>
+See the <a href="tutorial_java.html"/>Java Archive tutorial</a> for declaring data to monitor for Zephyr. 
+
+<h3>4. Running Zephyr with your client</h3>
+<ul>
+	<li>Go to: <span href="">Run -&gt; Run Configurations...</span></li>
+	<li>On the left, right click on Eclipse Application then New</li>
+	<li>Give a name to your configuration</li>
+	<li>In <i>Run a product:</i> select <i>zephyr.application.product</i></li>
+	<li>Select the tab <i>Plug-ins</i></li>
+	<li>In <i>Launch with:</i> select <i>plug-ins selected below
+			only</i></li>
+	<li>Click<i> Deselect All</i> then select your Eclipse Plug-in
+		Project and click <i>Add Required Plug-ins</i></li>
+	<li>Click on<i> Run</i></li>
+</ul>
+Zephyr will start with an empty plot view. To select traces (data),
+press S in the Graphs view or go to <span class='menu'>Plotting-&gt;Select Traces...</span> or
+click in the toolbar. You can add views by going to
+<span class='menu'>Window-&gt;New Plot</span>
+You can move the views by dragging their tab title.
+
+<h3>Links:</h3>
+<ul>
+	<li>Source of the Zephyr example plugin project: <a
+		href="http://www.ualberta.ca/%7Edegris/examples/zephyrexamplesimpleclient.tar.gz">http://www.ualberta.ca/~degris/examples/zephyrexamplesimpleclient.tar.gz</a></li>
+	<li>The Zephyr <a
+		href="https://github.com/ThomasDegris/Zephyr/tree/master/zephyr.example.simpleclienthttps://github.com/ThomasDegris/Zephyr/tree/master/zephyr.example.simpleclient">example
+			plugin project</a> on github<br>
+	</li>
+	<li>Creating Eclipse plugins: <a
+		href="http://www.vogella.de/articles/EclipsePlugIn/article.html">http://www.vogella.de/articles/EclipsePlugIn/article.html</a></li>
+	<li>Eclipse RCP tutorial (how to create menu items, commands,
+		views, ...): <a
+		href="http://www.vogella.de/articles/EclipseRCP/article.html">http://www.vogella.de/articles/EclipseRCP/article.html</a><br>
+	</li>
+	<li><a href="http://www.eclipsepluginsite.com/">http://www.eclipsepluginsite.com/</a><br>
+	</li>
+</ul>
+<br>

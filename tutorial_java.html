@@ -1,0 +1,132 @@
+--- 
+title: Tutorial Java Archive 
+layout: tutorials 
+---
+
+<h1>Tutorial Java Archive:</h1>
+
+<h3>1. Getting Zephyr Application to run a jar:</h3>
+
+<ul>
+	<li><a href="download.html">Download</a> and install the
+		standalone application</li>
+	<li>Optional:
+		<ul>
+			<li>Download the example as a binary: <a
+				href="http://www.ualberta.ca/%7Edegris/examples/simpleclient.jar">simpleexample.jar</a></li>
+			<li>In Zephyr, go to: <span class='menu'>File-&gt;Open</span>
+				and open <span class='file'>simpleexample.jar</span></li>
+			<li>Zephyr will start running the jar, you can select data to
+				plot</li>
+			<li>Tips: you can unzip <span class='file'>simpleexample.jar</span>
+				to give you a working example
+			</li>
+		</ul>
+</ul>
+<h3>2. Create your jar:</h3>
+<ul>
+	<li>Your project needs to import a few definitions to interface
+		with Zephyr, mainly: the <code>Clock</code> class for synchronization,
+		and the <code>@Monitor</code> and <code>@IgnoreMonitor</code> to
+		specify what data in your code you would like to monitor. These
+		definitions are included in <span class='file'>Zephyr.jar</span>. </br>
+		Export this file from Zephyr application by going to the menu item <span
+		class='menu'>File-&gt;Extract Zephyr Jar...</span> and include it into
+		the classpath of your project.
+	</li>
+	<li>To synchronize data with Zephyr:
+		<ul>
+			<li>Create a new instance of the class <code>Clock</code> by
+				calling <code>Clock clock = new Clock()</code>. The instance <code>clock</code>
+				is used to let Zephyr know when to synchronize data.
+			</li>
+			<li>Use the annotation <code>@Monitor</code> to indicates to
+				Zephyr what data to monitor. Added before the declaration of a class
+				means that all the fields of the class will be monitored
+			</li>
+			<li>Use <code>
+					Zephyr.advertise(clock, <i>instance</i>);
+				</code> to specify to Zephyr the root node <code>
+					<i>instance</i>
+				</code> to look for data to monitor. Zephyr will use the annotation <code>@Monitor</code>
+				and <code>@IgnoreMonitor</code> to decide what fields and classes to
+				explore for data. The argument <code>clock</code> indicates on what
+				clock the data will be synchronized.
+			<li>When <code>clock.tick()</code> is called, Zephyr views
+				collect the data (if necessary) for statistics or the next drawing.
+				<code>clock.tick()</code> returns a boolean indicating if the clock
+				is still running (not terminated). A clock can be terminated by a
+				user from Zephyr graphic user interface or by a program by calling <code>clock.terminate()</code>.
+			</li>
+			<li>Check the following files in Zephyr code source for
+				examples:
+				<ul>
+					<li>Exemple 01: <a
+						href="https://github.com/ThomasDegris/Zephyr/blob/master/zephyr.example.simpleclient/src/zephyr/example/simpleclient/SimpleClient.java">zephyr/example/simpleclient/SimpleClient.java</a></li>
+					<li>Exemple 02: <a
+						href="https://github.com/ThomasDegris/Zephyr/blob/master/zephyr.example.jaridbd/src/zephyr/example/jaridbd/Experiment.java">zephyr/example/jaridbd/Experiment.java</a></li>
+				</ul>
+			</li>
+		</ul>
+	</li>
+	<li>Similarly to Java, Zephyr use the <code>main</code> method to
+		start your program. Specify the location of the entry point class to
+		run in the jar using a manifest file (the path of the file in your jar
+		should be: <span style="font-family: courier new, monospace">META-INF/MANIFEST.MF</span>)
+		and the <code>Main-Class</code> entry (same entry to specify the class
+		with the main method to run for Java). See the <a
+		href="https://github.com/ThomasDegris/Zephyr/blob/master/zephyr.example.simpleclient/META-INF/MANIFEST.MF"
+		style="font-family: courier new, monospace">MANIFEST.MF</a> of the
+		SimpleExample project. Note that Eclipse, Netbeans and other Java
+		editors write this file for you when your export your project(s) into
+		a runnable jar.<br>
+	</li>
+</ul>
+<h3>3. Load your jar with the Zephyr application:</h3>
+<ul>
+	<li>A first test is to check if Java can run your jar without
+		Zephyr by trying the following command: <span class="command">java
+			-jar &lt;yourfilename&gt;.jar</span> If Java cannot run it, Zephyr will not
+		run it either. This test checks that the <span class="file">MANIFEST.MF</span>
+		file is correct and that the entry class has a static method <code>main</code>
+		method.
+	</li>
+	<li>Start the Zephyr Application and go to <span class="menu">File-&gt;Open
+			File...</span> to start running your jar
+	</li>
+	<li>If you would like to start your jar automatically when Zephyr
+		starts, then you can specify the path of the jar file to run at start
+		up in: <br />
+	<span class="menu">Preferences-&gt;Zephyr-&gt;Startup</span>
+	</li>
+	<li>Additional arguments to the JVM running Zephyr (and your jar)
+		can be specified in the file <span class="file">Zephyr.ini</span> (<span
+		class="file">zephyr/Zephyr.ini</span> on Linux and Windows and <span
+		class="file">zephyr/Zephyr.app/Contents/MacOS/Zephyr.ini<span
+			class="file"> for Mac OS X)</span></span> after the line <span
+		class="command">-vmargs</span>. One argument per line. See <a
+		href="http://wiki.eclipse.org/Eclipse.ini">Eclipse.ini</a> for the
+		file format.
+	</li>
+</ul>
+<h3>Notes:</h3>
+<<ul>
+  <li>The jar depends on <span class="file">Zephyr.jar</span> but can run directly from Java, without the application</li>
+  <li>The overload of calling <span class="code">clock.tick()</span> without the Zephyr application should be negligeable</li>
+</ul>
+
+<h3>Related Links:</h3>
+<ul>
+	<li>Jar file: <a
+		href="http://www.ualberta.ca/%7Edegris/examples/simpleclient.jar">simpleclient.jar</a>
+	</li>
+	<li>Source project: <a
+		href="http://www.ualberta.ca/%7Edegris/examples/zephyrexamplejaridbd.tar.gz">zephyrexamplejaridbd.tar.gz</a></li>
+	<li><a
+		href="https://github.com/ThomasDegris/Zephyr/tree/master/zephyr.example.jaridbd/">IDBD
+			example project on git</a></li>
+	<li>External java tutorial: <a
+		href="http://download.oracle.com/javase/tutorial/deployment/jar/">Lesson:
+			Packaging Programs in JAR Files</a></li>
+</ul>
+

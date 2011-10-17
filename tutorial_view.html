@@ -1,0 +1,53 @@
+
+--- 
+title: Create a new view 
+layout: tutorials 
+---
+
+<h1>Create a new view:</h1>
+
+<h1>Using Zephyr Plugins:</h1>
+
+The steps for a new Zephyr view are:<br>
+<ol><li>creating a new Eclipse view</li>
+<li>declare a view provider in the plugin extension, so that Zephyr can know that the view can be used to display a given advertized object<br>
+</li>
+<li>implement a Zephyr interface for synchronization</li>
+<li>advertize objects so that Zephyr looks in the code for objects for which a provider can be found<br>
+</li>
+</ol>
+<h4>Create a new Eclipse view</h4>
+<ol><li>Make sure you did the tutorial <a href="http://critterbot.rl-community.org/software/zephyr/tutorial-eclipse-plugins">running an application using Zephyr Eclipse Plugins</a></li>
+<li>Follow steps 9.1 and 9.2 of <a href="http://www.vogella.de/articles/EclipseRCP/article.html#views">this external tutorial</a>&nbsp;to&nbsp;extend Crittergui/Zephyr with new views</li>
+</ol>
+<br>
+<h4>Declare a view provider<br>
+</h4>
+The first thing we need to do is to declare a view provider, that is an object to which Zephyr can ask if it is able to display an object and if so, what view ID (a string) should Zephyr open<br>
+<ol><li>Open the file <span style="font-family:courier new,monospace">plugin.xml</span> of your project</li>
+<li>In the tab <span style="font-family:courier new,monospace">Dependencies</span>, make sure you have <span style="font-family:courier new,monospace">zephyr.plugin.core</span></li>
+<li>In the tab <span style="font-family:courier new,monospace">Extensions</span>, click on <span style="font-family:courier new,monospace">Add...</span>, select <span style="font-family:courier new,monospace">zephyr.viewprovider</span></li>
+<li>Right click on<span style="font-family:courier new,monospace"> zephyr.viewprovider</span> and then <span style="font-family:courier new,monospace">New-&gt;client</span></li>
+<li>In the new client, on the right, set the class to use as a view provider. The class needs to implement the interface <a href="https://github.com/ThomasDegris/Zephyr/blob/master/zephyr.plugin.core/src/zephyr/plugin/core/views/ViewProvider.java"><span style="font-family:courier new,monospace"><code>zephyr.plugin.core.views.ViewProvider</code></span></a><br>
+</li>
+</ol>
+See the documentation of the interface <span style="font-family:courier new,monospace">ViewProvider</span> to implement its methods. Note that you can extend the class <a href="https://github.com/ThomasDegris/Zephyr/blob/master/zephyr.plugin.core/src/zephyr/plugin/core/helpers/ClassViewProvider.java"><span style="font-family:courier new,monospace"><code>zephyr.plugin.core.helpers.ClassViewProvider</code></span></a> where the constructor takes two arguments: a class and a view id (a string). Such provider will return the view id for any object instance of the class given to the constructor.<br>
+<br>
+See the internal class Provider of the class <a href="https://github.com/ThomasDegris/RLPark/blob/master/rlpark.plugin.rltoysview/src/rlpark/plugin/rltoysview/views/pendulum/SwingPendulumView.java#L19"><code>rlpark.plugin.rltoysview.views.pendulum.SwingPendulumView$Provider</code></a> for an example.<br>
+<h4>Implement Zephyr interfaces for synchronization</h4>
+The Eclipse framework provides what is necessary to create a new view and display whatever you want inside. However, additional mechanism needs to be used to avoid threading issues with Zephyr because:<br>
+<ul><li>display and drawing can take time, so we do not want a thread controlling a robot for example to wait for a view finishing drawing</li>
+<li>display on the screen can only be done in the User Interface (UI) thread. This thread is also responsible for managing user events. Because we want a responsive application, we do not want the UI thread to wait for data that would come from a thread doing long and massive computation&nbsp;</li>
+<li>while some data is drawn, it should not be changed or affected by the thread generating this data, even if this thread is running much faster than the display</li></ul>
+What Zephyr proposes is the <a href="https://github.com/ThomasDegris/Zephyr/blob/master/zephyr.plugin.core/src/zephyr/plugin/core/views/SyncView.java"><code>zephyr.plugin.core.views.SyncView</code></a> interface. This interface has two methods that the view needs to implement:<br>
+<ul><li>synchronize(Clock clock) : Zephyr will call this method on the view so that the data required for drawing can be copied locally. This method is called inside the thread updating the data, so the minimum of computation should be done for thread requiring real-time interaction.<br>
+</li>
+<li>repaint() : this method is called when the view needs to be updated (often after synchronize) and outside the thread updating the data, outside the UI thread as well</li></ul>
+The <code>SyncView</code> interface is great for synchronizing data but the view still does not know about what object to display. For this, Zephyr uses the interface <a href="https://github.com/ThomasDegris/Zephyr/blob/master/zephyr.plugin.core/src/zephyr/plugin/core/views/ProvidedView.java"><code>zephyr.plugin.core.views.ProvidedView</code></a> to add or remove object to display for the view. See the documentation of the interface for more information. Note that <code>ProvidedView</code> inherits from <code>SyncView</code>.<br>
+<br>
+For a complete working example, see the class <a href="https://github.com/ThomasDegris/RLPark/blob/master/rlpark.plugin.rltoysview/src/rlpark/plugin/rltoysview/views/pendulum/SwingPendulumView.java"><code>SwingPendulumView</code></a> <br>
+<br>
+<h4>Advertize objects</h4>
+Use the method <code>advertise(Clock clock, Object drawn)</code> in the class <code>zephyr.plugin.core.api.Zephyr</code> to ask Zephyr to start from drawn (as the root of a tree to parse) and look for objects than can be displayed. Use the annotation <code>@Monitor&nbsp;</code>(<code>zephyr.plugin.core.api.monitoring.annotations.Monitor</code>) to determine what to advertise and what not to advertise.<br>
+<br>
+
