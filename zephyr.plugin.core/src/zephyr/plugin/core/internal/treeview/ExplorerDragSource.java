@@ -25,7 +25,7 @@ public class ExplorerDragSource implements DragSourceListener {
   @Override
   public void dragStart(DragSourceEvent event) {
     Tree tree = (Tree) ((DragSource) event.getSource()).getControl();
-    CodeNode[] codeNodes = StructureExplorer.getSelection(tree);
+    CodeNode[] codeNodes = StructureExplorerView.getSelection(tree);
     CodeNodeTransfert.instance().setSelection(codeNodes);
   }
 

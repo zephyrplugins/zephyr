@@ -18,7 +18,7 @@ public class MouseTreeListener implements MouseListener {
   @Override
   public void mouseDoubleClick(MouseEvent event) {
     Tree tree = (Tree) event.widget;
-    CodeNode[] codeNodes = StructureExplorer.getSelection(tree);
+    CodeNode[] codeNodes = StructureExplorerView.getSelection(tree);
     Set<ViewProviderReference> providers = buildProviders(codeNodes);
     for (ViewProviderReference reference : providers) {
       final String viewID = reference.viewID();

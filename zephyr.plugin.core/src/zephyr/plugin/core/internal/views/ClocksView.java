@@ -10,6 +10,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.part.ViewPart;
 
 import zephyr.ZephyrSync;
@@ -20,8 +21,11 @@ import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.views.SyncView;
 import zephyr.plugin.core.views.ViewProvider;
+import zephyr.plugin.core.views.ViewWithControl;
 
-public class ClocksView extends ViewPart implements SyncView {
+public class ClocksView extends ViewPart implements SyncView, ViewWithControl {
+  static final public String ViewID = "zephyr.plugin.core.clocksview";
+
   static public class Provider implements ViewProvider {
     @Override
     public boolean canViewDraw(CodeNode codeNode) {
@@ -154,5 +158,10 @@ public class ClocksView extends ViewPart implements SyncView {
     for (Clock clock : new ArrayList<Clock>(composites.keySet()))
       removeComposite(clock);
     super.dispose();
+  }
+
+  @Override
+  public Control control() {
+    return parent;
   }
 }

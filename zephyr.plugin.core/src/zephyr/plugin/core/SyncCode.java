@@ -41,4 +41,8 @@ public class SyncCode {
   public List<ClockNode> clockNodes() {
     return new ArrayList<ClockNode>(clockNodes.values());
   }
+
+  public ClockNode clockNode(Clock clock) {
+    return clockNodes.get(clock);
+  }
 }

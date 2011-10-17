@@ -6,9 +6,9 @@ import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.signals.Listener;
 
 public class RootClassNodeListener implements Listener<CodeNode> {
-  final StructureExplorer structureExplorer;
+  final StructureExplorerView structureExplorer;
 
-  public RootClassNodeListener(StructureExplorer structureExplorer) {
+  public RootClassNodeListener(StructureExplorerView structureExplorer) {
     this.structureExplorer = structureExplorer;
   }
 

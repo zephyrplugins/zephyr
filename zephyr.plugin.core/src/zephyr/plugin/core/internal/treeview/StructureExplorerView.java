@@ -8,6 +8,8 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.IMemento;
@@ -16,6 +18,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 
 import zephyr.ZephyrCore;
+import zephyr.ZephyrSync;
 import zephyr.plugin.core.SyncCode;
 import zephyr.plugin.core.api.codeparser.codetree.AbstractPrimitives;
 import zephyr.plugin.core.api.codeparser.codetree.ClassNode;
@@ -23,21 +26,43 @@ import zephyr.plugin.core.api.codeparser.codetree.ClockNode;
 import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.codeparser.interfaces.ParentNode;
 import zephyr.plugin.core.api.signals.Listener;
+import zephyr.plugin.core.api.synchronization.Clock;
+import zephyr.plugin.core.views.ViewWithControl;
 
-public class StructureExplorer extends ViewPart implements ItemProvider {
+public class StructureExplorerView extends ViewPart implements ItemProvider, ViewWithControl {
+  static final public String ViewID = "zephyr.plugin.core.treeview";
   private Tree tree;
   private final SyncCode codeParser;
   private final IconDatabase iconDatabase = new IconDatabase();
-  private final Map<ClockNode, TreeItem> clockItems = new HashMap<ClockNode, TreeItem>();
+  final Map<ClockNode, TreeItem> clockItems = new HashMap<ClockNode, TreeItem>();
   private final Listener<CodeNode> classNodeListener;
   final TreeState treeState = new TreeState(this);
   private final SelectionListener selectionListener = new SelectionTreeListener();
   private final MouseTreeListener mouseListener = new MouseTreeListener();
+  private final Listener<Clock> onClockRemoved = new Listener<Clock>() {
+    @Override
+    public void listen(Clock clock) {
+      removeClock(clock);
+    }
+  };
 
-  public StructureExplorer() {
+  public StructureExplorerView() {
     codeParser = ZephyrCore.syncCode();
     classNodeListener = new RootClassNodeListener(this);
     codeParser.onParse.connect(classNodeListener);
+    ZephyrSync.onClockRemoved().connect(onClockRemoved);
+  }
+
+  protected void removeClock(final Clock clock) {
+    Display.getDefault().asyncExec(new Runnable() {
+      @Override
+      public void run() {
+        ClockNode clockNode = ZephyrCore.syncCode().clockNode(clock);
+        TreeItem treeItem = clockItems.get(clockNode);
+        if (treeItem != null)
+          treeItem.dispose();
+      }
+    });
   }
 
   @Override
@@ -145,6 +170,7 @@ public class StructureExplorer extends ViewPart implements ItemProvider {
 
   @Override
   public void dispose() {
+    ZephyrSync.onClockRemoved().disconnect(onClockRemoved);
     codeParser.onParse.disconnect(classNodeListener);
     super.dispose();
     iconDatabase.dispose();
@@ -158,5 +184,10 @@ public class StructureExplorer extends ViewPart implements ItemProvider {
     for (int i = 0; i < codeNodes.length; i++)
       codeNodes[i] = (CodeNode) treeItems[i].getData();
     return codeNodes;
+  }
+
+  @Override
+  public Control control() {
+    return tree.getParent();
   }
 }

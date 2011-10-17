@@ -207,7 +207,7 @@
                style="push">
             <parameter
                   name="org.eclipse.ui.views.showView.viewId"
-                  value="zephyr.plugin.tests.treeview">
+                  value="zephyr.plugin.core.treeview">
             </parameter>
          </command>
          <command
@@ -360,9 +360,9 @@
       </view>
       <view
             allowMultiple="false"
-            class="zephyr.plugin.core.internal.treeview.StructureExplorer"
+            class="zephyr.plugin.core.internal.treeview.StructureExplorerView"
             icon="icons/view_structureexplorer.gif"
-            id="zephyr.plugin.tests.treeview"
+            id="zephyr.plugin.core.treeview"
             name="Structure Explorer"
             restorable="true">
       </view>
