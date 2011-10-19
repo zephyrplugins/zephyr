@@ -23,7 +23,6 @@ public class ClockViews implements Listener<ViewTaskExecutor> {
   private final List<ViewTask> viewTasks = Collections.synchronizedList(new ArrayList<ViewTask>());
   private final Clock clock;
   private Thread runnableThread = null;
-  private boolean synchronizationRequired = true;
 
   public ClockViews(Clock clock) {
     this.clock = clock;
@@ -32,7 +31,6 @@ public class ClockViews implements Listener<ViewTaskExecutor> {
   }
 
   protected void synchronize() {
-    synchronizationRequired = true;
     runnableThread = Thread.currentThread();
     refreshViewsIFN();
     if (ZephyrPluginCore.synchronous())
@@ -42,7 +40,6 @@ public class ClockViews implements Listener<ViewTaskExecutor> {
   private void refreshViewsIFN() {
     if (!allTaskDone())
       return;
-    synchronizationRequired = false;
     for (ViewTask task : getViewTasks())
       task.refreshIFN(executor, clock, true);
   }
@@ -96,8 +93,7 @@ public class ClockViews implements Listener<ViewTaskExecutor> {
     synchronized (this) {
       notify();
     }
-    if ((ZephyrPluginCore.control().isSuspended(clock) || runnableThread == null || !runnableThread.isAlive())
-        && synchronizationRequired && allTaskDone())
+    if (ZephyrPluginCore.control().isSuspended(clock) || runnableThread == null || !runnableThread.isAlive())
       refreshViewsIFN();
   }
 
