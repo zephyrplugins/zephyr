@@ -53,8 +53,4 @@ public abstract class ForegroundCanvasView<T> extends ClassTypeView<T> {
       return;
     canvas.getDisplay().syncExec(drawOnCanvas);
   }
-
-  @Override
-  public void unset() {
-  }
 }

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="zephyr.runnable">
+      <client
+            autostart="false"
+            class="zephyr.example.simpleview.SimpleModel"
+            id="zephyr.example.simpleview.simplemodel">
+      </client>
+   </extension>
+   <extension
+         point="zephyr.viewprovider">
+      <client
+            class="zephyr.example.simpleview.SimpleView$Provider"
+            name="Simple View"
+            viewid="zephyr.example.simpleview.simpleview">
+      </client>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            allowMultiple="true"
+            class="zephyr.example.simpleview.SimpleView"
+            id="zephyr.example.simpleview.simpleview"
+            name="Simple View"
+            restorable="true">
+      </view>
+   </extension>
+</plugin>

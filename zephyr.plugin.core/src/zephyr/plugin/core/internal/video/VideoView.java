@@ -129,4 +129,10 @@ public class VideoView extends ForegroundCanvasView<ImageProvider> {
     }
     return null;
   }
+
+  @Override
+  protected void unset() {
+    imageProvider = null;
+    image = null;
+  }
 }
