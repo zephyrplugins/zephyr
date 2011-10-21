@@ -258,22 +258,6 @@
             activityId="zephyr.plugin.core.activity"
             pattern="zephyr.*">
       </activityPatternBinding>
-      <activity
-            id="zephyr.ui.editors.activity"
-            name="Zephyr Eclipse Editors Activity">
-         <enabledWhen>
-            <with
-                  variable="zephyr.plugin.core.isZephyrEnabled">
-               <equals
-                     value="false">
-               </equals>
-            </with>
-         </enabledWhen>
-      </activity>
-      <activityPatternBinding
-            activityId="zephyr.ui.editors.activity"
-            pattern="org.eclipse.ui.edit.*">
-      </activityPatternBinding>
    </extension>
    <extension
          point="org.eclipse.ui.bindings">
