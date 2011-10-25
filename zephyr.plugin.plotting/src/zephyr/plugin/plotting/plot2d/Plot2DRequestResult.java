@@ -2,6 +2,8 @@ package zephyr.plugin.plotting.plot2d;
 
 import org.eclipse.swt.graphics.Point;
 
+import zephyr.plugin.plotting.axes.Axes;
+import zephyr.plugin.plotting.data.Data2D;
 import zephyr.plugin.plotting.mousesearch.RequestResult;
 
 public class Plot2DRequestResult implements RequestResult {

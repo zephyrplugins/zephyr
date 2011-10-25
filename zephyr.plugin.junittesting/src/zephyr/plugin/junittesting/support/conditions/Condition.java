@@ -1,4 +1,4 @@
-package zephyr.plugin.junittesting.conditions;
+package zephyr.plugin.junittesting.support.conditions;
 
 import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.synchronization.Clock;

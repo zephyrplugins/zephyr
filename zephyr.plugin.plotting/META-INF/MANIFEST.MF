@@ -14,7 +14,10 @@ Require-Bundle: zephyr.plugin.core;bundle-version="1.0.0",
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Export-Package: zephyr,
- zephyr.plugin.plotting.mousesearch,
  zephyr.plugin.plotting.actions,
+ zephyr.plugin.plotting.axes,
+ zephyr.plugin.plotting.bar2d,
+ zephyr.plugin.plotting.data,
+ zephyr.plugin.plotting.mousesearch,
  zephyr.plugin.plotting.plot2d,
  zephyr.plugin.plotting.plot2d.drawer2d

@@ -1,4 +1,4 @@
-package zephyr.plugin.junittesting;
+package zephyr.plugin.junittesting.support;
 
 import java.util.HashSet;
 import java.util.Set;

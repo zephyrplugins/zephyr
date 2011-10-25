@@ -12,9 +12,9 @@ import zephyr.ZephyrPlotting;
 import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.canvas.Painter;
 import zephyr.plugin.core.utils.Colors;
+import zephyr.plugin.plotting.axes.Axes;
 import zephyr.plugin.plotting.internal.plots.PlotData.HistoryCached;
 import zephyr.plugin.plotting.internal.traces.TraceData;
-import zephyr.plugin.plotting.plot2d.Axes;
 
 public class PlotOverTime implements Painter {
   static private final RGB[] colorsOrder = { Colors.COLOR_BLUE, Colors.COLOR_DARK_RED, Colors.COLOR_DARK_GREEN,

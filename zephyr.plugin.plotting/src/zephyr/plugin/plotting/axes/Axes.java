@@ -1,4 +1,4 @@
-package zephyr.plugin.plotting.plot2d;
+package zephyr.plugin.plotting.axes;
 
 import java.awt.geom.Point2D;
 
@@ -72,6 +72,10 @@ public class Axes {
     public float max() {
       return (float) maxValue;
     }
+
+    public int toGLength(float length) {
+      return (int) (length * scale);
+    }
   }
 
   public final Axe x;
@@ -114,11 +118,11 @@ public class Axes {
   }
 
 
-  protected double toDX(int gx) {
+  public double toDX(int gx) {
     return x.toD(gx - drawingTranslationX);
   }
 
-  protected double toDY(int gy) {
+  public double toDY(int gy) {
     return y.toD(-(gy - drawingTranslationY));
   }
 

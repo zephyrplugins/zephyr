@@ -38,7 +38,8 @@ public class StructureExplorerView extends ViewPart implements ItemProvider, Vie
   private final Listener<CodeNode> classNodeListener;
   final TreeState treeState = new TreeState(this);
   private final SelectionListener selectionListener = new SelectionTreeListener();
-  private final MouseTreeListener mouseListener = new MouseTreeListener();
+  private MouseTreeListener mouseListener = null;
+  private final ViewAssociator viewAssociator = new ViewAssociator();
   private final Listener<Clock> onClockRemoved = new Listener<Clock>() {
     @Override
     public void listen(Clock clock) {
@@ -75,6 +76,7 @@ public class StructureExplorerView extends ViewPart implements ItemProvider, Vie
     buildRootNode();
     tree.addSelectionListener(selectionListener);
     tree.addTreeListener(treeState);
+    mouseListener = new MouseTreeListener(tree, viewAssociator);
     tree.addMouseListener(mouseListener);
     new TooltipManager(tree);
     treeState.expandNodes();
@@ -172,10 +174,11 @@ public class StructureExplorerView extends ViewPart implements ItemProvider, Vie
   public void dispose() {
     ZephyrSync.onClockRemoved().disconnect(onClockRemoved);
     codeParser.onParse.disconnect(classNodeListener);
-    super.dispose();
+    mouseListener.dispose();
     iconDatabase.dispose();
     tree.dispose();
     clockItems.clear();
+    super.dispose();
   }
 
   static public CodeNode[] getSelection(Tree tree) {

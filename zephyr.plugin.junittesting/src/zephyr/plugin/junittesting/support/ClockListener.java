@@ -1,4 +1,4 @@
-package zephyr.plugin.junittesting;
+package zephyr.plugin.junittesting.support;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,9 +8,9 @@ import zephyr.ZephyrCore;
 import zephyr.ZephyrSync;
 import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.synchronization.Clock;
-import zephyr.plugin.junittesting.conditions.Condition;
+import zephyr.plugin.junittesting.support.conditions.Condition;
 
-class ClockListener {
+public class ClockListener {
   class ClockDeclared implements Listener<Clock> {
     @Override
     public void listen(Clock clock) {

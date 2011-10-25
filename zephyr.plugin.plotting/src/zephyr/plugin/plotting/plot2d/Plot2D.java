@@ -8,6 +8,8 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
 
 import zephyr.plugin.core.utils.Colors;
+import zephyr.plugin.plotting.axes.Axes;
+import zephyr.plugin.plotting.data.Data2D;
 import zephyr.plugin.plotting.mousesearch.MouseSearchable;
 import zephyr.plugin.plotting.mousesearch.RequestResult;
 import zephyr.plugin.plotting.plot2d.drawer2d.Drawer2D;

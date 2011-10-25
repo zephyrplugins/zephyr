@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="zephyr.runnable">
+      <client
+            autostart="false"
+            class="zephyr.plugin.junittesting.histograms.HistogramRunnable"
+            id="zephyr.plugin.junittesting.histograms.runnable">
+      </client>
+   </extension>
+   <extension
+         point="zephyr.viewprovider">
+      <client
+            class="zephyr.plugin.junittesting.histograms.HistogramView$Provider"
+            name="Histogram"
+            viewid="zephyr.plugin.junittesting.histograms.view">
+      </client>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            class="zephyr.plugin.junittesting.histograms.HistogramView"
+            id="zephyr.plugin.junittesting.histograms.view"
+            name="Histogram"
+            restorable="true">
+      </view>
+   </extension>
+
+</plugin>

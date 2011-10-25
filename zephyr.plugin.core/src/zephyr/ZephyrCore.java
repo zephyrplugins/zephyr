@@ -3,6 +3,10 @@ package zephyr;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtension;
+import org.eclipse.core.runtime.IExtensionPoint;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IActionBars;
@@ -17,6 +21,7 @@ import org.eclipse.ui.PlatformUI;
 import zephyr.plugin.core.RunnableFactory;
 import zephyr.plugin.core.SyncCode;
 import zephyr.plugin.core.api.synchronization.Clock;
+import zephyr.plugin.core.internal.StartZephyrMain;
 import zephyr.plugin.core.internal.ZephyrPluginCore;
 import zephyr.plugin.core.internal.startup.StartupJobs;
 
@@ -67,6 +72,10 @@ public class ZephyrCore {
       ZephyrPluginCore.viewBinder().removeClock(clock);
   }
 
+  public static void junitTestMode() {
+    ZephyrPluginCore.setSynchronous(true);
+  }
+
   public static void sendStatusBarMessage(final String message) {
     Display.getDefault().syncExec(new Runnable() {
       @Override
@@ -90,5 +99,21 @@ public class ZephyrCore {
 
   public static SyncCode syncCode() {
     return ZephyrPluginCore.syncCode();
+  }
+
+  public static void start(IConfigurationElement element) {
+    ZephyrPluginCore.getDefault().startZephyrMain(StartZephyrMain.createRunnableFactory(element));
+  }
+
+  static public IConfigurationElement findRunnable(String runnableID) {
+    IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint("zephyr.runnable");
+    IConfigurationElement configurationElement = null;
+    for (IExtension extension : extensionPoint.getExtensions())
+      for (IConfigurationElement element : extension.getConfigurationElements())
+        if (runnableID.equals(element.getAttribute("id"))) {
+          configurationElement = element;
+          break;
+        }
+    return configurationElement;
   }
 }

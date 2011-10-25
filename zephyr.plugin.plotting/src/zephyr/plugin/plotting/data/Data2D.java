@@ -1,4 +1,4 @@
-package zephyr.plugin.plotting.plot2d;
+package zephyr.plugin.plotting.data;
 
 
 public class Data2D {

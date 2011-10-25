@@ -7,10 +7,10 @@ import org.eclipse.swt.graphics.Point;
 
 import zephyr.plugin.core.api.parsing.LabelBuilder;
 import zephyr.plugin.core.api.synchronization.Chrono;
+import zephyr.plugin.plotting.axes.Axes;
 import zephyr.plugin.plotting.internal.plots.PlotData.HistoryCached;
 import zephyr.plugin.plotting.internal.traces.TraceData;
 import zephyr.plugin.plotting.mousesearch.RequestResult;
-import zephyr.plugin.plotting.plot2d.Axes;
 
 public class PlotOverTimeRequestResult implements RequestResult {
   public final HistoryCached history;

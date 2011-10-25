@@ -1,66 +1,91 @@
 package zephyr.plugin.core.internal.treeview;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Tree;
 
 import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
-import zephyr.plugin.core.internal.ZephyrPluginCore;
-import zephyr.plugin.core.internal.synchronization.ViewBinder;
 import zephyr.plugin.core.internal.synchronization.providers.ViewProviderReference;
 
 public class MouseTreeListener implements MouseListener {
-  @Override
-  public void mouseDoubleClick(MouseEvent event) {
-    Tree tree = (Tree) event.widget;
-    CodeNode[] codeNodes = StructureExplorerView.getSelection(tree);
-    Set<ViewProviderReference> providers = buildProviders(codeNodes);
-    for (ViewProviderReference reference : providers) {
-      final String viewID = reference.viewID();
-      if (viewID == null || viewID.isEmpty())
-        continue;
-      displayInView(reference, filter(reference, codeNodes));
+  class PopupItemListener extends SelectionAdapter {
+    @Override
+    public void widgetSelected(SelectionEvent e) {
+      treeItemSelected();
     }
   }
 
-  private void displayInView(final ViewProviderReference reference, final List<CodeNode> codeNodes) {
-    ZephyrPluginCore.viewScheduler().schedule(new Runnable() {
-      @Override
-      public void run() {
-        ViewBinder viewBinder = ZephyrPluginCore.viewBinder();
-        CodeNode[] array = new CodeNode[codeNodes.size()];
-        codeNodes.toArray(array);
-        viewBinder.displayAndBindView(array, reference.viewID());
-      }
-    });
+  final ViewAssociator viewAssociator;
+  private final Menu menu;
+  private final Tree tree;
+  private final List<MenuItem> popupItems = new ArrayList<MenuItem>();
+
+  public MouseTreeListener(Tree tree, ViewAssociator viewAssociator) {
+    this.tree = tree;
+    this.viewAssociator = viewAssociator;
+    menu = new Menu(tree.getShell(), SWT.POP_UP);
   }
 
-  private List<CodeNode> filter(ViewProviderReference reference, CodeNode[] codeNodes) {
-    List<CodeNode> result = new ArrayList<CodeNode>();
-    for (CodeNode codeNode : codeNodes)
-      if (reference.provider().canViewDraw(codeNode))
-        result.add(codeNode);
-    return result;
+  void treeItemSelected() {
+    CodeNode[] selection = StructureExplorerView.getSelection(tree);
+    viewAssociator.showSelection(selection);
   }
 
-  private Set<ViewProviderReference> buildProviders(CodeNode[] codeNodes) {
-    final ViewBinder viewBinder = ZephyrPluginCore.viewBinder();
-    Set<ViewProviderReference> providers = new LinkedHashSet<ViewProviderReference>();
-    for (CodeNode codeNode : codeNodes)
-      providers.addAll(viewBinder.findViewProviders(codeNode));
-    return providers;
+  @Override
+  public void mouseDoubleClick(MouseEvent event) {
+    treeItemSelected();
   }
 
   @Override
   public void mouseDown(MouseEvent event) {
+    if (event.button != 3)
+      return;
+    CodeNode[] selection = StructureExplorerView.getSelection(tree);
+    Set<ViewProviderReference> providers = viewAssociator.buildProviders(selection);
+    disposePreviousItems();
+    if (providers.size() > 0)
+      buildPopupMenu(selection, providers);
+    else
+      buildNoViewAvailableMenu();
+    menu.setVisible(true);
+  }
+
+  private void buildNoViewAvailableMenu() {
+    MenuItem item = new MenuItem(menu, SWT.PUSH);
+    item.setText("<No View Available>");
+    item.setEnabled(false);
+    popupItems.add(item);
+  }
+
+  private void disposePreviousItems() {
+    for (MenuItem menuItem : popupItems)
+      menuItem.dispose();
+    popupItems.clear();
+  }
+
+  private void buildPopupMenu(CodeNode[] selection, Set<ViewProviderReference> providers) {
+    for (ViewProviderReference reference : viewAssociator.buildProviders(selection)) {
+      MenuItem item = new MenuItem(menu, SWT.PUSH);
+      item.setText("Show in " + reference.name());
+      item.addSelectionListener(new PopupItemListener());
+      popupItems.add(item);
+    }
   }
 
   @Override
   public void mouseUp(MouseEvent event) {
+  }
+
+  public void dispose() {
+    menu.dispose();
   }
 }

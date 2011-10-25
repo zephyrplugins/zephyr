@@ -8,10 +8,10 @@ import java.util.concurrent.Semaphore;
 import org.eclipse.swt.graphics.Point;
 
 import zephyr.plugin.core.api.signals.Listener;
+import zephyr.plugin.plotting.axes.Axes;
 import zephyr.plugin.plotting.internal.traces.TraceData;
 import zephyr.plugin.plotting.internal.traces.TraceData.DataTimeInfo;
 import zephyr.plugin.plotting.mousesearch.RequestResult;
-import zephyr.plugin.plotting.plot2d.Axes;
 
 public class PlotData {
   static public class HistoryCached {
