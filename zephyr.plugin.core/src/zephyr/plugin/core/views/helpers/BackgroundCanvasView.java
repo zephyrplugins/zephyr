@@ -1,5 +1,6 @@
 package zephyr.plugin.core.views.helpers;
 
+import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
@@ -18,6 +19,10 @@ public abstract class BackgroundCanvasView<T> extends ClassTypeView<T> implement
     parent.setLayout(gridLayout);
     backgroundCanvas = new BackgroundCanvas(parent, this);
     backgroundCanvas.setFillLayout();
+    setToolbar(getViewSite().getActionBars().getToolBarManager());
+  }
+
+  protected void setToolbar(IToolBarManager toolBarManager) {
   }
 
   @Override
