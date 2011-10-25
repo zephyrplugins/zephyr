@@ -4,7 +4,7 @@
    <extension
          point="zephyr.runnable">
       <client
-            autostart="true"
+            autostart="false"
             class="zephyr.example.simpleplugin.SimplePlugin"
             id="zephyr.example.simpleplugin.client">
       </client>
