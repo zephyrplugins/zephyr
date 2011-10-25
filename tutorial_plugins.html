@@ -58,12 +58,10 @@ purpose, we use the Extension framework of Eclipse:
 </ul>
 
 If the attribute
-<span class="code">autostart</span>
-is set to
-<span class="code">true</span>, Zephyr will run your client at startup in its own thread. When
-autostart is set to false, then you need to pass the
+<span class="code">autostart=true</span>, Zephyr will run your client at startup in its own thread. When
+<span class="code">autostart=false</span>, then you need to pass the
 <span class="code">id</span>
-of the client at the command line for Zephyr to start it up.
+of the client at the command line for Zephyr to start it up (see below).
 <br>
 <br>
 When Zephyr starts, it requests to Eclipse every clients in plugins that provide
@@ -81,11 +79,22 @@ See the <a href="tutorial_java.html"/>Java Archive tutorial</a> for declaring da
 	<li>On the left, right click on Eclipse Application then New</li>
 	<li>Give a name to your configuration</li>
 	<li>In <i>Run a product:</i> select <i>zephyr.application.product</i></li>
-	<li>Select the tab <i>Plug-ins</i></li>
+	<li>Select the tab <span class='menu'>Plug-ins</span></li>
 	<li>In <i>Launch with:</i> select <i>plug-ins selected below
 			only</i></li>
 	<li>Click<i> Deselect All</i> then select your Eclipse Plug-in
 		Project and click <i>Add Required Plug-ins</i></li>
+	<li>If <span class='code'>autostart=false</span> in the client of your <span class='code'>zephyr.runnable</span> 
+	extension, then you need to add the <span class='code'>id</span> (not the class) of your client to the program
+	arguments:
+	  <ul>
+	    <li>Select the tab <span class='menu'>Arguments</span>
+	    <li>Add to <span class='menu'>Program arguments</span> the <span class='code'>id</span> of your client 
+	    (e.g. <span class='code'>zephyr.example.simpleplugin.client</span>)
+	    <li>Note: you can find the id by opening the file <span class='file'>plugin.xml</span> of your project, then 
+	    the tab <span class='menu'>Extensions</span>, then select your client in 
+	    <span class='code'>zephyr.runnable</span>, finally check the field <span class='code'>id</span>
+	  </ul>
 	<li>Click on<i> Run</i></li>
 </ul>
 Zephyr will start with an empty plot view. To select traces (data),
