@@ -14,11 +14,13 @@ public class ViewAssociator {
   public ViewAssociator() {
   }
 
-  public void showSelection(CodeNode[] codeNodes) {
+  public void showSelection(CodeNode[] codeNodes, String defaultView) {
     Set<ViewProviderReference> providers = buildProviders(codeNodes);
     for (ViewProviderReference reference : providers) {
       final String viewID = reference.viewID();
       if (viewID == null || viewID.isEmpty())
+        continue;
+      if (defaultView != null && !defaultView.equals(viewID))
         continue;
       displayInView(reference, filter(reference, codeNodes));
     }

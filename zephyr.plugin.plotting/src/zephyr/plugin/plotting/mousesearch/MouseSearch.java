@@ -65,10 +65,12 @@ public class MouseSearch extends Job implements Overlay {
     Display.getDefault().syncExec(new Runnable() {
       @Override
       public void run() {
-        if (valueLabel.isDisposed())
-          return;
-        valueLabel.setText(requestResult != null ? requestResult.fieldLabel() : "");
-        valueLabel.getParent().pack(true);
+        String searchLabel = requestResult != null ? requestResult.fieldLabel() : "";
+        if (validValueLabel()) {
+          valueLabel.setText(searchLabel);
+          valueLabel.getParent().pack(true);
+        }
+        ZephyrCore.sendStatusBarMessage(searchLabel);
         control.setToolTipText(requestResult != null ? requestResult.tooltipLabel() : "");
         control.redraw();
         searchRunning = false;
@@ -80,19 +82,28 @@ public class MouseSearch extends Job implements Overlay {
     valueLabel = new Label(composite, SWT.NONE);
   }
 
+  boolean validValueLabel() {
+    return valueLabel != null && !valueLabel.isDisposed();
+  }
+
+  private void setValueLabel(String text) {
+    if (!validValueLabel())
+      return;
+    valueLabel.setText(text);
+  }
+
   @Override
   public void drawOverlay(GC gc) {
     if (requestResult == null || mouseSearchable.emptySearch()) {
-      valueLabel.setText("");
+      setValueLabel("");
       control.setToolTipText("");
       return;
     }
     gc.setForeground(colors.color(gc, Colors.COLOR_RED));
     final int halfSize = 2;
     Point stickyMousePosition = requestResult.computeMousePosition();
-    gc.drawRectangle(stickyMousePosition.x - halfSize, stickyMousePosition.y - halfSize,
-                     halfSize * 2, halfSize * 2);
+    gc.drawRectangle(stickyMousePosition.x - halfSize, stickyMousePosition.y - halfSize, halfSize * 2, halfSize * 2);
     if (requestResult.dynamicText())
-      valueLabel.setText(requestResult.fieldLabel());
+      setValueLabel(requestResult.fieldLabel());
   }
 }

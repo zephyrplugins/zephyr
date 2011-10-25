@@ -78,4 +78,8 @@ public class Bar2D implements MouseSearchable {
   public Axes axes() {
     return axes;
   }
+
+  public void dispose() {
+    colors.dispose();
+  }
 }

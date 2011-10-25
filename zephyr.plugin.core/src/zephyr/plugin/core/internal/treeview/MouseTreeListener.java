@@ -18,9 +18,15 @@ import zephyr.plugin.core.internal.synchronization.providers.ViewProviderReferen
 
 public class MouseTreeListener implements MouseListener {
   class PopupItemListener extends SelectionAdapter {
+    private final String viewID;
+
+    public PopupItemListener(String viewID) {
+      this.viewID = viewID;
+    }
+
     @Override
     public void widgetSelected(SelectionEvent e) {
-      treeItemSelected();
+      treeItemSelected(viewID);
     }
   }
 
@@ -35,14 +41,14 @@ public class MouseTreeListener implements MouseListener {
     menu = new Menu(tree.getShell(), SWT.POP_UP);
   }
 
-  void treeItemSelected() {
+  void treeItemSelected(String viewID) {
     CodeNode[] selection = StructureExplorerView.getSelection(tree);
-    viewAssociator.showSelection(selection);
+    viewAssociator.showSelection(selection, viewID);
   }
 
   @Override
   public void mouseDoubleClick(MouseEvent event) {
-    treeItemSelected();
+    treeItemSelected(null);
   }
 
   @Override
@@ -76,7 +82,7 @@ public class MouseTreeListener implements MouseListener {
     for (ViewProviderReference reference : viewAssociator.buildProviders(selection)) {
       MenuItem item = new MenuItem(menu, SWT.PUSH);
       item.setText("Show in " + reference.name());
-      item.addSelectionListener(new PopupItemListener());
+      item.addSelectionListener(new PopupItemListener(reference.viewID()));
       popupItems.add(item);
     }
   }
