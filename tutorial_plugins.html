@@ -23,16 +23,16 @@ The first thing you need to do is to contribute to Zephyr (with your
 code generating the data you want to plot) is an Eclipse Plug-in
 Project. The first way is to create a new project:
 <ul>
-	<li><span class='menu'>File -&gt; New -&gt; Other...</span></li>
-	<li>Select Plug-in Project (in Plug-in Development) then push Next</li>
-	<li>Give the project a name then push Next and then Finish</li>
+	<li><span class='menu'>File-&gt;New-&gt;Other...</span></li>
+	<li>Select <span class='menu'>Plug-in Project</span> (in Plug-in Development) then push <span class='menu'>Next</span></li>
+	<li>Give the project a name then push <span class='menu'>Next</span> and then <span class='menu'>Finish</span></li>
 </ul>
 The second way is to transform an existing Java Project in your Eclipse
 into a Eclipse Plug-in Project:
 <ul>
 	<li>Right-click on your Java project and then <span class='menu'>Configure
 			-&gt; Convert to Plug-in Projects...</span></li>
-	<li>Select your project and then click Finish</li>
+	<li>Select your project and then click <span class='menu'>Finish</span></li>
 </ul>
 
 
@@ -42,16 +42,16 @@ into a Eclipse Plug-in Project:
 When Zephyr starts, it needs to know what to run in your code. To this
 purpose, we use the Extension framework of Eclipse:
 <ul>
-	<li>Open the file META-INF/MANIFEST.MF (this file should exist for
+	<li>Open the file <span class='file'>META-INF/MANIFEST.MF</span> (this file should exist for
 		every Eclipse Plug-in Project)</li>
-	<li>Click on the tab Dependencies then click Add... then select <i>zephyr.plugin.core</i>
-		and <i>zephyr.plugin.core.api</i> then click Ok<br>
+	<li>Click on the tab <span class='menu'>Dependencies</span> then click <span class='menu'>Add...</span> then select <span class='code'>zephyr.plugin.core</span>
+		and <span class='code'>zephyr.plugin.core.api</span> then click <span class='menu'>Ok</span><br>
 	</li>
-	<li>Click on the tab Extensions then click Add... then select <i>zephyr.runnable
-	</i>then<i> </i>click Finish<br>
+	<li>Click on the tab <span class='menu'>Extensions</span> then click <span class='menu'>Add...</span> then select <span class='code'>zephyr.runnable
+	</span>then click <span class='menu'>Finish</span><br>
 	</li>
-	<li>Click right on the extension then New -&gt; client</li>
-	<li>Click on the new client and set a class (click on the link <i>class</i>
+	<li>Click right on the extension then <span class='menu'>New-&gt;client</span></li>
+	<li>Click on the new client and set a class (click on the link <span class='menu'>class</span>
 		to create a new one or browse to select an existing one). This class
 		must implement the interface <span class="code">java.lang.Runnable</span></li>
 	<li>Save the file</li>
@@ -70,20 +70,20 @@ extension and then start each client provided by the extension in its own thread
 
 <br>
 <br>
-See the <a href="tutorial_java.html"/>Java Archive tutorial</a> for declaring data to monitor for Zephyr. 
+See the <a href="tutorial_java.html">Java Archive tutorial</a> for declaring data to monitor for Zephyr. 
 
 
 <h3 id='running'>4. Running Zephyr with your client</h3>
 <ul>
 	<li>Go to: <span class="menu">Run -&gt; Run Configurations...</span></li>
-	<li>On the left, right click on Eclipse Application then New</li>
+	<li>On the left, right click on <span class="menu">Eclipse Application</span> then <span class="menu">New</span></li>
 	<li>Give a name to your configuration</li>
-	<li>In <i>Run a product:</i> select <i>zephyr.application.product</i></li>
+	<li>In <span class="menu">Run a product:</span> select <span class="code">zephyr.application.product</span></li>
 	<li>Select the tab <span class='menu'>Plug-ins</span></li>
-	<li>In <i>Launch with:</i> select <i>plug-ins selected below
-			only</i></li>
-	<li>Click<i> Deselect All</i> then select your Eclipse Plug-in
-		Project and click <i>Add Required Plug-ins</i></li>
+	<li>In <span class="menu">Launch with:</span> select <span class="menu">plug-ins selected below
+			only</span></li>
+	<li>Click <span class="menu">Deselect All</span> then select your Eclipse Plug-in
+		Project (e.g. select <span class='code'>zephyr.example.simpleplugin</span>) and click <span class="menu">Add Required Plug-ins</span> </li>
 	<li>If <span class='code'>autostart=false</span> in the client of your <span class='code'>zephyr.runnable</span> 
 	extension, then you need to add the <span class='code'>id</span> (not the class) of your client to the program
 	arguments:
@@ -95,7 +95,7 @@ See the <a href="tutorial_java.html"/>Java Archive tutorial</a> for declaring da
 	    the tab <span class='menu'>Extensions</span>, then select your client in 
 	    <span class='code'>zephyr.runnable</span>, finally check the field <span class='code'>id</span>
 	  </ul>
-	<li>Click on<i> Run</i></li>
+	<li>Click on <span class='menu'>Run</span></li>
 </ul>
 Zephyr will start with an empty plot view. To select traces (data),
 press S in the Graphs view or go to <span class='menu'>Plotting-&gt;Select Traces...</span> or
