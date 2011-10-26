@@ -20,8 +20,7 @@ public class StartZephyrMain implements StartupJob {
   @Override
   public void run() {
     List<String> args = ZephyrPluginCore.getArgsFiltered();
-    IConfigurationElement[] config = Platform.getExtensionRegistry()
-          .getConfigurationElementsFor("zephyr.runnable");
+    IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor("zephyr.runnable");
     for (IConfigurationElement element : config) {
       boolean autostart = Boolean.parseBoolean(element.getAttribute("autostart"));
       if (!autostart && !checkForID(args, element.getAttribute("id")))

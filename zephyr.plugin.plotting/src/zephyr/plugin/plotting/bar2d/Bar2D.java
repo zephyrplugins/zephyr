@@ -3,6 +3,7 @@ package zephyr.plugin.plotting.bar2d;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
 
+import zephyr.ZephyrPlotting;
 import zephyr.plugin.core.utils.Colors;
 import zephyr.plugin.plotting.axes.Axes;
 import zephyr.plugin.plotting.data.Data2D;
@@ -36,6 +37,9 @@ public class Bar2D implements MouseSearchable {
     int barWidth = Math.max(1, gc.getClipping().width / data.nbPoints);
     int origin = axes.toGY(0);
     gc.setForeground(colors.color(gc, Colors.COLOR_BLACK));
+    int lineWidth = ZephyrPlotting.preferredLineSize();
+    gc.setLineWidth(lineWidth);
+    boolean drawContour = barWidth > lineWidth * 2;
     for (int i = 0; i < data.nbPoints; i++) {
       float yValue = ydata[i];
       int barHeight = axes.y.toGLength(-yValue);
@@ -44,7 +48,7 @@ public class Bar2D implements MouseSearchable {
       int gx = axes.toGX(xdata[i]);
       gc.setBackground(colors.color(gc, yValue > 0 ? Colors.COLOR_RED : Colors.COLOR_BLUE));
       gc.fillRectangle(gx, origin, barWidth, barHeight);
-      if (barWidth > 5)
+      if (drawContour)
         gc.drawRectangle(gx, origin, barWidth, barHeight);
     }
   }
