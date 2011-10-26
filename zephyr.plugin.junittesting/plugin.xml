@@ -26,5 +26,11 @@
             restorable="true">
       </view>
    </extension>
+   <extension
+         point="zephyr.listener">
+      <recorder
+            class="zephyr.plugin.junittesting.busevent.JUnitRecorder">
+      </recorder>
+   </extension>
 
 </plugin>

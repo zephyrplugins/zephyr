@@ -29,7 +29,9 @@ import zephyr.plugin.core.api.codeparser.codetree.CodeTrees;
 import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.synchronization.Clock;
+import zephyr.plugin.core.async.BusEvent;
 import zephyr.plugin.core.control.Control;
+import zephyr.plugin.core.internal.async.ZephyrBusEvent;
 import zephyr.plugin.core.internal.preferences.PreferenceKeys;
 import zephyr.plugin.core.internal.synchronization.ViewBinder;
 import zephyr.plugin.core.internal.synchronization.tasks.ViewTaskScheduler;
@@ -47,6 +49,7 @@ public class ZephyrPluginCore extends AbstractUIPlugin {
   private final ThreadGroup threadGroup = new ThreadGroup("ZephyrRunnable");
   private final ZephyrClassLoaderInternal classLoader;
   private final Control control = new Control();
+  private final ZephyrBusEvent busEvent = new ZephyrBusEvent();
 
   public ZephyrPluginCore() {
     classLoader = AccessController.doPrivileged(new PrivilegedAction<ZephyrClassLoaderInternal>() {
@@ -104,12 +107,18 @@ public class ZephyrPluginCore extends AbstractUIPlugin {
   public void start(BundleContext context) throws Exception {
     super.start(context);
     plugin = this;
+    busEvent.registerRecorders();
+    busEvent.start();
   }
 
   @Override
   public void stop(BundleContext context) throws Exception {
     plugin = null;
     super.stop(context);
+  }
+
+  static public BusEvent busEvent() {
+    return getDefault().busEvent;
   }
 
   static public ViewBinder viewBinder() {
