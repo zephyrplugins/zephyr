@@ -1,4 +1,4 @@
-package zephyr.plugin.junittesting.histograms;
+package zephyr.plugin.junittesting.bars;
 
 import java.util.Random;
 
@@ -6,13 +6,13 @@ import zephyr.plugin.core.api.Zephyr;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 import zephyr.plugin.core.api.synchronization.Clock;
 
-public class HistogramRunnable implements Runnable {
+public class BarRunnable implements Runnable {
   @Monitor
   private final float[] values = new float[100];
   private final Random random = new Random(0);
   private final Clock clock = new Clock("ModelRunnable");
 
-  public HistogramRunnable() {
+  public BarRunnable() {
     Zephyr.advertise(clock, this);
   }
 

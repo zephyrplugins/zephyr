@@ -5,24 +5,24 @@
          point="zephyr.runnable">
       <client
             autostart="false"
-            class="zephyr.plugin.junittesting.histograms.HistogramRunnable"
-            id="zephyr.plugin.junittesting.histograms.runnable">
+            class="zephyr.plugin.junittesting.bars.BarRunnable"
+            id="zephyr.plugin.junittesting.bars.runnable">
       </client>
    </extension>
    <extension
          point="zephyr.viewprovider">
       <client
-            class="zephyr.plugin.junittesting.histograms.HistogramView$Provider"
-            name="Histogram"
-            viewid="zephyr.plugin.junittesting.histograms.view">
+            class="zephyr.plugin.junittesting.bars.BarView$Provider"
+            name="Bar"
+            viewid="zephyr.plugin.junittesting.bars.view">
       </client>
    </extension>
    <extension
          point="org.eclipse.ui.views">
       <view
-            class="zephyr.plugin.junittesting.histograms.HistogramView"
-            id="zephyr.plugin.junittesting.histograms.view"
-            name="Histogram"
+            class="zephyr.plugin.junittesting.bars.BarView"
+            id="zephyr.plugin.junittesting.bars.view"
+            name="Bars"
             restorable="true">
       </view>
    </extension>
