@@ -28,13 +28,12 @@ import zephyr.plugin.core.api.Zephyr.AdvertisementInfo;
 import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.async.BusEvent;
 import zephyr.plugin.core.async.recognizers.OnEventBlocker;
-import zephyr.plugin.core.async.recognizers.RecognizeID;
-import zephyr.plugin.core.control.Control;
 import zephyr.plugin.core.events.AdvertizeEvent;
-import zephyr.plugin.core.events.CodeParsedEvent;
 import zephyr.plugin.core.internal.async.ZephyrBusEvent;
+import zephyr.plugin.core.internal.clocks.Clocks;
+import zephyr.plugin.core.internal.clocks.Control;
 import zephyr.plugin.core.internal.preferences.PreferenceKeys;
-import zephyr.plugin.core.internal.synchronization.ViewBinder;
+import zephyr.plugin.core.internal.synchronization.binding.ViewBinder;
 import zephyr.plugin.core.internal.synchronization.tasks.ViewTaskScheduler;
 import zephyr.plugin.core.views.SyncView;
 
@@ -50,7 +49,7 @@ public class ZephyrPluginCore extends AbstractUIPlugin {
   private final ZephyrClassLoaderInternal classLoader;
   private final Control control = new Control();
   final ZephyrBusEvent busEvent = new ZephyrBusEvent();
-  final OnEventBlocker codeParsedBlocker = busEvent.createWaiter(new RecognizeID(CodeParsedEvent.ID));
+  private final Clocks clocks = new Clocks();
 
   public ZephyrPluginCore() {
     classLoader = AccessController.doPrivileged(new PrivilegedAction<ZephyrClassLoaderInternal>() {
@@ -62,6 +61,10 @@ public class ZephyrPluginCore extends AbstractUIPlugin {
     Zephyr.onAdvertised.connect(new Listener<AdvertisementInfo>() {
       @Override
       public void listen(AdvertisementInfo eventInfo) {
+        RecognizeZephyrInitialization recognizer = new RecognizeZephyrInitialization(eventInfo);
+        if (recognizer.isSatisfied())
+          return;
+        OnEventBlocker codeParsedBlocker = busEvent.createWaiter(recognizer);
         codeParsedBlocker.connect();
         busEvent.dispatch(new AdvertizeEvent(eventInfo));
         codeParsedBlocker.block();
@@ -240,5 +243,9 @@ public class ZephyrPluginCore extends AbstractUIPlugin {
 
   public ClassLoader classLoader() {
     return classLoader;
+  }
+
+  public static Clocks clocks() {
+    return plugin.clocks;
   }
 }

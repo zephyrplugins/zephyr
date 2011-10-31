@@ -1,4 +1,4 @@
-package zephyr.plugin.core.control;
+package zephyr.plugin.core.internal.clocks;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -8,27 +8,13 @@ import java.util.Map;
 import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.signals.Signal;
 import zephyr.plugin.core.api.synchronization.Clock;
-import zephyr.plugin.core.internal.SavedSettings;
 import zephyr.plugin.core.internal.ZephyrPluginCore;
-import zephyr.plugin.core.utils.Helper;
 
 public class Control implements Listener<Clock> {
   public Signal<Control> onModeChange = new Signal<Control>();
   private final Map<Clock, Integer> suspended = new LinkedHashMap<Clock, Integer>();
 
   public Control() {
-  }
-
-  public void connectSuspendOnJobStarting() {
-    ZephyrPluginCore.viewBinder().onClockAdded.connect(new Listener<Clock>() {
-      @Override
-      public void listen(Clock clock) {
-        if (!Helper.booleanState(SavedSettings.STARTSUSPENDED, false))
-          return;
-        suspendClock(clock);
-        onModeChange.fire(Control.this);
-      }
-    });
   }
 
   public void step(int nbTimeSteps) {
@@ -44,7 +30,7 @@ public class Control implements Listener<Clock> {
 
   public void suspend() {
     assert hasOneClockRunning();
-    for (Clock clock : ZephyrPluginCore.viewBinder().getClocks())
+    for (Clock clock : ZephyrPluginCore.clocks().getClocks())
       suspendClock(clock);
     onModeChange.fire(this);
   }
@@ -61,6 +47,7 @@ public class Control implements Listener<Clock> {
     Integer previous = suspended.put(clock, 0);
     if (previous == null)
       clock.onTick.connect(this);
+    onModeChange.fire(Control.this);
   }
 
   public void resume() {

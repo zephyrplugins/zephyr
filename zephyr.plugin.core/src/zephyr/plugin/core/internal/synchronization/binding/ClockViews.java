@@ -1,4 +1,4 @@
-package zephyr.plugin.core.internal.synchronization;
+package zephyr.plugin.core.internal.synchronization.binding;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -103,5 +103,9 @@ public class ClockViews implements Listener<ViewTaskExecutor> {
     for (int i = 0; i < result.length; i++)
       result[i] = tasks.get(i).viewRef().view();
     return result;
+  }
+
+  public Clock clock() {
+    return clock;
   }
 }

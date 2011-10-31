@@ -22,9 +22,9 @@ import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.synchronization.Chrono;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.api.synchronization.ClockInfo;
-import zephyr.plugin.core.control.Control;
 import zephyr.plugin.core.helpers.ImageManager;
 import zephyr.plugin.core.internal.ZephyrPluginCore;
+import zephyr.plugin.core.internal.clocks.Control;
 
 public class ClockComposite {
   static class UpdatableLabelInfo {

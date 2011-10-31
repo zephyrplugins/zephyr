@@ -5,11 +5,15 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import zephyr.ZephyrSync;
+import zephyr.ZephyrCore;
+import zephyr.plugin.core.api.Zephyr;
 import zephyr.plugin.core.api.monitoring.abstracts.MonitorSynchronizer;
 import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.signals.Signal;
 import zephyr.plugin.core.api.synchronization.Clock;
+import zephyr.plugin.core.async.events.Event;
+import zephyr.plugin.core.async.listeners.EventListener;
+import zephyr.plugin.core.events.ClockEvent;
 
 public class ClockTracesManager implements MonitorSynchronizer {
   private boolean forceEnabled = false;
@@ -19,21 +23,22 @@ public class ClockTracesManager implements MonitorSynchronizer {
   private final Map<Clock, ClockTraces> clocks = new LinkedHashMap<Clock, ClockTraces>();
 
   public ClockTracesManager() {
-    ZephyrSync.onClockRemoved().connect(new Listener<Clock>() {
+    ZephyrCore.busEvent().register(ClockEvent.RemovedID, new EventListener() {
+
       @Override
-      public void listen(Clock clock) {
-        removeClock(clock);
+      public void listen(Event event) {
+        removeClock(((ClockEvent) event).clock());
       }
     });
   }
 
   @Override
   synchronized public ClockTraces getSyncMonitor(Clock clock) {
+    Zephyr.advertise(clock, null);
     String clockLabel = clock.info().label();
     ClockTraces clockTraces = clocks.get(clock);
     if (clockTraces != null)
       return clockTraces;
-    ZephyrSync.declareClock(clock);
     clockTraces = new ClockTraces(clockLabel, clock);
     assert !clocks.containsKey(clock);
     clocks.put(clock, clockTraces);

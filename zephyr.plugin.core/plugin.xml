@@ -383,12 +383,27 @@
    <extension
          point="zephyr.listener">
       <listener
-            class="zephyr.plugin.core.internal.listeners.ObjectAdvertizedListener"
+            class="zephyr.plugin.core.internal.clocks.RegisterClockWhenAdvertizedListener"
+            eventid="zephyr.event.advertize"
+            name="ClockRegisteredWhenAdvertized">
+      </listener>
+      <listener
+            class="zephyr.plugin.core.internal.synchronization.binding.ClockAddedListener"
+            eventid="zephyr.event.clockadded"
+            name="ViewRegistryCreatedWhenClockAdded">
+      </listener>
+      <listener
+            class="zephyr.plugin.core.internal.synchronization.binding.ClockRemovedListener"
+            eventid="zephyr.event.clockremoved"
+            name="ViewRegistryDeletedWhenClockRemoved">
+      </listener>
+      <listener
+            class="zephyr.plugin.core.internal.ParseCodeWhenAdvertizedListener"
             eventid="zephyr.event.advertize"
             name="ParseCodeOnAdvertized">
       </listener>
       <listener
-            class="zephyr.plugin.core.internal.listeners.PopupViewListener"
+            class="zephyr.plugin.core.internal.synchronization.PopupViewListener"
             eventid="zephyr.event.codeparsed"
             name="PopupViewOnCodeParsed">
       </listener>

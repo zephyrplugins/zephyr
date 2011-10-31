@@ -2,6 +2,7 @@ package zephyr.plugin.core.events;
 
 import zephyr.plugin.core.api.codeparser.codetree.ClockNode;
 import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
+import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.async.events.Event;
 
 public class CodeParsedEvent implements Event {
@@ -25,5 +26,9 @@ public class CodeParsedEvent implements Event {
 
   public ClockNode clockNode() {
     return clockNode;
+  }
+
+  public Clock clock() {
+    return clockNode.clock();
   }
 }

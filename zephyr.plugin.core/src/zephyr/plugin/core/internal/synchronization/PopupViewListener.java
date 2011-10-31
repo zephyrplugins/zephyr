@@ -1,4 +1,4 @@
-package zephyr.plugin.core.internal.listeners;
+package zephyr.plugin.core.internal.synchronization;
 
 import zephyr.plugin.core.api.codeparser.codetree.CodeTrees;
 import zephyr.plugin.core.async.events.Event;

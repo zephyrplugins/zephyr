@@ -4,11 +4,8 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 
-import zephyr.ZephyrSync;
-import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.internal.observations.LineLayout;
 import zephyr.plugin.core.views.helpers.ClassTypeView;
@@ -27,17 +24,6 @@ public abstract class EnvironmentView<T> extends ClassTypeView<T> {
   protected T environment = null;
   protected Clock clock = null;
   private String defaultViewName = "EnvironmentView";
-
-  public EnvironmentView() {
-    ZephyrSync.onClockRemoved().connect(new Listener<Clock>() {
-      @SuppressWarnings("synthetic-access")
-      @Override
-      public void listen(Clock clock) {
-        if (instance.clock() == clock)
-          unset();
-      }
-    });
-  }
 
   @Override
   public void createPartControl(Composite parent) {
@@ -106,18 +92,11 @@ public abstract class EnvironmentView<T> extends ClassTypeView<T> {
 
   @Override
   protected void unset() {
-    obsLayout = null;
-    Display.getDefault().asyncExec(new Runnable() {
-      @SuppressWarnings("synthetic-access")
-      @Override
-      public void run() {
-        if (parent.isDisposed())
-          return;
-        for (Control child : parent.getChildren())
-          child.dispose();
-      }
-    });
-    if (!parent.isDisposed())
-      setViewName(defaultViewName, "");
+  }
+
+  @Override
+  protected void disposeChildrenOnUnset() {
+    dispose();
+    setViewName(defaultViewName, "");
   }
 }

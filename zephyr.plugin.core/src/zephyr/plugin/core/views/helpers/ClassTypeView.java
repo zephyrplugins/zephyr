@@ -20,6 +20,13 @@ import zephyr.plugin.core.views.ProvidedView;
 
 public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView, SetableView, DropTargetView {
   private final Semaphore viewLock = new Semaphore(1, true);
+  private final Runnable disposeChildrenUnlockView = new Runnable() {
+    @Override
+    public void run() {
+      disposeChildrenOnUnset();
+      releaseViewLock();
+    }
+  };
   protected final InstanceManager<T> instance;
   protected Composite parent;
 
@@ -85,7 +92,7 @@ public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView,
     });
   }
 
-  private void releaseViewLock() {
+  void releaseViewLock() {
     viewLock.release();
   }
 
@@ -123,7 +130,7 @@ public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView,
   final public void unsetInstance() {
     acquireViewLock();
     unset();
-    releaseViewLock();
+    Display.getDefault().asyncExec(disposeChildrenUnlockView);
   }
 
   @Override
@@ -135,6 +142,9 @@ public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView,
 
   protected Class<?> classSupported() {
     return Object.class;
+  }
+
+  protected void disposeChildrenOnUnset() {
   }
 
   abstract protected void set(T current);

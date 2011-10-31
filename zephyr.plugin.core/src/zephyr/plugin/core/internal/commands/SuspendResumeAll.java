@@ -5,8 +5,8 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 
-import zephyr.plugin.core.control.Control;
 import zephyr.plugin.core.internal.ZephyrPluginCore;
+import zephyr.plugin.core.internal.clocks.Control;
 
 public class SuspendResumeAll extends AbstractHandler {
   @Override

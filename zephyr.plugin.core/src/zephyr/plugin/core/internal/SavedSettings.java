@@ -15,6 +15,5 @@ public class SavedSettings implements StartupJob {
   @Override
   public void run() {
     ZephyrPluginCore.setSynchronous(Helper.booleanState(SYNCHRONOUS, false));
-    ZephyrPluginCore.control().connectSuspendOnJobStarting();
   }
 }

@@ -1,6 +1,7 @@
 package zephyr.plugin.junittesting;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import zephyr.plugin.filehandling.FileHandler;
@@ -10,6 +11,11 @@ import zephyr.plugin.junittesting.support.conditions.NumberTickCondition;
 
 public class RunnableFilesTests {
   private static final long TimeOut = 120000;
+
+  @Before
+  public void before() {
+    // ClockListener.enableVerbose();
+  }
 
   private void testFileLoading(String filepath) {
     ClockListener listener = new ClockListener();

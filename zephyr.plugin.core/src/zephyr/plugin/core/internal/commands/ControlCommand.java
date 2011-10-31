@@ -6,8 +6,8 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 
 import zephyr.plugin.core.api.signals.Listener;
-import zephyr.plugin.core.control.Control;
 import zephyr.plugin.core.internal.ZephyrPluginCore;
+import zephyr.plugin.core.internal.clocks.Control;
 import zephyr.plugin.core.utils.Helper;
 
 public abstract class ControlCommand extends AbstractHandler implements Listener<Control> {

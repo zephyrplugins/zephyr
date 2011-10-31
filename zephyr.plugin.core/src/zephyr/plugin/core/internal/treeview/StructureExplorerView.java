@@ -9,7 +9,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.IMemento;
@@ -18,15 +17,16 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 
 import zephyr.ZephyrCore;
-import zephyr.ZephyrSync;
 import zephyr.plugin.core.SyncCode;
 import zephyr.plugin.core.api.codeparser.codetree.AbstractPrimitives;
 import zephyr.plugin.core.api.codeparser.codetree.ClassNode;
 import zephyr.plugin.core.api.codeparser.codetree.ClockNode;
 import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.codeparser.interfaces.ParentNode;
-import zephyr.plugin.core.api.signals.Listener;
-import zephyr.plugin.core.api.synchronization.Clock;
+import zephyr.plugin.core.async.events.Event;
+import zephyr.plugin.core.async.listeners.EventListener;
+import zephyr.plugin.core.async.listeners.UIListener;
+import zephyr.plugin.core.events.ClockEvent;
 import zephyr.plugin.core.events.CodeParsedEvent;
 import zephyr.plugin.core.views.ViewWithControl;
 
@@ -41,10 +41,13 @@ public class StructureExplorerView extends ViewPart implements ItemProvider, Vie
   private final SelectionListener selectionListener = new SelectionTreeListener();
   private MouseTreeListener mouseListener = null;
   private final ViewAssociator viewAssociator = new ViewAssociator();
-  private final Listener<Clock> onClockRemoved = new Listener<Clock>() {
+  private final EventListener onClockRemoved = new UIListener() {
     @Override
-    public void listen(Clock clock) {
-      removeClock(clock);
+    public void listenInUIThread(Event event) {
+      ClockNode clockNode = ZephyrCore.syncCode().clockNode(((ClockEvent) event).clock());
+      TreeItem treeItem = clockItems.get(clockNode);
+      if (treeItem != null)
+        treeItem.dispose();
     }
   };
 
@@ -52,19 +55,7 @@ public class StructureExplorerView extends ViewPart implements ItemProvider, Vie
     codeParser = ZephyrCore.syncCode();
     classNodeListener = new RootClassNodeListener(this);
     ZephyrCore.busEvent().register(CodeParsedEvent.ID, classNodeListener);
-    ZephyrSync.onClockRemoved().connect(onClockRemoved);
-  }
-
-  protected void removeClock(final Clock clock) {
-    Display.getDefault().asyncExec(new Runnable() {
-      @Override
-      public void run() {
-        ClockNode clockNode = ZephyrCore.syncCode().clockNode(clock);
-        TreeItem treeItem = clockItems.get(clockNode);
-        if (treeItem != null)
-          treeItem.dispose();
-      }
-    });
+    ZephyrCore.busEvent().register(ClockEvent.RemovedID, onClockRemoved);
   }
 
   @Override
@@ -173,7 +164,7 @@ public class StructureExplorerView extends ViewPart implements ItemProvider, Vie
 
   @Override
   public void dispose() {
-    ZephyrSync.onClockRemoved().disconnect(onClockRemoved);
+    ZephyrCore.busEvent().unregister(ClockEvent.RemovedID, onClockRemoved);
     ZephyrCore.busEvent().unregister(CodeParsedEvent.ID, classNodeListener);
     mouseListener.dispose();
     iconDatabase.dispose();

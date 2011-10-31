@@ -7,7 +7,7 @@ import java.util.Set;
 
 import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.internal.ZephyrPluginCore;
-import zephyr.plugin.core.internal.synchronization.ViewBinder;
+import zephyr.plugin.core.internal.synchronization.binding.ViewBinder;
 import zephyr.plugin.core.internal.synchronization.providers.ViewProviderReference;
 
 public class ViewAssociator {

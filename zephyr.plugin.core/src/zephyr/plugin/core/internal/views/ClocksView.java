@@ -13,12 +13,16 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.part.ViewPart;
 
+import zephyr.ZephyrCore;
 import zephyr.ZephyrSync;
 import zephyr.plugin.core.api.codeparser.codetree.ClassNode;
 import zephyr.plugin.core.api.codeparser.codetree.ClockNode;
 import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
-import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.synchronization.Clock;
+import zephyr.plugin.core.async.events.Event;
+import zephyr.plugin.core.async.listeners.EventListener;
+import zephyr.plugin.core.async.listeners.UIListener;
+import zephyr.plugin.core.events.ClockEvent;
 import zephyr.plugin.core.views.SyncView;
 import zephyr.plugin.core.views.ViewProvider;
 import zephyr.plugin.core.views.ViewWithControl;
@@ -37,16 +41,20 @@ public class ClocksView extends ViewPart implements SyncView, ViewWithControl {
     }
   }
 
-  private final Listener<Clock> removeClockListener = new Listener<Clock>() {
+  private final EventListener removeClockListener = new UIListener() {
     @Override
-    public void listen(Clock clock) {
-      removeClock(clock);
+    protected void listenInUIThread(Event event) {
+      if (!isViewActive())
+        return;
+      removeComposite(((ClockEvent) event).clock());
     }
   };
-  private final Listener<Clock> addClockListener = new Listener<Clock>() {
+  private final EventListener addClockListener = new UIListener() {
     @Override
-    public void listen(Clock clock) {
-      addClock(clock);
+    public void listenInUIThread(Event event) {
+      if (!isViewActive())
+        return;
+      addComposite(((ClockEvent) event).clock());
     }
   };
 
@@ -55,32 +63,12 @@ public class ClocksView extends ViewPart implements SyncView, ViewWithControl {
       .synchronizedMap(new HashMap<Clock, ClockComposite>());
 
   public ClocksView() {
-    ZephyrSync.onClockRemoved().connect(removeClockListener);
-    ZephyrSync.onClockAdded().connect(addClockListener);
+    ZephyrCore.busEvent().register(ClockEvent.AddedID, addClockListener);
+    ZephyrCore.busEvent().register(ClockEvent.RemovedID, removeClockListener);
   }
 
-  protected void addClock(final Clock clock) {
-    if (!isViewActive())
-      return;
-    parent.getDisplay().syncExec(new Runnable() {
-      @Override
-      public void run() {
-        addComposite(clock);
-      }
-    });
-  }
-
-  private boolean isViewActive() {
+  boolean isViewActive() {
     return parent != null && !parent.isDisposed();
-  }
-
-  protected void removeClock(final Clock clock) {
-    parent.getDisplay().asyncExec(new Runnable() {
-      @Override
-      public void run() {
-        removeComposite(clock);
-      }
-    });
   }
 
   @Override
@@ -152,8 +140,8 @@ public class ClocksView extends ViewPart implements SyncView, ViewWithControl {
 
   @Override
   public void dispose() {
-    ZephyrSync.onClockRemoved().disconnect(removeClockListener);
-    ZephyrSync.onClockAdded().disconnect(addClockListener);
+    ZephyrCore.busEvent().unregister(ClockEvent.AddedID, addClockListener);
+    ZephyrCore.busEvent().unregister(ClockEvent.RemovedID, removeClockListener);
     parent = null;
     for (Clock clock : new ArrayList<Clock>(composites.keySet()))
       removeComposite(clock);

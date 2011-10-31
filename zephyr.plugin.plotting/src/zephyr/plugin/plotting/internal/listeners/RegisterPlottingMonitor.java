@@ -15,7 +15,7 @@ public class RegisterPlottingMonitor implements EventListener {
   public void listen(Event event) {
     CodeParsedEvent eventInfo = (CodeParsedEvent) event;
     ClockTracesManager manager = ZephyrPluginPlotting.tracesManager();
-    Clock clock = eventInfo.clockNode().clock();
+    Clock clock = eventInfo.clock();
     ClockTraces dataMonitor = manager.getSyncMonitor(clock);
     dataMonitor.startAddingTrace();
     MonitoredDataTraverser traverser = new MonitoredDataTraverser(dataMonitor);
