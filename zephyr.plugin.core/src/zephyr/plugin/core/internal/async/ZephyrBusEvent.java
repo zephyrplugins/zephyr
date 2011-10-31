@@ -1,15 +1,14 @@
 package zephyr.plugin.core.internal.async;
 
-import java.util.concurrent.Semaphore;
-
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
 
-import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.async.BusEvent;
 import zephyr.plugin.core.async.Event;
 import zephyr.plugin.core.async.EventListener;
-import zephyr.plugin.core.async.ListenerRecorder;
+import zephyr.plugin.core.async.EventRecognizer;
+import zephyr.plugin.core.async.EventWaiter;
+import zephyr.plugin.core.async.recognizers.RecognizeInstance;
 
 
 public class ZephyrBusEvent implements BusEvent {
@@ -45,36 +44,21 @@ public class ZephyrBusEvent implements BusEvent {
     registeredListeners.unregister(event, listener);
   }
 
-  @Override
-  public void syncDispatch(final Event event) {
-    final Semaphore semaphore = new Semaphore(0);
-    Listener<Event> listener = new Listener<Event>() {
-      @Override
-      public void listen(Event eventProcessed) {
-        if (event == eventProcessed)
-          semaphore.release();
-      }
-    };
-    processor.onEventProcessed.connect(listener);
-    dispatch(event);
-    try {
-      semaphore.acquire();
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
-    processor.onEventProcessed.disconnect(listener);
-  }
-
   public void registerRecorders() {
     IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor("zephyr.listener");
     for (IConfigurationElement element : config) {
       try {
         Object o = element.createExecutableExtension("class");
-        if (!(o instanceof ListenerRecorder)) {
-          System.err.println(o.getClass().getSimpleName() + " does not implement " + ListenerRecorder.class.getName());
+        if (!(o instanceof EventListener)) {
+          System.err.println(o.getClass().getSimpleName() + " does not implement " + EventListener.class.getName());
           continue;
         }
-        ((ListenerRecorder) o).recordListener(this);
+        String eventID = element.getAttribute("eventid");
+        if (eventID == null) {
+          System.err.println(o.getClass().getSimpleName() + " does not implement " + EventListener.class.getName());
+          continue;
+        }
+        register(eventID, (EventListener) o);
       } catch (Throwable throwable) {
         throwable.printStackTrace();
       }
@@ -86,5 +70,22 @@ public class ZephyrBusEvent implements BusEvent {
     thread.setDaemon(true);
     thread.setName("Zephyr Bus Event");
     thread.start();
+  }
+
+  @Override
+  public void syncDispatch(final Event event) {
+    EventWaiter reference = createWaiter(new RecognizeInstance(event));
+    reference.connect();
+    dispatch(event);
+    reference.waitForEvent();
+  }
+
+  @Override
+  public EventWaiter createWaiter(EventRecognizer recognizer) {
+    return new ZephyrRecognizerReference(this, recognizer);
+  }
+
+  public EventProcessor processor() {
+    return processor;
   }
 }

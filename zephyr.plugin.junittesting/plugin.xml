@@ -28,9 +28,10 @@
    </extension>
    <extension
          point="zephyr.listener">
-      <recorder
-            class="zephyr.plugin.junittesting.busevent.JUnitRecorder">
-      </recorder>
+      <listener
+            class="zephyr.plugin.junittesting.busevent.TestingEventListener"
+            eventid="TestBusEvent">
+      </listener>
    </extension>
 
 </plugin>

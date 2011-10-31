@@ -25,7 +25,15 @@ public class EventProcessor implements Runnable {
   public void processEvent(Event event) {
     Set<EventListener> listeners = registeredListeners.getListeners(event);
     for (EventListener listener : listeners)
-      listener.listen(event);
+      process(event, listener);
     onEventProcessed.fire(event);
+  }
+
+  private void process(Event event, EventListener listener) {
+    try {
+      listener.listen(event);
+    } catch (Throwable throwable) {
+      throwable.printStackTrace();
+    }
   }
 }

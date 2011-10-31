@@ -36,7 +36,7 @@ public class TestBusEvent {
   @Test
   public void testEventBothRegistration() {
     TestingEvent event = new TestingEvent();
-    ZephyrCore.busEvent().register(event, JUnitRecorder.Listener);
+    ZephyrCore.busEvent().register(event, TestingEventListener.listener);
     ZephyrCore.busEvent().syncDispatch(event);
     Assert.assertTrue(event.processed());
   }
@@ -46,7 +46,7 @@ public class TestBusEvent {
     TestingEvent event = new TestingEvent("HelloWorld");
     ZephyrCore.busEvent().syncDispatch(event);
     Assert.assertFalse(event.processed());
-    ZephyrCore.busEvent().register(event, JUnitRecorder.Listener);
+    ZephyrCore.busEvent().register(event, TestingEventListener.listener);
     ZephyrCore.busEvent().syncDispatch(event);
     Assert.assertTrue(event.processed());
   }

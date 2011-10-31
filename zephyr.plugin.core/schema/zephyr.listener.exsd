@@ -18,7 +18,7 @@
       </annotation>
       <complexType>
          <choice minOccurs="1" maxOccurs="unbounded">
-            <element ref="recorder"/>
+            <element ref="listener"/>
          </choice>
          <attribute name="point" type="string" use="required">
             <annotation>
@@ -47,7 +47,7 @@
       </complexType>
    </element>
 
-   <element name="recorder">
+   <element name="listener">
       <complexType>
          <attribute name="class" type="string" use="required">
             <annotation>
@@ -55,8 +55,15 @@
                   
                </documentation>
                <appinfo>
-                  <meta.attribute kind="java" basedOn=":zephyr.plugin.core.async.ListenerRecorder"/>
+                  <meta.attribute kind="java" basedOn=":zephyr.plugin.core.async.EventListener"/>
                </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="eventid" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
             </annotation>
          </attribute>
       </complexType>
