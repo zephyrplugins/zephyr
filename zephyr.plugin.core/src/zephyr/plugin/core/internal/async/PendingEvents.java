@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.Semaphore;
 
-import zephyr.plugin.core.async.Event;
+import zephyr.plugin.core.async.events.Event;
 
 public class PendingEvents {
   private final HashSet<Event> pendingEvents = new HashSet<Event>();

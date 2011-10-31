@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 
 import zephyr.plugin.core.api.codeparser.codetree.ClassNode;
 import zephyr.plugin.core.api.codeparser.codetree.ObjectCollectionNode;
+import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.codeparser.interfaces.CodeParser;
 import zephyr.plugin.core.api.codeparser.interfaces.FieldParser;
 import zephyr.plugin.core.api.codeparser.interfaces.MutableParentNode;
@@ -11,7 +12,7 @@ import zephyr.plugin.core.api.parsing.CollectionLabelBuilder;
 
 public abstract class AbstractCollectionParser<T> implements FieldParser {
   @Override
-  public void parse(CodeParser codeParser, MutableParentNode parentNode, Field field, Object fieldValue) {
+  public CodeNode parse(CodeParser codeParser, MutableParentNode parentNode, Field field, Object fieldValue) {
     @SuppressWarnings("unchecked")
     T container = (T) fieldValue;
     int nbChildren = nbChildren(container);
@@ -28,6 +29,7 @@ public abstract class AbstractCollectionParser<T> implements FieldParser {
       parseElement(codeParser, collectionNode, elementLabel, element, field);
     }
     endChildrenParse();
+    return collectionNode;
   }
 
   protected void beginChildrenParse(T fieldValue) {

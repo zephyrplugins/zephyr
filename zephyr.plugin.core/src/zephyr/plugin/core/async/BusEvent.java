@@ -1,5 +1,10 @@
 package zephyr.plugin.core.async;
 
+import zephyr.plugin.core.async.events.Event;
+import zephyr.plugin.core.async.listeners.EventListener;
+import zephyr.plugin.core.async.recognizers.EventRecognizer;
+import zephyr.plugin.core.async.recognizers.OnEventBlocker;
+
 
 public interface BusEvent {
   void register(String id, EventListener listener);
@@ -14,5 +19,5 @@ public interface BusEvent {
 
   void syncDispatch(Event event);
 
-  EventWaiter createWaiter(EventRecognizer recognizer);
+  OnEventBlocker createWaiter(EventRecognizer recognizer);
 }

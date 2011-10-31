@@ -1,11 +1,10 @@
 package zephyr.plugin.core.internal.treeview;
 
-import org.eclipse.swt.widgets.Display;
+import zephyr.plugin.core.async.events.Event;
+import zephyr.plugin.core.async.listeners.UIListener;
+import zephyr.plugin.core.events.CodeParsedEvent;
 
-import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
-import zephyr.plugin.core.api.signals.Listener;
-
-public class RootClassNodeListener implements Listener<CodeNode> {
+public class RootClassNodeListener extends UIListener {
   final StructureExplorerView structureExplorer;
 
   public RootClassNodeListener(StructureExplorerView structureExplorer) {
@@ -13,15 +12,10 @@ public class RootClassNodeListener implements Listener<CodeNode> {
   }
 
   @Override
-  public void listen(final CodeNode codeNode) {
+  protected void listenInUIThread(Event event) {
     if (structureExplorer.tree() == null)
       return;
-    Display.getDefault().asyncExec(new Runnable() {
-      @Override
-      public void run() {
-        structureExplorer.registerClockChildNode(codeNode);
-        structureExplorer.treeState().expandNodes();
-      }
-    });
+    structureExplorer.registerClockChildNode(((CodeParsedEvent) event).node());
+    structureExplorer.treeState().expandNodes();
   }
 }

@@ -5,6 +5,7 @@ import java.util.List;
 
 import zephyr.plugin.core.api.codeparser.codetree.CodeTrees;
 import zephyr.plugin.core.api.codeparser.codetree.PrimitiveCollectionNode;
+import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.codeparser.interfaces.CodeParser;
 import zephyr.plugin.core.api.codeparser.interfaces.FieldParser;
 import zephyr.plugin.core.api.codeparser.interfaces.MutableParentNode;
@@ -27,7 +28,7 @@ public class PrimitiveCollectionParser implements FieldParser {
 
   @SuppressWarnings("unchecked")
   @Override
-  public void parse(CodeParser codeParser, MutableParentNode parentNode, Field field, Object fieldValue) {
+  public CodeNode parse(CodeParser codeParser, MutableParentNode parentNode, Field field, Object fieldValue) {
     int level = CodeTrees.levelOf(field);
     String label = CodeTrees.labelOf(field);
     List<? extends Number> list = ((List<? extends Number>) fieldValue);
@@ -35,5 +36,6 @@ public class PrimitiveCollectionParser implements FieldParser {
     PrimitiveCollectionNode arrayPrimitiveNode = new PrimitiveCollectionNode(label, parentNode, list, labelBuilder,
                                                                              level);
     parentNode.addChild(arrayPrimitiveNode);
+    return arrayPrimitiveNode;
   }
 }

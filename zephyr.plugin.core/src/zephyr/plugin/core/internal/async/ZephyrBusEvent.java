@@ -4,10 +4,10 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
 
 import zephyr.plugin.core.async.BusEvent;
-import zephyr.plugin.core.async.Event;
-import zephyr.plugin.core.async.EventListener;
-import zephyr.plugin.core.async.EventRecognizer;
-import zephyr.plugin.core.async.EventWaiter;
+import zephyr.plugin.core.async.events.Event;
+import zephyr.plugin.core.async.listeners.EventListener;
+import zephyr.plugin.core.async.recognizers.EventRecognizer;
+import zephyr.plugin.core.async.recognizers.OnEventBlocker;
 import zephyr.plugin.core.async.recognizers.RecognizeInstance;
 
 
@@ -74,14 +74,14 @@ public class ZephyrBusEvent implements BusEvent {
 
   @Override
   public void syncDispatch(final Event event) {
-    EventWaiter reference = createWaiter(new RecognizeInstance(event));
+    OnEventBlocker reference = createWaiter(new RecognizeInstance(event));
     reference.connect();
     dispatch(event);
-    reference.waitForEvent();
+    reference.block();
   }
 
   @Override
-  public EventWaiter createWaiter(EventRecognizer recognizer) {
+  public OnEventBlocker createWaiter(EventRecognizer recognizer) {
     return new ZephyrRecognizerReference(this, recognizer);
   }
 

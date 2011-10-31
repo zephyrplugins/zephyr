@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import zephyr.plugin.core.async.Event;
-import zephyr.plugin.core.async.EventListener;
+import zephyr.plugin.core.async.events.Event;
+import zephyr.plugin.core.async.listeners.EventListener;
 
 public class RegisteredListeners {
   private final Map<String, List<EventListener>> eventIdRegistered = new LinkedHashMap<String, List<EventListener>>();

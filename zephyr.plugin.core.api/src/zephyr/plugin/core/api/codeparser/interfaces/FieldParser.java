@@ -5,5 +5,5 @@ import java.lang.reflect.Field;
 public interface FieldParser {
   public boolean canParse(Object fieldValue);
 
-  public void parse(CodeParser codeParser, MutableParentNode parentNode, Field field, Object fieldValue);
+  public CodeNode parse(CodeParser codeParser, MutableParentNode parentNode, Field field, Object fieldValue);
 }

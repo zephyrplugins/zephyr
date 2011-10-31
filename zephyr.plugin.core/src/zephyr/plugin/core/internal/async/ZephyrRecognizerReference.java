@@ -3,11 +3,11 @@ package zephyr.plugin.core.internal.async;
 import java.util.concurrent.Semaphore;
 
 import zephyr.plugin.core.api.signals.Listener;
-import zephyr.plugin.core.async.Event;
-import zephyr.plugin.core.async.EventRecognizer;
-import zephyr.plugin.core.async.EventWaiter;
+import zephyr.plugin.core.async.events.Event;
+import zephyr.plugin.core.async.recognizers.EventRecognizer;
+import zephyr.plugin.core.async.recognizers.OnEventBlocker;
 
-public class ZephyrRecognizerReference implements EventWaiter {
+public class ZephyrRecognizerReference implements OnEventBlocker {
   private final ZephyrBusEvent busEvent;
   Semaphore semaphore = new Semaphore(0);
   private Listener<Event> listener = null;
@@ -33,7 +33,7 @@ public class ZephyrRecognizerReference implements EventWaiter {
   }
 
   @Override
-  public void waitForEvent() {
+  public void block() {
     if (!connected)
       throw new RuntimeException("Not connected");
     try {

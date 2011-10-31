@@ -1,7 +1,6 @@
 package zephyr.plugin.core.async.recognizers;
 
-import zephyr.plugin.core.async.Event;
-import zephyr.plugin.core.async.EventRecognizer;
+import zephyr.plugin.core.async.events.Event;
 
 public class RecognizeInstance implements EventRecognizer {
   private final Event event;

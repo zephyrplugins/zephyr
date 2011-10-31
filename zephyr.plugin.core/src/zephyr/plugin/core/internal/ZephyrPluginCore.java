@@ -25,17 +25,17 @@ import zephyr.plugin.core.RunnableFactory;
 import zephyr.plugin.core.SyncCode;
 import zephyr.plugin.core.api.Zephyr;
 import zephyr.plugin.core.api.Zephyr.AdvertisementInfo;
-import zephyr.plugin.core.api.codeparser.codetree.CodeTrees;
-import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.signals.Listener;
-import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.async.BusEvent;
+import zephyr.plugin.core.async.recognizers.OnEventBlocker;
+import zephyr.plugin.core.async.recognizers.RecognizeID;
 import zephyr.plugin.core.control.Control;
+import zephyr.plugin.core.events.AdvertizeEvent;
+import zephyr.plugin.core.events.CodeParsedEvent;
 import zephyr.plugin.core.internal.async.ZephyrBusEvent;
 import zephyr.plugin.core.internal.preferences.PreferenceKeys;
 import zephyr.plugin.core.internal.synchronization.ViewBinder;
 import zephyr.plugin.core.internal.synchronization.tasks.ViewTaskScheduler;
-import zephyr.plugin.core.internal.views.PopupViewTraverser;
 import zephyr.plugin.core.views.SyncView;
 
 public class ZephyrPluginCore extends AbstractUIPlugin {
@@ -49,7 +49,8 @@ public class ZephyrPluginCore extends AbstractUIPlugin {
   private final ThreadGroup threadGroup = new ThreadGroup("ZephyrRunnable");
   private final ZephyrClassLoaderInternal classLoader;
   private final Control control = new Control();
-  private final ZephyrBusEvent busEvent = new ZephyrBusEvent();
+  final ZephyrBusEvent busEvent = new ZephyrBusEvent();
+  final OnEventBlocker codeParsedBlocker = busEvent.createWaiter(new RecognizeID(CodeParsedEvent.ID));
 
   public ZephyrPluginCore() {
     classLoader = AccessController.doPrivileged(new PrivilegedAction<ZephyrClassLoaderInternal>() {
@@ -61,12 +62,9 @@ public class ZephyrPluginCore extends AbstractUIPlugin {
     Zephyr.onAdvertised.connect(new Listener<AdvertisementInfo>() {
       @Override
       public void listen(AdvertisementInfo eventInfo) {
-        Clock clock = eventInfo.clock;
-        CodeNode[] children = syncCode.parse(clock, eventInfo.advertised);
-        PopupViewTraverser traverser = new PopupViewTraverser();
-        for (CodeNode node : children) {
-          CodeTrees.traverse(traverser, node);
-        }
+        codeParsedBlocker.connect();
+        busEvent.dispatch(new AdvertizeEvent(eventInfo));
+        codeParsedBlocker.block();
       }
     });
   }

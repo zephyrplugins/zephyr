@@ -380,4 +380,17 @@
          </variable>
       </sourceProvider>
    </extension>
+   <extension
+         point="zephyr.listener">
+      <listener
+            class="zephyr.plugin.core.internal.listeners.ObjectAdvertizedListener"
+            eventid="zephyr.event.advertize"
+            name="ParseCodeOnAdvertized">
+      </listener>
+      <listener
+            class="zephyr.plugin.core.internal.listeners.PopupViewListener"
+            eventid="zephyr.event.codeparsed"
+            name="PopupViewOnCodeParsed">
+      </listener>
+   </extension>
 </plugin>

@@ -6,6 +6,7 @@ import java.util.List;
 import zephyr.plugin.core.api.codeparser.codetree.ClassNode;
 import zephyr.plugin.core.api.codeparser.codetree.CodeTrees;
 import zephyr.plugin.core.api.codeparser.codetree.PrimitiveNode;
+import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.codeparser.interfaces.CodeParser;
 import zephyr.plugin.core.api.codeparser.interfaces.FieldParser;
 import zephyr.plugin.core.api.codeparser.interfaces.MutableParentNode;
@@ -20,7 +21,7 @@ public class PrimitiveParser implements FieldParser {
   }
 
   @Override
-  public void parse(CodeParser codeParser, MutableParentNode parentNode, Field field, Object fieldValue) {
+  public CodeNode parse(CodeParser codeParser, MutableParentNode parentNode, Field field, Object fieldValue) {
     String label = CodeTrees.labelOf(field);
     Object container = ((ClassNode) parentNode).instance();
     int level = CodeTrees.levelOf(field);
@@ -28,12 +29,13 @@ public class PrimitiveParser implements FieldParser {
     parentNode.addChild(node);
     List<MonitorWrapper> localWrappers = Wrappers.getWrappers(field, null);
     if (localWrappers == null)
-      return;
+      return node;
     for (MonitorWrapper wrapper : localWrappers) {
       String wrapperLabel = label + wrapper.getClass().getSimpleName();
       Monitored wrapperMonitored = wrapper.createMonitored(node.monitored());
       PrimitiveNode wrapperNode = new PrimitiveNode(wrapperLabel, parentNode, wrapperMonitored, level);
       parentNode.addChild(wrapperNode);
     }
+    return node;
   }
 }

@@ -1,7 +1,7 @@
 package zephyr.plugin.junittesting.busevent;
 
-import zephyr.plugin.core.async.Event;
-import zephyr.plugin.core.async.EventListener;
+import zephyr.plugin.core.async.events.Event;
+import zephyr.plugin.core.async.listeners.EventListener;
 
 public class TestingEventListener implements EventListener {
   static TestingEventListener listener;

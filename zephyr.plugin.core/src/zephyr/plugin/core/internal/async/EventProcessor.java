@@ -3,8 +3,8 @@ package zephyr.plugin.core.internal.async;
 import java.util.Set;
 
 import zephyr.plugin.core.api.signals.Signal;
-import zephyr.plugin.core.async.Event;
-import zephyr.plugin.core.async.EventListener;
+import zephyr.plugin.core.async.events.Event;
+import zephyr.plugin.core.async.listeners.EventListener;
 
 public class EventProcessor implements Runnable {
   private final RegisteredListeners registeredListeners;

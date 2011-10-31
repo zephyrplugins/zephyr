@@ -27,6 +27,7 @@ import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.codeparser.interfaces.ParentNode;
 import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.synchronization.Clock;
+import zephyr.plugin.core.events.CodeParsedEvent;
 import zephyr.plugin.core.views.ViewWithControl;
 
 public class StructureExplorerView extends ViewPart implements ItemProvider, ViewWithControl {
@@ -35,7 +36,7 @@ public class StructureExplorerView extends ViewPart implements ItemProvider, Vie
   private final SyncCode codeParser;
   private final IconDatabase iconDatabase = new IconDatabase();
   final Map<ClockNode, TreeItem> clockItems = new HashMap<ClockNode, TreeItem>();
-  private final Listener<CodeNode> classNodeListener;
+  private final RootClassNodeListener classNodeListener;
   final TreeState treeState = new TreeState(this);
   private final SelectionListener selectionListener = new SelectionTreeListener();
   private MouseTreeListener mouseListener = null;
@@ -50,7 +51,7 @@ public class StructureExplorerView extends ViewPart implements ItemProvider, Vie
   public StructureExplorerView() {
     codeParser = ZephyrCore.syncCode();
     classNodeListener = new RootClassNodeListener(this);
-    codeParser.onParse.connect(classNodeListener);
+    ZephyrCore.busEvent().register(CodeParsedEvent.ID, classNodeListener);
     ZephyrSync.onClockRemoved().connect(onClockRemoved);
   }
 
@@ -124,7 +125,7 @@ public class StructureExplorerView extends ViewPart implements ItemProvider, Vie
   }
 
   private void buildRootNode() {
-    for (ClockNode clockNode : codeParser.clockNodes())
+    for (ClockNode clockNode : codeParser.getClockNodes())
       for (int i = 0; i < clockNode.nbChildren(); i++)
         registerClockChildNode(clockNode.getChild(i));
   }
@@ -173,7 +174,7 @@ public class StructureExplorerView extends ViewPart implements ItemProvider, Vie
   @Override
   public void dispose() {
     ZephyrSync.onClockRemoved().disconnect(onClockRemoved);
-    codeParser.onParse.disconnect(classNodeListener);
+    ZephyrCore.busEvent().unregister(CodeParsedEvent.ID, classNodeListener);
     mouseListener.dispose();
     iconDatabase.dispose();
     tree.dispose();

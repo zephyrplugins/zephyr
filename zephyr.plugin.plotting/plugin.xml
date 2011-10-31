@@ -232,7 +232,7 @@
    <extension
          point="zephyr.startup">
       <client
-            class="zephyr.plugin.plotting.internal.RegisterPlottingMonitor">
+            class="zephyr.plugin.plotting.internal.listeners.RegisterPlottingMonitor">
       </client>
    </extension>
    <extension
@@ -244,5 +244,13 @@
             popup="false"
             viewid="zephyr.plugin.plotting.view.plot">
       </client>
+   </extension>
+   <extension
+         point="zephyr.listener">
+      <listener
+            class="zephyr.plugin.plotting.internal.listeners.RegisterPlottingMonitor"
+            eventid="zephyr.event.codeparsed"
+            name="TracesOnCodeParsed">
+      </listener>
    </extension>
 </plugin>

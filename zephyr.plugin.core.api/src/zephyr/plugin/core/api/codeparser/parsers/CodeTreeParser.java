@@ -14,6 +14,7 @@ import java.util.Stack;
 import zephyr.plugin.core.api.codeparser.codetree.ClassNode;
 import zephyr.plugin.core.api.codeparser.codetree.CodeTrees;
 import zephyr.plugin.core.api.codeparser.codetree.PrimitiveNode;
+import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.codeparser.interfaces.CodeParser;
 import zephyr.plugin.core.api.codeparser.interfaces.FieldParser;
 import zephyr.plugin.core.api.codeparser.interfaces.MutableParentNode;
@@ -113,13 +114,13 @@ public class CodeTreeParser implements CodeParser {
   }
 
   @Override
-  public void recursiveParseInstance(MutableParentNode parentNode, Field field, Object fieldValue) {
+  public CodeNode recursiveParseInstance(MutableParentNode parentNode, Field field, Object fieldValue) {
     for (FieldParser parser : parsers) {
       if (parser.canParse(fieldValue)) {
-        parser.parse(this, parentNode, field, fieldValue);
-        return;
+        return parser.parse(this, parentNode, field, fieldValue);
       }
     }
+    return null;
   }
 
   @Override
@@ -152,8 +153,8 @@ public class CodeTreeParser implements CodeParser {
   }
 
   @Override
-  public void parse(MutableParentNode parent, Object root) {
-    recursiveParseInstance(parent, null, root);
+  public CodeNode parse(MutableParentNode parent, Object root) {
+    return recursiveParseInstance(parent, null, root);
   }
 
   static public void registerParser(FieldParser parser) {

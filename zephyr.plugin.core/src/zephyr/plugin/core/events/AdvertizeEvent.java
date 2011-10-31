@@ -1,7 +1,7 @@
 package zephyr.plugin.core.events;
 
 import zephyr.plugin.core.api.Zephyr.AdvertisementInfo;
-import zephyr.plugin.core.async.Event;
+import zephyr.plugin.core.async.events.Event;
 
 public class AdvertizeEvent implements Event {
   private static final String ID = "zephyr.event.advertize";
