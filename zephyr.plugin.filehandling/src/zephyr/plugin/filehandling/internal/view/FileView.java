@@ -36,7 +36,7 @@ public class FileView extends EnvironmentView<LogFile> implements Closeable, Res
 
   @Override
   protected ObsLayout getObservationLayout() {
-    String[] labels = environment.labels();
+    String[] labels = instance().labels();
     int nbLine = (int) Math.sqrt(labels.length);
     int nbItems = labels.length / nbLine;
     ObsWidget[][] widgets = new ObsWidget[nbLine][];
@@ -59,7 +59,7 @@ public class FileView extends EnvironmentView<LogFile> implements Closeable, Res
 
   @Override
   public void restart() {
-    final String filepath = environment.filepath;
+    final String filepath = instance().filepath;
     close();
     ZephyrCore.start(new Runnable() {
       @Override
@@ -70,30 +70,30 @@ public class FileView extends EnvironmentView<LogFile> implements Closeable, Res
   }
 
   @Override
-  protected Class<?> classSupported() {
-    return LogFile.class;
+  protected boolean isInstanceSupported(Object instance) {
+    return LogFile.class.isInstance(instance);
   }
 
   @Override
-  protected void set(LogFile current) {
-    super.set(current);
+  protected void setLayout() {
+    super.setLayout();
     restartAction.setEnabled(true);
     terminateAction.setEnabled(true);
-    setViewName(new File(environment.filepath).getName(), environment.filepath);
-  }
-
-  @Override
-  protected void unset() {
-    restartAction.setEnabled(false);
-    terminateAction.setEnabled(false);
-    super.unset();
+    setViewName(new File(instance().filepath).getName(), instance().filepath);
   }
 
   @Override
   protected boolean synchronize() {
-    double[] currentLine = environment.currentLine();
+    double[] currentLine = instance().currentLine();
     synchronize(currentLine);
     return currentLine != null;
+  }
+
+  @Override
+  protected void unsetLayout() {
+    super.unsetLayout();
+    restartAction.setEnabled(false);
+    terminateAction.setEnabled(false);
   }
 
   @Override

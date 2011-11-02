@@ -12,7 +12,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.PaletteData;
 import org.eclipse.swt.graphics.RGB;
-import org.eclipse.swt.widgets.Display;
 
 import zephyr.plugin.core.api.video.ImageProvider;
 import zephyr.plugin.core.helpers.ClassViewProvider;
@@ -25,41 +24,30 @@ public class VideoView extends ForegroundCanvasView<ImageProvider> {
     }
   }
 
-  private ImageProvider imageProvider;
-  private Image image;
+  private ImageData imageData;
 
   @Override
   protected void paint(GC gc) {
-    if (image == null) {
+    if (imageData == null) {
       gc.fillRectangle(canvas.getBounds());
       return;
     }
+    Image image = new Image(canvas.getDisplay(), imageData);
     int width = image.getImageData().width;
     int height = image.getImageData().height;
     gc.drawImage(image, 0, 0, width, height, 0, 0, width, height);
   }
 
   @Override
-  protected void set(ImageProvider current) {
-    imageProvider = current;
-    image = null;
-    setViewName();
-  }
-
-  @Override
   protected boolean synchronize() {
     if (parent.isDisposed())
       return true;
-    BufferedImage bufferedImage = imageProvider.image();
+    BufferedImage bufferedImage = instance().image();
     if (bufferedImage == null) {
-      image = null;
+      imageData = null;
       return true;
     }
-    if (image != null) {
-      image.dispose();
-      image = null;
-    }
-    image = new Image(Display.getDefault(), convertToSWT(bufferedImage));
+    imageData = convertToSWT(bufferedImage);
     return true;
   }
 
@@ -131,8 +119,7 @@ public class VideoView extends ForegroundCanvasView<ImageProvider> {
   }
 
   @Override
-  protected void unset() {
-    imageProvider = null;
-    image = null;
+  protected boolean isInstanceSupported(Object instance) {
+    return ImageProvider.class.isInstance(instance);
   }
 }

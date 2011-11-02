@@ -8,7 +8,7 @@ import zephyr.plugin.core.api.synchronization.Clock;
 
 public class BarRunnable implements Runnable {
   @Monitor
-  private final float[] values = new float[100];
+  private final double[] values = new double[100];
   private final Random random = new Random(0);
   private final Clock clock = new Clock("ModelRunnable");
 
@@ -23,7 +23,7 @@ public class BarRunnable implements Runnable {
         values[i] += random.nextInt(3) - 1;
   }
 
-  public float[] data() {
+  public double[] data() {
     return values;
   }
 }

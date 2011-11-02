@@ -21,7 +21,7 @@ public class Bar2D implements MouseSearchable {
     gc.fillRectangle(gc.getClipping());
   }
 
-  synchronized public void draw(GC gc, float[] toplot) {
+  synchronized public void draw(GC gc, double[] toplot) {
     if (toplot == null) {
       data = null;
       return;
@@ -29,7 +29,7 @@ public class Bar2D implements MouseSearchable {
     updateData(toplot);
     axes.x.update(0);
     axes.x.update(data.nbPoints);
-    for (float y : data.ydata)
+    for (double y : data.ydata)
       axes.y.update(y);
     axes.updateScaling(gc.getClipping());
     float[] xdata = data.xdata;
@@ -41,8 +41,8 @@ public class Bar2D implements MouseSearchable {
     gc.setLineWidth(lineWidth);
     boolean drawContour = barWidth > lineWidth * 2;
     for (int i = 0; i < data.nbPoints; i++) {
-      float yValue = ydata[i];
-      int barHeight = axes.y.toGLength(-yValue);
+      double yValue = ydata[i];
+      int barHeight = axes.y.toGLength((float) -yValue);
       if (barHeight == 0)
         continue;
       int gx = axes.toGX(xdata[i]);
@@ -53,13 +53,14 @@ public class Bar2D implements MouseSearchable {
     }
   }
 
-  private void updateData(float[] toplot) {
+  private void updateData(double[] toplot) {
     if (data == null || toplot.length != data.nbPoints) {
       data = new Data2D(toplot.length);
       for (int i = 0; i < data.nbPoints; i++)
         data.xdata[i] = i;
     }
-    System.arraycopy(toplot, 0, data.ydata, 0, data.nbPoints);
+    for (int i = 0; i < toplot.length; i++)
+      data.ydata[i] = (float) toplot[i];
   }
 
   public void resetAxes() {

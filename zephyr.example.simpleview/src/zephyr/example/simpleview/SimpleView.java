@@ -16,9 +16,8 @@ public class SimpleView extends ForegroundCanvasView<SimpleModel> {
     }
   }
 
-  private float[] data;
+  private float[] data = new float[0];
   private final Colors colors = new Colors();
-  private SimpleModel model;
   private float maxDataValue;
 
   public SimpleView() {
@@ -26,7 +25,10 @@ public class SimpleView extends ForegroundCanvasView<SimpleModel> {
 
   @Override
   public boolean synchronize() {
-    System.arraycopy(model.data, 0, data, 0, data.length);
+    if (data.length != instance().data.length)
+      data = instance().data.clone();
+    else
+      System.arraycopy(instance().data, 0, data, 0, data.length);
     return true;
   }
 
@@ -34,8 +36,6 @@ public class SimpleView extends ForegroundCanvasView<SimpleModel> {
   protected void paint(GC gc) {
     gc.setBackground(colors.color(gc, Colors.COLOR_WHITE));
     gc.fillRectangle(gc.getClipping());
-    if (model == null)
-      return;
     updateMaxData();
     float scaleX = gc.getClipping().width / data.length;
     float scaleY = ((gc.getClipping().height - CircleSize * 2) / 2.0f) / maxDataValue;
@@ -50,19 +50,7 @@ public class SimpleView extends ForegroundCanvasView<SimpleModel> {
   }
 
   @Override
-  public void unset() {
-    this.model = null;
-    this.data = null;
-  }
-
-  @Override
-  protected void set(SimpleModel model) {
-    this.model = model;
-    this.data = model.data.clone();
-  }
-
-  @Override
-  protected Class<?> classSupported() {
-    return SimpleModel.class;
+  protected boolean isInstanceSupported(Object instance) {
+    return SimpleModel.class.isInstance(instance);
   }
 }

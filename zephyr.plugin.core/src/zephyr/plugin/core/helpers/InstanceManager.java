@@ -7,22 +7,21 @@ import zephyr.plugin.core.api.codeparser.codetree.ClassNode;
 import zephyr.plugin.core.api.codeparser.codetree.CodeTrees;
 import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.synchronization.Clock;
-import zephyr.plugin.core.internal.ZephyrPluginCore;
 import zephyr.plugin.core.views.SyncView;
 
 public class InstanceManager<T> {
-  public interface SetableView extends SyncView {
-    void setInstance();
+  public interface InstanceListener<T> extends SyncView {
+    void onInstanceSet();
 
-    void unsetInstance();
+    void onInstanceUnset();
   }
 
   private T instance = null;
   private Clock clock;
   private CodeNode codeNode;
-  private final SetableView view;
+  private final InstanceListener<T> view;
 
-  public InstanceManager(SetableView view) {
+  public InstanceManager(InstanceListener<T> view) {
     this.view = view;
   }
 
@@ -37,18 +36,7 @@ public class InstanceManager<T> {
   public void unset() {
     if (isNull())
       return;
-    ZephyrPluginCore.viewScheduler().schedule(new Runnable() {
-      @Override
-      public void run() {
-        syncUnset();
-      }
-    });
-  }
-
-  void syncUnset() {
-    if (clock == null)
-      return;
-    view.unsetInstance();
+    view.onInstanceUnset();
     Clock previousClock = clock;
     instance = null;
     codeNode = null;
@@ -63,27 +51,17 @@ public class InstanceManager<T> {
 
   @SuppressWarnings("unchecked")
   void set(CodeNode codeNode) {
-    if (instance != null)
-      syncUnset();
+    unset();
     instance = (T) ((ClassNode) codeNode).instance();
     this.codeNode = codeNode;
     this.clock = CodeTrees.clockOf(codeNode);
-    view.setInstance();
+    view.onInstanceSet();
     ZephyrSync.bind(clock, view);
-  }
-
-  private void asyncSet(final CodeNode codeNode) {
-    ZephyrPluginCore.viewScheduler().schedule(new Runnable() {
-      @Override
-      public void run() {
-        set(codeNode);
-      }
-    });
   }
 
   public void drop(CodeNode[] codeNodes) {
     if (!isDisplayed(codeNodes[0]))
-      asyncSet(codeNodes[0]);
+      set(codeNodes[0]);
   }
 
   public boolean[] provide(CodeNode[] codeNodes) {
@@ -91,7 +69,7 @@ public class InstanceManager<T> {
     if (displayedIndex == -1)
       return CodeTrees.toBooleans(codeNodes, displayedIndex);
     if (!isDisplayed(codeNodes[displayedIndex]))
-      asyncSet(codeNodes[displayedIndex]);
+      set(codeNodes[displayedIndex]);
     return CodeTrees.toBooleans(codeNodes, displayedIndex);
   }
 

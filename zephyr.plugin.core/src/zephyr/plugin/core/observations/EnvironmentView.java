@@ -4,9 +4,7 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 
-import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.internal.observations.LineLayout;
 import zephyr.plugin.core.views.helpers.ClassTypeView;
 
@@ -21,14 +19,10 @@ public abstract class EnvironmentView<T> extends ClassTypeView<T> {
         widget.repaint();
     }
   };
-  protected T environment = null;
-  protected Clock clock = null;
-  private String defaultViewName = "EnvironmentView";
 
   @Override
   public void createPartControl(Composite parent) {
     super.createPartControl(parent);
-    defaultViewName = getPartName();
     setToolbar(getViewSite().getActionBars().getToolBarManager());
   }
 
@@ -37,20 +31,12 @@ public abstract class EnvironmentView<T> extends ClassTypeView<T> {
 
   abstract protected ObsLayout getObservationLayout();
 
-  protected void createLayout() {
-    Display.getDefault().asyncExec(new Runnable() {
-      @Override
-      public void run() {
-        createObservationLayout();
-      }
-    });
-  }
-
-  protected void createObservationLayout() {
-    ObsLayout localObsLayout = getObservationLayout();
+  @Override
+  protected void setLayout() {
+    obsLayout = getObservationLayout();
     FillLayout layout = new FillLayout(SWT.VERTICAL);
     parent.setLayout(layout);
-    for (ObsWidget[] line : localObsLayout.widgetArray()) {
+    for (ObsWidget[] line : obsLayout.widgetArray()) {
       if (!hasContent(line))
         continue;
       Composite lineComposite = new Composite(parent, SWT.NONE);
@@ -59,7 +45,10 @@ public abstract class EnvironmentView<T> extends ClassTypeView<T> {
         widget.createWidgetComposite(lineComposite);
     }
     parent.layout(true, true);
-    obsLayout = localObsLayout;
+  }
+
+  @Override
+  protected void unsetLayout() {
   }
 
   static protected boolean hasContent(ObsWidget[] line) {
@@ -70,7 +59,7 @@ public abstract class EnvironmentView<T> extends ClassTypeView<T> {
   }
 
   protected void synchronize(double[] currentObservation) {
-    if (obsLayout == null || currentObservation == null)
+    if (currentObservation == null)
       return;
     for (ObsWidget widget : obsLayout)
       widget.updateValue(currentObservation);
@@ -81,22 +70,5 @@ public abstract class EnvironmentView<T> extends ClassTypeView<T> {
     if (obsLayout == null)
       return;
     parent.getDisplay().syncExec(repaintWidgets);
-  }
-
-  @Override
-  protected void set(T current) {
-    environment = current;
-    clock = instance.clock();
-    createLayout();
-  }
-
-  @Override
-  protected void unset() {
-  }
-
-  @Override
-  protected void disposeChildrenOnUnset() {
-    dispose();
-    setViewName(defaultViewName, "");
   }
 }

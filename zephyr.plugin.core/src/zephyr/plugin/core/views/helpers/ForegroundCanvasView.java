@@ -9,8 +9,11 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 
-public abstract class ForegroundCanvasView<T> extends ClassTypeView<T> {
+import zephyr.plugin.core.views.ViewWithControl;
+
+public abstract class ForegroundCanvasView<T> extends ClassTypeView<T> implements ViewWithControl {
   protected Canvas canvas = null;
   protected Runnable drawOnCanvas = new Runnable() {
     @Override
@@ -25,16 +28,8 @@ public abstract class ForegroundCanvasView<T> extends ClassTypeView<T> {
   @Override
   public void createPartControl(final Composite parent) {
     super.createPartControl(parent);
-    canvas = new Canvas(parent, SWT.DOUBLE_BUFFERED);
     GridLayout gridLayout = new GridLayout(1, false);
-    canvas.getParent().setLayout(gridLayout);
-    canvas.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-    canvas.addPaintListener(new PaintListener() {
-      @Override
-      public void paintControl(PaintEvent e) {
-        paint(e.gc);
-      }
-    });
+    parent.setLayout(gridLayout);
     setToolbar(getViewSite().getActionBars().getToolBarManager());
   }
 
@@ -49,8 +44,40 @@ public abstract class ForegroundCanvasView<T> extends ClassTypeView<T> {
 
   @Override
   public void repaintView() {
-    if (canvas.isDisposed())
+    if (canvas == null || canvas.isDisposed())
       return;
     canvas.getDisplay().syncExec(drawOnCanvas);
+  }
+
+  @Override
+  protected void setLayout() {
+    canvas = new Canvas(parent, SWT.DOUBLE_BUFFERED);
+    canvas.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+    canvas.addPaintListener(new PaintListener() {
+      @Override
+      public void paintControl(PaintEvent e) {
+        GC gc = e.gc;
+        if (hasBeenSynchronized())
+          paint(gc);
+        else
+          defaultPainting(gc);
+      }
+    });
+  }
+
+  protected void defaultPainting(GC gc) {
+    gc.setBackground(canvas.getDisplay().getSystemColor(SWT.COLOR_WHITE));
+    gc.fillRectangle(gc.getClipping());
+  }
+
+  @Override
+  protected void unsetLayout() {
+    canvas.dispose();
+    canvas = null;
+  }
+
+  @Override
+  public Control control() {
+    return canvas;
   }
 }

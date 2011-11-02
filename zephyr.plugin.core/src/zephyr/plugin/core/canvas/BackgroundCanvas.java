@@ -56,7 +56,8 @@ public class BackgroundCanvas implements PainterMonitor {
     showProgress = showProgress || !paintingImage.currentImageIsValide();
     GC gc = new GC(image);
     chrono.start();
-    painter.paint(this, image, gc);
+    if (!gc.getClipping().isEmpty())
+      painter.paint(this, image, gc);
     showProgress = false;
     paintingImage.releaseImage(gc);
     paintingImage.swap();

@@ -9,7 +9,7 @@ public interface SyncView {
    * @param clock
    *          the clock used by the model
    * 
-   * @return true if some data has been synchronised
+   * @return true if some data has been synchronized
    */
   boolean synchronize(Clock clock);
 

@@ -3,8 +3,8 @@ package zephyr.plugin.core.internal.synchronization.tasks;
 import zephyr.plugin.core.api.codeparser.codetree.CodeTrees;
 import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.synchronization.Clock;
-import zephyr.plugin.core.views.SyncView;
 import zephyr.plugin.core.views.ProvidedView;
+import zephyr.plugin.core.views.SyncView;
 
 public class ViewReference {
   private final SyncView view;

@@ -17,8 +17,6 @@ public abstract class BackgroundCanvasView<T> extends ClassTypeView<T> implement
     gridLayout.marginHeight = 0;
     gridLayout.marginWidth = 0;
     parent.setLayout(gridLayout);
-    backgroundCanvas = new BackgroundCanvas(parent, this);
-    backgroundCanvas.setFillLayout();
     setToolbar(getViewSite().getActionBars().getToolBarManager());
   }
 
@@ -28,5 +26,17 @@ public abstract class BackgroundCanvasView<T> extends ClassTypeView<T> implement
   @Override
   public void repaintView() {
     backgroundCanvas.paint();
+  }
+
+  @Override
+  protected void setLayout() {
+    backgroundCanvas = new BackgroundCanvas(parent, this);
+    backgroundCanvas.setFillLayout();
+  }
+
+  @Override
+  protected void unsetLayout() {
+    backgroundCanvas.dispose();
+    backgroundCanvas = null;
   }
 }

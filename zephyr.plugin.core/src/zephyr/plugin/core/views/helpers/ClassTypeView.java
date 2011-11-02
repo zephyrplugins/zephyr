@@ -1,7 +1,5 @@
 package zephyr.plugin.core.views.helpers;
 
-import java.util.concurrent.Semaphore;
-
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IMemento;
@@ -13,25 +11,44 @@ import zephyr.plugin.core.api.codeparser.codetree.ClassNode;
 import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.helpers.InstanceManager;
-import zephyr.plugin.core.helpers.InstanceManager.SetableView;
+import zephyr.plugin.core.helpers.InstanceManager.InstanceListener;
 import zephyr.plugin.core.helpers.SyncViewDropTarget;
 import zephyr.plugin.core.views.DropTargetView;
 import zephyr.plugin.core.views.ProvidedView;
 
-public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView, SetableView, DropTargetView {
-  private final Semaphore viewLock = new Semaphore(1, true);
-  private final Runnable disposeChildrenUnlockView = new Runnable() {
+public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView, InstanceListener<T>, DropTargetView {
+  protected final Runnable uiSetLayout = new Runnable() {
     @Override
     public void run() {
-      disposeChildrenOnUnset();
-      releaseViewLock();
+      if (!viewLock.acquire())
+        return;
+      if (parent.isDisposed())
+        return;
+      setLayout();
+      parent.layout(true, true);
+      viewLock.release();
+    }
+  };
+  protected final Runnable uiUnsetLayout = new Runnable() {
+    @Override
+    public void run() {
+      if (!viewLock.acquire())
+        return;
+      if (parent.isDisposed())
+        return;
+      unsetLayout();
+      parent.layout(true, true);
+      viewLock.release();
     }
   };
   protected final InstanceManager<T> instance;
+  protected final ViewLock viewLock;
   protected Composite parent;
+  private boolean hasBeenSynchronized = false;
 
   public ClassTypeView() {
     instance = new InstanceManager<T>(this);
+    viewLock = new ViewLock();
   }
 
   @Override
@@ -68,8 +85,8 @@ public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView,
 
   @Override
   public void dispose() {
-    instance.unset();
     super.dispose();
+    instance.unset();
   }
 
   protected void setViewName() {
@@ -92,66 +109,62 @@ public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView,
     });
   }
 
-  void releaseViewLock() {
-    viewLock.release();
-  }
-
-  private void acquireViewLock() {
-    try {
-      viewLock.acquire();
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
-  }
-
-  @Override
-  final public void setInstance() {
-    acquireViewLock();
-    set(instance.current());
-    releaseViewLock();
+  protected boolean hasBeenSynchronized() {
+    return hasBeenSynchronized;
   }
 
   @Override
   final public boolean synchronize(Clock clock) {
-    acquireViewLock();
+    if (!viewLock.acquire())
+      return false;
     boolean result = synchronize();
-    releaseViewLock();
+    hasBeenSynchronized = true;
+    viewLock.release();
     return result;
   }
 
   @Override
   final public void repaint() {
-    acquireViewLock();
+    if (!viewLock.acquire())
+      return;
     repaintView();
-    releaseViewLock();
-  }
-
-  @Override
-  final public void unsetInstance() {
-    acquireViewLock();
-    unset();
-    Display.getDefault().asyncExec(disposeChildrenUnlockView);
+    viewLock.release();
   }
 
   @Override
   public boolean isSupported(CodeNode codeNode) {
     if (!(codeNode instanceof ClassNode))
       return false;
-    return classSupported().isInstance(((ClassNode) codeNode).instance());
+    return isInstanceSupported(((ClassNode) codeNode).instance());
   }
 
-  protected Class<?> classSupported() {
-    return Object.class;
+  abstract protected boolean isInstanceSupported(Object instance);
+
+  @Override
+  public void onInstanceSet() {
+    hasBeenSynchronized = false;
+    Display.getDefault().asyncExec(uiSetLayout);
   }
 
-  protected void disposeChildrenOnUnset() {
+  @Override
+  public void onInstanceUnset() {
+    hasBeenSynchronized = false;
+    Display.getDefault().asyncExec(uiUnsetLayout);
   }
 
-  abstract protected void set(T current);
+  protected Clock clock() {
+    return instance.clock();
+  }
 
-  abstract protected void unset();
+  protected T instance() {
+    return instance.current();
+  }
 
   abstract protected void repaintView();
 
   abstract protected boolean synchronize();
+
+  abstract protected void setLayout();
+
+  abstract protected void unsetLayout();
 }
