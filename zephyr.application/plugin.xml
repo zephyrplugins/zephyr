@@ -30,7 +30,7 @@
          </property>
          <property
                name="aboutText"
-               value="Zephyr&#x0A;Thomas Degris">
+               value="Zephyr&#x0A;Thomas Degris&#x0A;http://thomasdegris.github.com/Zephyr/">
          </property>
          <property
                name="windowImages"

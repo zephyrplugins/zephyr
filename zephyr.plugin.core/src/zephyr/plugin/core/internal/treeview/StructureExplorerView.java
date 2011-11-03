@@ -61,6 +61,8 @@ public class StructureExplorerView extends ViewPart implements ItemProvider, Vie
   @Override
   public void createPartControl(Composite parent) {
     GridLayout parentLayout = new GridLayout(1, false);
+    parentLayout.marginWidth = 0;
+    parentLayout.marginHeight = 0;
     parent.setLayout(parentLayout);
     tree = new Tree(parent, SWT.MULTI);
     tree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));

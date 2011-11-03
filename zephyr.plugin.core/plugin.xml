@@ -413,4 +413,34 @@
             name="RemoveNodeCodeWhenClockRemovedListener">
       </listener>
    </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="zephyr.plugin.core.perspective.initial">
+         <view
+               closeable="true"
+               id="zephyr.plugin.core.treeview"
+               minimized="false"
+               moveable="true"
+               ratio="0.3"
+               relationship="left"
+               relative="org.eclipse.ui.editorss"
+               showTitle="true"
+               standalone="false"
+               visible="true">
+         </view>
+         <view
+               closeable="true"
+               id="zephyr.plugin.core.clocksview"
+               minimized="false"
+               moveable="true"
+               ratio="0.7"
+               relationship="bottom"
+               relative="zephyr.plugin.core.treeview"
+               showTitle="true"
+               standalone="false"
+               visible="true">
+         </view>
+      </perspectiveExtension>
+   </extension>
 </plugin>
