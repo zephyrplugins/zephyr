@@ -20,7 +20,15 @@ public class ViewTaskExecutor extends ThreadPoolExecutor {
     }
   }
 
-  public ViewTaskExecutor(int nbThread) {
+  public static int getDefaultNbThreads() {
+    return Runtime.getRuntime().availableProcessors();
+  }
+
+  public ViewTaskExecutor() {
+    this(getDefaultNbThreads());
+  }
+
+  private ViewTaskExecutor(int nbThread) {
     super(nbThread, nbThread, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>(), new Factory());
   }
 

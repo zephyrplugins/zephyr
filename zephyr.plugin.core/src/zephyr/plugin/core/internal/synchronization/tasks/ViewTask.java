@@ -2,58 +2,52 @@ package zephyr.plugin.core.internal.synchronization.tasks;
 
 import java.util.concurrent.Future;
 
-import org.eclipse.swt.widgets.Display;
-
 import zephyr.plugin.core.api.synchronization.Clock;
 
 public class ViewTask implements Runnable {
   final ViewReference view;
   private Future<?> future;
-  private boolean isDirty = false;
+  private boolean repaintRequired = false;
+  private final ViewTaskExecutor executor;
 
-  protected ViewTask(ViewReference view) {
+  protected ViewTask(ViewTaskExecutor executor, ViewReference view) {
+    this.executor = executor;
     this.view = view;
   }
 
   @Override
   public void run() {
     try {
-      while (isDirty) {
-        isDirty = false;
+      do {
         synchronized (view) {
+          repaintRequired = false;
           view.repaint();
         }
-      }
+      } while (repaintRequired);
     } catch (Exception e) {
       e.printStackTrace();
     }
   }
 
-
-  public void refreshIFN(ViewTaskExecutor executor) {
-    refreshIFN(executor, null, false);
+  public void refreshIFN() {
+    repaintRequired = true;
+    refreshIFN(null, false);
   }
 
-  public void refreshIFN(ViewTaskExecutor executor, Clock clock, boolean synchronize) {
-    isDirty = !synchronize;
+  public Future<?> refreshIFN(Clock clock, boolean synchronize) {
     if (!isDone())
-      return;
-    boolean hasSynchronized = false;
+      return future;
     if (synchronize)
-      hasSynchronized = view.synchronize(clock);
-    isDirty = isDirty || hasSynchronized;
-    if (isDirty && !executor.isShutdown())
+      synchronized (view) {
+        view.synchronize(clock);
+      }
+    if (!executor.isShutdown())
       future = executor.submit(this);
+    return future;
   }
 
   public boolean isDone() {
     return future == null || future.isDone();
-  }
-
-  public void disable() {
-    isDirty = false;
-    while (!isDone())
-      Display.getCurrent().readAndDispatch();
   }
 
   public ViewReference viewRef() {

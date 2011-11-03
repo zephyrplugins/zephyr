@@ -7,14 +7,14 @@ import zephyr.plugin.core.api.signals.Signal;
 import zephyr.plugin.core.views.SyncView;
 
 public class ViewTaskScheduler {
-  protected final ViewTaskExecutor sequentialExecutor = new ViewTaskExecutor(1);
+  protected final ViewTaskExecutor sequentialExecutor = new ViewTaskExecutor();
   private final Map<SyncView, ViewTask> viewTasks = new HashMap<SyncView, ViewTask>();
   public static final Signal<ViewTaskExecutor> onTaskExecuted = new Signal<ViewTaskExecutor>();
 
   synchronized public ViewTask task(SyncView view) {
     ViewTask task = viewTasks.get(view);
     if (task == null) {
-      task = new ViewTask(new ViewReference(view));
+      task = new ViewTask(sequentialExecutor, new ViewReference(view));
       viewTasks.put(view, task);
     }
     return task;
@@ -27,7 +27,7 @@ public class ViewTaskScheduler {
   public void submitView(SyncView view) {
     ViewTask task = viewTasks.get(view);
     if (task != null)
-      task.refreshIFN(sequentialExecutor);
+      task.refreshIFN();
   }
 
   public void schedule(Runnable runnable) {
