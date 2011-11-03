@@ -1,8 +1,12 @@
 package zephyr.plugin.core.views.helpers;
 
 import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 
 import zephyr.plugin.core.canvas.BackgroundCanvas;
 import zephyr.plugin.core.canvas.Painter;
@@ -17,6 +21,8 @@ public abstract class BackgroundCanvasView<T> extends ClassTypeView<T> implement
     gridLayout.marginHeight = 0;
     gridLayout.marginWidth = 0;
     parent.setLayout(gridLayout);
+    backgroundCanvas = new BackgroundCanvas(parent, this);
+    backgroundCanvas.setFillLayout();
     setToolbar(getViewSite().getActionBars().getToolBarManager());
   }
 
@@ -24,19 +30,35 @@ public abstract class BackgroundCanvasView<T> extends ClassTypeView<T> implement
   }
 
   @Override
-  public void repaintView() {
+  public void repaint() {
     backgroundCanvas.paint();
   }
 
   @Override
-  protected void setLayout() {
-    backgroundCanvas = new BackgroundCanvas(parent, this);
-    backgroundCanvas.setFillLayout();
+  public void paint(PainterMonitor painterListener, Image image, GC gc) {
+    if (!instance.isNull() && hasBeenSynchronized())
+      synchronizedPaint(painterListener, gc);
+    else
+      defaultPainting(image, gc);
+
   }
 
-  @Override
-  protected void unsetLayout() {
-    backgroundCanvas.dispose();
-    backgroundCanvas = null;
+  private void synchronizedPaint(PainterMonitor painterListener, GC gc) {
+    if (!viewLock.acquire())
+      return;
+    paint(painterListener, gc);
+    viewLock.release();
   }
+
+  protected void defaultPainting(Image image, final GC gc) {
+    Display.getDefault().syncExec(new Runnable() {
+      @Override
+      public void run() {
+        gc.setBackground(gc.getDevice().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
+        gc.fillRectangle(gc.getClipping());
+      }
+    });
+  }
+
+  abstract protected void paint(PainterMonitor painterListener, GC gc);
 }

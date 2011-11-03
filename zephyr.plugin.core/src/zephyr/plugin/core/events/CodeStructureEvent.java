@@ -5,19 +5,22 @@ import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.async.events.Event;
 
-public class CodeParsedEvent implements Event {
-  public static final String ID = "zephyr.event.codeparsed";
+public class CodeStructureEvent implements Event {
+  public static final String ParsedID = "zephyr.event.codeparsed";
+  public static final String RemovedID = "zephyr.event.coderemoved";
   private final ClockNode clockNode;
   private final CodeNode node;
+  private final String id;
 
-  public CodeParsedEvent(ClockNode clockNode, CodeNode node) {
+  public CodeStructureEvent(String id, ClockNode clockNode, CodeNode node) {
+    this.id = id;
     this.clockNode = clockNode;
     this.node = node;
   }
 
   @Override
   public String id() {
-    return ID;
+    return id;
   }
 
   public CodeNode node() {

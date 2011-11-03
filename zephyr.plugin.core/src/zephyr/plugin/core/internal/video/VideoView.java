@@ -36,19 +36,22 @@ public class VideoView extends ForegroundCanvasView<ImageProvider> {
     int width = image.getImageData().width;
     int height = image.getImageData().height;
     gc.drawImage(image, 0, 0, width, height, 0, 0, width, height);
+    image.dispose();
   }
+
 
   @Override
   protected boolean synchronize() {
-    if (parent.isDisposed())
-      return true;
-    BufferedImage bufferedImage = instance().image();
-    if (bufferedImage == null) {
-      imageData = null;
-      return true;
-    }
-    imageData = convertToSWT(bufferedImage);
     return true;
+  }
+
+  @Override
+  protected void unprotectedSynchronization() {
+    ImageProvider provider = instance();
+    if (provider == null)
+      return;
+    BufferedImage bufferedImage = provider.image();
+    imageData = bufferedImage != null ? convertToSWT(bufferedImage) : null;
   }
 
   static ImageData convertToSWT(BufferedImage bufferedImage) {

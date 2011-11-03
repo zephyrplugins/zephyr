@@ -5,7 +5,10 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
+import org.eclipse.ui.views.IViewDescriptor;
+import org.eclipse.ui.views.IViewRegistry;
 
 import zephyr.plugin.core.api.codeparser.codetree.ClassNode;
 import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
@@ -24,6 +27,7 @@ public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView,
         return;
       if (parent.isDisposed())
         return;
+      setViewName();
       setLayout();
       parent.layout(true, true);
       viewLock.release();
@@ -36,6 +40,7 @@ public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView,
         return;
       if (parent.isDisposed())
         return;
+      setViewName();
       unsetLayout();
       parent.layout(true, true);
       viewLock.release();
@@ -44,7 +49,7 @@ public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView,
   protected final InstanceManager<T> instance;
   protected final ViewLock viewLock;
   protected Composite parent;
-  private boolean hasBeenSynchronized = false;
+  protected boolean hasBeenSynchronized = false;
 
   public ClassTypeView() {
     instance = new InstanceManager<T>(this);
@@ -55,6 +60,7 @@ public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView,
   public void createPartControl(Composite parent) {
     this.parent = parent;
     new SyncViewDropTarget(this, parent);
+    setDefaultName();
   }
 
   @Override
@@ -90,8 +96,10 @@ public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView,
   }
 
   protected void setViewName() {
-    if (instance.isNull())
+    if (instance.isNull()) {
+      setDefaultName();
       return;
+    }
     setViewName(instance.codeNode().label(), instance.codeNode().path());
   }
 
@@ -115,20 +123,16 @@ public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView,
 
   @Override
   final public boolean synchronize(Clock clock) {
-    if (!viewLock.acquire())
+    if (!viewLock.tryAcquire())
       return false;
     boolean result = synchronize();
     hasBeenSynchronized = true;
     viewLock.release();
+    unprotectedSynchronization();
     return result;
   }
 
-  @Override
-  final public void repaint() {
-    if (!viewLock.acquire())
-      return;
-    repaintView();
-    viewLock.release();
+  protected void unprotectedSynchronization() {
   }
 
   @Override
@@ -160,7 +164,11 @@ public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView,
     return instance.current();
   }
 
-  abstract protected void repaintView();
+  private void setDefaultName() {
+    IViewRegistry viewRegistry = PlatformUI.getWorkbench().getViewRegistry();
+    IViewDescriptor descriptor = viewRegistry.find(getSite().getId());
+    setViewName(descriptor.getLabel(), "");
+  }
 
   abstract protected boolean synchronize();
 

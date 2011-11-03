@@ -5,7 +5,7 @@ import zephyr.plugin.core.api.monitoring.abstracts.MonitoredDataTraverser;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.async.events.Event;
 import zephyr.plugin.core.async.listeners.EventListener;
-import zephyr.plugin.core.events.CodeParsedEvent;
+import zephyr.plugin.core.events.CodeStructureEvent;
 import zephyr.plugin.plotting.internal.ZephyrPluginPlotting;
 import zephyr.plugin.plotting.internal.traces.ClockTraces;
 import zephyr.plugin.plotting.internal.traces.ClockTracesManager;
@@ -13,7 +13,7 @@ import zephyr.plugin.plotting.internal.traces.ClockTracesManager;
 public class RegisterPlottingMonitor implements EventListener {
   @Override
   public void listen(Event event) {
-    CodeParsedEvent eventInfo = (CodeParsedEvent) event;
+    CodeStructureEvent eventInfo = (CodeStructureEvent) event;
     ClockTracesManager manager = ZephyrPluginPlotting.tracesManager();
     Clock clock = eventInfo.clock();
     ClockTraces dataMonitor = manager.getSyncMonitor(clock);

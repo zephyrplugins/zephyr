@@ -2,11 +2,14 @@ package zephyr.plugin.core.helpers;
 
 import org.eclipse.ui.IMemento;
 
+import zephyr.ZephyrCore;
 import zephyr.ZephyrSync;
 import zephyr.plugin.core.api.codeparser.codetree.ClassNode;
 import zephyr.plugin.core.api.codeparser.codetree.CodeTrees;
 import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.synchronization.Clock;
+import zephyr.plugin.core.async.events.CastedEventListener;
+import zephyr.plugin.core.events.ClockEvent;
 import zephyr.plugin.core.views.SyncView;
 
 public class InstanceManager<T> {
@@ -17,12 +20,19 @@ public class InstanceManager<T> {
   }
 
   private T instance = null;
-  private Clock clock;
+  Clock clock;
   private CodeNode codeNode;
   private final InstanceListener<T> view;
 
   public InstanceManager(InstanceListener<T> view) {
     this.view = view;
+    ZephyrCore.busEvent().register(ClockEvent.RemovedID, new CastedEventListener<ClockEvent>() {
+      @Override
+      protected void listenEvent(ClockEvent event) {
+        if (event.clock() == clock)
+          unset();
+      }
+    });
   }
 
   public CodeNode codeNode() {
@@ -36,12 +46,12 @@ public class InstanceManager<T> {
   public void unset() {
     if (isNull())
       return;
-    view.onInstanceUnset();
     Clock previousClock = clock;
+    ZephyrSync.unbind(previousClock, view);
+    view.onInstanceUnset();
     instance = null;
     codeNode = null;
     clock = null;
-    ZephyrSync.unbind(previousClock, view);
     ZephyrSync.submitView(view);
   }
 

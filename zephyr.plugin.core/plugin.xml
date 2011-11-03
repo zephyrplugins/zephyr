@@ -398,14 +398,19 @@
             name="ViewRegistryDeletedWhenClockRemoved">
       </listener>
       <listener
-            class="zephyr.plugin.core.internal.ParseCodeWhenAdvertizedListener"
+            class="zephyr.plugin.core.internal.listeners.ParseCodeWhenAdvertizedListener"
             eventid="zephyr.event.advertize"
             name="ParseCodeOnAdvertized">
       </listener>
       <listener
-            class="zephyr.plugin.core.internal.synchronization.PopupViewListener"
+            class="zephyr.plugin.core.internal.listeners.PopupViewListener"
             eventid="zephyr.event.codeparsed"
             name="PopupViewOnCodeParsed">
+      </listener>
+      <listener
+            class="zephyr.plugin.core.internal.listeners.RemoveNodeCodeWhenClockRemovedListener"
+            eventid="zephyr.event.clockremoved"
+            name="RemoveNodeCodeWhenClockRemovedListener">
       </listener>
    </extension>
 </plugin>

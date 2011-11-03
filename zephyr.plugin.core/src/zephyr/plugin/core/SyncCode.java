@@ -12,7 +12,7 @@ import zephyr.plugin.core.api.codeparser.interfaces.CodeParser;
 import zephyr.plugin.core.api.codeparser.parsers.CodeTreeParser;
 import zephyr.plugin.core.api.monitoring.abstracts.MonitoredDataTraverser;
 import zephyr.plugin.core.api.synchronization.Clock;
-import zephyr.plugin.core.events.CodeParsedEvent;
+import zephyr.plugin.core.events.CodeStructureEvent;
 
 public class SyncCode {
   private final Map<Clock, ClockNode> clockNodes = new LinkedHashMap<Clock, ClockNode>();
@@ -28,7 +28,7 @@ public class SyncCode {
     }
     CodeParser parser = new CodeTreeParser(MonitoredDataTraverser.MonitorEverythingLevel);
     CodeNode newNode = parser.parse(clockNode, root);
-    ZephyrCore.busEvent().dispatch(new CodeParsedEvent(clockNode, newNode));
+    ZephyrCore.busEvent().dispatch(new CodeStructureEvent(CodeStructureEvent.ParsedID, clockNode, newNode));
     return newNode;
   }
 
@@ -38,5 +38,10 @@ public class SyncCode {
 
   public ClockNode clockNode(Clock clock) {
     return clockNodes.get(clock);
+  }
+
+  public void removeClockNode(Clock clock) {
+    ClockNode clockNode = clockNodes.remove(clock);
+    ZephyrCore.busEvent().dispatch(new CodeStructureEvent(CodeStructureEvent.RemovedID, clockNode, clockNode));
   }
 }

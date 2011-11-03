@@ -11,7 +11,6 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Canvas;
 
 public class DoubleBuffer implements ControlListener {
-
   private final Canvas canvas;
   protected Rectangle canvasRectangle = null;
   private final Semaphore drawingSemaphore = new Semaphore(1);
@@ -26,8 +25,8 @@ public class DoubleBuffer implements ControlListener {
   }
 
   public boolean currentImageIsValide() {
-    return backgroundImage != null && !backgroundImage.isDisposed() && backgroundImage.getBounds()
-        .equals(canvasRectangle);
+    return backgroundImage != null && !backgroundImage.isDisposed()
+        && backgroundImage.getBounds().equals(canvasRectangle);
   }
 
   public Image acquireImage() {

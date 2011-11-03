@@ -1,8 +1,9 @@
-package zephyr.plugin.core.internal;
+package zephyr.plugin.core.internal.listeners;
 
 import zephyr.plugin.core.api.Zephyr.AdvertisementInfo;
 import zephyr.plugin.core.async.events.CastedEventListener;
 import zephyr.plugin.core.events.AdvertizeEvent;
+import zephyr.plugin.core.internal.ZephyrPluginCore;
 
 public class ParseCodeWhenAdvertizedListener extends CastedEventListener<AdvertizeEvent> {
   @Override

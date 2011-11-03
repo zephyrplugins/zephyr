@@ -17,6 +17,10 @@ public class ViewLock {
     return true;
   }
 
+  public boolean tryAcquire() {
+    return viewLock.tryAcquire();
+  }
+
   public void release() {
     viewLock.release();
   }

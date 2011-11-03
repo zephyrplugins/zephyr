@@ -6,9 +6,13 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import zephyr.ZephyrCore;
 import zephyr.ZephyrSync;
 import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.synchronization.Clock;
+import zephyr.plugin.core.async.events.CastedEventListener;
+import zephyr.plugin.core.async.listeners.EventListener;
+import zephyr.plugin.core.events.ClockEvent;
 import zephyr.plugin.plotting.internal.traces.ClockTraces;
 import zephyr.plugin.plotting.internal.traces.TraceData;
 
@@ -21,10 +25,17 @@ public class ClockGraphBindings {
       selectionChanged(traceDatas);
     }
   };
+  private final EventListener clockRemovedListener = new CastedEventListener<ClockEvent>() {
+    @Override
+    protected void listenEvent(ClockEvent event) {
+      unbind(event.clock());
+    }
+  };
 
   public ClockGraphBindings(PlotView plotView) {
     this.plotView = plotView;
     plotView.plotSelection.onSelectedTracesChanged.connect(selectionChangedListener);
+    ZephyrCore.busEvent().register(ClockEvent.RemovedID, clockRemovedListener);
   }
 
   private void bind(Clock clock) {
@@ -62,6 +73,7 @@ public class ClockGraphBindings {
 
   public void dispose() {
     plotView.plotSelection.onSelectedTracesChanged.disconnect(selectionChangedListener);
+    ZephyrCore.busEvent().unregister(ClockEvent.RemovedID, clockRemovedListener);
   }
 
   public boolean isEmpty() {

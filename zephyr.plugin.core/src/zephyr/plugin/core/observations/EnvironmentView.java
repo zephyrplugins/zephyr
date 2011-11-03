@@ -66,7 +66,7 @@ public abstract class EnvironmentView<T> extends ClassTypeView<T> {
   }
 
   @Override
-  protected void repaintView() {
+  public void repaint() {
     if (obsLayout == null)
       return;
     parent.getDisplay().syncExec(repaintWidgets);

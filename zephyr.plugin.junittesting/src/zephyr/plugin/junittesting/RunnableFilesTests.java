@@ -1,12 +1,11 @@
 package zephyr.plugin.junittesting;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import zephyr.plugin.filehandling.FileHandler;
 import zephyr.plugin.junittesting.support.ClockListener;
-import zephyr.plugin.junittesting.support.ControlChecks;
+import zephyr.plugin.junittesting.support.RunnableTests;
 import zephyr.plugin.junittesting.support.conditions.NumberTickCondition;
 
 public class RunnableFilesTests {
@@ -22,13 +21,8 @@ public class RunnableFilesTests {
     listener.registerCondition(new NumberTickCondition(1000));
     FileHandler.openFile(filepath);
     listener.waitConditions();
-    checkViews(listener);
-  }
-
-  private void checkViews(ClockListener clockListener) {
-    clockListener.waitClockRemoved();
-    Assert.assertEquals(0, ControlChecks.countChildren("zephyr.plugin.core.clocksview"));
-    Assert.assertEquals(1, ControlChecks.countChildren("zephyr.plugin.core.treeview"));
+    listener.waitClockRemoved();
+    RunnableTests.checkRunnableAllDone();
   }
 
   @Test(timeout = TimeOut)

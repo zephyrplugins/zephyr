@@ -30,7 +30,26 @@ public abstract class ForegroundCanvasView<T> extends ClassTypeView<T> implement
     super.createPartControl(parent);
     GridLayout gridLayout = new GridLayout(1, false);
     parent.setLayout(gridLayout);
+    canvas = new Canvas(parent, SWT.DOUBLE_BUFFERED | SWT.NO_BACKGROUND);
+    canvas.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+    canvas.addPaintListener(new PaintListener() {
+      @Override
+      public void paintControl(PaintEvent e) {
+        GC gc = e.gc;
+        if (!instance.isNull() && hasBeenSynchronized())
+          synchronizedPaint(gc);
+        else
+          defaultPainting(gc);
+      }
+    });
     setToolbar(getViewSite().getActionBars().getToolBarManager());
+  }
+
+  protected void synchronizedPaint(GC gc) {
+    if (!viewLock.acquire())
+      return;
+    paint(gc);
+    viewLock.release();
   }
 
   abstract protected void paint(GC gc);
@@ -43,37 +62,24 @@ public abstract class ForegroundCanvasView<T> extends ClassTypeView<T> implement
   }
 
   @Override
-  public void repaintView() {
-    if (canvas == null || canvas.isDisposed())
-      return;
-    canvas.getDisplay().syncExec(drawOnCanvas);
-  }
-
-  @Override
-  protected void setLayout() {
-    canvas = new Canvas(parent, SWT.DOUBLE_BUFFERED);
-    canvas.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-    canvas.addPaintListener(new PaintListener() {
-      @Override
-      public void paintControl(PaintEvent e) {
-        GC gc = e.gc;
-        if (hasBeenSynchronized())
-          paint(gc);
-        else
-          defaultPainting(gc);
-      }
-    });
+  public void repaint() {
+    if (!canvas.isDisposed())
+      canvas.getDisplay().syncExec(drawOnCanvas);
   }
 
   protected void defaultPainting(GC gc) {
-    gc.setBackground(canvas.getDisplay().getSystemColor(SWT.COLOR_WHITE));
+    gc.setBackground(canvas.getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
     gc.fillRectangle(gc.getClipping());
   }
 
   @Override
+  protected void setLayout() {
+    setViewName();
+  }
+
+  @Override
   protected void unsetLayout() {
-    canvas.dispose();
-    canvas = null;
+    setViewName();
   }
 
   @Override

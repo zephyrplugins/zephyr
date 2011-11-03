@@ -27,7 +27,7 @@ import zephyr.plugin.core.async.events.Event;
 import zephyr.plugin.core.async.listeners.EventListener;
 import zephyr.plugin.core.async.listeners.UIListener;
 import zephyr.plugin.core.events.ClockEvent;
-import zephyr.plugin.core.events.CodeParsedEvent;
+import zephyr.plugin.core.events.CodeStructureEvent;
 import zephyr.plugin.core.views.ViewWithControl;
 
 public class StructureExplorerView extends ViewPart implements ItemProvider, ViewWithControl {
@@ -41,11 +41,11 @@ public class StructureExplorerView extends ViewPart implements ItemProvider, Vie
   private final SelectionListener selectionListener = new SelectionTreeListener();
   private MouseTreeListener mouseListener = null;
   private final ViewAssociator viewAssociator = new ViewAssociator();
-  private final EventListener onClockRemoved = new UIListener() {
+  private final EventListener onClockNodeRemoved = new UIListener() {
     @Override
     public void listenInUIThread(Event event) {
-      ClockNode clockNode = ZephyrCore.syncCode().clockNode(((ClockEvent) event).clock());
-      TreeItem treeItem = clockItems.get(clockNode);
+      CodeStructureEvent structureEvent = (CodeStructureEvent) event;
+      TreeItem treeItem = clockItems.get(structureEvent.clockNode());
       if (treeItem != null)
         treeItem.dispose();
     }
@@ -54,8 +54,8 @@ public class StructureExplorerView extends ViewPart implements ItemProvider, Vie
   public StructureExplorerView() {
     codeParser = ZephyrCore.syncCode();
     classNodeListener = new RootClassNodeListener(this);
-    ZephyrCore.busEvent().register(CodeParsedEvent.ID, classNodeListener);
-    ZephyrCore.busEvent().register(ClockEvent.RemovedID, onClockRemoved);
+    ZephyrCore.busEvent().register(CodeStructureEvent.ParsedID, classNodeListener);
+    ZephyrCore.busEvent().register(CodeStructureEvent.RemovedID, onClockNodeRemoved);
   }
 
   @Override
@@ -164,8 +164,8 @@ public class StructureExplorerView extends ViewPart implements ItemProvider, Vie
 
   @Override
   public void dispose() {
-    ZephyrCore.busEvent().unregister(ClockEvent.RemovedID, onClockRemoved);
-    ZephyrCore.busEvent().unregister(CodeParsedEvent.ID, classNodeListener);
+    ZephyrCore.busEvent().unregister(ClockEvent.RemovedID, onClockNodeRemoved);
+    ZephyrCore.busEvent().unregister(CodeStructureEvent.ParsedID, classNodeListener);
     mouseListener.dispose();
     iconDatabase.dispose();
     tree.dispose();
