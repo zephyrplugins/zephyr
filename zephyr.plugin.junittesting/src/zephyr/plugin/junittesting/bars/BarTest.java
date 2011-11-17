@@ -8,8 +8,8 @@ import org.junit.Test;
 import zephyr.ZephyrCore;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.junittesting.support.ClockListener;
-import zephyr.plugin.junittesting.support.ControlChecks;
 import zephyr.plugin.junittesting.support.RunnableTests;
+import zephyr.plugin.junittesting.support.checklisteners.ControlChecks;
 import zephyr.plugin.junittesting.support.conditions.Condition;
 
 public class BarTest {

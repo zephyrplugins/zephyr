@@ -30,7 +30,18 @@
          point="zephyr.listener">
       <listener
             class="zephyr.plugin.junittesting.busevent.TestingEventListener"
-            eventid="TestBusEvent">
+            eventid="TestBusEvent"
+            name="TestBusEvent">
+      </listener>
+      <listener
+            class="zephyr.plugin.junittesting.support.checklisteners.CountControlChildrenListener"
+            eventid="zephyr.event.countcontrolchildren"
+            name="Count Control Children Listener">
+      </listener>
+      <listener
+            class="zephyr.plugin.junittesting.support.checklisteners.CountColorsListener"
+            eventid="zephyr.event.countcolorchildren"
+            name="Count Colors Children Listener">
       </listener>
    </extension>
 

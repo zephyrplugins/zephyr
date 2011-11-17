@@ -3,6 +3,8 @@ package zephyr.plugin.junittesting;
 import org.junit.Before;
 import org.junit.Test;
 
+import zephyr.ZephyrCore;
+import zephyr.plugin.core.async.events.Event;
 import zephyr.plugin.filehandling.FileHandler;
 import zephyr.plugin.junittesting.support.ClockListener;
 import zephyr.plugin.junittesting.support.RunnableTests;
@@ -22,6 +24,12 @@ public class RunnableFilesTests {
     FileHandler.openFile(filepath);
     listener.waitConditions();
     listener.waitClockRemoved();
+    ZephyrCore.busEvent().syncDispatch(new Event() {
+      @Override
+      public String id() {
+        return "RunnableFilesTests";
+      }
+    });
     RunnableTests.checkRunnableAllDone();
   }
 
@@ -38,5 +46,15 @@ public class RunnableFilesTests {
   @Test(timeout = TimeOut)
   public void testClojureLoading() {
     testFileLoading("../zephyr.example.scripts/simple.clj");
+  }
+
+  @Test(timeout = TimeOut)
+  public void testTextFileLoading() {
+    testFileLoading("data/textdata");
+  }
+
+  @Test(timeout = TimeOut)
+  public void testShortTextFileLoading() {
+    testFileLoading("data/textdatashort");
   }
 }

@@ -79,8 +79,13 @@ public class FileView extends EnvironmentView<LogFile> implements Closeable, Res
     super.setLayout();
     restartAction.setEnabled(true);
     terminateAction.setEnabled(true);
+  }
+
+  @Override
+  protected void setViewNameFromInstance() {
     setViewName(new File(instance().filepath).getName(), instance().filepath);
   }
+
 
   @Override
   protected boolean synchronize() {

@@ -23,22 +23,23 @@ public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView,
   protected final Runnable uiSetLayout = new Runnable() {
     @Override
     public void run() {
-      if (!viewLock.acquire())
+      if (parent.isDisposed() || instance.isNull())
         return;
-      if (parent.isDisposed())
+      if (!viewLock.acquire())
         return;
       setViewName();
       setLayout();
       parent.layout(true, true);
       viewLock.release();
+      isLayoutReady = true;
     }
   };
   protected final Runnable uiUnsetLayout = new Runnable() {
     @Override
     public void run() {
-      if (!viewLock.acquire())
-        return;
       if (parent.isDisposed())
+        return;
+      if (!viewLock.acquire())
         return;
       setViewName();
       unsetLayout();
@@ -50,6 +51,7 @@ public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView,
   protected final ViewLock viewLock;
   protected Composite parent;
   protected boolean hasBeenSynchronized = false;
+  protected boolean isLayoutReady = false;
 
   public ClassTypeView() {
     instance = new InstanceManager<T>(this);
@@ -100,6 +102,10 @@ public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView,
       setDefaultName();
       return;
     }
+    setViewNameFromInstance();
+  }
+
+  protected void setViewNameFromInstance() {
     setViewName(instance.codeNode().label(), instance.codeNode().path());
   }
 
@@ -123,6 +129,8 @@ public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView,
 
   @Override
   final public boolean synchronize(Clock clock) {
+    if (!isLayoutReady)
+      return false;
     if (!viewLock.tryAcquire())
       return false;
     boolean result = synchronize();
@@ -153,6 +161,7 @@ public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView,
   @Override
   public void onInstanceUnset() {
     hasBeenSynchronized = false;
+    isLayoutReady = false;
     Display.getDefault().asyncExec(uiUnsetLayout);
   }
 
@@ -164,7 +173,7 @@ public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView,
     return instance.current();
   }
 
-  private void setDefaultName() {
+  protected void setDefaultName() {
     IViewRegistry viewRegistry = PlatformUI.getWorkbench().getViewRegistry();
     IViewDescriptor descriptor = viewRegistry.find(getSite().getId());
     setViewName(descriptor.getLabel(), "");

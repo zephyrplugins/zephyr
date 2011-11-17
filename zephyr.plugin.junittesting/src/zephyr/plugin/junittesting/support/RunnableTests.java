@@ -4,6 +4,7 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.junit.Assert;
 
 import zephyr.ZephyrCore;
+import zephyr.plugin.junittesting.support.checklisteners.ControlChecks;
 
 public class RunnableTests {
   static public void checkRunnableAllDone() {
