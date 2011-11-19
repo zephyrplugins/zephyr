@@ -88,7 +88,10 @@ public class ViewBinder {
   }
 
   public void bind(Clock clock, SyncView view) {
-    clockToView.get(clock).addView(view);
+    ClockViews clockViews = clockToView.get(clock);
+    if (clockViews == null)
+      return;
+    clockViews.addView(view);
   }
 
   public void unbind(Clock clock, SyncView view) {
