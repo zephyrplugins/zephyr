@@ -1,27 +1,21 @@
 package zephyr.plugin.plotting.plot2d;
 
-import java.awt.geom.Point2D;
-import java.util.HashSet;
-import java.util.Set;
-
 import org.eclipse.swt.graphics.GC;
-import org.eclipse.swt.graphics.Point;
 
 import zephyr.plugin.core.utils.Colors;
 import zephyr.plugin.plotting.axes.Axes;
 import zephyr.plugin.plotting.data.Data2D;
 import zephyr.plugin.plotting.mousesearch.MouseSearchable;
-import zephyr.plugin.plotting.mousesearch.RequestResult;
 import zephyr.plugin.plotting.plot2d.drawer2d.Drawer2D;
 import zephyr.plugin.plotting.plot2d.drawer2d.Drawers;
 
-public class Plot2D implements MouseSearchable {
+public class Plot2D {
   public final Colors colors = new Colors();
   private final Axes axes = new Axes();
-  private final Set<Data2D> datas = new HashSet<Data2D>();
+  private final PlotData2D datas = new PlotData2D(axes);
 
   synchronized public void clear(GC gc) {
-    datas.clear();
+    datas.reset();
     gc.setBackground(colors.color(gc, Colors.COLOR_WHITE));
     gc.fillRectangle(gc.getClipping());
   }
@@ -54,32 +48,11 @@ public class Plot2D implements MouseSearchable {
     axes.y.reset();
   }
 
-  @Override
-  synchronized public RequestResult search(Point mousePosition) {
-    Point2D.Double dataPoint = axes.toD(mousePosition);
-    Data2D bestData = null;
-    int xIndex = -1;
-    double bestDistance = Double.MAX_VALUE;
-    for (Data2D data : datas)
-      for (int i = 0; i < data.nbPoints; i++) {
-        double distance = dataPoint.distance(data.xdata[i], data.ydata[i]);
-        if (distance < bestDistance) {
-          bestDistance = distance;
-          xIndex = i;
-          bestData = data;
-        }
-      }
-    if (bestData == null)
-      return null;
-    return new Plot2DRequestResult(axes, bestData, xIndex);
-  }
-
-  @Override
-  synchronized public boolean emptySearch() {
-    return datas.isEmpty();
-  }
-
   public Axes axes() {
     return axes;
+  }
+
+  public MouseSearchable dataBuffer() {
+    return datas;
   }
 }

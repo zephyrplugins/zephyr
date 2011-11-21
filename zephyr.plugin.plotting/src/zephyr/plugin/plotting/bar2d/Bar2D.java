@@ -11,7 +11,7 @@ import zephyr.plugin.plotting.mousesearch.MouseSearchable;
 public class Bar2D {
   public final Colors colors = new Colors();
   private final Axes axes = new Axes();
-  private final SearchableData dataBuffer = new SearchableData(axes);
+  private final BarData2D dataBuffer = new BarData2D(axes);
 
   public void clear(GC gc) {
     gc.setBackground(colors.color(gc, Colors.COLOR_WHITE));

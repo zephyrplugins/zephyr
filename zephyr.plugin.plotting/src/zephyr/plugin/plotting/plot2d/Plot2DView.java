@@ -24,7 +24,7 @@ abstract public class Plot2DView<T> extends BackgroundCanvasView<T> implements V
   public void createPartControl(Composite parent) {
     super.createPartControl(parent);
     Control canvas = backgroundCanvas.canvas();
-    mouseSearch = new MouseSearch(plot, canvas);
+    mouseSearch = new MouseSearch(plot.dataBuffer(), canvas);
     backgroundCanvas.addOverlay(mouseSearch);
     setupToolbar(getViewSite().getActionBars().getToolBarManager());
     Composite settingBar = new Composite(parent, SWT.NONE);
