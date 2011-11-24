@@ -14,17 +14,17 @@ public class Plot2D {
   private final Axes axes = new Axes();
   private final PlotData2D datas = new PlotData2D(axes);
 
-  synchronized public void clear(GC gc) {
+  public void clear(GC gc) {
     datas.reset();
     gc.setBackground(colors.color(gc, Colors.COLOR_WHITE));
     gc.fillRectangle(gc.getClipping());
   }
 
-  synchronized public void draw(GC gc, Data2D data) {
+  public void draw(GC gc, Data2D data) {
     draw(gc, Drawers.Lines, data);
   }
 
-  synchronized public void draw(GC gc, Drawer2D drawer, Data2D data) {
+  public void draw(GC gc, Drawer2D drawer, Data2D data) {
     datas.add(data);
     float[] xdata = data.xdata;
     float[] ydata = data.ydata;
