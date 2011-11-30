@@ -11,16 +11,16 @@ import zephyr.plugin.junittesting.support.RunnableTests;
 import zephyr.plugin.junittesting.support.conditions.NumberTickCondition;
 
 public class RunnableFilesTests {
-  private static final long TimeOut = 120000;
+  public static final long TimeOut = 120000;
 
   @Before
   public void before() {
     // ClockListener.enableVerbose();
   }
 
-  private void testFileLoading(String filepath) {
+  static public void testFileLoading(String filepath, int nbClockTick) {
     ClockListener listener = new ClockListener();
-    listener.registerCondition(new NumberTickCondition(1000));
+    listener.registerCondition(new NumberTickCondition(nbClockTick));
     FileHandler.openFile(filepath);
     listener.waitConditions();
     listener.waitClockRemoved();
@@ -35,26 +35,31 @@ public class RunnableFilesTests {
 
   @Test(timeout = TimeOut)
   public void testJarLoading() {
-    testFileLoading("../../zephyr/zephyr.example.simpleclient/simpleclient.jar");
+    ZephyrCore.setSynchronous(false);
+    testFileLoading("../../zephyr/zephyr.example.simpleclient/simpleclient.jar", 1000);
   }
 
   @Test(timeout = TimeOut)
   public void testPythonLoading() {
-    testFileLoading("../../zephyr/zephyr.example.scripts/simple.py");
+    ZephyrCore.setSynchronous(false);
+    testFileLoading("../../zephyr/zephyr.example.scripts/simple.py", 1000);
   }
 
   @Test(timeout = TimeOut)
   public void testClojureLoading() {
-    testFileLoading("../../zephyr/zephyr.example.scripts/simple.clj");
+    ZephyrCore.setSynchronous(false);
+    testFileLoading("../../zephyr/zephyr.example.scripts/simple.clj", 1000);
   }
 
   @Test(timeout = TimeOut)
   public void testTextFileLoading() {
-    testFileLoading("../../zephyr/zephyr.plugin.junittesting/data/textdata");
+    ZephyrCore.setSynchronous(true);
+    testFileLoading("../../zephyr/zephyr.plugin.junittesting/data/textdata", 100);
   }
 
   @Test(timeout = TimeOut)
   public void testShortTextFileLoading() {
-    testFileLoading("../../zephyr/zephyr.plugin.junittesting/data/textdatashort");
+    ZephyrCore.setSynchronous(false);
+    testFileLoading("../../zephyr/zephyr.plugin.junittesting/data/textdatashort", 1000);
   }
 }

@@ -37,7 +37,7 @@ public class FileView extends EnvironmentView<LogFile> implements Closeable, Res
 
   @Override
   protected ObsLayout getObservationLayout() {
-    String[] labels = instance().labels();
+    String[] labels = instance.current().labels();
     int nbLine = (int) Math.sqrt(labels.length);
     int nbItems = labels.length / nbLine;
     ObsWidget[][] widgets = new ObsWidget[nbLine][];
@@ -60,7 +60,7 @@ public class FileView extends EnvironmentView<LogFile> implements Closeable, Res
 
   @Override
   public void restart() {
-    final String filepath = instance().filepath;
+    final String filepath = instance.current().filepath;
     close();
     ZephyrCore.start(new Runnable() {
       @Override
@@ -90,7 +90,7 @@ public class FileView extends EnvironmentView<LogFile> implements Closeable, Res
 
   @Override
   protected boolean synchronize() {
-    double[] currentLine = instance().currentLine();
+    double[] currentLine = instance.current().currentLine();
     synchronize(currentLine);
     return currentLine != null;
   }

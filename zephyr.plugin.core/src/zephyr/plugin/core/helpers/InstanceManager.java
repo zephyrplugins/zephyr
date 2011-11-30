@@ -44,7 +44,7 @@ public class InstanceManager<T> {
   }
 
   public void unset() {
-    if (isNull())
+    if (instance == null)
       return;
     Clock previousClock = clock;
     ZephyrSync.unbind(previousClock, view);
@@ -91,16 +91,12 @@ public class InstanceManager<T> {
     for (int i = 0; i < codeNodes.length; i++)
       if (codeNodes[i] == codeNode)
         return i;
-    return isNull() ? 0 : -1;
+    return instance == null ? 0 : -1;
   }
 
   public void parseMemento(IMemento memento) {
   }
 
   public void saveState(IMemento memento) {
-  }
-
-  public boolean isNull() {
-    return instance == null;
   }
 }

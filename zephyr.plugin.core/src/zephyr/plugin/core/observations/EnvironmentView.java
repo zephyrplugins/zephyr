@@ -4,6 +4,7 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 
 import zephyr.plugin.core.internal.observations.LineLayout;
 import zephyr.plugin.core.views.helpers.ClassTypeView;
@@ -70,5 +71,10 @@ public abstract class EnvironmentView<T> extends ClassTypeView<T> {
     if (obsLayout == null)
       return;
     parent.getDisplay().syncExec(repaintWidgets);
+  }
+
+  @Override
+  public Control control() {
+    return parent;
   }
 }

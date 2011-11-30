@@ -17,7 +17,7 @@ public class BarTest {
 
   @Before
   public void before() {
-    ZephyrCore.junitTestMode();
+    ZephyrCore.setSynchronous(true);
   }
 
   class BarDrawingCondition implements Condition {

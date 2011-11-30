@@ -25,10 +25,10 @@ public class SimpleView extends ForegroundCanvasView<SimpleModel> {
 
   @Override
   public boolean synchronize() {
-    if (data.length != instance().data.length)
-      data = instance().data.clone();
+    if (data.length != instance.current().data.length)
+      data = instance.current().data.clone();
     else
-      System.arraycopy(instance().data, 0, data, 0, data.length);
+      System.arraycopy(instance.current().data, 0, data, 0, data.length);
     return true;
   }
 

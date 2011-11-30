@@ -26,7 +26,7 @@ public class BarView extends ForegroundCanvasView<BarRunnable> {
 
   @Override
   protected boolean synchronize() {
-    data = instance().data();
+    data = instance.current().data();
     return true;
   }
 

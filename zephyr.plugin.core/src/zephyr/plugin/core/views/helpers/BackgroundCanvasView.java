@@ -36,7 +36,7 @@ public abstract class BackgroundCanvasView<T> extends ClassTypeView<T> implement
 
   @Override
   public void paint(PainterMonitor painterListener, Image image, GC gc) {
-    if (!instance.isNull() && hasBeenSynchronized())
+    if (instance.current() != null && hasBeenSynchronized())
       synchronizedPaint(painterListener, gc);
     else
       defaultPainting(image, gc);
@@ -51,7 +51,7 @@ public abstract class BackgroundCanvasView<T> extends ClassTypeView<T> implement
   }
 
   protected void defaultPainting(Image image, final GC gc) {
-    Display.getDefault().syncExec(new Runnable() {
+    Display.getDefault().asyncExec(new Runnable() {
       @Override
       public void run() {
         gc.setBackground(gc.getDevice().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));

@@ -73,8 +73,8 @@ public class ZephyrCore {
       ZephyrPluginCore.viewBinder().removeClock(clock);
   }
 
-  public static void junitTestMode() {
-    ZephyrPluginCore.setSynchronous(true);
+  public static void setSynchronous(boolean value) {
+    ZephyrPluginCore.setSynchronous(value);
   }
 
   public static void sendStatusBarMessage(final String message) {

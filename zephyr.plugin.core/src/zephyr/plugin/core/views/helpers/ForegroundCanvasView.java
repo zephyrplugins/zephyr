@@ -11,9 +11,7 @@ import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
-import zephyr.plugin.core.views.ViewWithControl;
-
-public abstract class ForegroundCanvasView<T> extends ClassTypeView<T> implements ViewWithControl {
+public abstract class ForegroundCanvasView<T> extends ClassTypeView<T> {
   protected Canvas canvas = null;
   protected Runnable drawOnCanvas = new Runnable() {
     @Override
@@ -36,7 +34,7 @@ public abstract class ForegroundCanvasView<T> extends ClassTypeView<T> implement
       @Override
       public void paintControl(PaintEvent e) {
         GC gc = e.gc;
-        if (!instance.isNull() && hasBeenSynchronized())
+        if (instance.current() != null && hasBeenSynchronized())
           synchronizedPaint(gc);
         else
           defaultPainting(gc);

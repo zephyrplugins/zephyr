@@ -47,7 +47,7 @@ public class VideoView extends ForegroundCanvasView<ImageProvider> {
 
   @Override
   protected void unprotectedSynchronization() {
-    ImageProvider provider = instance();
+    ImageProvider provider = instance.current();
     if (provider == null)
       return;
     BufferedImage bufferedImage = provider.image();

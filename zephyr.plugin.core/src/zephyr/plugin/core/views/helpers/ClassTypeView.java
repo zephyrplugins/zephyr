@@ -1,6 +1,7 @@
 package zephyr.plugin.core.views.helpers;
 
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
@@ -18,12 +19,14 @@ import zephyr.plugin.core.helpers.InstanceManager.InstanceListener;
 import zephyr.plugin.core.helpers.SyncViewDropTarget;
 import zephyr.plugin.core.views.DropTargetView;
 import zephyr.plugin.core.views.ProvidedView;
+import zephyr.plugin.core.views.ViewWithControl;
 
-public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView, InstanceListener<T>, DropTargetView {
+public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView, InstanceListener<T>, DropTargetView,
+    ViewWithControl {
   protected final Runnable uiSetLayout = new Runnable() {
     @Override
     public void run() {
-      if (parent.isDisposed() || instance.isNull())
+      if (parent.isDisposed() || instance.current() == null)
         return;
       if (!viewLock.acquire())
         return;
@@ -167,18 +170,15 @@ public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView,
     Display.getDefault().asyncExec(uiUnsetLayout);
   }
 
-  protected Clock clock() {
-    return instance.clock();
-  }
-
-  protected T instance() {
-    return instance.current();
-  }
-
   protected void setDefaultName() {
     IViewRegistry viewRegistry = PlatformUI.getWorkbench().getViewRegistry();
     IViewDescriptor descriptor = viewRegistry.find(getSite().getId());
     setViewName(descriptor.getLabel(), "");
+  }
+
+  @Override
+  public Control control() {
+    return parent;
   }
 
   abstract protected boolean synchronize();
