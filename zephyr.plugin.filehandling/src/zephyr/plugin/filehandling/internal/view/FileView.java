@@ -7,6 +7,7 @@ import org.eclipse.jface.action.IToolBarManager;
 import zephyr.ZephyrCore;
 import zephyr.plugin.core.actions.RestartAction;
 import zephyr.plugin.core.actions.TerminateAction;
+import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.logfiles.LogFile;
 import zephyr.plugin.core.api.synchronization.Closeable;
 import zephyr.plugin.core.helpers.ClassViewProvider;
@@ -82,8 +83,8 @@ public class FileView extends EnvironmentView<LogFile> implements Closeable, Res
   }
 
   @Override
-  protected void setViewNameFromInstance() {
-    setViewName(new File(instance().filepath).getName(), instance().filepath);
+  protected void setViewName(CodeNode codeNode, LogFile instance) {
+    setViewName(new File(instance.filepath).getName(), instance.filepath);
   }
 
 

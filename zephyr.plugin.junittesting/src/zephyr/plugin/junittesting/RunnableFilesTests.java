@@ -35,26 +35,26 @@ public class RunnableFilesTests {
 
   @Test(timeout = TimeOut)
   public void testJarLoading() {
-    testFileLoading("../zephyr.example.simpleclient/simpleclient.jar");
+    testFileLoading("../../zephyr/zephyr.example.simpleclient/simpleclient.jar");
   }
 
   @Test(timeout = TimeOut)
   public void testPythonLoading() {
-    testFileLoading("../zephyr.example.scripts/simple.py");
+    testFileLoading("../../zephyr/zephyr.example.scripts/simple.py");
   }
 
   @Test(timeout = TimeOut)
   public void testClojureLoading() {
-    testFileLoading("../zephyr.example.scripts/simple.clj");
+    testFileLoading("../../zephyr/zephyr.example.scripts/simple.clj");
   }
 
   @Test(timeout = TimeOut)
   public void testTextFileLoading() {
-    testFileLoading("data/textdata");
+    testFileLoading("../../zephyr/zephyr.plugin.junittesting/data/textdata");
   }
 
   @Test(timeout = TimeOut)
   public void testShortTextFileLoading() {
-    testFileLoading("data/textdatashort");
+    testFileLoading("../../zephyr/zephyr.plugin.junittesting/data/textdatashort");
   }
 }

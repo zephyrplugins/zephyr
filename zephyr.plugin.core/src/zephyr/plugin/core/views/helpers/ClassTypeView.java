@@ -97,16 +97,18 @@ public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView,
     instance.unset();
   }
 
+  @SuppressWarnings("unchecked")
   protected void setViewName() {
-    if (instance.isNull()) {
+    CodeNode codeNode = instance.codeNode();
+    if (codeNode == null) {
       setDefaultName();
       return;
     }
-    setViewNameFromInstance();
+    setViewName(codeNode, (T) ((ClassNode) codeNode).instance());
   }
 
-  protected void setViewNameFromInstance() {
-    setViewName(instance.codeNode().label(), instance.codeNode().path());
+  protected void setViewName(CodeNode codeNode, T instance) {
+    setViewName(codeNode.label(), codeNode.path());
   }
 
   protected void setViewName(final String viewName, final String toolTip) {

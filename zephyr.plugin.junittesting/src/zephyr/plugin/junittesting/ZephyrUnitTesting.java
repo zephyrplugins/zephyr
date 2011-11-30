@@ -9,5 +9,5 @@ import zephyr.plugin.junittesting.busevent.TestBusEvent;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({ ZephyrTests.class, TestBusEvent.class, RunnableFilesTests.class, BarTest.class })
-public class UnitTesting {
+public class ZephyrUnitTesting {
 }
