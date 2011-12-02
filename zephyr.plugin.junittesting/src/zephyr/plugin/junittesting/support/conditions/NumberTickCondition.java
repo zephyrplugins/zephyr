@@ -13,12 +13,17 @@ public class NumberTickCondition implements Condition {
 
   @Override
   public void listen(Clock clock) {
-    if (clock.timeStep() > nbMaxTick)
+    if (nbMaxTick >= 0 && clock.timeStep() > nbMaxTick)
       satisfied = true;
   }
 
   @Override
   public boolean isSatisfied() {
+    if (satisfied)
+      checkConditionsWhenSatisfied();
     return satisfied;
+  }
+
+  protected void checkConditionsWhenSatisfied() {
   }
 }

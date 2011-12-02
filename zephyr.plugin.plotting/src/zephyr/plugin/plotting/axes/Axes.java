@@ -138,7 +138,11 @@ public class Axes {
     return gy / y.scale;
   }
 
-  public Point toG(long x, double y) {
+  public double scaleToDX(int gx) {
+    return gx / x.scale;
+  }
+
+  public Point toG(double x, double y) {
     return new Point(toGX(x), toGY(y));
   }
 

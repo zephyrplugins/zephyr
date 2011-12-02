@@ -6,11 +6,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import zephyr.ZephyrCore;
-import zephyr.plugin.core.api.synchronization.Clock;
-import zephyr.plugin.junittesting.support.ClockListener;
 import zephyr.plugin.junittesting.support.RunnableTests;
 import zephyr.plugin.junittesting.support.checklisteners.ControlChecks;
-import zephyr.plugin.junittesting.support.conditions.Condition;
+import zephyr.plugin.junittesting.support.conditions.NumberTickCondition;
 
 public class BarTest {
   private static final long TimeOut = 120000;
@@ -20,29 +18,19 @@ public class BarTest {
     ZephyrCore.setSynchronous(true);
   }
 
-  class BarDrawingCondition implements Condition {
-    private long time;
-
-    @Override
-    public void listen(Clock clock) {
-      time = clock.timeStep();
+  class BarDrawingCondition extends NumberTickCondition {
+    public BarDrawingCondition() {
+      super(10);
     }
 
     @Override
-    public boolean isSatisfied() {
-      if (time < 10)
-        return false;
+    protected void checkConditionsWhenSatisfied() {
       Assert.assertTrue(ControlChecks.countColors(BarView.ViewID) >= 3);
-      return true;
     }
   }
 
   @Test(timeout = TimeOut)
   public void testBarDrawing() {
-    ClockListener listener = new ClockListener();
-    listener.registerCondition(new BarDrawingCondition());
-    RunnableTests.startRunnable("zephyr.plugin.junittesting.bars.runnable");
-    listener.waitClockRemoved();
-    RunnableTests.checkRunnableAllDone();
+    RunnableTests.startRunnable("zephyr.plugin.junittesting.bars.runnable", new BarDrawingCondition());
   }
 }

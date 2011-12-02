@@ -15,6 +15,11 @@ public class ClassViewProvider implements ViewProvider {
   public boolean canViewDraw(CodeNode codeNode) {
     if (!(codeNode instanceof ClassNode))
       return false;
-    return drawnClass.isInstance(((ClassNode) codeNode).instance());
+    Object instance = ((ClassNode) codeNode).instance();
+    return isInstanceSupported(instance);
+  }
+
+  protected boolean isInstanceSupported(Object instance) {
+    return drawnClass.isInstance(instance);
   }
 }
