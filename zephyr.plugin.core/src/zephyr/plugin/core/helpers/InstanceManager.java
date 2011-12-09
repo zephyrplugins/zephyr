@@ -10,6 +10,7 @@ import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.async.events.CastedEventListener;
 import zephyr.plugin.core.events.ClockEvent;
+import zephyr.plugin.core.internal.ZephyrPluginCore;
 import zephyr.plugin.core.views.SyncView;
 
 public class InstanceManager<T> {
@@ -52,7 +53,7 @@ public class InstanceManager<T> {
     instance = null;
     codeNode = null;
     clock = null;
-    ZephyrSync.submitView(view);
+    ZephyrPluginCore.viewScheduler().submitView(view);
   }
 
   public T current() {

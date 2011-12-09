@@ -43,4 +43,9 @@ abstract public class Plot2DView<T> extends BackgroundCanvasView<T> implements V
   protected void setupToolbar(IToolBarManager toolBarManager) {
     toolBarManager.add(new CenterPlotAction(this));
   }
+
+  @Override
+  public void unsetLayout() {
+    plot.clearData();
+  }
 }

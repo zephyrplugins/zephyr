@@ -33,21 +33,17 @@ public abstract class ForegroundCanvasView<T> extends ClassTypeView<T> {
     canvas.addPaintListener(new PaintListener() {
       @Override
       public void paintControl(PaintEvent e) {
+        if (!viewLock.acquire())
+          return;
         GC gc = e.gc;
         if (instance.current() != null && hasBeenSynchronized())
-          synchronizedPaint(gc);
+          paint(gc);
         else
           defaultPainting(gc);
+        viewLock.release();
       }
     });
     setToolbar(getViewSite().getActionBars().getToolBarManager());
-  }
-
-  protected void synchronizedPaint(GC gc) {
-    if (!viewLock.acquire())
-      return;
-    paint(gc);
-    viewLock.release();
   }
 
   abstract protected void paint(GC gc);
@@ -63,11 +59,6 @@ public abstract class ForegroundCanvasView<T> extends ClassTypeView<T> {
   public void repaint() {
     if (!canvas.isDisposed())
       canvas.getDisplay().syncExec(drawOnCanvas);
-  }
-
-  protected void defaultPainting(GC gc) {
-    gc.setBackground(canvas.getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
-    gc.fillRectangle(gc.getClipping());
   }
 
   @Override

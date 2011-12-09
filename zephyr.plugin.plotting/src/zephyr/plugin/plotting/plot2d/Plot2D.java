@@ -55,4 +55,8 @@ public class Plot2D {
   public MouseSearchable dataBuffer() {
     return datas;
   }
+
+  public void clearData() {
+    datas.reset();
+  }
 }

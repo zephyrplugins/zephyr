@@ -1,5 +1,7 @@
 package zephyr.plugin.core.views.helpers;
 
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -55,6 +57,7 @@ public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView,
   protected Composite parent;
   protected boolean hasBeenSynchronized = false;
   protected boolean isLayoutReady = false;
+  private Color backgroundColor;
 
   public ClassTypeView() {
     instance = new InstanceManager<T>(this);
@@ -64,6 +67,7 @@ public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView,
   @Override
   public void createPartControl(Composite parent) {
     this.parent = parent;
+    backgroundColor = parent.getBackground();
     new SyncViewDropTarget(this, parent);
     setDefaultName();
   }
@@ -108,6 +112,11 @@ public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView,
       return;
     }
     setViewName(codeNode, (T) ((ClassNode) codeNode).instance());
+  }
+
+  protected void defaultPainting(GC gc) {
+    gc.setBackground(backgroundColor);
+    gc.fillRectangle(gc.getClipping());
   }
 
   protected void setViewName(CodeNode codeNode, T instance) {

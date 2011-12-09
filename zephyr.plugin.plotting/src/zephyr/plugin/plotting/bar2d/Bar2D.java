@@ -69,4 +69,8 @@ public class Bar2D {
   public MouseSearchable dataBuffer() {
     return dataBuffer;
   }
+
+  public void clearData() {
+    dataBuffer.reset();
+  }
 }
