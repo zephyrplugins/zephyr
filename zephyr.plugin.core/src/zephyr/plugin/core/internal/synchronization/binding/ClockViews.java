@@ -35,7 +35,7 @@ public class ClockViews {
   synchronized private List<Future<?>> synchronizeViews() {
     List<Future<?>> futures = new ArrayList<Future<?>>();
     for (ViewTask task : viewTasks) {
-      Future<?> future = task.refreshIFN(clock, true);
+      Future<?> future = task.refreshIFN(clock);
       assert future != null;
       futures.add(future);
     }

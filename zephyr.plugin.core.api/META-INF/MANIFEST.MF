@@ -22,5 +22,5 @@ Export-Package: zephyr.plugin.core.api,
  zephyr.plugin.core.api.parsing,
  zephyr.plugin.core.api.signals,
  zephyr.plugin.core.api.synchronization,
- zephyr.plugin.core.api.video
+ zephyr.plugin.core.api.viewable
 Require-Bundle: org.junit;bundle-version="4.8.2";resolution:=optional

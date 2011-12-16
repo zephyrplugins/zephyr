@@ -29,18 +29,17 @@ public class ViewTask implements Runnable {
     }
   }
 
-  public void refreshIFN() {
+  public Future<?> refreshIFN() {
     repaintRequired = true;
-    refreshIFN(null, false);
+    return refreshIFN(null);
   }
 
-  public Future<?> refreshIFN(Clock clock, boolean synchronize) {
+  public Future<?> refreshIFN(Clock clock) {
     if (!isDone())
       return future;
-    if (synchronize)
-      synchronized (view) {
-        view.synchronize(clock);
-      }
+    synchronized (view) {
+      view.synchronize(clock);
+    }
     if (!executor.isShutdown())
       future = executor.submit(this);
     return future;

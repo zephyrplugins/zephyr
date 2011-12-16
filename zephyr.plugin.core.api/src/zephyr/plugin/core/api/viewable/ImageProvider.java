@@ -1,4 +1,4 @@
-package zephyr.plugin.core.api.video;
+package zephyr.plugin.core.api.viewable;
 
 import java.awt.image.BufferedImage;
 

@@ -18,6 +18,7 @@ Export-Package: zephyr,
  zephyr.plugin.plotting.axes,
  zephyr.plugin.plotting.bar2d,
  zephyr.plugin.plotting.data,
+ zephyr.plugin.plotting.heatmap,
  zephyr.plugin.plotting.mousesearch,
  zephyr.plugin.plotting.plot2d,
  zephyr.plugin.plotting.plot2d.drawer2d

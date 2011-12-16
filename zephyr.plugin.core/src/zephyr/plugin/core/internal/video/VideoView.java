@@ -2,7 +2,7 @@ package zephyr.plugin.core.internal.video;
 
 import org.eclipse.swt.graphics.GC;
 
-import zephyr.plugin.core.api.video.ImageProvider;
+import zephyr.plugin.core.api.viewable.ImageProvider;
 import zephyr.plugin.core.helpers.ClassViewProvider;
 import zephyr.plugin.core.utils.ImageAdapter;
 import zephyr.plugin.core.views.helpers.ForegroundCanvasView;
