@@ -22,9 +22,13 @@ import zephyr.plugin.core.RunnableFactory;
 import zephyr.plugin.core.SyncCode;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.async.BusEvent;
+import zephyr.plugin.core.events.AtomicEvent;
+import zephyr.plugin.core.events.Events;
 import zephyr.plugin.core.internal.StartZephyrMain;
 import zephyr.plugin.core.internal.ZephyrPluginCore;
 import zephyr.plugin.core.internal.startup.StartupJobs;
+import zephyr.plugin.core.internal.synchronization.binding.ClockViews;
+import zephyr.plugin.core.internal.synchronization.binding.SynchronizationMode.Mode;
 
 public class ZephyrCore {
   public static final String PluginID = "zephyr.plugin.core";
@@ -61,6 +65,7 @@ public class ZephyrCore {
   public static void start() {
     ZephyrPluginCore.setupPartListener();
     ZephyrPluginCore.enableZephyrActivity();
+    busEvent().dispatch(new AtomicEvent(Events.ZephyrStartingEvent));
     new StartupJobs().schedule();
   }
 
@@ -74,7 +79,7 @@ public class ZephyrCore {
   }
 
   public static void setSynchronous(boolean value) {
-    ZephyrPluginCore.setSynchronous(value);
+    ClockViews.synchronizationMode.setMode(value ? Mode.Synchrone : Mode.Asynchrone, -1);
   }
 
   public static void sendStatusBarMessage(final String message) {

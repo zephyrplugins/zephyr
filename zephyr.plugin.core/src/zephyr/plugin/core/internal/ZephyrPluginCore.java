@@ -39,7 +39,6 @@ import zephyr.plugin.core.views.SyncView;
 
 public class ZephyrPluginCore extends AbstractUIPlugin {
   static private boolean zephyrEnabled = false;
-  private static boolean synchronous;
 
   final ViewBinder viewBinder = new ViewBinder();
   final SyncCode syncCode = new SyncCode();
@@ -140,14 +139,6 @@ public class ZephyrPluginCore extends AbstractUIPlugin {
 
   public Class<? extends Object> loadClass(String className) throws ClassNotFoundException {
     return plugin.getBundle().loadClass(className);
-  }
-
-  public static void setSynchronous(boolean value) {
-    synchronous = value;
-  }
-
-  public static boolean synchronous() {
-    return synchronous;
   }
 
   public static void setupPartListener() {

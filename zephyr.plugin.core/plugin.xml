@@ -12,10 +12,27 @@
             defaultHandler="zephyr.plugin.core.internal.commands.Synchronous"
             id="zephyr.plugin.core.commands.synchronous"
             name="Synchronous">
-         <state id="org.eclipse.ui.commands.toggleState"
-               class="org.eclipse.ui.handlers.RegistryToggleState:false">
-         </state>
-      </command>
+		<commandParameter
+		         id="org.eclipse.ui.commands.radioStateParameter"
+		         name="State"
+		         optional="false"> 
+        </commandParameter>    
+        <state
+		         class="org.eclipse.ui.handlers.RadioState"
+		         id="org.eclipse.ui.commands.radioState">
+		      <class
+		            class="org.eclipse.ui.handlers.RadioState">
+		         <parameter
+		               name="default"
+		               value="Asynchronous">
+		         </parameter>
+		         <parameter
+		               name="persisted"
+		               value="true">
+		         </parameter>
+		      </class>
+		   </state>
+	  </command>
       <command
             defaultHandler="zephyr.plugin.core.internal.commands.StartSuspended"
             id="zephyr.plugin.core.commands.startsuspended"
@@ -128,6 +145,54 @@
                   mnemonic="d"
                   style="toggle">
             </command>
+            <menu
+                  label="Speed">
+               <command
+                     commandId="zephyr.plugin.core.commands.synchronous"
+                     label="As Fast as Possible"
+                     style="radio">
+                  <parameter
+                        name="org.eclipse.ui.commands.radioStateParameter"
+                        value="Asynchronous">
+                  </parameter>
+               </command>
+               <command
+                     commandId="zephyr.plugin.core.commands.synchronous"
+                     label="2ms Period"
+                     style="radio">
+                  <parameter
+                        name="org.eclipse.ui.commands.radioStateParameter"
+                        value="Period2ms">
+                  </parameter>
+               </command>
+               <command
+                     commandId="zephyr.plugin.core.commands.synchronous"
+                     label="10ms Period"
+                     style="radio">
+                  <parameter
+                        name="org.eclipse.ui.commands.radioStateParameter"
+                        value="Period10ms">
+                  </parameter>
+               </command>
+               <command
+                     commandId="zephyr.plugin.core.commands.synchronous"
+                     label="100ms Period"
+                     style="radio">
+                  <parameter
+                        name="org.eclipse.ui.commands.radioStateParameter"
+                        value="Period100ms">
+                  </parameter>
+               </command>
+               <command
+                     commandId="zephyr.plugin.core.commands.synchronous"
+                     label="Synchronized on Drawing"
+                     style="radio">
+                  <parameter
+                        name="org.eclipse.ui.commands.radioStateParameter"
+                        value="Synchronous">
+                  </parameter>
+               </command>
+            </menu>
             <separator
                   name="zephyr.plugin.core.separator1"
                   visible="true">
@@ -154,16 +219,6 @@
                   icon="icons/action_resume.gif"
                   label="Resume"
                   mnemonic="R">
-            </command>
-            <separator
-                  name="zephyr.plugin.core.separator2"
-                  visible="true">
-            </separator>
-            <command
-                  commandId="zephyr.plugin.core.commands.synchronous"
-                  label="Synchronous"
-                  mnemonic="o"
-                  style="toggle">
             </command>
          </menu>
       </menuContribution>
@@ -300,9 +355,6 @@
    <extension
          point="zephyr.startup">
       <client
-            class="zephyr.plugin.core.internal.SavedSettings">
-      </client>
-      <client
             class="zephyr.plugin.core.internal.StartZephyrMain">
       </client>
    </extension>
@@ -382,6 +434,11 @@
    </extension>
    <extension
          point="zephyr.listener">
+      <listener
+            class="zephyr.plugin.core.internal.synchronization.binding.SynchronizationMode$SynchronizationSettingLoader"
+            eventid="zephyr.event.starting"
+            name="SynchronizationModeSettingLoader">
+      </listener>
       <listener
             class="zephyr.plugin.core.internal.clocks.RegisterClockWhenAdvertizedListener"
             eventid="zephyr.event.advertize"

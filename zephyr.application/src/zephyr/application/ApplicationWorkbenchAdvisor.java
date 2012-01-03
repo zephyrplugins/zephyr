@@ -11,14 +11,13 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 
   @Override
   public void initialize(IWorkbenchConfigurer configurer) {
-    ZephyrCore.start();
     super.initialize(configurer);
     configurer.setSaveAndRestore(true);
+    ZephyrCore.start();
   }
 
   @Override
-  public WorkbenchWindowAdvisor createWorkbenchWindowAdvisor(
-      IWorkbenchWindowConfigurer configurer) {
+  public WorkbenchWindowAdvisor createWorkbenchWindowAdvisor(IWorkbenchWindowConfigurer configurer) {
     return new ApplicationWorkbenchWindowAdvisor(configurer);
   }
 

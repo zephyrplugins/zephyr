@@ -4,7 +4,7 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.junit.Assert;
 
 import zephyr.ZephyrCore;
-import zephyr.plugin.core.async.events.Event;
+import zephyr.plugin.core.events.AtomicEvent;
 import zephyr.plugin.filehandling.FileHandler;
 import zephyr.plugin.junittesting.support.checklisteners.ControlChecks;
 import zephyr.plugin.junittesting.support.conditions.Condition;
@@ -38,12 +38,7 @@ public class RunnableTests {
     FileHandler.openFile(filepath);
     listener.waitConditions();
     listener.waitClockRemoved();
-    ZephyrCore.busEvent().syncDispatch(new Event() {
-      @Override
-      public String id() {
-        return "RunnableFilesTests";
-      }
-    });
+    ZephyrCore.busEvent().syncDispatch(new AtomicEvent("RunnableFilesTests"));
     checkRunnableAllDone();
   }
 }

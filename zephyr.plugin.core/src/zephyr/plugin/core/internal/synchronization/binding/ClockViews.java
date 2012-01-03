@@ -2,7 +2,6 @@ package zephyr.plugin.core.internal.synchronization.binding;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 import zephyr.plugin.core.api.signals.Listener;
@@ -12,6 +11,7 @@ import zephyr.plugin.core.internal.synchronization.tasks.ViewTask;
 import zephyr.plugin.core.views.SyncView;
 
 public class ClockViews {
+  static public final SynchronizationMode synchronizationMode = new SynchronizationMode();
   private final Listener<Clock> tickListener = new Listener<Clock>() {
     @Override
     public void listen(Clock eventInfo) {
@@ -23,13 +23,13 @@ public class ClockViews {
 
   public ClockViews(Clock clock) {
     this.clock = clock;
+    synchronizationMode.addClock(clock);
     clock.onTick.connect(tickListener);
   }
 
   protected void synchronize() {
     List<Future<?>> futures = synchronizeViews();
-    if (ZephyrPluginCore.synchronous())
-      waitCompletion(futures);
+    synchronizationMode.synchronize(clock, futures);
   }
 
   synchronized private List<Future<?>> synchronizeViews() {
@@ -40,17 +40,6 @@ public class ClockViews {
       futures.add(future);
     }
     return futures;
-  }
-
-  private void waitCompletion(List<Future<?>> futures) {
-    for (Future<?> future : futures)
-      try {
-        future.get();
-      } catch (InterruptedException e) {
-        e.printStackTrace();
-      } catch (ExecutionException e) {
-        e.printStackTrace();
-      }
   }
 
   synchronized public void addView(SyncView view) {
@@ -69,6 +58,7 @@ public class ClockViews {
 
   synchronized public void dispose() {
     clock.onTick.disconnect(tickListener);
+    synchronizationMode.removeClock(clock);
     viewTasks.clear();
   }
 }

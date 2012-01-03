@@ -27,6 +27,8 @@ import zephyr.plugin.core.internal.ZephyrPluginCore;
 import zephyr.plugin.core.internal.clocks.Control;
 
 public class ClockComposite {
+  static final double PeriodUpdateRate = 0.99;
+
   static class UpdatableLabelInfo {
     public Label label;
     public String value;
@@ -43,11 +45,19 @@ public class ClockComposite {
   private final Label periodLabel;
   final Clock clock;
   private long timeStep;
-  private long period = -1;
   private final Group group;
   private final Map<String, UpdatableLabelInfo> captionToLabelInfo = new LinkedHashMap<String, UpdatableLabelInfo>();
   final ImageManager imageManager = new ImageManager();
   private Listener<Control> pauseResumeListener;
+  private final Listener<Clock> clockTickListener = new Listener<Clock>() {
+    @Override
+    public void listen(Clock clock) {
+      if (averagePeriod == -1)
+        averagePeriod = clock.lastPeriodNano();
+      averagePeriod = (long) (PeriodUpdateRate * averagePeriod + (1.0 - PeriodUpdateRate) * clock.lastPeriodNano());
+    }
+  };
+  long averagePeriod = -1;
 
   public ClockComposite(Composite parent, Clock clock) {
     this.clock = clock;
@@ -58,6 +68,7 @@ public class ClockComposite {
     createLabelLine(group);
     timeStepLabel = updatedShortTextLabel(group, "Step");
     periodLabel = updatedShortTextLabel(group, "Period");
+    clock.onTick.connect(clockTickListener);
   }
 
   private void createLabelLine(Composite parent) {
@@ -147,7 +158,6 @@ public class ClockComposite {
 
   public void synchronize() {
     timeStep = clock.timeStep();
-    period = clock.lastPeriodNano();
     ClockInfo clockInfo = clock.info();
     for (String caption : clockInfo.captions()) {
       UpdatableLabelInfo labelInfo = captionToLabelInfo.get(caption);
@@ -170,9 +180,10 @@ public class ClockComposite {
   public void repaint() {
     boolean layoutChanged = false;
     layoutChanged = adjustLabel(timeStepLabel, String.valueOf(timeStep)) || layoutChanged;
-    layoutChanged = adjustLabel(periodLabel, Chrono.toPeriodString(period)) || layoutChanged;
-    HashSet<Map.Entry<String, UpdatableLabelInfo>> labelSet =
-        new LinkedHashSet<Map.Entry<String, UpdatableLabelInfo>>(captionToLabelInfo.entrySet());
+    layoutChanged = adjustLabel(periodLabel, Chrono.toPeriodString(averagePeriod)) || layoutChanged;
+    HashSet<Map.Entry<String, UpdatableLabelInfo>> labelSet = new LinkedHashSet<Map.Entry<String, UpdatableLabelInfo>>(
+                                                                                                                       captionToLabelInfo
+                                                                                                                           .entrySet());
     for (Map.Entry<String, UpdatableLabelInfo> entry : labelSet) {
       UpdatableLabelInfo labelInfo = entry.getValue();
       if (labelInfo.label == null) {
@@ -192,6 +203,7 @@ public class ClockComposite {
   }
 
   public void dispose() {
+    clock.onTick.disconnect(clockTickListener);
     if (pauseResumeListener != null)
       ZephyrPluginCore.control().onModeChange.disconnect(pauseResumeListener);
     group.dispose();
