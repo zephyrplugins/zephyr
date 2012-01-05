@@ -9,7 +9,7 @@
    <extension
          point="org.eclipse.ui.commands">
       <command
-            defaultHandler="zephyr.plugin.core.internal.commands.Synchronous"
+            defaultHandler="zephyr.plugin.core.internal.commands.SetSpeedCommand"
             id="zephyr.plugin.core.commands.synchronous"
             name="Synchronous">
 		<commandParameter
@@ -17,8 +17,7 @@
 		         name="State"
 		         optional="false"> 
         </commandParameter>    
-        <state
-		         class="org.eclipse.ui.handlers.RadioState"
+		   <state
 		         id="org.eclipse.ui.commands.radioState">
 		      <class
 		            class="org.eclipse.ui.handlers.RadioState">
@@ -28,7 +27,7 @@
 		         </parameter>
 		         <parameter
 		               name="persisted"
-		               value="true">
+		               value="false">
 		         </parameter>
 		      </class>
 		   </state>
@@ -181,6 +180,15 @@
                   <parameter
                         name="org.eclipse.ui.commands.radioStateParameter"
                         value="Period100ms">
+                  </parameter>
+               </command>
+               <command
+                     commandId="zephyr.plugin.core.commands.synchronous"
+                     label="1s Period"
+                     style="radio">
+                  <parameter
+                        name="org.eclipse.ui.commands.radioStateParameter"
+                        value="Period1s">
                   </parameter>
                </command>
                <command
@@ -435,7 +443,7 @@
    <extension
          point="zephyr.listener">
       <listener
-            class="zephyr.plugin.core.internal.synchronization.binding.SynchronizationMode$SynchronizationSettingLoader"
+            class="zephyr.plugin.core.internal.commands.SetSpeedCommand$SynchronizationSettingLoader"
             eventid="zephyr.event.starting"
             name="SynchronizationModeSettingLoader">
       </listener>

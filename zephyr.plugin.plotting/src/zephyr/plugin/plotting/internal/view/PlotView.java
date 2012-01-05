@@ -132,6 +132,8 @@ public class PlotView extends ViewPart implements TraceSelector, ProvidedView, D
 
   @Override
   public void repaint() {
+    if (backgroundCanvas == null)
+      return;
     backgroundCanvas.paint();
   }
 

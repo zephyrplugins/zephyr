@@ -5,8 +5,8 @@ class HelloZephyr(object):
     def __init__(self):
         self.clock = zepy.Clock("HelloZephyr")
         self.value = 0 
-        zepy.monattr(self, "value")
-        zepy.monattr(self, "someValue")
+        zepy.monattr(self.clock, self, "value")
+        zepy.monattr(self.clock, self, "someValue")
         
     def someValue(self):
         return math.cos(self.value)

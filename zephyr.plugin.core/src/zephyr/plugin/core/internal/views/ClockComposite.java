@@ -27,7 +27,7 @@ import zephyr.plugin.core.internal.ZephyrPluginCore;
 import zephyr.plugin.core.internal.clocks.Control;
 
 public class ClockComposite {
-  static final double PeriodUpdateRate = 0.99;
+  static final double PeriodUpdateRate = 0.9;
 
   static class UpdatableLabelInfo {
     public Label label;

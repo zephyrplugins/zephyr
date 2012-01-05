@@ -49,10 +49,10 @@ public class BackgroundCanvas implements PainterMonitor {
     paintingImage = new DoubleBuffer(canvas);
   }
 
-  public void paint() {
+  public boolean draw() {
     Image image = paintingImage.acquireImage();
     if (image == null)
-      return;
+      return false;
     showProgress = showProgress || !paintingImage.currentImageIsValide();
     GC gc = new GC(image);
     chrono.start();
@@ -61,10 +61,15 @@ public class BackgroundCanvas implements PainterMonitor {
     showProgress = false;
     paintingImage.releaseImage(gc);
     paintingImage.swap();
-    updateForegroundCanvas();
+    return true;
   }
 
-  private void updateForegroundCanvas() {
+  public void paint() {
+    if (draw())
+      updateForegroundCanvas();
+  }
+
+  public void updateForegroundCanvas() {
     if (!canvas.isDisposed())
       canvas.getDisplay().syncExec(updateForeground);
   }

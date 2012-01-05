@@ -1,6 +1,8 @@
 from zephyr.plugin.core.api import Zephyr
 from zephyr.plugin.core.api.synchronization import Clock
 
+#pylint: disable-msg=W0621
+
 def advertise(clock, obj):
     Zephyr.advertise(clock, obj)
     

@@ -3,20 +3,38 @@ package zephyr.plugin.core.internal.commands;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.handlers.RadioState;
 
+import zephyr.plugin.core.async.events.Event;
+import zephyr.plugin.core.async.listeners.EventListener;
+import zephyr.plugin.core.internal.ZephyrPluginCore;
 import zephyr.plugin.core.internal.synchronization.binding.ClockViews;
+import zephyr.plugin.core.internal.synchronization.binding.SynchronizationMode;
 import zephyr.plugin.core.internal.synchronization.binding.SynchronizationMode.Mode;
 
-public class Synchronous extends AbstractHandler {
+public class SetSpeedCommand extends AbstractHandler {
+  static public class SynchronizationSettingLoader implements EventListener {
+    @Override
+    public void listen(Event eventInfo) {
+      IPreferenceStore preferenceStore = ZephyrPluginCore.getDefault().getPreferenceStore();
+      preferenceStore.setDefault(SynchronizationMode.SynchronousMode, SynchronizationMode.Mode.Asynchrone.ordinal());
+      SynchronizationMode.Mode mode = SynchronizationMode.Mode.values()[preferenceStore
+          .getInt(SynchronizationMode.SynchronousMode)];
+      long delay = preferenceStore.getLong(SynchronizationMode.SynchronousDelay);
+      ClockViews.synchronizationMode.setMode(mode, delay);
+    }
+  }
+
   enum ParameterValues {
     Asynchronous, Period2ms, Period10ms, Period100ms, Period1s, Synchronous
   }
 
-
   @Override
   public Object execute(ExecutionEvent event) throws ExecutionException {
+    System.out.println(event.getCommand().getState(RadioState.STATE_ID).getValue());
+
     String parameter = event.getParameter(RadioState.PARAMETER_ID);
     ParameterValues mode = ParameterValues.valueOf(parameter);
     boolean updateState = true;

@@ -16,9 +16,7 @@ public class Model implements Runnable {
 
   @Override
   public void run() {
-    while (!clock.isTerminated()) {
-      clock.tick();
+    while (clock.tick())
       insideRadius = 1.9f + (float) Math.sin((0.05f * clock.timeStep()));
-    }
   }
 }

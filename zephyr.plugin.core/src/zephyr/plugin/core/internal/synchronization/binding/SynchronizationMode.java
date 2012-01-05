@@ -10,24 +10,11 @@ import org.eclipse.jface.preference.IPreferenceStore;
 
 import zephyr.plugin.core.api.synchronization.Chrono;
 import zephyr.plugin.core.api.synchronization.Clock;
-import zephyr.plugin.core.async.events.Event;
-import zephyr.plugin.core.async.listeners.EventListener;
 import zephyr.plugin.core.internal.ZephyrPluginCore;
 
 public class SynchronizationMode {
-  private static final String SynchronousMode = "zephyr.synchronizationmode";
-  private static final String SynchronousDelay = "zephyr.synchronizationdelay";
-
-  static public class SynchronizationSettingLoader implements EventListener {
-    @Override
-    public void listen(Event eventInfo) {
-      IPreferenceStore preferenceStore = ZephyrPluginCore.getDefault().getPreferenceStore();
-      preferenceStore.setDefault(SynchronousMode, Mode.Asynchrone.ordinal());
-      Mode mode = Mode.values()[preferenceStore.getInt(SynchronousMode)];
-      long delay = preferenceStore.getLong(SynchronousDelay);
-      ClockViews.synchronizationMode.setMode(mode, delay);
-    }
-  }
+  public static final String SynchronousMode = "zephyr.synchronizationmode";
+  public static final String SynchronousDelay = "zephyr.synchronizationdelay";
 
   public enum Mode {
     Delayed, Asynchrone, Synchrone
