@@ -8,9 +8,9 @@ import java.util.concurrent.Future;
 
 import org.eclipse.jface.preference.IPreferenceStore;
 
-import zephyr.plugin.core.api.synchronization.Chrono;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.internal.ZephyrPluginCore;
+import zephyr.plugin.core.internal.clocks.ClockStat;
 
 public class SynchronizationMode {
   public static final String SynchronousMode = "zephyr.synchronizationmode";
@@ -22,22 +22,17 @@ public class SynchronizationMode {
 
   private long delay = 0;
   private Mode mode = Mode.Synchrone;
-  private final Map<Clock, Chrono> chronos = new LinkedHashMap<Clock, Chrono>();
+  private final Map<Clock, ClockStat> chronos = new LinkedHashMap<Clock, ClockStat>();
 
   private void delayClock(Clock clock) {
-    Chrono chrono = chronos.get(clock);
-    if (chrono == null) {
-      chrono = new Chrono();
-      chronos.put(clock, chrono);
-    }
-    long clockDelay = delay - chrono.getCurrentMillis();
+    ClockStat clockStat = chronos.get(clock);
+    long clockDelay = delay - (clockStat.modelPeriod() / 1000000);
     if (clockDelay >= 1)
       try {
         Thread.sleep(clockDelay);
       } catch (InterruptedException e) {
         e.printStackTrace();
       }
-    chrono.start();
   }
 
   private void waitCompletion(List<Future<?>> futures) {
@@ -72,7 +67,8 @@ public class SynchronizationMode {
     preferenceStore.setValue(SynchronousDelay, delay);
   }
 
-  public void addClock(Clock clock) {
+  public void addClock(Clock clock, ClockStat clockStat) {
+    chronos.put(clock, clockStat);
   }
 
   public void removeClock(Clock clock) {

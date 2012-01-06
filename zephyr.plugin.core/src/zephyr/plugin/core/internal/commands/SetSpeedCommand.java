@@ -33,8 +33,6 @@ public class SetSpeedCommand extends AbstractHandler {
 
   @Override
   public Object execute(ExecutionEvent event) throws ExecutionException {
-    System.out.println(event.getCommand().getState(RadioState.STATE_ID).getValue());
-
     String parameter = event.getParameter(RadioState.PARAMETER_ID);
     ParameterValues mode = ParameterValues.valueOf(parameter);
     boolean updateState = true;

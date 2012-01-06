@@ -27,7 +27,7 @@
 		         </parameter>
 		         <parameter
 		               name="persisted"
-		               value="false">
+		               value="true">
 		         </parameter>
 		      </class>
 		   </state>

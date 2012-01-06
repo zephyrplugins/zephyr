@@ -8,6 +8,7 @@ import java.util.Set;
 import zephyr.ZephyrCore;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.events.ClockEvent;
+import zephyr.plugin.core.internal.ZephyrPluginCore;
 
 public class Clocks {
   private final Set<Clock> clocks = new LinkedHashSet<Clock>();
@@ -47,5 +48,9 @@ public class Clocks {
       result = clocks.contains(clock);
     }
     return result;
+  }
+
+  public ClockStat clockStats(Clock clock) {
+    return ZephyrPluginCore.viewBinder().clockViews(clock).clockStats();
   }
 }

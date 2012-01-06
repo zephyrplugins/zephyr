@@ -56,7 +56,7 @@ public class Chrono {
 
   public static String toPeriodString(long periodNano) {
     if (periodNano < 1000000)
-      return String.valueOf(periodNano) + "ns";
+      return "0." + String.valueOf(periodNano / 1000) + "ms";
     if (periodNano < 1000000000)
       return String.valueOf(periodNano / 1000000) + "ms";
     return String.valueOf(periodNano / 1000000000) + "s";

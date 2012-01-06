@@ -108,4 +108,8 @@ public class ViewBinder {
     }
     ZephyrPluginCore.viewScheduler().disposeView(view);
   }
+
+  public ClockViews clockViews(Clock clock) {
+    return clockToView.get(clock);
+  }
 }

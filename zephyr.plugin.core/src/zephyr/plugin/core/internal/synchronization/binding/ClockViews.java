@@ -7,6 +7,7 @@ import java.util.concurrent.Future;
 import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.internal.ZephyrPluginCore;
+import zephyr.plugin.core.internal.clocks.ClockStat;
 import zephyr.plugin.core.internal.synchronization.tasks.ViewTask;
 import zephyr.plugin.core.views.SyncView;
 
@@ -20,16 +21,19 @@ public class ClockViews {
   };
   private final List<ViewTask> viewTasks = new ArrayList<ViewTask>();
   private final Clock clock;
+  private final ClockStat clockStat = new ClockStat();
 
   public ClockViews(Clock clock) {
     this.clock = clock;
-    synchronizationMode.addClock(clock);
+    synchronizationMode.addClock(clock, clockStat);
     clock.onTick.connect(tickListener);
   }
 
   protected void synchronize() {
+    clockStat.updateBeforeSynchronization();
     List<Future<?>> futures = synchronizeViews();
     synchronizationMode.synchronize(clock, futures);
+    clockStat.updateAfterSynchronization();
   }
 
   synchronized private List<Future<?>> synchronizeViews() {
@@ -60,5 +64,9 @@ public class ClockViews {
     clock.onTick.disconnect(tickListener);
     synchronizationMode.removeClock(clock);
     viewTasks.clear();
+  }
+
+  public ClockStat clockStats() {
+    return clockStat;
   }
 }
