@@ -63,7 +63,7 @@ public class PrimitiveNode extends AbstractCodeNode implements MonitorContainer 
 
   @Override
   public void addToMonitor(DataMonitor monitor) {
-    monitor.add(path(), level(), monitored);
+    monitor.add(CodeTrees.mergePath(path()), level(), monitored);
   }
 
   public double value() {

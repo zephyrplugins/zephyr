@@ -21,9 +21,10 @@ public class PrimitiveCollectionNode extends AbstractCodeNode implements Monitor
 
   @Override
   public void addToMonitor(DataMonitor monitor) {
+    String fullLabel = CodeTrees.mergePath(path());
     for (int i = 0; i < array.size(); i++) {
       final int elementIndex = i;
-      monitor.add(path() + collectionLabelBuilder.elementLabel(i), level(), new Monitored() {
+      monitor.add(fullLabel + collectionLabelBuilder.elementLabel(i), level(), new Monitored() {
         @Override
         public double monitoredValue() {
           return array.get(elementIndex).doubleValue();

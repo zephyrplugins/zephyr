@@ -14,6 +14,7 @@ import org.eclipse.ui.views.IViewDescriptor;
 import org.eclipse.ui.views.IViewRegistry;
 
 import zephyr.plugin.core.api.codeparser.codetree.ClassNode;
+import zephyr.plugin.core.api.codeparser.codetree.CodeTrees;
 import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.helpers.InstanceManager;
@@ -120,7 +121,7 @@ public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView,
   }
 
   protected void setViewName(CodeNode codeNode, T instance) {
-    setViewName(codeNode.label(), codeNode.path());
+    setViewName(codeNode.label(), CodeTrees.mergePath(codeNode.path()));
   }
 
   protected void setViewName(final String viewName, final String toolTip) {

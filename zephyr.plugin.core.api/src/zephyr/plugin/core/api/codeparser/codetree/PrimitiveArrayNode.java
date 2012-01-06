@@ -25,9 +25,10 @@ public class PrimitiveArrayNode extends AbstractCodeNode implements MonitorConta
   @Override
   public void addToMonitor(DataMonitor monitor) {
     int length = Array.getLength(array);
+    String fullLabel = CodeTrees.mergePath(path());
     String[] elementLabels = new String[length];
     for (int i = 0; i < elementLabels.length; i++)
-      elementLabels[i] = path() + collectionLabelBuilder.elementLabel(i);
+      elementLabels[i] = fullLabel + collectionLabelBuilder.elementLabel(i);
 
     List<MonitorWrapper> wrappers = null;
     if (array.getClass().getComponentType().equals(double.class))

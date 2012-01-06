@@ -20,7 +20,7 @@ public class SelectionTreeListener implements SelectionListener {
   }
 
   static protected String buildDescriptiveLabel(CodeNode codeNode) {
-    StringBuilder label = new StringBuilder(codeNode.path());
+    StringBuilder label = new StringBuilder(CodeTrees.mergePath(codeNode.path()));
     String nodeInfo = CodeTrees.nodeInfo(codeNode);
     if (!nodeInfo.isEmpty()) {
       label.append(": ");

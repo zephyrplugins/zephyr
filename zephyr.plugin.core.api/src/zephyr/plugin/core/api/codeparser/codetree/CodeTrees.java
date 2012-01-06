@@ -143,4 +143,15 @@ public class CodeTrees {
       return String.valueOf(((AbstractPrimitives) codeNode).size());
     return "";
   }
+
+  public static String mergePath(String[] path) {
+    StringBuilder result = new StringBuilder();
+    for (String label : path) {
+      if (!label.isEmpty()) {
+        result.append(label);
+        result.append("/");
+      }
+    }
+    return result.length() > 0 ? result.substring(0, result.length() - 1) : result.toString();
+  }
 }

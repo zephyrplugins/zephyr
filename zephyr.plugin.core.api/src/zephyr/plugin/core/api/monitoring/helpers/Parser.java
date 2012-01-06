@@ -11,7 +11,7 @@ public class Parser {
   public static void parse(DataMonitor dataMonitor, Object toParse, int levelRequired) {
     MonitoredDataTraverser traverser = new MonitoredDataTraverser(dataMonitor, levelRequired);
     CodeParser codeParser = new CodeTreeParser(levelRequired);
-    ClassNode classNode = new ClassNode();
+    ClassNode classNode = new ClassNode("", null, null, null);
     codeParser.parse(classNode, toParse);
     CodeTrees.traverse(traverser, classNode);
   }

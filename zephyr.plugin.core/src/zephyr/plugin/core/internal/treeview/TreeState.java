@@ -11,6 +11,7 @@ import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.IMemento;
 
 import zephyr.plugin.core.api.codeparser.codetree.ClockNode;
+import zephyr.plugin.core.api.codeparser.codetree.CodeTrees;
 import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.codeparser.interfaces.ParentNode;
 
@@ -29,8 +30,9 @@ public class TreeState implements TreeListener {
   @Override
   public void treeCollapsed(TreeEvent event) {
     CodeNode codeNode = (CodeNode) ((TreeItem) event.item).getData();
+    String codeNodeIdentifier = CodeTrees.mergePath(codeNode.path());
     for (String identifier : new ArrayList<String>(expanded)) {
-      if (identifier.startsWith(codeNode.path()))
+      if (identifier.startsWith(codeNodeIdentifier))
         expanded.remove(identifier);
     }
   }
@@ -39,7 +41,7 @@ public class TreeState implements TreeListener {
   public void treeExpanded(TreeEvent event) {
     final TreeItem root = (TreeItem) event.item;
     CodeNode codeNode = (CodeNode) root.getData();
-    expanded.add(codeNode.path());
+    expanded.add(CodeTrees.mergePath(codeNode.path()));
     buildChildrenIFN(root);
     expandNodes();
   }
@@ -57,7 +59,7 @@ public class TreeState implements TreeListener {
 
   public void nodeCreated(TreeItem treeItem) {
     CodeNode codeNode = (CodeNode) treeItem.getData();
-    String nodeIdentifier = codeNode.path();
+    String nodeIdentifier = CodeTrees.mergePath(codeNode.path());
     for (String identifier : expanded)
       if (identifier.startsWith(nodeIdentifier)) {
         nodeToExpand(treeItem);
