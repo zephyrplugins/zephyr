@@ -426,7 +426,6 @@
             class="zephyr.plugin.core.internal.video.VideoView$VideoViewProvider"
             icon="icons/film.png"
             name="Video"
-            popup="false"
             viewid="zephyr.plugin.core.videoview">
       </client>
    </extension>

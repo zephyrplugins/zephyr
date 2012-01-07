@@ -10,12 +10,15 @@ import java.util.Map;
 import java.util.Set;
 
 import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
+import zephyr.plugin.core.api.codeparser.interfaces.CodeParser;
 import zephyr.plugin.core.api.codeparser.interfaces.ParentNode;
+import zephyr.plugin.core.api.codeparser.interfaces.PopupHandler;
 import zephyr.plugin.core.api.codeparser.traverser.Traverser;
 import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
 import zephyr.plugin.core.api.monitoring.abstracts.MonitoredDataTraverser;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
+import zephyr.plugin.core.api.monitoring.annotations.Popup;
 import zephyr.plugin.core.api.synchronization.Clock;
 
 public class CodeTrees {
@@ -153,5 +156,14 @@ public class CodeTrees {
       }
     }
     return result.length() > 0 ? result.substring(0, result.length() - 1) : result.toString();
+  }
+
+  public static void popupIFN(CodeParser codeParser, Field field, CodeNode codeNode) {
+    if (field == null || codeNode == null)
+      return;
+    if (!field.isAnnotationPresent(Popup.class))
+      return;
+    if (codeParser instanceof PopupHandler)
+      ((PopupHandler) codeParser).popup(codeNode);
   }
 }

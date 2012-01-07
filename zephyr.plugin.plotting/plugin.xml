@@ -241,7 +241,6 @@
             class="zephyr.plugin.plotting.internal.view.PlotViewProvider"
             icon="icons/view_plotting.png"
             name="Plot View"
-            popup="false"
             viewid="zephyr.plugin.plotting.view.plot">
       </client>
    </extension>

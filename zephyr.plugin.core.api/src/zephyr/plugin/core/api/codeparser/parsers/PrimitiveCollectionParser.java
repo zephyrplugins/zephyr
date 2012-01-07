@@ -36,6 +36,7 @@ public class PrimitiveCollectionParser implements FieldParser {
     PrimitiveCollectionNode arrayPrimitiveNode = new PrimitiveCollectionNode(label, parentNode, list, labelBuilder,
                                                                              level);
     parentNode.addChild(arrayPrimitiveNode);
+    CodeTrees.popupIFN(codeParser, field, arrayPrimitiveNode);
     return arrayPrimitiveNode;
   }
 }

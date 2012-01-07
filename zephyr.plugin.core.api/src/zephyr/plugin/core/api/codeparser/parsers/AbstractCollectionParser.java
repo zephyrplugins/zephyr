@@ -3,6 +3,7 @@ package zephyr.plugin.core.api.codeparser.parsers;
 import java.lang.reflect.Field;
 
 import zephyr.plugin.core.api.codeparser.codetree.ClassNode;
+import zephyr.plugin.core.api.codeparser.codetree.CodeTrees;
 import zephyr.plugin.core.api.codeparser.codetree.ObjectCollectionNode;
 import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.codeparser.interfaces.CodeParser;
@@ -18,7 +19,7 @@ public abstract class AbstractCollectionParser<T> implements FieldParser {
     int nbChildren = nbChildren(container);
     String label = field != null ? field.getName() : "";
     CollectionLabelBuilder labelBuilder = codeParser.newCollectionLabelBuilder(field, nbChildren);
-    ClassNode collectionNode = new ObjectCollectionNode(label, parentNode, fieldValue, field);
+    ObjectCollectionNode collectionNode = new ObjectCollectionNode(label, parentNode, fieldValue, field);
     parentNode.addChild(collectionNode);
     beginChildrenParse(container);
     for (int i = 0; i < nbChildren; i++) {
@@ -49,6 +50,7 @@ public abstract class AbstractCollectionParser<T> implements FieldParser {
       codeParser.recursiveParseClass(childNode, element);
     }
     parentNode.addChild(childNode);
+    CodeTrees.popupIFN(codeParser, field, childNode);
   }
 
   abstract protected int nbChildren(T container);

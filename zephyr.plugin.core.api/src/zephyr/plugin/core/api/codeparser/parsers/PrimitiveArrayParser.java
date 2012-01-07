@@ -29,6 +29,7 @@ public class PrimitiveArrayParser implements FieldParser {
     CollectionLabelBuilder labelBuilder = codeParser.newCollectionLabelBuilder(field, length);
     PrimitiveArrayNode arrayPrimitiveNode = new PrimitiveArrayNode(label, parentNode, fieldValue, labelBuilder, level);
     parentNode.addChild(arrayPrimitiveNode);
+    CodeTrees.popupIFN(codeParser, field, arrayPrimitiveNode);
     return arrayPrimitiveNode;
   }
 }

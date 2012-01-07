@@ -69,13 +69,6 @@
                </documentation>
             </annotation>
          </attribute>
-         <attribute name="popup" type="boolean">
-            <annotation>
-               <documentation>
-                  
-               </documentation>
-            </annotation>
-         </attribute>
       </complexType>
    </element>
 

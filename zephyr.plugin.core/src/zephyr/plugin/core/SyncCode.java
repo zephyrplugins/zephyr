@@ -10,10 +10,10 @@ import zephyr.plugin.core.api.codeparser.codetree.ClockNode;
 import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.codeparser.interfaces.CodeParser;
 import zephyr.plugin.core.api.codeparser.interfaces.ParentNode;
-import zephyr.plugin.core.api.codeparser.parsers.CodeTreeParser;
 import zephyr.plugin.core.api.monitoring.abstracts.MonitoredDataTraverser;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.events.CodeStructureEvent;
+import zephyr.plugin.core.internal.ZephyrCodeTreeParser;
 
 public class SyncCode {
   private final Map<Clock, ClockNode> clockNodes = new LinkedHashMap<Clock, ClockNode>();
@@ -27,7 +27,7 @@ public class SyncCode {
       clockNode = new ClockNode(clock);
       clockNodes.put(clock, clockNode);
     }
-    CodeParser parser = new CodeTreeParser(MonitoredDataTraverser.MonitorEverythingLevel);
+    CodeParser parser = new ZephyrCodeTreeParser(MonitoredDataTraverser.MonitorEverythingLevel);
     CodeNode newNode = parser.parse(clockNode, root);
     ZephyrCore.busEvent().dispatch(new CodeStructureEvent(CodeStructureEvent.ParsedID, clockNode, newNode));
     return newNode;

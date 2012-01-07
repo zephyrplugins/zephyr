@@ -54,7 +54,6 @@
       <client
             class="zephyr.plugin.filehandling.internal.view.FileView$Provider"
             name="Data View"
-            popup="true"
             viewid="zephyr.plugin.filehandling.internal.view.fileview">
       </client>
    </extension>

@@ -112,4 +112,10 @@ public class ViewBinder {
   public ClockViews clockViews(Clock clock) {
     return clockToView.get(clock);
   }
+
+  public void popup(CodeNode codeNode) {
+    List<ViewProviderReference> providers = findViewProviders(codeNode);
+    for (ViewProviderReference provider : providers)
+      displayAndBindView(codeNode, provider.viewID());
+  }
 }

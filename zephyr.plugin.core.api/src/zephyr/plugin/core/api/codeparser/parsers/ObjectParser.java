@@ -3,6 +3,7 @@ package zephyr.plugin.core.api.codeparser.parsers;
 import java.lang.reflect.Field;
 
 import zephyr.plugin.core.api.codeparser.codetree.ClassNode;
+import zephyr.plugin.core.api.codeparser.codetree.CodeTrees;
 import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.codeparser.interfaces.CodeParser;
 import zephyr.plugin.core.api.codeparser.interfaces.FieldParser;
@@ -25,6 +26,7 @@ public class ObjectParser implements FieldParser {
     ClassNode node = new ClassNode(label, parentNode, fieldValue, field);
     parentNode.addChild(node);
     codeParser.recursiveParseClass(node, node.instance());
+    CodeTrees.popupIFN(codeParser, field, node);
     return node;
   }
 }

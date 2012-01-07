@@ -28,14 +28,19 @@ public class PrimitiveParser implements FieldParser {
     PrimitiveNode node = new PrimitiveNode(label, parentNode, field, container, level);
     parentNode.addChild(node);
     List<MonitorWrapper> localWrappers = Wrappers.getWrappers(field, null);
-    if (localWrappers == null)
-      return node;
+    if (localWrappers != null)
+      addLocalWrapper(parentNode, label, level, node, localWrappers);
+    CodeTrees.popupIFN(codeParser, field, node);
+    return node;
+  }
+
+  private void addLocalWrapper(MutableParentNode parentNode, String label, int level, PrimitiveNode node,
+      List<MonitorWrapper> localWrappers) {
     for (MonitorWrapper wrapper : localWrappers) {
       String wrapperLabel = label + wrapper.getClass().getSimpleName();
       Monitored wrapperMonitored = wrapper.createMonitored(node.monitored());
       PrimitiveNode wrapperNode = new PrimitiveNode(wrapperLabel, parentNode, wrapperMonitored, level);
       parentNode.addChild(wrapperNode);
     }
-    return node;
   }
 }
