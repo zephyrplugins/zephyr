@@ -21,9 +21,10 @@ public class ClockViews {
   };
   private final List<ViewTask> viewTasks = new ArrayList<ViewTask>();
   private final Clock clock;
-  private final ClockStat clockStat = new ClockStat();
+  private final ClockStat clockStat;
 
   public ClockViews(Clock clock) {
+    clockStat = ZephyrPluginCore.clocks().clockStats(clock);
     this.clock = clock;
     synchronizationMode.addClock(clock, clockStat);
     clock.onTick.connect(tickListener);

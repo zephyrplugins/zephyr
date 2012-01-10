@@ -14,8 +14,8 @@ import zephyr.plugin.core.api.codeparser.interfaces.CodeParser;
 import zephyr.plugin.core.api.codeparser.interfaces.ParentNode;
 import zephyr.plugin.core.api.codeparser.interfaces.PopupHandler;
 import zephyr.plugin.core.api.codeparser.traverser.Traverser;
-import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
-import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
+import zephyr.plugin.core.api.monitoring.abstracts.DataMonitorAdapter;
+import zephyr.plugin.core.api.monitoring.abstracts.MonitorContainerNode;
 import zephyr.plugin.core.api.monitoring.abstracts.MonitoredDataTraverser;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 import zephyr.plugin.core.api.monitoring.annotations.Popup;
@@ -122,15 +122,22 @@ public class CodeTrees {
 
   public static Set<String> parseLabels(CodeNode codeNode) {
     final Set<String> labels = new HashSet<String>();
-    DataMonitor monitor = new DataMonitor() {
+    DataMonitorAdapter monitorAdapter = new DataMonitorAdapter() {
       @Override
-      public void add(String label, int level, Monitored monitored) {
-        labels.add(label);
+      public void add(MonitorContainerNode codeNode) {
+        String nodePath = CodeTrees.mergePath(codeNode);
+        for (String monitoredLabel : codeNode.createLabels())
+          labels.add(nodePath + monitoredLabel);
       }
     };
-    MonitoredDataTraverser traverser = new MonitoredDataTraverser(monitor);
+    MonitoredDataTraverser traverser = new MonitoredDataTraverser(monitorAdapter,
+                                                                  MonitoredDataTraverser.MonitorEverythingLevel);
     CodeTrees.traverse(traverser, codeNode);
     return labels;
+  }
+
+  public static String mergePath(MonitorContainerNode codeNode) {
+    return CodeTrees.mergePath(((CodeNode) codeNode).path());
   }
 
   public static String nodeInfo(CodeNode codeNode) {
@@ -148,7 +155,7 @@ public class CodeTrees {
   }
 
   public static String mergePath(String[] path) {
-    StringBuilder result = new StringBuilder();
+    StringBuilder result = new StringBuilder(measureLength(path) + path.length);
     for (String label : path) {
       if (!label.isEmpty()) {
         result.append(label);
@@ -156,6 +163,13 @@ public class CodeTrees {
       }
     }
     return result.length() > 0 ? result.substring(0, result.length() - 1) : result.toString();
+  }
+
+  private static int measureLength(String[] path) {
+    int result = 0;
+    for (String s : path)
+      result += s.length();
+    return result;
   }
 
   public static void popupIFN(CodeParser codeParser, Field field, CodeNode codeNode) {

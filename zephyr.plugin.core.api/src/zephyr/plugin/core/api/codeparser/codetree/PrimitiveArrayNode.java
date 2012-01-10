@@ -1,46 +1,112 @@
 package zephyr.plugin.core.api.codeparser.codetree;
 
 import java.lang.reflect.Array;
-import java.util.List;
 
 import zephyr.plugin.core.api.codeparser.interfaces.ParentNode;
-import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
-import zephyr.plugin.core.api.monitoring.abstracts.MonitorContainer;
-import zephyr.plugin.core.api.monitoring.helpers.Loggers;
-import zephyr.plugin.core.api.monitoring.wrappers.MonitorWrapper;
+import zephyr.plugin.core.api.monitoring.abstracts.MonitorContainerNode;
+import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
 import zephyr.plugin.core.api.parsing.CollectionLabelBuilder;
 
 
-public class PrimitiveArrayNode extends AbstractCodeNode implements MonitorContainer, AbstractPrimitives {
-  final Object array;
-  final CollectionLabelBuilder collectionLabelBuilder;
+public abstract class PrimitiveArrayNode<T> extends AbstractCodeNode implements MonitorContainerNode,
+    AbstractPrimitives {
+  static class PrimitiveDoubleArrayNode extends PrimitiveArrayNode<double[]> {
+    protected PrimitiveDoubleArrayNode(String label, ParentNode parent, int level,
+        CollectionLabelBuilder collectionLabelBuilder, double[] array) {
+      super(label, parent, level, collectionLabelBuilder, array);
+    }
 
-  public PrimitiveArrayNode(String label, ParentNode parent, Object array,
-      CollectionLabelBuilder collectionLabelBuilder, int level) {
+    @Override
+    protected Monitored createMonitored(final int i) {
+      return new Monitored() {
+        @Override
+        public double monitoredValue() {
+          return array[i];
+        }
+      };
+    }
+  }
+
+  static class PrimitiveIntegerArrayNode extends PrimitiveArrayNode<int[]> {
+    protected PrimitiveIntegerArrayNode(String label, ParentNode parent, int level,
+        CollectionLabelBuilder collectionLabelBuilder, int[] array) {
+      super(label, parent, level, collectionLabelBuilder, array);
+    }
+
+    @Override
+    protected Monitored createMonitored(final int i) {
+      return new Monitored() {
+        @Override
+        public double monitoredValue() {
+          return array[i];
+        }
+      };
+    }
+  }
+
+  static class PrimitiveFloatArrayNode extends PrimitiveArrayNode<float[]> {
+    protected PrimitiveFloatArrayNode(String label, ParentNode parent, int level,
+        CollectionLabelBuilder collectionLabelBuilder, float[] array) {
+      super(label, parent, level, collectionLabelBuilder, array);
+    }
+
+    @Override
+    protected Monitored createMonitored(final int i) {
+      return new Monitored() {
+        @Override
+        public double monitoredValue() {
+          return array[i];
+        }
+      };
+    }
+  }
+
+  final protected CollectionLabelBuilder collectionLabelBuilder;
+  final protected T array;
+
+  protected PrimitiveArrayNode(String label, ParentNode parent, int level,
+      CollectionLabelBuilder collectionLabelBuilder, T array) {
     super(label, parent, level);
-    this.array = array;
     this.collectionLabelBuilder = collectionLabelBuilder;
+    this.array = array;
   }
 
   @Override
-  public void addToMonitor(DataMonitor monitor) {
-    int length = Array.getLength(array);
-    String fullLabel = CodeTrees.mergePath(path());
-    String[] elementLabels = new String[length];
-    for (int i = 0; i < elementLabels.length; i++)
-      elementLabels[i] = fullLabel + collectionLabelBuilder.elementLabel(i);
-
-    List<MonitorWrapper> wrappers = null;
-    if (array.getClass().getComponentType().equals(double.class))
-      Loggers.add(monitor, elementLabels, level(), (double[]) array, wrappers);
-    else if (array.getClass().getComponentType().equals(float.class))
-      Loggers.add(monitor, elementLabels, level(), (float[]) array, wrappers);
-    if (array.getClass().getComponentType().equals(int.class))
-      Loggers.add(monitor, elementLabels, level(), (int[]) array, wrappers);
+  public Monitored createMonitored(String label) {
+    int index = collectionLabelBuilder.indexOf(label, size());
+    if (index < 0)
+      return null;
+    return createMonitored(index);
   }
+
+  @Override
+  public String[] createLabels() {
+    return collectionLabelBuilder.createLabels(size());
+  }
+
+  @Override
+  public Monitored[] createMonitored() {
+    Monitored[] monitored = new Monitored[size()];
+    for (int i = 0; i < monitored.length; i++)
+      monitored[i] = createMonitored(i);
+    return monitored;
+  }
+
+  abstract protected Monitored createMonitored(int i);
 
   @Override
   public int size() {
     return Array.getLength(array);
+  }
+
+  static public PrimitiveArrayNode<?> createPrimitiveArrayNode(String label, ParentNode parent, Object array,
+      CollectionLabelBuilder collectionLabelBuilder, int level) {
+    if (array.getClass().getComponentType().equals(double.class))
+      return new PrimitiveDoubleArrayNode(label, parent, level, collectionLabelBuilder, (double[]) array);
+    else if (array.getClass().getComponentType().equals(float.class))
+      return new PrimitiveFloatArrayNode(label, parent, level, collectionLabelBuilder, (float[]) array);
+    if (array.getClass().getComponentType().equals(int.class))
+      return new PrimitiveIntegerArrayNode(label, parent, level, collectionLabelBuilder, (int[]) array);
+    return null;
   }
 }

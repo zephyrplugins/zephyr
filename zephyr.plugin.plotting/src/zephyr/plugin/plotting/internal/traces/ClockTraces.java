@@ -1,101 +1,72 @@
 package zephyr.plugin.plotting.internal.traces;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
-import zephyr.plugin.core.Utils;
-import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
+import zephyr.plugin.core.api.monitoring.abstracts.MonitorContainerNode;
 import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
-import zephyr.plugin.core.api.monitoring.abstracts.MonitoredDataTraverser;
-import zephyr.plugin.core.api.monitoring.helpers.Parser;
 import zephyr.plugin.core.api.signals.Listener;
-import zephyr.plugin.core.api.signals.Signal;
 import zephyr.plugin.core.api.synchronization.Clock;
 
-public class ClockTraces implements DataMonitor {
-  public final Signal<List<Trace>> onTraceAdded = new Signal<List<Trace>>();
-  public final Signal<List<Trace>> onTraceRemoved = new Signal<List<Trace>>();
+public class ClockTraces {
   public final Clock clock;
-
-  protected final TracesSelection selection;
-  private final List<Trace> traces = new LinkedList<Trace>();
+  private final Map<Trace, TraceData> traces = new LinkedHashMap<Trace, TraceData>();
   private final Listener<Clock> onTickClockListener = new Listener<Clock>() {
     @Override
     public void listen(Clock clock) {
-      selection.update(clock);
+      update(clock);
     }
   };
-  private final Thread modelThread = Thread.currentThread();
-  private final String clockLabel;
-  private int nbProcessAddingTrace = 0;
-  private final List<Trace> pendingTraces = new ArrayList<Trace>();
 
-  protected ClockTraces(String clockLabel, Clock clock) {
+  protected ClockTraces(Clock clock) {
     this.clock = clock;
-    this.clockLabel = clockLabel;
-    selection = new TracesSelection(this);
     clock.onTick.connect(onTickClockListener);
   }
 
-  public void startAddingTrace() {
-    nbProcessAddingTrace++;
-  }
-
-  public void endAddingTrace() {
-    assert nbProcessAddingTrace > 0;
-    nbProcessAddingTrace--;
-    if (nbProcessAddingTrace > 0)
-      return;
-    if (pendingTraces.isEmpty())
-      return;
-    onTraceAdded.fire(pendingTraces);
-    pendingTraces.clear();
-  }
-
-  @Override
-  synchronized public void add(String label, int level, Monitored logged) {
-    assert checkThread();
-    Trace trace = new Trace(this, label, level, logged);
-    traces.add(trace);
-    if (nbProcessAddingTrace == 0)
-      onTraceAdded.fire(Utils.asList(trace));
-    else
-      pendingTraces.add(trace);
-  }
-
-  protected boolean checkThread() {
-    return modelThread == Thread.currentThread();
-  }
-
-  public void add(Object toAdd) {
-    add(toAdd, MonitoredDataTraverser.MonitorEverythingLevel);
-  }
-
-  public void add(Object toAdd, int level) {
-    startAddingTrace();
-    Parser.parse(this, toAdd, level);
-    endAddingTrace();
-  }
-
-  synchronized public List<Trace> getTraces() {
-    return new ArrayList<Trace>(traces);
+  synchronized protected void update(Clock clock) {
+    assert clock == this.clock;
+    for (TraceData traceData : traces.values())
+      traceData.update(clock.timeStep());
   }
 
   synchronized public void dispose() {
-    onTraceRemoved.fire(traces);
     traces.clear();
   }
 
-  public String clockLabel() {
-    return clockLabel;
+  public TraceData traceData(Trace trace) {
+    return traceData(trace, null);
   }
 
-  public TracesSelection selection() {
-    return selection;
+  synchronized public TraceData traceData(Trace trace, Monitored monitored) {
+    TraceData traceData = traces.get(trace);
+    Trace lightTrace = new Trace(trace.label, trace.codeNode);
+    if (traceData == null) {
+      Monitored monitoredFound = findMonitored(trace, monitored);
+      if (monitoredFound == null)
+        return null;
+      traceData = new TraceData(lightTrace, monitoredFound);
+      traces.put(new Trace(trace.label, trace.codeNode), traceData);
+    }
+    return traceData;
   }
 
-  public List<Trace> traces() {
-    return traces;
+  private Monitored findMonitored(Trace trace, Monitored monitored) {
+    Monitored result = monitored;
+    if (result != null)
+      return result;
+    if (trace instanceof TraceExtended)
+      result = ((TraceExtended) trace).monitored;
+    if (result != null)
+      return result;
+    return ((MonitorContainerNode) trace.codeNode).createMonitored(trace.label);
+  }
+
+  public void gc() {
+    List<TraceData> datas = new ArrayList<TraceData>(traces.values());
+    for (TraceData traceData : datas)
+      if (traceData.ref() == 0)
+        traces.remove(traceData.trace);
   }
 }

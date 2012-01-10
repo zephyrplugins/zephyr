@@ -13,7 +13,9 @@ import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.async.events.CastedEventListener;
 import zephyr.plugin.core.async.listeners.EventListener;
 import zephyr.plugin.core.events.ClockEvent;
+import zephyr.plugin.plotting.internal.ZephyrPluginPlotting;
 import zephyr.plugin.plotting.internal.traces.ClockTraces;
+import zephyr.plugin.plotting.internal.traces.ClockTracesManager;
 import zephyr.plugin.plotting.internal.traces.TraceData;
 
 public class ClockGraphBindings {
@@ -59,9 +61,10 @@ public class ClockGraphBindings {
 
 
   protected void selectionChanged(List<TraceData> traceDatas) {
+    ClockTracesManager tracesManager = ZephyrPluginPlotting.tracesManager();
     Set<ClockTraces> clocks = new HashSet<ClockTraces>();
     for (TraceData traceData : traceDatas)
-      clocks.add(traceData.trace.clockTraces);
+      clocks.add(tracesManager.clockTraces(traceData.trace.clock()));
     bind(clocks);
   }
 

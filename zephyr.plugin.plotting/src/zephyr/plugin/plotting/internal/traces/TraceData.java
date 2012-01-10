@@ -1,11 +1,9 @@
 package zephyr.plugin.plotting.internal.traces;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
-
+import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
+import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.plotting.internal.histories.AveragedHistory;
 import zephyr.plugin.plotting.internal.histories.History;
-import zephyr.plugin.plotting.internal.traces.TracesSelection.TraceSelector;
 
 public class TraceData {
   static public class DataTimeInfo {
@@ -17,13 +15,14 @@ public class TraceData {
   static public final int HistoryLength = 1000;
   static public final double MaxTimeLength = 10e8;
   static private final int baseHistoryIndex = toHistoryIndex(HistoryLength - 1);
-
+  final public Monitored monitored;
   final public Trace trace;
   final protected History[] histories;
-  final private Set<TraceSelector> selectors = new LinkedHashSet<TraceSelector>();
+  private int ref = 0;
 
-  protected TraceData(Trace trace) {
+  protected TraceData(Trace trace, Monitored monitored) {
     this.trace = trace;
+    this.monitored = monitored;
     histories = createHistories();
   }
 
@@ -34,27 +33,12 @@ public class TraceData {
       if (timeScale <= baseHistoryIndex)
         histories[timeScale] = shortTimeHistory;
       else
-        histories[timeScale] = new AveragedHistory((int) Math.pow(10, timeScale) / HistoryLength,
-                                                   HistoryLength);
+        histories[timeScale] = new AveragedHistory((int) Math.pow(10, timeScale) / HistoryLength, HistoryLength);
     return histories;
   }
 
-  protected void addSelector(TraceSelector selector) {
-    assert !selectors.contains(selector);
-    selectors.add(selector);
-  }
-
-  protected void removeSelector(TraceSelector selector) {
-    assert selectors.contains(selector);
-    selectors.remove(selector);
-  }
-
-  protected boolean isSelected() {
-    return !selectors.isEmpty();
-  }
-
   protected void update(long stepTime) {
-    float value = (float) trace.logged.monitoredValue();
+    float value = (float) monitored.monitoredValue();
     if (Float.isNaN(value))
       value = 0;
     for (int i = baseHistoryIndex; i < histories.length; i++)
@@ -69,10 +53,10 @@ public class TraceData {
     return timeInfo.synchronizationTime - timeInfo.bufferedData - (long) dataIndex * timeInfo.period;
   }
 
-  public void history(double historyTimeLength, float[] values, DataTimeInfo timeInfo) {
+  public void history(Clock clock, double historyTimeLength, float[] values, DataTimeInfo timeInfo) {
     final History history = histories[toHistoryIndex(historyTimeLength)];
     history.toArray(values);
-    timeInfo.synchronizationTime = trace.clockTraces.clock.timeStep();
+    timeInfo.synchronizationTime = clock.timeStep();
     if (history instanceof AveragedHistory) {
       AveragedHistory averageHistory = (AveragedHistory) history;
       timeInfo.bufferedData = averageHistory.nbBufferedData() - 1;
@@ -94,5 +78,19 @@ public class TraceData {
     int arrayLength = (int) Math.pow(10, logArrayLength);
     assert arrayLength > 0 && arrayLength <= HistoryLength;
     return arrayLength;
+  }
+
+  public void incRef() {
+    ref++;
+  }
+
+  public boolean decRef() {
+    ref--;
+    return (ref == 0);
+  }
+
+  public int ref() {
+    assert ref >= 0;
+    return ref;
   }
 }

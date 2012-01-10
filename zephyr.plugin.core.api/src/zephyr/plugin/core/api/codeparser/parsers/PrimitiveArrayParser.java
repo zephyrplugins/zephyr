@@ -27,7 +27,9 @@ public class PrimitiveArrayParser implements FieldParser {
     int level = CodeTrees.levelOf(field);
     int length = Array.getLength(fieldValue);
     CollectionLabelBuilder labelBuilder = codeParser.newCollectionLabelBuilder(field, length);
-    PrimitiveArrayNode arrayPrimitiveNode = new PrimitiveArrayNode(label, parentNode, fieldValue, labelBuilder, level);
+    PrimitiveArrayNode<?> arrayPrimitiveNode = PrimitiveArrayNode.createPrimitiveArrayNode(label, parentNode,
+                                                                                           fieldValue, labelBuilder,
+                                                                                           level);
     parentNode.addChild(arrayPrimitiveNode);
     CodeTrees.popupIFN(codeParser, field, arrayPrimitiveNode);
     return arrayPrimitiveNode;

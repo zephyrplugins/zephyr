@@ -1,22 +1,38 @@
 package zephyr.plugin.plotting.internal.traces;
 
-import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
+import zephyr.plugin.core.api.codeparser.codetree.CodeTrees;
+import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
+import zephyr.plugin.core.api.synchronization.Clock;
 
 public class Trace {
-  public final ClockTraces clockTraces;
-  public final String label;
-  public final Monitored logged;
-  public final int level;
+  final public CodeNode codeNode;
+  final public String label;
 
-  public Trace(ClockTraces clockTraces, String label, int level, Monitored logged) {
-    this.clockTraces = clockTraces;
+  public Trace(String label, CodeNode codeNode) {
     this.label = label;
-    this.logged = logged;
-    this.level = level;
+    this.codeNode = codeNode;
+  }
+
+  public String[] path() {
+    return codeNode.path();
+  }
+
+  public Clock clock() {
+    return CodeTrees.clockOf(codeNode);
   }
 
   @Override
-  public String toString() {
-    return label;
+  public boolean equals(Object obj) {
+    if (obj == null || !(obj instanceof Trace))
+      return false;
+    if (super.equals(obj))
+      return true;
+    Trace other = (Trace) obj;
+    return other.codeNode == codeNode && label.equals(other.label);
+  }
+
+  @Override
+  public int hashCode() {
+    return codeNode.hashCode() + label.hashCode();
   }
 }

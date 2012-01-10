@@ -22,30 +22,24 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.ui.dialogs.FilteredItemsSelectionDialog;
 
+import zephyr.ZephyrCore;
+import zephyr.plugin.core.api.codeparser.codetree.ClockNode;
+import zephyr.plugin.core.api.codeparser.codetree.CodeTrees;
+import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
+import zephyr.plugin.core.api.monitoring.abstracts.DataMonitorAdapter;
+import zephyr.plugin.core.api.monitoring.abstracts.MonitorContainerNode;
+import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
+import zephyr.plugin.core.api.monitoring.abstracts.MonitoredDataTraverser;
 import zephyr.plugin.plotting.internal.ZephyrPluginPlotting;
+import zephyr.plugin.plotting.internal.traces.TraceExtended;
 import zephyr.plugin.plotting.internal.traces.Trace;
-import zephyr.plugin.plotting.internal.traces.Traces;
 
 public class SelectDataDialog extends FilteredItemsSelectionDialog {
-  private final class TraceFilter extends ItemsFilter {
+  final class TraceFilter extends ItemsFilter {
     private final int level;
 
     public TraceFilter(int level) {
       this.level = level;
-    }
-
-    @Override
-    public boolean equalsFilter(ItemsFilter filter) {
-      if (level != ((TraceFilter) filter).level)
-        return false;
-      return super.equalsFilter(filter);
-    }
-
-    @Override
-    public boolean isSubFilter(ItemsFilter filter) {
-      if (level != ((TraceFilter) filter).level)
-        return false;
-      return super.isSubFilter(filter);
     }
 
     @Override
@@ -55,10 +49,24 @@ public class SelectDataDialog extends FilteredItemsSelectionDialog {
 
     @Override
     public boolean matchItem(Object item) {
-      Trace trace = (Trace) item;
-      if (trace.level > level)
+      TraceExtended trace = (TraceExtended) item;
+      if (trace.codeNode.level() > level)
         return false;
-      return matches(trace.label);
+      return matches(trace.name);
+    }
+
+    @Override
+    public boolean isSubFilter(ItemsFilter filter) {
+      if (!super.isSubFilter(filter))
+        return false;
+      return ((TraceFilter) filter).level <= level;
+    }
+
+    @Override
+    public boolean equalsFilter(ItemsFilter filter) {
+      if (!super.equalsFilter(filter))
+        return false;
+      return ((TraceFilter) filter).level == level;
     }
   }
 
@@ -88,7 +96,7 @@ public class SelectDataDialog extends FilteredItemsSelectionDialog {
     spinner.setDigits(0);
     spinner.setMinimum(Integer.MIN_VALUE);
     spinner.addSelectionListener(new SelectionListener() {
-      private void setHistoryLength() {
+      private void setLevel() {
         try {
           setLevelValue(Integer.parseInt(spinner.getText()));
         } catch (NumberFormatException e) {
@@ -98,12 +106,12 @@ public class SelectDataDialog extends FilteredItemsSelectionDialog {
 
       @Override
       public void widgetSelected(SelectionEvent e) {
-        setHistoryLength();
+        setLevel();
       }
 
       @Override
       public void widgetDefaultSelected(SelectionEvent e) {
-        setHistoryLength();
+        setLevel();
       }
     });
     return composite;
@@ -120,12 +128,22 @@ public class SelectDataDialog extends FilteredItemsSelectionDialog {
   }
 
   @Override
-  protected void fillContentProvider(AbstractContentProvider contentProvider, ItemsFilter itemsFilter,
+  protected void fillContentProvider(final AbstractContentProvider contentProvider, final ItemsFilter itemsFilter,
       IProgressMonitor progressMonitor) throws CoreException {
-    List<Trace> allTraces = Traces.getAllTraces();
-    progressMonitor.beginTask("Looking...", allTraces.size());
-    for (Trace trace : allTraces) {
-      contentProvider.add(trace, itemsFilter);
+    DataMonitorAdapter monitorAdapter = new DataMonitorAdapter() {
+      @Override
+      public void add(MonitorContainerNode codeNode) {
+        String[] labels = codeNode.createLabels();
+        Monitored[] monitored = codeNode.createMonitored();
+        for (int i = 0; i < monitored.length; i++)
+          contentProvider.add(new TraceExtended(labels[i], (CodeNode) codeNode, monitored[i]), itemsFilter);
+      }
+    };
+    MonitoredDataTraverser traverser = new MonitoredDataTraverser(monitorAdapter, level);
+    List<ClockNode> clockNodes = ZephyrCore.syncCode().getClockNodes();
+    progressMonitor.beginTask("Looking...", clockNodes.size());
+    for (ClockNode clockNode : clockNodes) {
+      CodeTrees.traverse(traverser, clockNode);
       progressMonitor.worked(1);
     }
     progressMonitor.done();
@@ -142,15 +160,15 @@ public class SelectDataDialog extends FilteredItemsSelectionDialog {
 
   @Override
   public String getElementName(Object item) {
-    return ((Trace) item).label;
+    return ((TraceExtended) item).name;
   }
 
   @Override
-  protected Comparator<Trace> getItemsComparator() {
-    return new Comparator<Trace>() {
+  protected Comparator<TraceExtended> getItemsComparator() {
+    return new Comparator<TraceExtended>() {
       @Override
-      public int compare(Trace trace1, Trace trace2) {
-        return Collator.getInstance().compare(trace1.label, trace2.label);
+      public int compare(TraceExtended trace1, TraceExtended trace2) {
+        return Collator.getInstance().compare(trace1.name, trace2.name);
       }
     };
   }

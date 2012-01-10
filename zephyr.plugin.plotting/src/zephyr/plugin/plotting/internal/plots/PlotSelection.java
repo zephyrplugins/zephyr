@@ -1,110 +1,90 @@
 package zephyr.plugin.plotting.internal.plots;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import zephyr.plugin.core.api.signals.Listener;
+import org.eclipse.ui.IMemento;
+
+import zephyr.ZephyrCore;
+import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.signals.Signal;
+import zephyr.plugin.core.api.synchronization.Clock;
+import zephyr.plugin.core.async.events.Event;
+import zephyr.plugin.core.async.listeners.EventListener;
+import zephyr.plugin.core.events.CodeStructureEvent;
+import zephyr.plugin.plotting.internal.ZephyrPluginPlotting;
 import zephyr.plugin.plotting.internal.traces.ClockTraces;
-import zephyr.plugin.plotting.internal.traces.ClockTracesManager;
+import zephyr.plugin.plotting.internal.traces.PersistentTrace;
 import zephyr.plugin.plotting.internal.traces.Trace;
 import zephyr.plugin.plotting.internal.traces.TraceData;
 import zephyr.plugin.plotting.internal.traces.Traces;
-import zephyr.plugin.plotting.internal.traces.TracesSelection;
-import zephyr.plugin.plotting.internal.traces.TracesSelection.TraceSelector;
 
-public class PlotSelection implements TraceSelector {
+public class PlotSelection {
+  final private static String SelectionTypeKey = "selection";
+
   public Signal<List<TraceData>> onSelectedTracesChanged = new Signal<List<TraceData>>();
   public Signal<Integer> onHistoryChanged = new Signal<Integer>();
+  private final Set<PersistentTrace> persistentSelection = new LinkedHashSet<PersistentTrace>();
   private final List<TraceData> selected = new ArrayList<TraceData>();
-  private final Set<String> persistentSelection = new LinkedHashSet<String>();
-  private final Set<String> currentSelection = new LinkedHashSet<String>();
-  private final Listener<List<Trace>> addedTraceListener = new Listener<List<Trace>>() {
+  private final EventListener addedTraceListener = new EventListener() {
     @Override
-    public void listen(List<Trace> traces) {
-      checkNewTrace(traces);
+    public void listen(Event event) {
+      checkNewTrace(((CodeStructureEvent) event).clock());
     }
   };
-  private final Listener<List<Trace>> removedTraceListener = new Listener<List<Trace>>() {
+  private final EventListener removedTraceListener = new EventListener() {
     @Override
-    public void listen(List<Trace> traces) {
-      checkRemovedTrace(traces);
+    public void listen(Event event) {
+      checkRemovedTrace(((CodeStructureEvent) event).clock());
     }
   };
-  private final ClockTracesManager tracesManager;
 
-  public PlotSelection(ClockTracesManager tracesManager) {
-    this.tracesManager = tracesManager;
+  public PlotSelection() {
+    ZephyrCore.busEvent().register(CodeStructureEvent.ParsedID, addedTraceListener);
+    ZephyrCore.busEvent().register(CodeStructureEvent.RemovedID, removedTraceListener);
   }
 
-  synchronized public Set<String> getLabelsToSave() {
-    Set<String> labelsToSave = new LinkedHashSet<String>();
-    labelsToSave.addAll(persistentSelection);
-    labelsToSave.addAll(currentSelection);
-    return labelsToSave;
-  }
-
-  synchronized public void init(Set<String> initialSelection) {
-    if (initialSelection != null)
-      persistentSelection.addAll(initialSelection);
-    checkNewTrace(Traces.getAllTraces());
-    tracesManager.onTraceAdded.connect(addedTraceListener);
-    tracesManager.onTraceRemoved.connect(removedTraceListener);
-  }
-
-  synchronized void checkNewTrace(List<Trace> traces) {
-    List<Trace> tracesAdded = new ArrayList<Trace>();
-    for (Trace trace : traces) {
-      if (!persistentSelection.contains(trace.label))
+  synchronized void checkNewTrace(Clock clock) {
+    Set<Trace> selection = getCurrentTracesSelection();
+    boolean changed = false;
+    for (PersistentTrace trace : persistentSelection) {
+      CodeNode codeNode = ZephyrCore.syncCode().findNode(trace.path);
+      if (codeNode == null)
         continue;
-      persistentSelection.remove(trace.label);
-      currentSelection.add(trace.label);
-      tracesAdded.add(trace);
+      changed = selection.add(new Trace(trace.label, codeNode)) || changed;
     }
-    if (tracesAdded.isEmpty())
-      return;
-    Set<Trace> selectedTraces = getCurrentTracesSelection();
-    selectedTraces.addAll(tracesAdded);
-    setCurrentSelection(selectedTraces);
+    if (changed)
+      setCurrentSelection(selection);
   }
 
-  synchronized protected void checkRemovedTrace(List<Trace> traces) {
-    Set<Trace> currentSelection = getCurrentTracesSelection();
-    boolean oneTraceRemoved = false;
-    for (Trace trace : traces) {
-      boolean removed = currentSelection.remove(trace);
-      if (removed) {
-        oneTraceRemoved = true;
-        persistentSelection.add(trace.label);
-      }
-    }
-    if (oneTraceRemoved)
-      setCurrentSelection(currentSelection);
+  synchronized protected void checkRemovedTrace(Clock clock) {
   }
 
   synchronized public void setCurrentSelection(Set<Trace> newSelection) {
+    derefSelection();
     Map<ClockTraces, Set<Trace>> orderedNewTraces = Traces.orderTraces(newSelection);
-    Map<ClockTraces, Set<Trace>> orderedOldTraces = Traces.orderTraces(selected);
-    for (ClockTraces clockTrace : orderedOldTraces.keySet())
-      if (!orderedNewTraces.containsKey(clockTrace))
-        orderedNewTraces.put(clockTrace, new HashSet<Trace>());
-    selected.clear();
-    currentSelection.clear();
     for (Map.Entry<ClockTraces, Set<Trace>> entry : orderedNewTraces.entrySet()) {
-      final ClockTraces clockTrace = entry.getKey();
-      TracesSelection selection = clockTrace.selection();
-      final Set<Trace> newSel = entry.getValue();
-      final Set<Trace> oldSel = orderedOldTraces.get(clockTrace);
-      List<TraceData> selectedTraceData = selection.selectTraces(this, oldSel, newSel);
-      for (TraceData traceData : selectedTraceData)
-        currentSelection.add(traceData.trace.label);
-      selected.addAll(selectedTraceData);
+      ClockTraces clockTraces = entry.getKey();
+      for (Trace trace : entry.getValue()) {
+        persistentSelection.remove(new PersistentTrace(trace.label, trace.path()));
+        TraceData traceData = clockTraces.traceData(trace);
+        if (traceData == null)
+          continue;
+        traceData.incRef();
+        selected.add(traceData);
+      }
     }
+    ZephyrPluginPlotting.tracesManager().gc();
     fireSelectedTracesChanged();
+  }
+
+  synchronized private void derefSelection() {
+    for (TraceData traceData : selected)
+      traceData.decRef();
+    selected.clear();
   }
 
   protected void fireSelectedTracesChanged() {
@@ -126,7 +106,27 @@ public class PlotSelection implements TraceSelector {
     return selected.isEmpty();
   }
 
+  public void init(IMemento memento) {
+    for (IMemento child : memento.getChildren(SelectionTypeKey)) {
+      PersistentTrace loaded = PersistentTrace.load(child);
+      if (loaded == null)
+        continue;
+      persistentSelection.add(loaded);
+    }
+    for (Clock clock : ZephyrCore.registeredClocks())
+      checkNewTrace(clock);
+  }
+
+  public void saveState(IMemento memento) {
+    for (PersistentTrace trace : persistentSelection)
+      PersistentTrace.save(memento.createChild(SelectionTypeKey), trace.label, trace.path);
+    for (TraceData traceData : selected)
+      PersistentTrace.save(memento.createChild(SelectionTypeKey), traceData.trace.label, traceData.trace.path());
+  }
+
   public void dispose() {
-    setCurrentSelection(new HashSet<Trace>());
+    derefSelection();
+    ZephyrPluginPlotting.tracesManager().gc();
+    fireSelectedTracesChanged();
   }
 }

@@ -3,11 +3,10 @@ package zephyr.plugin.core.api.codeparser.codetree;
 import java.lang.reflect.Field;
 
 import zephyr.plugin.core.api.codeparser.interfaces.ParentNode;
-import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
-import zephyr.plugin.core.api.monitoring.abstracts.MonitorContainer;
+import zephyr.plugin.core.api.monitoring.abstracts.MonitorContainerNode;
 import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
 
-public class PrimitiveNode extends AbstractCodeNode implements MonitorContainer {
+public class PrimitiveNode extends AbstractCodeNode implements MonitorContainerNode {
   private final Monitored monitored;
 
   public PrimitiveNode(String label, ParentNode parent, Field field, Object container, int level) {
@@ -61,12 +60,22 @@ public class PrimitiveNode extends AbstractCodeNode implements MonitorContainer 
     };
   }
 
-  @Override
-  public void addToMonitor(DataMonitor monitor) {
-    monitor.add(CodeTrees.mergePath(path()), level(), monitored);
-  }
-
   public double value() {
     return monitored.monitoredValue();
+  }
+
+  @Override
+  public Monitored createMonitored(String label) {
+    return monitored;
+  }
+
+  @Override
+  public String[] createLabels() {
+    return new String[] { "" };
+  }
+
+  @Override
+  public Monitored[] createMonitored() {
+    return new Monitored[] { createMonitored(null) };
   }
 }

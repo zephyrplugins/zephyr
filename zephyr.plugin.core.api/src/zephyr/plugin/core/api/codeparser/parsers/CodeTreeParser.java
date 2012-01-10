@@ -144,8 +144,8 @@ public class CodeTreeParser implements CodeParser {
     if (container instanceof MonitorContainer)
       ((MonitorContainer) container).addToMonitor(new DataMonitor() {
         @Override
-        public void add(String label, int level, Monitored monitored) {
-          PrimitiveNode child = new PrimitiveNode(label, classNode, monitored, level);
+        public void add(String label, Monitored monitored) {
+          PrimitiveNode child = new PrimitiveNode(label, classNode, monitored, classNode.level());
           classNode.addChild(child);
         }
       });

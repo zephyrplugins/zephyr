@@ -3,7 +3,7 @@ package zephyr.plugin.core.internal.clocks;
 import zephyr.plugin.core.api.synchronization.Chrono;
 
 public class ClockStat {
-  static final double PeriodUpdateRate = 0.9;
+  static final double PeriodUpdateRate = 0.5;
 
   static class PeriodStats {
     private final Chrono chrono = new Chrono();

@@ -7,6 +7,7 @@ public class CollectionLabelBuilder {
   private final LabeledCollection labeledElement;
   private final String elementLabelSeparator;
   private final boolean arrayDecoration;
+  private String[] labels;
 
   public CollectionLabelBuilder(LabelBuilder labelBuilder, int size, String label, String id, boolean arrayDecoration) {
     collectionPattern = Labels.collectionPattern(label, size, arrayDecoration);
@@ -28,5 +29,22 @@ public class CollectionLabelBuilder {
     if (arrayDecoration && suffix != null)
       suffix = elementLabelSeparator + suffix;
     return Labels.collectionLabel(collectionPattern, index, suffix, arrayDecoration);
+  }
+
+  public int indexOf(String label, int size) {
+    createLabels(size);
+    for (int i = 0; i < labels.length; i++)
+      if (labels[i].equals(label))
+        return i;
+    return -1;
+  }
+
+  public String[] createLabels(int size) {
+    if (labels != null)
+      return labels;
+    labels = new String[size];
+    for (int i = 0; i < size; i++)
+      labels[i] = elementLabel(i);
+    return labels;
   }
 }

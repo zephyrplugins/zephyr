@@ -1,12 +1,11 @@
 package zephyr.plugin.core.helpers;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import org.eclipse.ui.IMemento;
 
 import zephyr.ZephyrCore;
 import zephyr.ZephyrSync;
+import zephyr.plugin.core.Utils;
 import zephyr.plugin.core.api.codeparser.codetree.ClassNode;
 import zephyr.plugin.core.api.codeparser.codetree.CodeTrees;
 import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
@@ -20,9 +19,6 @@ import zephyr.plugin.core.internal.ZephyrPluginCore;
 import zephyr.plugin.core.views.SyncView;
 
 public class InstanceManager<T> {
-  private static final String PathRootType = "codetreelink";
-  private static final String PathLabelType = "nodelabel";
-
   public interface InstanceListener<T> extends SyncView {
     void onInstanceSet();
 
@@ -122,16 +118,9 @@ public class InstanceManager<T> {
   }
 
   public void parseMemento(IMemento memento) {
-    if (memento == null)
+    loadedPath = Utils.loadPath(memento);
+    if (loadedPath == null)
       return;
-    IMemento pathRoot = memento.getChild(PathRootType);
-    if (pathRoot == null)
-      return;
-    List<String> pathList = new ArrayList<String>();
-    for (IMemento child : pathRoot.getChildren(PathLabelType))
-      pathList.add(child.getID());
-    loadedPath = new String[pathList.size()];
-    pathList.toArray(loadedPath);
     setCodetree();
   }
 
@@ -139,9 +128,7 @@ public class InstanceManager<T> {
     String[] savedPath = codeNode != null ? codeNode.path() : loadedPath;
     if (savedPath == null)
       return;
-    IMemento pathRoot = memento.createChild(PathRootType);
-    for (String label : savedPath)
-      pathRoot.createChild(PathLabelType, label);
+    Utils.savePath(memento, savedPath);
   }
 
   public void dispose() {

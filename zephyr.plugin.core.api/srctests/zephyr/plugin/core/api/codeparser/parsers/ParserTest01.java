@@ -62,7 +62,7 @@ public class ParserTest01 {
 
     @Override
     public void addToMonitor(DataMonitor monitor) {
-      monitor.add(logged01AddedFromInterface, 0, new Monitored() {
+      monitor.add(logged01AddedFromInterface, new Monitored() {
         @Override
         public double monitoredValue() {
           return 0;

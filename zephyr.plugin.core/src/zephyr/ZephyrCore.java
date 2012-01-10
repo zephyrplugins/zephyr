@@ -126,4 +126,8 @@ public class ZephyrCore {
   public static BusEvent busEvent() {
     return ZephyrPluginCore.busEvent();
   }
+
+  public static List<Clock> registeredClocks() {
+    return ZephyrPluginCore.clocks().getClocks();
+  }
 }

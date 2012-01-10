@@ -8,6 +8,7 @@ import java.util.concurrent.Semaphore;
 import org.eclipse.swt.graphics.Point;
 
 import zephyr.plugin.core.api.signals.Listener;
+import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.plotting.axes.Axes;
 import zephyr.plugin.plotting.internal.traces.TraceData;
 import zephyr.plugin.plotting.internal.traces.TraceData.DataTimeInfo;
@@ -91,15 +92,17 @@ public class PlotData {
     selectionChanged = true;
   }
 
-  public boolean synchronize() {
+  public boolean synchronize(Clock clock) {
     List<TraceData> selection = plotSelection.getSelection();
     if (selection.isEmpty())
       return false;
     List<HistoryCached> histories = syncHistory.lockHistory(selection);
     for (int i = 0; i < selection.size(); i++) {
       TraceData traceData = selection.get(i);
+      if (traceData.trace.clock() != clock)
+        continue;
       HistoryCached history = histories.get(i);
-      traceData.history(currentHistoryLength, history.values, history.timeInfo);
+      traceData.history(clock, currentHistoryLength, history.values, history.timeInfo);
     }
     syncHistory.unlock();
     return true;
@@ -143,9 +146,7 @@ public class PlotData {
   }
 
   public boolean setHistoryLengthIFN(int historyLength) {
-    if (historyLength == currentHistoryLength ||
-        historyLength >= TraceData.MaxTimeLength ||
-        historyLength <= 0)
+    if (historyLength == currentHistoryLength || historyLength >= TraceData.MaxTimeLength || historyLength <= 0)
       return false;
     currentHistoryLength = historyLength;
     selectionChanged();

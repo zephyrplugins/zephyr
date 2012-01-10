@@ -14,9 +14,9 @@ public class MonitorRegistry {
     }
 
     @Override
-    public void add(String label, int level, Monitored monitored) {
+    public void add(String label, Monitored monitored) {
       for (DataMonitor monitor : monitors)
-        monitor.add(label, level, monitored);
+        monitor.add(label, monitored);
     }
   }
 

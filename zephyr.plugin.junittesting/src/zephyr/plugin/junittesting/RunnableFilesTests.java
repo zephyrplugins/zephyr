@@ -15,15 +15,15 @@ public class RunnableFilesTests {
   }
 
   @Test(timeout = TimeOut)
-  public void testJarLoading() {
-    ZephyrCore.setSynchronous(false);
-    RunnableTests.testFileLoading("../../zephyr/zephyr.example.simpleclient/simpleclient.jar", 1000);
-  }
-
-  @Test(timeout = TimeOut)
   public void testPythonLoading() {
     ZephyrCore.setSynchronous(false);
     RunnableTests.testFileLoading("../../zephyr/zephyr.example.scripts/simple.py", 1000);
+  }
+
+  @Test(timeout = TimeOut)
+  public void testJarLoading() {
+    ZephyrCore.setSynchronous(false);
+    RunnableTests.testFileLoading("../../zephyr/zephyr.example.simpleclient/simpleclient.jar", 1000);
   }
 
   @Test(timeout = TimeOut)
