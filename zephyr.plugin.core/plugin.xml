@@ -442,6 +442,11 @@
    <extension
          point="zephyr.listener">
       <listener
+            class="zephyr.plugin.core.internal.clocks.SuspendClockWhenAddedListener"
+            eventid="zephyr.event.clockadded"
+            name="Suspend Clock When Added">
+      </listener>
+      <listener
             class="zephyr.plugin.core.internal.commands.SetSpeedCommand$SynchronizationSettingLoader"
             eventid="zephyr.event.starting"
             name="SynchronizationModeSettingLoader">
