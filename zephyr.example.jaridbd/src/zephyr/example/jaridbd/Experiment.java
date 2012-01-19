@@ -17,12 +17,14 @@ public class Experiment {
   final static private int numTotalInputs = 20;
   final static private int numRelevantInputs = 5;
 
-  /**
-   * Instance used to synchronize the data with Zephyr
-   */
   final private Problem problem = new Problem(new Random(0), numTotalInputs, numRelevantInputs);
   final private LMS lms = new LMS(numTotalInputs, .1 / numTotalInputs);
   final private IDBD idbd = new IDBD(numTotalInputs, 0.01, .1 / numTotalInputs);
+  final private Clock clock = new Clock("Experiment");
+
+  public Experiment() {
+    Zephyr.advertise(clock, this);
+  }
 
   /**
    * This method is annotated with @LabelProvider indicating to Zephyr that it
@@ -48,18 +50,15 @@ public class Experiment {
     problem.updateWeights();
   }
 
-  /**
-   * Zephyr does not use the static main method. But it can be used to run the
-   * class by Java directly, without Zephyr.
-   */
-  public static void main(String[] args) {
-    Experiment experiment = new Experiment();
-    Clock clock = new Clock("Experiment");
-    Zephyr.advertise(clock, experiment);
+  public void run() {
     // While clock is not terminated when we tick it, we can continue to
     // generate data
     // Note that data is also collected when we call this method
     while (clock.tick())
-      experiment.step();
+      step();
+  }
+
+  public static void main(String[] args) {
+    new Experiment().run();
   }
 }
