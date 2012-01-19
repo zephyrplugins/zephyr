@@ -6,18 +6,48 @@ layout: default
 
 <h1>Introduction to Zephyr</h1>
 <p>
-	<b>Zephyr</b> is a software in Java to visualize code variables in real time and at different time scale.
+	There are two common ways to debug code. The first way is to use a
+	debugger to check the state of the code at a given point in time and
+	trace code execution. The second way is to use <span class='code'>print</span>
+	statements (or more generally log files) to trace events when they
+	happen. <b>Zephyr</b> proposes a third easy way. <br /> <br /> <b>Zephyr</b>
+	is a software for Java to visualize over time the value of code
+	variables. At runtime, Zephyr uses Java reflexivity to parse the code
+	and register objects and data to be visualized. Through a generic
+	graphical user interface, developers can then browse and monitor at
+	different time-scale the data while the code is running. Zephyr is an
+	online debugger particularly suited for simulations, games or online
+	numerical computations. <br /> <br /> Zephyr is distributed as a
+	standalone executable to run Java jars, Python or Clojure scripts, and as a
+	collection of Eclipse plugins to integrate with Eclipse RCP
+	applications for debugging.
 </p>
+<div align="center">
+	<iframe width="420" height="315"
+		src="http://www.youtube.com/embed/Brnyq_shwD8" frameborder="0"
+		allowfullscreen></iframe>
+</div>
+
 <h3>Introduction tutorials</h3>
 <ul>
-	<li><a href='tutorial_logfiles.html'>Read large log files</a> with Zephyr</li>
+	<li><a href='tutorial_logfiles.html'>Read large log files</a> with
+		Zephyr</li>
 	<li><a href='tutorial_jython.html'>Zephyr for Python (Jython)</a></li>
 	<li><a href='tutorial_clojure.html'>Zephyr for Clojure </a></li>
 	<li><a href='tutorial_java.html'>Zephyr for Java </a></li>
 </ul>
 <a href='tutorials.html'>More tutorials</a>
-<h3>Download</h3>
+<h3>
+	Download<a
+		href='http://marketplace.eclipse.org/marketplace-client-intro?mpc_install=135157'
+		title='Drag and drop into a running Eclipse workspace to install Zephyr'>
+		<img border="0" height="16"
+		src='http://marketplace.eclipse.org/misc/installbutton.png' />
+	</a>
+</h3>
 <ul>
-  <li> <a href='download.html'>Binaries</a> for Mac OS X, Windows, Linux</li>
-  <li> The <a href="https://github.com/ThomasDegris/Zephyr">source code</a> is available on github
+	<li><a href='download.html'>Binaries</a> for Mac OS X, Windows,
+		Linux</li>
+	<li>The <a href="https://github.com/ThomasDegris/Zephyr">source
+			code</a> is available on github
 </ul>
