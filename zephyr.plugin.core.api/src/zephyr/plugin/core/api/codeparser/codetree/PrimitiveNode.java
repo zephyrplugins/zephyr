@@ -71,7 +71,7 @@ public class PrimitiveNode extends AbstractCodeNode implements MonitorContainerN
 
   @Override
   public String[] createLabels() {
-    return new String[] { label() };
+    return new String[] { "" };
   }
 
   @Override

@@ -20,6 +20,8 @@ import zephyr.plugin.core.views.SyncView;
 
 public class InstanceManager<T> {
   public interface InstanceListener<T> extends SyncView {
+    boolean isSupported(CodeNode codeNode);
+
     void onInstanceSet();
 
     void onInstanceUnset();
@@ -54,6 +56,8 @@ public class InstanceManager<T> {
       return;
     CodeNode loadedCodenode = ZephyrPluginCore.syncCode().findNode(loadedPath);
     if (loadedCodenode == null)
+      return;
+    if (!view.isSupported(loadedCodenode))
       return;
     set(loadedCodenode);
   }
