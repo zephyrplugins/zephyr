@@ -49,7 +49,7 @@ public class Function2DDrawer {
     this.colors = colors;
   }
 
-  public void set(Interval xRange, Interval yRange, ContinuousFunction continuousFunction, int resolution) {
+  synchronized public void set(Interval xRange, Interval yRange, ContinuousFunction continuousFunction, int resolution) {
     this.xRange = xRange;
     this.yRange = yRange;
     this.function = continuousFunction;
@@ -61,7 +61,7 @@ public class Function2DDrawer {
       synchronize();
   }
 
-  public void paint(GC gc, Canvas canvas) {
+  synchronized public void paint(GC gc, Canvas canvas) {
     if (imageData == null) {
       gc.setBackground(colors.color(gc, Colors.COLOR_WHITE));
       gc.fillRectangle(gc.getClipping());
@@ -107,7 +107,7 @@ public class Function2DDrawer {
     }
   }
 
-  public void synchronize() {
+  synchronized public void synchronize() {
     double minValue = Double.MAX_VALUE;
     double maxValue = -Double.MAX_VALUE;
     for (int ax = 0; ax < resolution; ax++) {
@@ -140,7 +140,7 @@ public class Function2DDrawer {
         + (int) (scaledValue * diffColor[1]), minColor[2] + (int) (scaledValue * diffColor[2]));
   }
 
-  public void unset() {
+  synchronized public void unset() {
     imageData = null;
     bufferedImage = null;
   }

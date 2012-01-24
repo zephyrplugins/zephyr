@@ -5,10 +5,12 @@ import java.util.List;
 
 import org.eclipse.swt.graphics.Point;
 
+import zephyr.plugin.core.api.codeparser.codetree.CodeTrees;
 import zephyr.plugin.core.api.parsing.LabelBuilder;
 import zephyr.plugin.core.api.synchronization.Chrono;
 import zephyr.plugin.plotting.axes.Axes;
 import zephyr.plugin.plotting.internal.plots.PlotData.HistoryCached;
+import zephyr.plugin.plotting.internal.traces.Trace;
 import zephyr.plugin.plotting.internal.traces.TraceData;
 import zephyr.plugin.plotting.mousesearch.RequestResult;
 
@@ -29,14 +31,18 @@ public class PlotOverTimeRequestResult implements RequestResult {
     history = histories.get(traceIndex);
     this.x = x;
     traceData = selection.get(traceIndex);
-    label = traceData.trace.label;
+    label = name(traceData.trace);
     y = history.values[x];
     dataAge = traceData.dataAge(history.timeInfo, history.values.length - x - 1);
     synchronizationTime = history.timeInfo.synchronizationTime;
     secondaryLabels = new ArrayList<String>();
     for (Integer index : secondaryResults)
-      secondaryLabels.add(selection.get(index).trace.label);
+      secondaryLabels.add(name(selection.get(index).trace));
     this.axes = axes;
+  }
+
+  private String name(Trace trace) {
+    return CodeTrees.mergePath(trace.path()) + trace.label;
   }
 
   @Override
