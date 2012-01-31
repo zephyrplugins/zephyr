@@ -11,29 +11,9 @@ import zephyr.plugin.core.utils.Colors;
 import zephyr.plugin.core.utils.ImageAdapter;
 
 public class Function2DDrawer {
-  static final int[][] Landmarks = new int[][] { new int[] { 155, 0, 0 }, new int[] { 255, 255, 0 },
+  static final int[][] BWColorMap = new int[][] { new int[] { 0, 0, 0 }, new int[] { 255, 255, 255 } };
+  static final int[][] PinkColorMap = new int[][] { new int[] { 155, 0, 0 }, new int[] { 255, 255, 0 },
       new int[] { 0, 255, 255 }, new int[] { 255, 100, 255 } };
-  static final int[][] Diffs = colorPreprocessing();
-  static final Interval[] ColorRanges = rangePreprocessing(1.0 / Diffs.length);
-
-  private static int[] computeDiff(int[] colorA, int[] colorB) {
-    return new int[] { colorA[0] - colorB[0], colorA[1] - colorB[1], colorA[2] - colorB[2] };
-  }
-
-  private static int[][] colorPreprocessing() {
-    int[][] diffs = new int[Landmarks.length - 1][];
-    for (int i = 0; i < diffs.length; i++)
-      diffs[i] = computeDiff(Landmarks[i + 1], Landmarks[i]);
-    return diffs;
-  }
-
-  private static Interval[] rangePreprocessing(double colorResolution) {
-    Interval[] ranges = new Interval[Landmarks.length - 1];
-    for (int i = 0; i < ranges.length; i++)
-      ranges[i] = new Interval(i * colorResolution, (i + 1) * colorResolution);
-    return ranges;
-  }
-
   private int resolution;
   private float[][] imageData;
   private Interval rangeValue;
@@ -44,9 +24,16 @@ public class Function2DDrawer {
   private Interval xRange;
   private Interval yRange;
   private ContinuousFunction function;
+  private ColorMap colorMap;
 
   public Function2DDrawer(Colors colors) {
     this.colors = colors;
+    colorMap = new ColorMap(PinkColorMap);
+  }
+
+  synchronized void setColorMap(int[][] colorLandmarks) {
+    colorMap = new ColorMap(colorLandmarks);
+    synchronize();
   }
 
   synchronized public void set(Interval xRange, Interval yRange, ContinuousFunction continuousFunction, int resolution) {
@@ -57,8 +44,7 @@ public class Function2DDrawer {
     imageData = new float[resolution][];
     for (int i = 0; i < imageData.length; i++)
       imageData[i] = new float[resolution];
-    if (function != null)
-      synchronize();
+    synchronize();
   }
 
   synchronized public void paint(GC gc, Canvas canvas) {
@@ -89,7 +75,7 @@ public class Function2DDrawer {
       final int imageDataY = imageData[0].length;
       for (int ay = 0; ay < imageDataY; ay++) {
         float gy = ay * pixelSizeY;
-        int color = valueToColor(rangeValue.scale(imageData[ax][imageDataY - ay - 1]));
+        int color = colorMap.valueToColor(rangeValue.scale(imageData[ax][imageDataY - ay - 1]));
         updatePixel(gx, pixelSizeX, gy, pixelSizeY, color);
       }
     }
@@ -108,6 +94,8 @@ public class Function2DDrawer {
   }
 
   synchronized public void synchronize() {
+    if (function == null)
+      return;
     double minValue = Double.MAX_VALUE;
     double maxValue = -Double.MAX_VALUE;
     for (int ax = 0; ax < resolution; ax++) {
@@ -122,22 +110,6 @@ public class Function2DDrawer {
     }
     rangeValue = new Interval(minValue, maxValue);
     dirty = true;
-  }
-
-
-  static private int colorToInt(int r, int g, int b) {
-    return 0xFF000000 | (r << 16) | (g << 8) | b;
-  }
-
-  private int valueToColor(double value) {
-    double adjustedValue = Math.min(value, 1.0 - 1e-10);
-    int colorIndex = (int) Math.floor(adjustedValue * (Landmarks.length - 1));
-    int[] minColor = Landmarks[colorIndex];
-    int[] diffColor = Diffs[colorIndex];
-    Interval colorRange = ColorRanges[colorIndex];
-    double scaledValue = colorRange.scale(adjustedValue);
-    return colorToInt(minColor[0] + (int) (scaledValue * diffColor[0]), minColor[1]
-        + (int) (scaledValue * diffColor[1]), minColor[2] + (int) (scaledValue * diffColor[2]));
   }
 
   synchronized public void unset() {

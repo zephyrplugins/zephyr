@@ -57,8 +57,9 @@ public abstract class ForegroundCanvasView<T> extends ClassTypeView<T> {
 
   @Override
   public void repaint() {
-    if (!canvas.isDisposed())
-      canvas.getDisplay().syncExec(drawOnCanvas);
+    if (canvas == null || canvas.isDisposed())
+      return;
+    canvas.getDisplay().syncExec(drawOnCanvas);
   }
 
   @Override
