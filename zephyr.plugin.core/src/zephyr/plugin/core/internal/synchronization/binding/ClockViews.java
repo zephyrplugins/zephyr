@@ -41,8 +41,8 @@ public class ClockViews {
     List<Future<?>> futures = new ArrayList<Future<?>>();
     for (ViewTask task : viewTasks) {
       Future<?> future = task.refreshIFN(clock);
-      assert future != null;
-      futures.add(future);
+      if (future != null)
+        futures.add(future);
     }
     return futures;
   }
