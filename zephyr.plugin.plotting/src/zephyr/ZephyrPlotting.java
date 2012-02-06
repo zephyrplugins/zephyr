@@ -6,7 +6,7 @@ import zephyr.plugin.plotting.preferences.PreferenceConstants;
 public class ZephyrPlotting {
   public static final String PluginID = "zephyr.plugin.plotting";
 
-  static public int preferredLineSize() {
+  static public int preferredLineWidth() {
     return ZephyrPluginPlotting.getDefault().getPreferenceStore().getInt(PreferenceConstants.LineSizePrefLabel);
   }
 

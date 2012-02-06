@@ -82,7 +82,7 @@ public class PlotOverTime implements Painter {
 
   private void updatePreferences() {
     antiAliasing = ZephyrPlotting.preferredAntiAliasing();
-    lineWidth = ZephyrPlotting.preferredLineSize();
+    lineWidth = ZephyrPlotting.preferredLineWidth();
   }
 
   private void updateAxes(List<HistoryCached> histories) {

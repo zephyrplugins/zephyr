@@ -12,22 +12,29 @@ public class Plot2DRequestResult implements RequestResult {
   private final int xIndex;
   private double xPosition = 0.0;
   private double yPosition = 0.0;
+  private final String xLabel;
 
   public Plot2DRequestResult(Axes axes, Data2D data, int xIndex) {
+    this(axes, data, xIndex, null);
+  }
+
+  public Plot2DRequestResult(Axes axes, Data2D data, int xIndex, String xLabel) {
     this.data = data;
     this.xIndex = xIndex;
     this.axes = axes;
+    this.xLabel = xLabel;
     refreshDataPosition();
   }
 
   @Override
   public String tooltipLabel() {
-    return "";
+    return fieldLabel();
   }
 
   @Override
   public String fieldLabel() {
-    return String.format("%s x:%f y:%f", data.label, xPosition, yPosition);
+    final String abscisseLabel = xLabel != null ? xLabel : String.valueOf(xPosition);
+    return String.format("%s x:%s y:%f", data.label, abscisseLabel, yPosition);
   }
 
   @Override

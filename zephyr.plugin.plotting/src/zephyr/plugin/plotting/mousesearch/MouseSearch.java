@@ -106,4 +106,8 @@ public class MouseSearch extends Job implements Overlay {
     if (requestResult.dynamicText())
       setValueLabel(requestResult.fieldLabel());
   }
+
+  public void dispose() {
+    colors.dispose();
+  }
 }

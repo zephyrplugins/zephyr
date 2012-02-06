@@ -9,13 +9,19 @@ import zephyr.plugin.plotting.mousesearch.SearchableData;
 import zephyr.plugin.plotting.plot2d.Plot2DRequestResult;
 
 public class BarData2D extends SearchableData<Data2D> {
+  private String[] labels = null;
+
   public BarData2D(Axes axes) {
     super(axes);
   }
 
   @Override
   protected RequestResult searchData(Point mousePosition) {
-    return new Plot2DRequestResult(axes, searchableData, (int) axes.toDX(mousePosition.x));
+    int xPosition = (int) axes.toDX(mousePosition.x);
+    String xLabel = null;
+    if (labels != null)
+      xLabel = xPosition >= 0 && xPosition < labels.length ? labels[xPosition] : "?";
+    return new Plot2DRequestResult(axes, searchableData, xPosition, xLabel);
   }
 
   void updateData(double[] newdata) {
@@ -39,5 +45,9 @@ public class BarData2D extends SearchableData<Data2D> {
     lockData();
     searchableData = null;
     unlockData();
+  }
+
+  public void setLabels(String[] labels) {
+    this.labels = labels;
   }
 }
