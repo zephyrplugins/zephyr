@@ -3,6 +3,7 @@ package zephyr.plugin.plotting.heatmap;
 import java.awt.image.BufferedImage;
 
 import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Canvas;
 
@@ -11,9 +12,10 @@ import zephyr.plugin.core.utils.Colors;
 import zephyr.plugin.core.utils.ImageAdapter;
 
 public class Function2DDrawer {
-  static final int[][] BWColorMap = new int[][] { new int[] { 0, 0, 0 }, new int[] { 255, 255, 255 } };
-  static final int[][] PinkColorMap = new int[][] { new int[] { 155, 0, 0 }, new int[] { 255, 255, 0 },
-      new int[] { 0, 255, 255 }, new int[] { 255, 100, 255 } };
+  static final ColorMapDescriptor BWColorMap = new ColorMapDescriptor(new int[][] { new int[] { 0, 0, 0 },
+      new int[] { 255, 255, 255 } }, new int[] { 0, 0, 255 });
+  static final ColorMapDescriptor PinkColorMap = new ColorMapDescriptor(new int[][] { new int[] { 155, 0, 0 },
+      new int[] { 255, 255, 0 }, new int[] { 0, 255, 255 }, new int[] { 255, 100, 255 } }, new int[] { 0, 0, 0 });
   private int resolution;
   private float[][] imageData;
   private Interval rangeValue;
@@ -31,8 +33,8 @@ public class Function2DDrawer {
     colorMap = new ColorMap(PinkColorMap);
   }
 
-  synchronized void setColorMap(int[][] colorLandmarks) {
-    colorMap = new ColorMap(colorLandmarks);
+  synchronized void setColorMap(ColorMapDescriptor descriptor) {
+    colorMap = new ColorMap(descriptor);
     synchronize();
   }
 
@@ -55,6 +57,10 @@ public class Function2DDrawer {
     }
     updateBufferedImage(gc.getClipping());
     imageAdapter.paint(gc, canvas);
+  }
+
+  public RGB spriteColor() {
+    return colorMap.spriteColor();
   }
 
   private void updateBufferedImage(Rectangle rectangle) {

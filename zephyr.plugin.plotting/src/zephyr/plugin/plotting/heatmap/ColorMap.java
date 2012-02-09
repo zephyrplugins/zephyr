@@ -1,14 +1,18 @@
 package zephyr.plugin.plotting.heatmap;
 
+import org.eclipse.swt.graphics.RGB;
+
 public class ColorMap {
   private final int[][] landmarks;
   private final int[][] diffs;
   private final Interval[] colorRanges;
+  private final RGB spriteColor;
 
-  public ColorMap(int[][] landmarks) {
-    this.landmarks = landmarks;
+  public ColorMap(ColorMapDescriptor descriptor) {
+    this.landmarks = descriptor.landmarks;
     diffs = colorPreprocessing(landmarks);
     colorRanges = rangePreprocessing(landmarks, 1.0 / diffs.length);
+    spriteColor = new RGB(descriptor.spriteColor[0], descriptor.spriteColor[1], descriptor.spriteColor[2]);
   }
 
   public int nbColors() {
@@ -47,5 +51,9 @@ public class ColorMap {
     double scaledValue = colorRange.scale(adjustedValue);
     return colorToInt(minColor[0] + (int) (scaledValue * diffColor[0]), minColor[1]
         + (int) (scaledValue * diffColor[1]), minColor[2] + (int) (scaledValue * diffColor[2]));
+  }
+
+  public RGB spriteColor() {
+    return spriteColor;
   }
 }

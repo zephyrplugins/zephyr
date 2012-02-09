@@ -23,7 +23,7 @@ public class ColorMapAction extends Action {
   }
 
   public void init(IMemento memento) {
-    Boolean saved = memento.getBoolean(ColorMapActionKey);
+    Boolean saved = memento != null ? memento.getBoolean(ColorMapActionKey) : null;
     if (saved != null) {
       setChecked(saved);
       run();
