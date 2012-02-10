@@ -94,6 +94,7 @@ public class InstanceManager<T> {
     this.clock = CodeTrees.clockOf(codeNode);
     view.onInstanceSet();
     ZephyrSync.bind(clock, view);
+    ZephyrSync.submitView(view);
   }
 
   public void drop(CodeNode[] codeNodes) {

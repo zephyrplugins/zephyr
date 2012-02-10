@@ -46,7 +46,6 @@ public class Function2DDrawer {
     imageData = new float[resolution][];
     for (int i = 0; i < imageData.length; i++)
       imageData[i] = new float[resolution];
-    synchronize();
   }
 
   synchronized public void paint(GC gc, Canvas canvas) {

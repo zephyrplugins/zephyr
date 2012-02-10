@@ -39,6 +39,8 @@ public class Axes {
       cachedMinValue = minValue;
       cachedMaxValue = maxValue;
       double valueScale = (maxValue - minValue) / drawingLength;
+      if (!Utils.checkValue(valueScale))
+        return;
       assert valueScale >= 0;
       minDisplayed = minValue - valueScale * margin;
       maxDisplayed = maxValue + valueScale * margin;
