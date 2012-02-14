@@ -7,7 +7,6 @@ import zephyr.plugin.core.api.synchronization.Clock;
 public class ViewTask implements Runnable {
   final ViewReference view;
   private Future<?> future;
-  private boolean repaintRequired = false;
   private final ViewTaskExecutor executor;
 
   protected ViewTask(ViewTaskExecutor executor, ViewReference view) {
@@ -17,36 +16,45 @@ public class ViewTask implements Runnable {
 
   @Override
   public void run() {
+    future = null;
     try {
-      do {
-        synchronized (view) {
-          repaintRequired = false;
-          view.repaint();
-        }
-      } while (repaintRequired);
-    } catch (Exception e) {
-      e.printStackTrace();
+      synchronized (view) {
+        view.repaint();
+      }
+    } catch (Throwable t) {
+      t.printStackTrace();
     }
   }
 
-  public Future<?> refreshIFN() {
-    repaintRequired = true;
-    return refreshIFN(null);
+  private Future<?> isDone() {
+    Future<?> current = future;
+    if (current != null && !current.isDone())
+      return current;
+    return null;
   }
 
-  public Future<?> refreshIFN(Clock clock) {
-    if (!isDone())
-      return future;
-    synchronized (view) {
-      view.synchronize(clock);
-    }
+  public Future<?> redrawIFN() {
+    Future<?> pending = isDone();
+    if (pending != null)
+      return pending;
+    future = null;
     if (!executor.isShutdown())
       future = executor.submit(this);
     return future;
   }
 
-  public boolean isDone() {
-    return future == null || future.isDone();
+  public Future<?> refreshIFN(Clock clock) {
+    Future<?> pending = isDone();
+    if (pending != null)
+      return pending;
+    return refresh(clock);
+  }
+
+  public Future<?> refresh(Clock clock) {
+    synchronized (view) {
+      view.synchronize(clock);
+    }
+    return redrawIFN();
   }
 
   public ViewReference viewRef() {

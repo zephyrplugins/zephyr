@@ -185,4 +185,8 @@ public class PlotView extends ViewPart implements ProvidedView, DropTargetView, 
       traces.addAll(Traces.labelToTraces((MonitorContainerNode) codeNode));
     plotSelection.setCurrentSelection(traces);
   }
+
+  public Clock[] clocks() {
+    return clockGraphBindings.clocks();
+  }
 }

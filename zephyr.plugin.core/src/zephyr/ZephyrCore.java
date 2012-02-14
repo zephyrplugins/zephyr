@@ -73,7 +73,7 @@ public class ZephyrCore {
     ZephyrPluginCore.viewScheduler().dispose();
     Collection<Clock> clocks = ZephyrSync.getClocks();
     for (Clock clock : clocks)
-      clock.terminate();
+      clock.prepareTermination();
     for (Clock clock : clocks)
       ZephyrPluginCore.viewBinder().removeClock(clock);
   }

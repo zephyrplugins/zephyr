@@ -15,6 +15,10 @@ public class ZephyrSync {
     ZephyrPluginCore.viewBinder().unbind(clock, view);
   }
 
+  public static void submitView(SyncView view, Clock... clocks) {
+    ZephyrPluginCore.viewScheduler().submitView(view, clocks);
+  }
+
   public static void submitView(SyncView view) {
     ZephyrPluginCore.viewScheduler().submitView(view);
   }

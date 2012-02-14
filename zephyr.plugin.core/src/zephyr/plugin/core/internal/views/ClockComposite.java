@@ -120,7 +120,7 @@ public class ClockComposite {
     button.addMouseListener(new MouseAdapter() {
       @Override
       public void mouseUp(MouseEvent e) {
-        clock.terminate();
+        clock.prepareTermination();
         ZephyrCore.removeClock(clock);
       }
     });

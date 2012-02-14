@@ -1,6 +1,7 @@
 package zephyr.plugin.core.api.synchronization;
 
 import java.io.Serializable;
+import java.util.concurrent.Semaphore;
 
 import zephyr.plugin.core.api.signals.Signal;
 
@@ -14,6 +15,7 @@ public class Clock implements Serializable {
   private boolean terminating = false;
   private boolean terminated = false;
   private final ClockInfo info;
+  private final Semaphore dataLock = new Semaphore(0);
 
   public Clock() {
     this("NoName");
@@ -28,6 +30,7 @@ public class Clock implements Serializable {
   }
 
   public boolean tick() {
+    releaseData();
     if (terminated)
       throw new RuntimeException("Clock is terminated");
     if (terminating) {
@@ -37,6 +40,25 @@ public class Clock implements Serializable {
     timeStep++;
     updateChrono();
     onTick.fire(this);
+    return acquireData();
+  }
+
+  public void releaseData() {
+    if (terminated)
+      return;
+    dataLock.release();
+  }
+
+  public boolean acquireData() {
+    if (terminated)
+      return true;
+    try {
+      dataLock.acquire();
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+      prepareTermination();
+      return false;
+    }
     return true;
   }
 
@@ -54,8 +76,13 @@ public class Clock implements Serializable {
     return lastPeriod;
   }
 
-  public void terminate() {
+  public void prepareTermination() {
     terminating = true;
+  }
+
+  public void terminate() {
+    prepareTermination();
+    tick();
   }
 
   public boolean isTerminated() {

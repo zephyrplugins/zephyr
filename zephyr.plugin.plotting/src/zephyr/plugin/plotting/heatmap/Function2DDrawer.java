@@ -18,7 +18,7 @@ public class Function2DDrawer {
       new int[] { 255, 255, 0 }, new int[] { 0, 255, 255 }, new int[] { 255, 100, 255 } }, new int[] { 0, 0, 0 });
   private int resolution;
   private float[][] imageData;
-  private Interval rangeValue;
+  private Interval rangeValue = new Interval(0, 1.0);
   private final Colors colors;
   private final ImageAdapter imageAdapter = new ImageAdapter();
   private BufferedImage bufferedImage = null;

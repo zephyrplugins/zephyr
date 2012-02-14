@@ -33,7 +33,7 @@ public class ClockListener {
       if (areConditionsSatisfied()) {
         print(clock.info().label() + " condition satisfied");
         thisClock.onTick.disconnect(this);
-        thisClock.terminate();
+        thisClock.prepareTermination();
         ZephyrCore.removeClock(clock);
         onConditionSatisfied.release();
       }

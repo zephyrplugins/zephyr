@@ -82,8 +82,8 @@ class HistoryLength {
     else
       setHistoryLengthValue(length());
     historyLength.setSelection(length());
-    historyLength.setLayoutData(new RowData((int) (historyLength.getSize().x / 9.0 * nbLetters),
-                                            historyLength.getSize().y));
+    historyLength.setLayoutData(new RowData((int) (historyLength.getSize().x / 9.0 * nbLetters), historyLength
+        .getSize().y));
     historyLength.addSelectionListener(new SelectionListener() {
       private void setHistoryLength() {
         try {
@@ -109,7 +109,7 @@ class HistoryLength {
     int increment = (int) (Math.pow(10, Math.floor(Math.log10(value))) / 2);
     historyLength.setIncrement(increment);
     if (plotdata.setHistoryLengthIFN(value))
-      ZephyrSync.submitView(syncView);
+      ZephyrSync.submitView(syncView, syncView.clocks());
     if (signalSource == null && linked) {
       signalSource = this;
       onLinkedHistoryChanged.fire(length());

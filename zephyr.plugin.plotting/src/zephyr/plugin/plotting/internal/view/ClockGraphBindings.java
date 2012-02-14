@@ -82,4 +82,10 @@ public class ClockGraphBindings {
   public boolean isEmpty() {
     return clockTracesSelection.isEmpty();
   }
+
+  public Clock[] clocks() {
+    Clock[] clocks = new Clock[clockTracesSelection.size()];
+    clockTracesSelection.toArray(clocks);
+    return clocks;
+  }
 }

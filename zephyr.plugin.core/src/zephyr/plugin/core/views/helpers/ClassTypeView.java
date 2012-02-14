@@ -13,6 +13,7 @@ import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.views.IViewDescriptor;
 import org.eclipse.ui.views.IViewRegistry;
 
+import zephyr.ZephyrSync;
 import zephyr.plugin.core.api.codeparser.codetree.ClassNode;
 import zephyr.plugin.core.api.codeparser.codetree.CodeTrees;
 import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
@@ -38,6 +39,7 @@ public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView,
       parent.layout(true, true);
       viewLock.release();
       isLayoutReady = true;
+      ZephyrSync.submitView(ClassTypeView.this, instance.clock());
     }
   };
   protected final Runnable uiUnsetLayout = new Runnable() {

@@ -19,6 +19,6 @@ public class SelectTraces extends PlotViewCommandHandler {
     if (dialogResult != Window.OK)
       return;
     view.plotSelection().setCurrentSelection(dialog.getSelectedTraces());
-    ZephyrSync.submitView(view);
+    ZephyrSync.submitView(view, view.clocks());
   }
 }

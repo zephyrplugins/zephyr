@@ -5,14 +5,18 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.ui.IMemento;
 
 import zephyr.ZephyrPlotting;
+import zephyr.ZephyrSync;
 import zephyr.plugin.core.utils.Helper;
+import zephyr.plugin.core.views.SyncView;
 
 public class ColorMapAction extends Action {
   private static final String ColorMapActionKey = "ColorMapAction";
   private final Function2DDrawer drawer;
+  private final SyncView view;
 
-  public ColorMapAction(Function2DDrawer drawer) {
+  public ColorMapAction(SyncView view, Function2DDrawer drawer) {
     super("Color Map", IAction.AS_CHECK_BOX);
+    this.view = view;
     this.drawer = drawer;
     setImageDescriptor(Helper.getImageDescriptor(ZephyrPlotting.PluginID, "icons/action_colormap.png"));
   }
@@ -20,6 +24,7 @@ public class ColorMapAction extends Action {
   @Override
   public void run() {
     drawer.setColorMap(isChecked() ? Function2DDrawer.BWColorMap : Function2DDrawer.PinkColorMap);
+    ZephyrSync.submitView(view);
   }
 
   public void init(IMemento memento) {

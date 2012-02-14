@@ -26,6 +26,6 @@ public class AddTraces extends PlotViewCommandHandler {
     Set<Trace> selectedTraces = plotSelection.getCurrentTracesSelection();
     selectedTraces.addAll(dialog.getSelectedTraces());
     plotSelection.setCurrentSelection(selectedTraces);
-    ZephyrSync.submitView(plotView);
+    ZephyrSync.submitView(plotView, plotView.clocks());
   }
 }
