@@ -12,6 +12,7 @@ public class ViewLock {
     try {
       viewLock.acquire();
     } catch (InterruptedException e) {
+      e.printStackTrace();
       return false;
     }
     return true;

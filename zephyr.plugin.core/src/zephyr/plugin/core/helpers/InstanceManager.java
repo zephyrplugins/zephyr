@@ -92,8 +92,8 @@ public class InstanceManager<T> {
     instance = (T) ((ClassNode) codeNode).instance();
     this.codeNode = codeNode;
     this.clock = CodeTrees.clockOf(codeNode);
-    ZephyrSync.bind(clock, view);
     view.onInstanceSet();
+    ZephyrSync.bind(clock, view);
   }
 
   public void drop(CodeNode[] codeNodes) {

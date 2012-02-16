@@ -5,13 +5,16 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
-public abstract class ForegroundCanvasView<T> extends ClassTypeView<T> {
+import zephyr.plugin.core.views.helpers.ScreenShotAction.Shotable;
+
+public abstract class ForegroundCanvasView<T> extends ClassTypeView<T> implements Shotable {
   protected Canvas canvas = null;
   protected Runnable drawOnCanvas = new Runnable() {
     @Override
@@ -27,6 +30,8 @@ public abstract class ForegroundCanvasView<T> extends ClassTypeView<T> {
   public void createPartControl(final Composite parent) {
     super.createPartControl(parent);
     GridLayout gridLayout = new GridLayout(1, false);
+    gridLayout.marginHeight = 0;
+    gridLayout.marginWidth = 0;
     parent.setLayout(gridLayout);
     canvas = new Canvas(parent, SWT.DOUBLE_BUFFERED | SWT.NO_BACKGROUND);
     canvas.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
@@ -75,5 +80,23 @@ public abstract class ForegroundCanvasView<T> extends ClassTypeView<T> {
   @Override
   public Control control() {
     return canvas;
+  }
+
+  @Override
+  public Image takeScreenshot() {
+    if (!viewLock.acquire())
+      return null;
+    Image screenshot = takeScreenshotUnprotected();
+    viewLock.release();
+    return screenshot;
+  }
+
+  private Image takeScreenshotUnprotected() {
+    if (canvas == null)
+      return null;
+    Image image = new Image(canvas.getDisplay(), canvas.getBounds());
+    GC gc = new GC(image);
+    paint(gc);
+    return image;
   }
 }

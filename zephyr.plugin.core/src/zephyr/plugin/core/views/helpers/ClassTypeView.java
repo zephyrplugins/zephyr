@@ -146,12 +146,13 @@ public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView,
 
   @Override
   final public boolean synchronize(Clock clock) {
-    if (!isLayoutReady)
+    if (!viewLock.acquire())
       return false;
-    if (!viewLock.tryAcquire())
-      return false;
-    boolean result = synchronize();
-    hasBeenSynchronized = true;
+    boolean result = false;
+    if (instance.current() != null) {
+      result = synchronize();
+      hasBeenSynchronized = true;
+    }
     viewLock.release();
     unprotectedSynchronization();
     return result;

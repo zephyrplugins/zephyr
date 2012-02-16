@@ -16,7 +16,6 @@ public class ViewTask implements Runnable {
 
   @Override
   public void run() {
-    future = null;
     try {
       synchronized (view) {
         view.repaint();
@@ -38,6 +37,10 @@ public class ViewTask implements Runnable {
     if (pending != null)
       return pending;
     future = null;
+    return redraw();
+  }
+
+  private Future<?> redraw() {
     if (!executor.isShutdown())
       future = executor.submit(this);
     return future;
@@ -54,7 +57,7 @@ public class ViewTask implements Runnable {
     synchronized (view) {
       view.synchronize(clock);
     }
-    return redrawIFN();
+    return redraw();
   }
 
   public ViewReference viewRef() {

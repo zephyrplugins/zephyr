@@ -9,6 +9,7 @@ import zephyr.plugin.core.api.signals.Signal;
 public class Clock implements Serializable {
   private static final long serialVersionUID = -1155346148292134613L;
   public final transient Signal<Clock> onTick = new Signal<Clock>();
+  public final transient Signal<Clock> onTerminate = new Signal<Clock>();
   private long timeStep = -1;
   private long lastUpdate = System.nanoTime();
   private long lastPeriod = 0;
@@ -35,6 +36,7 @@ public class Clock implements Serializable {
       throw new RuntimeException("Clock is terminated");
     if (terminating) {
       terminated = true;
+      onTerminate.fire(this);
       return false;
     }
     timeStep++;
@@ -55,7 +57,6 @@ public class Clock implements Serializable {
     try {
       dataLock.acquire();
     } catch (InterruptedException e) {
-      e.printStackTrace();
       prepareTermination();
       return false;
     }
@@ -81,6 +82,8 @@ public class Clock implements Serializable {
   }
 
   public void terminate() {
+    if (terminated)
+      return;
     prepareTermination();
     tick();
   }
