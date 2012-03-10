@@ -11,6 +11,6 @@ public class ParseCodeWhenAdvertizedListener extends CastedEventListener<Adverti
     AdvertisementInfo eventInfo = event.info();
     if (eventInfo.advertised == null)
       return;
-    ZephyrPluginCore.syncCode().parse(eventInfo.clock, eventInfo.advertised);
+    ZephyrPluginCore.syncCode().parse(eventInfo.clock, eventInfo.advertised, eventInfo.label);
   }
 }

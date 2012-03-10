@@ -22,16 +22,16 @@ public class PrimitiveArrayParser implements FieldParser {
   }
 
   @Override
-  public CodeNode parse(CodeParser codeParser, MutableParentNode parentNode, Field field, Object fieldValue) {
-    String label = CodeTrees.labelOf(field);
-    int level = CodeTrees.levelOf(field);
-    int length = Array.getLength(fieldValue);
-    CollectionLabelBuilder labelBuilder = codeParser.newCollectionLabelBuilder(field, length);
+  public CodeNode parse(CodeParser codeParser, MutableParentNode parentNode, Field instanceField, String instanceLabel, Object instance) {
+    String label = CodeTrees.labelOf(instanceField);
+    int level = CodeTrees.levelOf(instanceField);
+    int length = Array.getLength(instance);
+    CollectionLabelBuilder labelBuilder = codeParser.newCollectionLabelBuilder(instanceField, length);
     PrimitiveArrayNode<?> arrayPrimitiveNode = PrimitiveArrayNode.createPrimitiveArrayNode(label, parentNode,
-                                                                                           fieldValue, labelBuilder,
+                                                                                           instance, labelBuilder,
                                                                                            level);
     parentNode.addChild(arrayPrimitiveNode);
-    CodeTrees.popupIFN(codeParser, field, arrayPrimitiveNode);
+    CodeTrees.popupIFN(codeParser, instanceField, arrayPrimitiveNode);
     return arrayPrimitiveNode;
   }
 }

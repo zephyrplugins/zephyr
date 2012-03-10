@@ -13,13 +13,13 @@ import zephyr.plugin.core.api.parsing.CollectionLabelBuilder;
 
 public abstract class AbstractCollectionParser<T> implements FieldParser {
   @Override
-  public CodeNode parse(CodeParser codeParser, MutableParentNode parentNode, Field field, Object fieldValue) {
+  public CodeNode parse(CodeParser codeParser, MutableParentNode parentNode, Field instanceField, String instanceLabel, Object instance) {
     @SuppressWarnings("unchecked")
-    T container = (T) fieldValue;
+    T container = (T) instance;
     int nbChildren = nbChildren(container);
-    String label = field != null ? field.getName() : "";
-    CollectionLabelBuilder labelBuilder = codeParser.newCollectionLabelBuilder(field, nbChildren);
-    ObjectCollectionNode collectionNode = new ObjectCollectionNode(label, parentNode, fieldValue, field);
+    String label = instanceField != null ? instanceField.getName() : "";
+    CollectionLabelBuilder labelBuilder = codeParser.newCollectionLabelBuilder(instanceField, nbChildren);
+    ObjectCollectionNode collectionNode = new ObjectCollectionNode(label, parentNode, instance, instanceField);
     parentNode.addChild(collectionNode);
     beginChildrenParse(container);
     for (int i = 0; i < nbChildren; i++) {
@@ -27,7 +27,7 @@ public abstract class AbstractCollectionParser<T> implements FieldParser {
       if (element == null)
         continue;
       String elementLabel = labelBuilder.elementLabel(i);
-      parseElement(codeParser, collectionNode, elementLabel, element, field);
+      parseElement(codeParser, collectionNode, elementLabel, element, instanceField);
     }
     endChildrenParse();
     return collectionNode;
@@ -44,7 +44,7 @@ public abstract class AbstractCollectionParser<T> implements FieldParser {
     ClassNode childNode;
     if (element.getClass().isArray()) {
       childNode = new ObjectCollectionNode(elementLabel, parentNode, element, field);
-      codeParser.recursiveParseInstance(childNode, null, element);
+      codeParser.recursiveParseInstance(childNode, null, null, element);
     } else {
       childNode = new ClassNode(elementLabel, parentNode, element, field);
       codeParser.recursiveParseClass(childNode, element);

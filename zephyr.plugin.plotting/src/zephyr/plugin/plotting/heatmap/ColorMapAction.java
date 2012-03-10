@@ -23,7 +23,7 @@ public class ColorMapAction extends Action {
 
   @Override
   public void run() {
-    drawer.setColorMap(isChecked() ? Function2DDrawer.BWColorMap : Function2DDrawer.PinkColorMap);
+    drawer.setColorMap(isChecked() ? Function2DDrawer.BWColorMap : Function2DDrawer.DarkBlueColorMap);
     ZephyrSync.submitView(view);
   }
 

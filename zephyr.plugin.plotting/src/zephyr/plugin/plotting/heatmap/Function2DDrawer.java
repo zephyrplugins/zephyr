@@ -15,6 +15,8 @@ public class Function2DDrawer {
       new int[] { 255, 255, 255 } }, new int[] { 0, 0, 255 });
   static final ColorMapDescriptor PinkColorMap = new ColorMapDescriptor(new int[][] { new int[] { 155, 0, 0 },
       new int[] { 255, 255, 0 }, new int[] { 0, 255, 255 }, new int[] { 255, 100, 255 } }, new int[] { 0, 0, 0 });
+  static final ColorMapDescriptor DarkBlueColorMap = new ColorMapDescriptor(new int[][] { new int[] { 0, 0, 100 },
+      new int[] { 0, 255, 255 }, new int[] { 255, 255, 0 }, new int[] { 155, 0, 0 } }, new int[] { 0, 0, 0 });
   private final Colors colors;
   private final ImageAdapter imageAdapter = new ImageAdapter();
   private BufferedImage bufferedImage = null;
@@ -23,7 +25,7 @@ public class Function2DDrawer {
 
   public Function2DDrawer(Colors colors) {
     this.colors = colors;
-    colorMap = new ColorMap(PinkColorMap);
+    colorMap = new ColorMap(DarkBlueColorMap);
   }
 
   synchronized void setColorMap(ColorMapDescriptor descriptor) {

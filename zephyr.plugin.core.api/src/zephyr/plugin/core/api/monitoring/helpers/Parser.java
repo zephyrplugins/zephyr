@@ -25,7 +25,7 @@ public class Parser {
     MonitoredDataTraverser traverser = new MonitoredDataTraverser(monitorAdapter, levelRequired);
     CodeParser codeParser = new CodeTreeParser(levelRequired);
     ClassNode classNode = new ClassNode("", null, null, null);
-    codeParser.parse(classNode, toParse);
+    codeParser.parse(classNode, toParse, null);
     CodeTrees.traverse(traverser, classNode);
   }
 }

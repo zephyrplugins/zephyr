@@ -8,6 +8,7 @@ public class ViewTask implements Runnable {
   final ViewReference view;
   private Future<?> future;
   private final ViewTaskExecutor executor;
+  private Clock lastSyncClock = null;
 
   protected ViewTask(ViewTaskExecutor executor, ViewReference view) {
     this.executor = executor;
@@ -48,13 +49,14 @@ public class ViewTask implements Runnable {
 
   public Future<?> refreshIFN(Clock clock) {
     Future<?> pending = isDone();
-    if (pending != null)
+    if (pending != null && lastSyncClock == clock)
       return pending;
     return refresh(clock);
   }
 
   public Future<?> refresh(Clock clock) {
     synchronized (view) {
+      lastSyncClock = clock;
       view.synchronize(clock);
     }
     return redraw();

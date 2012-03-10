@@ -28,15 +28,15 @@ public class PrimitiveCollectionParser implements FieldParser {
 
   @SuppressWarnings("unchecked")
   @Override
-  public CodeNode parse(CodeParser codeParser, MutableParentNode parentNode, Field field, Object fieldValue) {
-    int level = CodeTrees.levelOf(field);
-    String label = CodeTrees.labelOf(field);
-    List<? extends Number> list = ((List<? extends Number>) fieldValue);
-    CollectionLabelBuilder labelBuilder = codeParser.newCollectionLabelBuilder(field, list.size());
+  public CodeNode parse(CodeParser codeParser, MutableParentNode parentNode, Field instanceField, String instanceLabel, Object instance) {
+    int level = CodeTrees.levelOf(instanceField);
+    String label = CodeTrees.labelOf(instanceField);
+    List<? extends Number> list = ((List<? extends Number>) instance);
+    CollectionLabelBuilder labelBuilder = codeParser.newCollectionLabelBuilder(instanceField, list.size());
     PrimitiveCollectionNode arrayPrimitiveNode = new PrimitiveCollectionNode(label, parentNode, list, labelBuilder,
                                                                              level);
     parentNode.addChild(arrayPrimitiveNode);
-    CodeTrees.popupIFN(codeParser, field, arrayPrimitiveNode);
+    CodeTrees.popupIFN(codeParser, instanceField, arrayPrimitiveNode);
     return arrayPrimitiveNode;
   }
 }

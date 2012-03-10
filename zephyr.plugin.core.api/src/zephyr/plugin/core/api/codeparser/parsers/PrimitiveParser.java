@@ -21,16 +21,16 @@ public class PrimitiveParser implements FieldParser {
   }
 
   @Override
-  public CodeNode parse(CodeParser codeParser, MutableParentNode parentNode, Field field, Object fieldValue) {
-    String label = CodeTrees.labelOf(field);
+  public CodeNode parse(CodeParser codeParser, MutableParentNode parentNode, Field instanceField, String instanceLabel, Object instance) {
+    String label = CodeTrees.labelOf(instanceField);
     Object container = ((ClassNode) parentNode).instance();
-    int level = CodeTrees.levelOf(field);
-    PrimitiveNode node = new PrimitiveNode(label, parentNode, field, container, level);
+    int level = CodeTrees.levelOf(instanceField);
+    PrimitiveNode node = new PrimitiveNode(label, parentNode, instanceField, container, level);
     parentNode.addChild(node);
-    List<MonitorWrapper> localWrappers = Wrappers.getWrappers(field, null);
+    List<MonitorWrapper> localWrappers = Wrappers.getWrappers(instanceField, null);
     if (localWrappers != null)
       addLocalWrapper(parentNode, label, level, node, localWrappers);
-    CodeTrees.popupIFN(codeParser, field, node);
+    CodeTrees.popupIFN(codeParser, instanceField, node);
     return node;
   }
 

@@ -114,10 +114,11 @@ public class CodeTreeParser implements CodeParser {
   }
 
   @Override
-  public CodeNode recursiveParseInstance(MutableParentNode parentNode, Field field, Object fieldValue) {
+  public CodeNode recursiveParseInstance(MutableParentNode parentNode, Field fieldInstance, String instanceLabel,
+      Object instance) {
     for (FieldParser parser : parsers) {
-      if (parser.canParse(fieldValue)) {
-        return parser.parse(this, parentNode, field, fieldValue);
+      if (parser.canParse(instance)) {
+        return parser.parse(this, parentNode, fieldInstance, instanceLabel, instance);
       }
     }
     return null;
@@ -136,7 +137,7 @@ public class CodeTreeParser implements CodeParser {
         if (isMonitored(classNode, field)) {
           Object fieldValue = CodeTrees.getValueFromField(field, classNode.instance());
           if (fieldValue != null)
-            recursiveParseInstance(classNode, field, fieldValue);
+            recursiveParseInstance(classNode, field, null, fieldValue);
         }
       }
       objectClass = objectClass.getSuperclass();
@@ -149,12 +150,16 @@ public class CodeTreeParser implements CodeParser {
           classNode.addChild(child);
         }
       });
+    if (container instanceof Monitored) {
+      PrimitiveNode child = new PrimitiveNode("this", classNode, (Monitored) container, classNode.level());
+      classNode.addChild(child);
+    }
     labelsMapStack.pop();
   }
 
   @Override
-  public CodeNode parse(MutableParentNode parent, Object root) {
-    return recursiveParseInstance(parent, null, root);
+  public CodeNode parse(MutableParentNode parent, Object root, String rootLabel) {
+    return recursiveParseInstance(parent, null, rootLabel, root);
   }
 
   static public void registerParser(FieldParser parser) {

@@ -22,10 +22,10 @@ public class SyncCode {
   public SyncCode() {
   }
 
-  public CodeNode parse(Clock clock, Object root) {
+  public CodeNode parse(Clock clock, Object root, String rootLabel) {
     ClockNode clockNode = clockNode(clock);
     CodeParser parser = new ZephyrCodeTreeParser(MonitoredDataTraverser.MonitorEverythingLevel);
-    CodeNode newNode = parser.parse(clockNode, root);
+    CodeNode newNode = parser.parse(clockNode, root, rootLabel);
     ZephyrCore.busEvent().dispatch(new CodeStructureEvent(CodeStructureEvent.ParsedID, clockNode, newNode));
     return newNode;
   }

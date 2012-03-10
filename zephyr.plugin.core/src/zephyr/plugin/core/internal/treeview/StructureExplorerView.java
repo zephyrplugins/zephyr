@@ -104,7 +104,7 @@ public class StructureExplorerView extends ViewPart implements ItemProvider, Vie
   }
 
   protected String itemLabel(CodeNode codeNode) {
-    if (codeNode.parent() instanceof ClockNode)
+    if (codeNode instanceof ClassNode && codeNode.label().isEmpty())
       return ((ClassNode) codeNode).instance().getClass().getSimpleName();
     if (codeNode instanceof AbstractPrimitives)
       return codeNode.label() + "[" + ((AbstractPrimitives) codeNode).size() + "]";

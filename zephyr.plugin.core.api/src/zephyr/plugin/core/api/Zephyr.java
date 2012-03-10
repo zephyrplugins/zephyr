@@ -12,10 +12,12 @@ public class Zephyr {
   static public class AdvertisementInfo {
     public final Clock clock;
     public final Object advertised;
+    public final String label;
 
-    AdvertisementInfo(Clock clock, Object advertised) {
+    AdvertisementInfo(Clock clock, Object advertised, String label) {
       this.clock = clock;
       this.advertised = advertised;
+      this.label = label;
     }
   }
 
@@ -26,7 +28,11 @@ public class Zephyr {
   }
 
   static public void advertise(Clock clock, Object advertised) {
-    onAdvertised.fire(new AdvertisementInfo(clock, advertised));
+    advertise(clock, advertised, null);
+  }
+
+  static public void advertise(Clock clock, Object advertised, String label) {
+    onAdvertised.fire(new AdvertisementInfo(clock, advertised, label));
   }
 
   static public void registerLabeledCollection(LabeledCollection labeledCollection, String... ids) {

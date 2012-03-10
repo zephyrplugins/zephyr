@@ -18,15 +18,22 @@ public class ObjectParser implements FieldParser {
   }
 
   @Override
-  public CodeNode parse(CodeParser codeParser, MutableParentNode parentNode, Field field, Object fieldValue) {
-    String label = field != null ? field.getName() : "";
-    Monitor monitor = field != null ? field.getAnnotation(Monitor.class) : null;
-    if (monitor != null && !monitor.label().isEmpty())
-      label = monitor.label();
-    ClassNode node = new ClassNode(label, parentNode, fieldValue, field);
+  public CodeNode parse(CodeParser codeParser, MutableParentNode parentNode, Field instanceField, String instanceLabel,
+      Object instance) {
+    String label = instanceLabel != null ? instanceLabel : extractLabel(instanceField);
+    ClassNode node = new ClassNode(label, parentNode, instance, instanceField);
     parentNode.addChild(node);
     codeParser.recursiveParseClass(node, node.instance());
-    CodeTrees.popupIFN(codeParser, field, node);
+    CodeTrees.popupIFN(codeParser, instanceField, node);
     return node;
+  }
+
+  private String extractLabel(Field instanceField) {
+    if (instanceField == null)
+      return "";
+    Monitor monitor = instanceField.getAnnotation(Monitor.class);
+    if (monitor != null && !monitor.label().isEmpty())
+      return monitor.label();
+    return instanceField.getName();
   }
 }
