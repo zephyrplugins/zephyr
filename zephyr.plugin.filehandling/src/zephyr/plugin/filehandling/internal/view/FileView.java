@@ -4,18 +4,18 @@ import java.io.File;
 
 import org.eclipse.jface.action.IToolBarManager;
 
-import zephyr.ZephyrCore;
-import zephyr.plugin.core.actions.RestartAction;
-import zephyr.plugin.core.actions.TerminateAction;
-import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
-import zephyr.plugin.core.api.logfiles.LogFile;
+import zephyr.plugin.core.ZephyrCore;
+import zephyr.plugin.core.api.internal.codeparser.interfaces.CodeNode;
+import zephyr.plugin.core.api.internal.logfiles.LogFile;
 import zephyr.plugin.core.api.synchronization.Closeable;
-import zephyr.plugin.core.helpers.ClassViewProvider;
-import zephyr.plugin.core.observations.EnvironmentView;
-import zephyr.plugin.core.observations.ObsLayout;
-import zephyr.plugin.core.observations.ObsWidget;
-import zephyr.plugin.core.observations.SensorGroup;
-import zephyr.plugin.core.views.Restartable;
+import zephyr.plugin.core.internal.actions.RestartAction;
+import zephyr.plugin.core.internal.actions.TerminateAction;
+import zephyr.plugin.core.internal.helpers.ClassViewProvider;
+import zephyr.plugin.core.internal.observations.EnvironmentView;
+import zephyr.plugin.core.internal.observations.ObsLayout;
+import zephyr.plugin.core.internal.observations.ObsWidget;
+import zephyr.plugin.core.internal.observations.SensorGroup;
+import zephyr.plugin.core.internal.views.Restartable;
 import zephyr.plugin.filehandling.internal.DefaultHandler;
 
 public class FileView extends EnvironmentView<LogFile> implements Closeable, Restartable {

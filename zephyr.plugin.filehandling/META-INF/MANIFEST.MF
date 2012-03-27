@@ -12,4 +12,4 @@ Require-Bundle: org.eclipse.core.runtime,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: zephyr.plugin.filehandling
 Bundle-ActivationPolicy: lazy
-Import-Package: zephyr.plugin.core.api.bz2
+Import-Package: zephyr.plugin.core.api.internal.bz2

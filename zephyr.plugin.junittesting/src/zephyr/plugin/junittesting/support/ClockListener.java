@@ -5,11 +5,12 @@ import java.util.List;
 import java.util.concurrent.Semaphore;
 
 import junit.framework.Assert;
-import zephyr.ZephyrCore;
+import zephyr.plugin.core.ZephyrCore;
 import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.synchronization.Clock;
-import zephyr.plugin.core.async.events.CastedEventListener;
-import zephyr.plugin.core.events.ClockEvent;
+import zephyr.plugin.core.internal.ZephyrSync;
+import zephyr.plugin.core.internal.async.events.CastedEventListener;
+import zephyr.plugin.core.internal.events.ClockEvent;
 import zephyr.plugin.junittesting.support.conditions.Condition;
 
 public class ClockListener {
@@ -17,10 +18,10 @@ public class ClockListener {
     @Override
     public void listenEvent(ClockEvent event) {
       print(event.clock().info().label() + " added");
-      ZephyrCore.busEvent().unregister(ClockEvent.AddedID, this);
+      ZephyrSync.busEvent().unregister(ClockEvent.AddedID, this);
       Assert.assertTrue(clock == null);
       clock = event.clock();
-      ZephyrCore.busEvent().register(ClockEvent.RemovedID, new ClockRemoved());
+      ZephyrSync.busEvent().register(ClockEvent.RemovedID, new ClockRemoved());
       clock.onTick.connect(onTickListener);
     }
   }
@@ -53,7 +54,7 @@ public class ClockListener {
       if (event.clock() != clock)
         return;
       print(clock.info().label() + " removed");
-      ZephyrCore.busEvent().unregister(ClockEvent.RemovedID, new ClockRemoved());
+      ZephyrSync.busEvent().unregister(ClockEvent.RemovedID, new ClockRemoved());
       onClockRemoved.release();
     }
   }
@@ -66,7 +67,7 @@ public class ClockListener {
   Clock clock;
 
   public ClockListener() {
-    ZephyrCore.busEvent().register(ClockEvent.AddedID, new ClockAdded());
+    ZephyrSync.busEvent().register(ClockEvent.AddedID, new ClockAdded());
   }
 
   public Clock clock() {

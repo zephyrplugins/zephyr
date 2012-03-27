@@ -3,6 +3,10 @@ package zephyr.plugin.plotting.internal.histories;
 import org.junit.Assert;
 import org.junit.Test;
 
+import zephyr.plugin.plotting.privates.histories.AveragedHistory;
+import zephyr.plugin.plotting.privates.histories.History;
+import zephyr.plugin.plotting.privates.histories.LazyHistory;
+
 public class HistoryTest {
   static private final float[] hist00 = { 0.0f, 0.0f, 0.0f };
   static private final float[] hist01 = { 0.0f, 0.0f, 1.0f };

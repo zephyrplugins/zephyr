@@ -9,8 +9,8 @@ import org.python.core.PyString;
 import org.python.core.PySystemState;
 import org.python.util.PythonInterpreter;
 
-import zephyr.plugin.core.Utils;
-import zephyr.plugin.core.utils.Helper;
+import zephyr.plugin.core.internal.utils.Helper;
+import zephyr.plugin.core.utils.Misc;
 import zephyr.plugin.filehandling.IFileHandler;
 
 public class JythonFileHandler implements IFileHandler {
@@ -49,6 +49,6 @@ public class JythonFileHandler implements IFileHandler {
 
   @Override
   public List<String> extensions() {
-    return Utils.asList("py");
+    return Misc.asList("py");
   }
 }

@@ -6,8 +6,8 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
-import zephyr.ZephyrCore;
-import zephyr.plugin.core.views.ViewWithControl;
+import zephyr.plugin.core.internal.ZephyrSync;
+import zephyr.plugin.core.internal.views.ViewWithControl;
 
 public class ControlChecks {
 
@@ -28,13 +28,13 @@ public class ControlChecks {
 
   public static int countChildren(String viewID) {
     CheckEvent event = new CheckEvent(CheckEvent.CountChildrenID, viewID);
-    ZephyrCore.busEvent().dispatch(event);
+    ZephyrSync.busEvent().dispatch(event);
     return event.pullResult();
   }
 
   public static int countColors(String viewID) {
     CheckEvent event = new CheckEvent(CheckEvent.CountColorID, viewID);
-    ZephyrCore.busEvent().dispatch(event);
+    ZephyrSync.busEvent().dispatch(event);
     return event.pullResult();
   }
 }

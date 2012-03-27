@@ -4,11 +4,11 @@ import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GL2GL3;
 
-import zephyr.plugin.core.api.codeparser.codetree.ClassNode;
-import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
+import zephyr.plugin.core.api.internal.codeparser.codetree.ClassNode;
+import zephyr.plugin.core.api.internal.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.synchronization.Clock;
-import zephyr.plugin.core.helpers.ClassViewProvider;
-import zephyr.plugin.core.views.ProvidedView;
+import zephyr.plugin.core.internal.helpers.ClassViewProvider;
+import zephyr.plugin.core.internal.views.ProvidedView;
 import zephyr.plugin.opengl.OpenGLView;
 
 /*
@@ -16,6 +16,7 @@ import zephyr.plugin.opengl.OpenGLView;
  * SWT OpenGL snippet: use JOGL to draw to an SWT GLCanvas
  *
  */
+@SuppressWarnings("restriction")
 public class View extends OpenGLView implements ProvidedView {
   static public class Provider extends ClassViewProvider {
     public Provider() {

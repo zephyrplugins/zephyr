@@ -2,10 +2,11 @@ package zephyr.plugin.junittesting.bars;
 
 import org.eclipse.swt.graphics.GC;
 
-import zephyr.plugin.core.helpers.ClassViewProvider;
-import zephyr.plugin.core.views.helpers.ForegroundCanvasView;
-import zephyr.plugin.plotting.bar2d.Bar2D;
+import zephyr.plugin.core.internal.helpers.ClassViewProvider;
+import zephyr.plugin.core.internal.views.helpers.ForegroundCanvasView;
+import zephyr.plugin.plotting.internal.bar2d.Bar2D;
 
+@SuppressWarnings("restriction")
 public class BarView extends ForegroundCanvasView<BarModel> {
   public static class Provider extends ClassViewProvider {
     public Provider() {

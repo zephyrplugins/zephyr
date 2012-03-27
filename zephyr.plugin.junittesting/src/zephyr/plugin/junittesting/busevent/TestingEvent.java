@@ -1,7 +1,7 @@
 package zephyr.plugin.junittesting.busevent;
 
 import junit.framework.Assert;
-import zephyr.plugin.core.async.events.Event;
+import zephyr.plugin.core.internal.async.events.Event;
 
 public class TestingEvent implements Event {
   static public String EventID = "TestBusEvent";

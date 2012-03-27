@@ -1,6 +1,6 @@
 package zephyr.plugin.clojure.internal;
 
-import zephyr.ZephyrCore;
+import zephyr.plugin.core.ZephyrCore;
 import clojure.lang.Compiler;
 
 public class ZephyrClassLoader extends ClassLoader {

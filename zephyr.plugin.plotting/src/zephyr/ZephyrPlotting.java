@@ -1,7 +1,7 @@
 package zephyr;
 
-import zephyr.plugin.plotting.internal.ZephyrPluginPlotting;
-import zephyr.plugin.plotting.preferences.PreferenceConstants;
+import zephyr.plugin.plotting.internal.preferences.PreferenceConstants;
+import zephyr.plugin.plotting.privates.ZephyrPluginPlotting;
 
 public class ZephyrPlotting {
   public static final String PluginID = "zephyr.plugin.plotting";

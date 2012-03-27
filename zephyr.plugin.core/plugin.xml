@@ -9,7 +9,7 @@
    <extension
          point="org.eclipse.ui.commands">
       <command
-            defaultHandler="zephyr.plugin.core.internal.commands.SetSpeedCommand"
+            defaultHandler="zephyr.plugin.core.privates.commands.SetSpeedCommand"
             id="zephyr.plugin.core.commands.synchronous"
             name="Synchronous">
 		<commandParameter
@@ -33,7 +33,7 @@
 		   </state>
 	  </command>
       <command
-            defaultHandler="zephyr.plugin.core.internal.commands.StartSuspended"
+            defaultHandler="zephyr.plugin.core.privates.commands.StartSuspended"
             id="zephyr.plugin.core.commands.startsuspended"
             name="StartSuspended">
          <state id="org.eclipse.ui.commands.toggleState"
@@ -41,43 +41,43 @@
          </state>
       </command>
       <command
-            defaultHandler="zephyr.plugin.core.internal.commands.SuspendResumeAll"
+            defaultHandler="zephyr.plugin.core.privates.commands.SuspendResumeAll"
             id="zephyr.plugin.core.commands.suspendresume"
             name="SuspendResume">
       </command>
       <command
-            defaultHandler="zephyr.plugin.core.internal.commands.ResumeAll"
+            defaultHandler="zephyr.plugin.core.privates.commands.ResumeAll"
             id="zephyr.plugin.core.commands.resume"
             name="Resume">
       </command>
       <command
-            defaultHandler="zephyr.plugin.core.internal.commands.SuspendAll"
+            defaultHandler="zephyr.plugin.core.privates.commands.SuspendAll"
             id="zephyr.plugin.core.commands.suspend"
             name="Suspend">
       </command>
       <command
-            defaultHandler="zephyr.plugin.core.internal.commands.StepAll"
+            defaultHandler="zephyr.plugin.core.privates.commands.StepAll"
             id="zephyr.plugin.core.commands.step"
             name="Step">
       </command>
       <command
-            defaultHandler="zephyr.plugin.core.internal.commands.NStepsAll"
+            defaultHandler="zephyr.plugin.core.privates.commands.NStepsAll"
             id="zephyr.plugin.core.commands.nsteps"
             name="N Steps">
       </command>
       <command
-            defaultHandler="zephyr.plugin.core.internal.commands.ClosePart"
+            defaultHandler="zephyr.plugin.core.privates.commands.ClosePart"
             description="Close"
             id="zephyr.plugin.core.close"
             name="Close">
       </command>
       <command
-            defaultHandler="zephyr.plugin.core.internal.commands.ExtractZephyrJar"
+            defaultHandler="zephyr.plugin.core.privates.commands.ExtractZephyrJar"
             id="zephyr.plugin.core.extractzephyrjar"
             name="Extract Zephyr Jar">
       </command>
       <command
-            defaultHandler="zephyr.plugin.core.internal.commands.ShowNewView"
+            defaultHandler="zephyr.plugin.core.privates.commands.ShowNewView"
             description="Show a new view"
             id="zephyr.plugin.core.views.showView"
             name="ShowNewView">
@@ -88,7 +88,7 @@
          </commandParameter>
       </command>
       <command
-            defaultHandler="zephyr.plugin.core.internal.commands.StartZephyrRunnable"
+            defaultHandler="zephyr.plugin.core.privates.commands.StartZephyrRunnable"
             id="zephyr.plugin.core.command.startrunnable"
             name="Start a Zephyr runnable">
          <commandParameter
@@ -299,7 +299,7 @@
    <extension
          point="org.eclipse.ui.perspectives">
       <perspective
-            class="zephyr.plugin.core.internal.Perspective"
+            class="zephyr.plugin.core.privates.Perspective"
             id="zephyr.plugin.core.perspective.initial"
             name="Zephyr Perspective">
       </perspective>
@@ -363,7 +363,7 @@
    <extension
          point="zephyr.startup">
       <client
-            class="zephyr.plugin.core.internal.StartZephyrMain">
+            class="zephyr.plugin.core.privates.StartZephyrMain">
       </client>
    </extension>
    <extension
@@ -376,7 +376,7 @@
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
-            class="zephyr.plugin.core.internal.preferences.ZephyrRoot"
+            class="zephyr.plugin.core.privates.preferences.ZephyrRoot"
             id="zephyr.plugin.core.preferences.zephyr.root"
             name="Zephyr">
       </page>
@@ -384,14 +384,14 @@
    <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer
-            class="zephyr.plugin.core.internal.preferences.PreferenceInitializer">
+            class="zephyr.plugin.core.privates.preferences.PreferenceInitializer">
       </initializer>
    </extension>
    <extension
          point="org.eclipse.ui.views">
       <view
             allowMultiple="false"
-            class="zephyr.plugin.core.internal.views.ClocksView"
+            class="zephyr.plugin.core.privates.views.ClocksView"
             icon="icons/view_clocks.png"
             id="zephyr.plugin.core.clocksview"
             name="Clocks"
@@ -399,7 +399,7 @@
       </view>
       <view
             allowMultiple="false"
-            class="zephyr.plugin.core.internal.treeview.StructureExplorerView"
+            class="zephyr.plugin.core.privates.treeview.StructureExplorerView"
             icon="icons/view_structureexplorer.gif"
             id="zephyr.plugin.core.treeview"
             name="Structure Explorer"
@@ -407,7 +407,7 @@
       </view>
       <view
             allowMultiple="true"
-            class="zephyr.plugin.core.internal.video.VideoView"
+            class="zephyr.plugin.core.privates.video.VideoView"
             icon="icons/film.png"
             id="zephyr.plugin.core.videoview"
             name="Video"
@@ -417,13 +417,13 @@
    <extension
          point="zephyr.viewprovider">
       <client
-            class="zephyr.plugin.core.internal.views.ClocksView$Provider"
+            class="zephyr.plugin.core.privates.views.ClocksView$Provider"
             icon="icons/view_clocks.png"
             name="Clocks View"
             viewid="zephyr.plugin.core.clocksview">
       </client>
       <client
-            class="zephyr.plugin.core.internal.video.VideoView$VideoViewProvider"
+            class="zephyr.plugin.core.privates.video.VideoView$VideoViewProvider"
             icon="icons/film.png"
             name="Video"
             viewid="zephyr.plugin.core.videoview">
@@ -432,7 +432,7 @@
    <extension
          point="org.eclipse.ui.services">
       <sourceProvider
-            provider="zephyr.plugin.core.internal.ZephyrVariables">
+            provider="zephyr.plugin.core.privates.ZephyrVariables">
          <variable
                name="zephyr.plugin.core.variable1"
                priorityLevel="workbench">
@@ -442,42 +442,42 @@
    <extension
          point="zephyr.listener">
       <listener
-            class="zephyr.plugin.core.internal.clocks.SuspendClockWhenAddedListener"
+            class="zephyr.plugin.core.privates.clocks.SuspendClockWhenAddedListener"
             eventid="zephyr.event.clockadded"
             name="Suspend Clock When Added">
       </listener>
       <listener
-            class="zephyr.plugin.core.internal.commands.SetSpeedCommand$SynchronizationSettingLoader"
+            class="zephyr.plugin.core.privates.commands.SetSpeedCommand$SynchronizationSettingLoader"
             eventid="zephyr.event.starting"
             name="SynchronizationModeSettingLoader">
       </listener>
       <listener
-            class="zephyr.plugin.core.internal.clocks.RegisterClockWhenAdvertizedListener"
+            class="zephyr.plugin.core.privates.clocks.RegisterClockWhenAdvertizedListener"
             eventid="zephyr.event.advertize"
             name="ClockRegisteredWhenAdvertized">
       </listener>
       <listener
-            class="zephyr.plugin.core.internal.synchronization.binding.ClockAddedListener"
+            class="zephyr.plugin.core.privates.synchronization.binding.ClockAddedListener"
             eventid="zephyr.event.clockadded"
             name="ViewRegistryCreatedWhenClockAdded">
       </listener>
       <listener
-            class="zephyr.plugin.core.internal.synchronization.binding.ClockRemovedListener"
+            class="zephyr.plugin.core.privates.synchronization.binding.ClockRemovedListener"
             eventid="zephyr.event.clockremoved"
             name="ViewRegistryDeletedWhenClockRemoved">
       </listener>
       <listener
-            class="zephyr.plugin.core.internal.listeners.ParseCodeWhenAdvertizedListener"
+            class="zephyr.plugin.core.privates.listeners.ParseCodeWhenAdvertizedListener"
             eventid="zephyr.event.advertize"
             name="ParseCodeOnAdvertized">
       </listener>
       <listener
-            class="zephyr.plugin.core.internal.listeners.PopupViewListener"
+            class="zephyr.plugin.core.privates.listeners.PopupViewListener"
             eventid="zephyr.event.codeparsed"
             name="PopupViewOnCodeParsed">
       </listener>
       <listener
-            class="zephyr.plugin.core.internal.listeners.RemoveNodeCodeWhenClockRemovedListener"
+            class="zephyr.plugin.core.privates.listeners.RemoveNodeCodeWhenClockRemovedListener"
             eventid="zephyr.event.clockremoved"
             name="RemoveNodeCodeWhenClockRemovedListener">
       </listener>

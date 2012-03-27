@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import zephyr.plugin.core.Utils;
+import zephyr.plugin.core.utils.Misc;
 import zephyr.plugin.filehandling.IFileHandler;
 import clojure.lang.Compiler;
 import clojure.lang.RT;
@@ -48,6 +48,6 @@ public class ClojureFileHandler implements IFileHandler {
 
   @Override
   public List<String> extensions() {
-    return Utils.asList("clj");
+    return Misc.asList("clj");
   }
 }

@@ -5,7 +5,7 @@
          point="org.eclipse.ui.views">
       <view
             allowMultiple="true"
-            class="zephyr.plugin.plotting.internal.view.PlotView"
+            class="zephyr.plugin.plotting.privates.view.PlotView"
             icon="icons/view_plotting.png"
             id="zephyr.plugin.plotting.view.plot"
             name="Plot"
@@ -15,12 +15,12 @@
    <extension
          point="org.eclipse.ui.commands">
       <command
-            defaultHandler="zephyr.plugin.plotting.internal.commands.NewPlotView"
+            defaultHandler="zephyr.plugin.plotting.privates.commands.NewPlotView"
             id="zephyr.plugin.plotting.commands.newplotview"
             name="New Window">
       </command>
       <command
-            defaultHandler="zephyr.plugin.plotting.internal.commands.EnableAllTraces"
+            defaultHandler="zephyr.plugin.plotting.privates.commands.EnableAllTraces"
             id="zephyr.plugin.plotting.commands.enablealltraces"
             name="Enable all traces">
          <state id="org.eclipse.ui.commands.toggleState"
@@ -140,7 +140,7 @@
    <extension
          point="org.eclipse.ui.handlers">
       <handler
-            class="zephyr.plugin.plotting.internal.commands.SelectTraces"
+            class="zephyr.plugin.plotting.privates.commands.SelectTraces"
             commandId="zephyr.plugin.plotting.selecttrace">
          <activeWhen>
             <reference
@@ -149,7 +149,7 @@
          </activeWhen>
       </handler>
       <handler
-            class="zephyr.plugin.plotting.internal.commands.AddTraces"
+            class="zephyr.plugin.plotting.privates.commands.AddTraces"
             commandId="zephyr.plugin.plotting.addtraces">
          <activeWhen>
             <reference
@@ -158,7 +158,7 @@
          </activeWhen>
       </handler>
       <handler
-            class="zephyr.plugin.plotting.internal.commands.CenterPlot"
+            class="zephyr.plugin.plotting.privates.commands.CenterPlot"
             commandId="zephyr.plugin.plotting.centerplot">
          <activeWhen>
             <reference
@@ -218,7 +218,7 @@
          point="org.eclipse.ui.preferencePages">
       <page
             category="zephyr.plugin.core.preferences.zephyr.root"
-            class="zephyr.plugin.plotting.preferences.PlottingPreferencePage"
+            class="zephyr.plugin.plotting.internal.preferences.PlottingPreferencePage"
             id="zephyr.plugin.plotting.preferences.PlottingPreferencePage"
             name="Plotting">
       </page>
@@ -226,19 +226,19 @@
    <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer
-            class="zephyr.plugin.plotting.preferences.PreferenceInitializer">
+            class="zephyr.plugin.plotting.internal.preferences.PreferenceInitializer">
       </initializer>
    </extension>
    <extension
          point="zephyr.startup">
       <client
-            class="zephyr.plugin.plotting.internal.listeners.RegisterPlottingMonitor">
+            class="zephyr.plugin.plotting.privates.listeners.RegisterPlottingMonitor">
       </client>
    </extension>
    <extension
          point="zephyr.viewprovider">
       <client
-            class="zephyr.plugin.plotting.internal.view.PlotViewProvider"
+            class="zephyr.plugin.plotting.privates.view.PlotViewProvider"
             icon="icons/view_plotting.png"
             name="Plot View"
             viewid="zephyr.plugin.plotting.view.plot">
@@ -247,7 +247,7 @@
    <extension
          point="zephyr.listener">
       <listener
-            class="zephyr.plugin.plotting.internal.listeners.RegisterPlottingMonitor"
+            class="zephyr.plugin.plotting.privates.listeners.RegisterPlottingMonitor"
             eventid="zephyr.event.codeparsed"
             name="TracesOnCodeParsed">
       </listener>

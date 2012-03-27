@@ -5,7 +5,7 @@ import java.util.Set;
 
 import org.python.core.imp;
 
-import zephyr.ZephyrCore;
+import zephyr.plugin.core.ZephyrCore;
 
 public class ZepyClassLoader extends ClassLoader {
   private final Set<String> resolving = new HashSet<String>();

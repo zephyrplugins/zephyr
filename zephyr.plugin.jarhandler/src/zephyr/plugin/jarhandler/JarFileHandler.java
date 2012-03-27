@@ -9,7 +9,7 @@ import java.security.PrivilegedAction;
 import java.util.List;
 import java.util.jar.Manifest;
 
-import zephyr.plugin.core.Utils;
+import zephyr.plugin.core.utils.Misc;
 import zephyr.plugin.filehandling.IFileHandler;
 
 public class JarFileHandler implements IFileHandler {
@@ -18,7 +18,7 @@ public class JarFileHandler implements IFileHandler {
 
   @Override
   public List<String> extensions() {
-    return Utils.asList("jar");
+    return Misc.asList("jar");
   }
 
   @Override

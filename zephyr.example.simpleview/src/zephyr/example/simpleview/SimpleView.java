@@ -2,11 +2,12 @@ package zephyr.example.simpleview;
 
 import org.eclipse.swt.graphics.GC;
 
-import zephyr.plugin.core.helpers.ClassViewProvider;
-import zephyr.plugin.core.utils.Colors;
-import zephyr.plugin.core.views.helpers.ForegroundCanvasView;
+import zephyr.plugin.core.internal.helpers.ClassViewProvider;
+import zephyr.plugin.core.internal.utils.Colors;
+import zephyr.plugin.core.internal.views.helpers.ForegroundCanvasView;
 
 
+@SuppressWarnings("restriction")
 public class SimpleView extends ForegroundCanvasView<SimpleModel> {
   static private int CircleSize = 10;
 

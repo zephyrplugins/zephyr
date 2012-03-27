@@ -3,7 +3,7 @@ package zephyr.plugin.junittesting;
 import org.junit.Before;
 import org.junit.Test;
 
-import zephyr.ZephyrCore;
+import zephyr.plugin.core.ZephyrCore;
 import zephyr.plugin.junittesting.support.RunnableTests;
 
 public class RunnableFilesTests {

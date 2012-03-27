@@ -7,14 +7,14 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import zephyr.ZephyrCore;
-import zephyr.plugin.core.async.BusEvent;
+import zephyr.plugin.core.internal.ZephyrSync;
+import zephyr.plugin.core.internal.async.BusEvent;
 
 public class TestBusEvent {
   @Test
   public void testEventHandling() {
     TestingEvent event = new TestingEvent();
-    ZephyrCore.busEvent().syncDispatch(event);
+    ZephyrSync.busEvent().syncDispatch(event);
     Assert.assertTrue(event.processed());
   }
 
@@ -24,7 +24,7 @@ public class TestBusEvent {
     for (int i = 0; i < 10000; i++)
       events.add(new TestingEvent());
     TestingEvent syncEvent = new TestingEvent();
-    BusEvent busEvent = ZephyrCore.busEvent();
+    BusEvent busEvent = ZephyrSync.busEvent();
     for (TestingEvent event : events)
       busEvent.syncDispatch(event);
     busEvent.syncDispatch(syncEvent);
@@ -36,18 +36,18 @@ public class TestBusEvent {
   @Test
   public void testEventBothRegistration() {
     TestingEvent event = new TestingEvent();
-    ZephyrCore.busEvent().register(event, TestingEventListener.listener);
-    ZephyrCore.busEvent().syncDispatch(event);
+    ZephyrSync.busEvent().register(event, TestingEventListener.listener);
+    ZephyrSync.busEvent().syncDispatch(event);
     Assert.assertTrue(event.processed());
   }
 
   @Test
   public void testEventOnlyRegistration() {
     TestingEvent event = new TestingEvent("HelloWorld");
-    ZephyrCore.busEvent().syncDispatch(event);
+    ZephyrSync.busEvent().syncDispatch(event);
     Assert.assertFalse(event.processed());
-    ZephyrCore.busEvent().register(event, TestingEventListener.listener);
-    ZephyrCore.busEvent().syncDispatch(event);
+    ZephyrSync.busEvent().register(event, TestingEventListener.listener);
+    ZephyrSync.busEvent().syncDispatch(event);
     Assert.assertTrue(event.processed());
   }
 }

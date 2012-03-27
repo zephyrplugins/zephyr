@@ -2,7 +2,7 @@ package zephyr.plugin.junittesting.support.checklisteners;
 
 import java.util.concurrent.Semaphore;
 
-import zephyr.plugin.core.async.events.Event;
+import zephyr.plugin.core.internal.async.events.Event;
 
 public class CheckEvent implements Event {
   public static final String CountChildrenID = "zephyr.event.countcontrolchildren";

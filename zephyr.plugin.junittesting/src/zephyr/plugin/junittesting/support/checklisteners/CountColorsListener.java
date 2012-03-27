@@ -9,8 +9,8 @@ import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Control;
 
-import zephyr.plugin.core.async.events.Event;
-import zephyr.plugin.core.async.listeners.UIListener;
+import zephyr.plugin.core.internal.async.events.Event;
+import zephyr.plugin.core.internal.async.listeners.UIListener;
 
 public class CountColorsListener extends UIListener {
   @Override

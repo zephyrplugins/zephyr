@@ -13,9 +13,9 @@ import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 
-import zephyr.ZephyrCore;
+import zephyr.plugin.core.ZephyrCore;
 
-public class FileHandlingStartupJob implements zephyr.plugin.core.startup.StartupJob {
+public class FileHandlingStartupJob implements zephyr.plugin.core.internal.startup.StartupJob {
   @Override
   public int level() {
     return 20;

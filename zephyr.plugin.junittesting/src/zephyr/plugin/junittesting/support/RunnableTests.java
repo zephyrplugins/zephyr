@@ -3,8 +3,9 @@ package zephyr.plugin.junittesting.support;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.junit.Assert;
 
-import zephyr.ZephyrCore;
-import zephyr.plugin.core.events.AtomicEvent;
+import zephyr.plugin.core.ZephyrCore;
+import zephyr.plugin.core.internal.ZephyrSync;
+import zephyr.plugin.core.internal.events.AtomicEvent;
 import zephyr.plugin.filehandling.FileHandler;
 import zephyr.plugin.junittesting.support.checklisteners.ControlChecks;
 import zephyr.plugin.junittesting.support.conditions.Condition;
@@ -14,7 +15,7 @@ public class RunnableTests {
   static public void checkRunnableAllDone() {
     Assert.assertEquals(0, ControlChecks.countChildren("zephyr.plugin.core.clocksview"));
     Assert.assertEquals(1, ControlChecks.countChildren("zephyr.plugin.core.treeview"));
-    Assert.assertEquals(0, ZephyrCore.syncCode().getClockNodes().size());
+    Assert.assertEquals(0, ZephyrSync.syncCode().getClockNodes().size());
   }
 
   static public void startRunnable(String runnableID, Condition... conditions) {
@@ -38,7 +39,7 @@ public class RunnableTests {
     FileHandler.openFile(filepath);
     listener.waitConditions();
     listener.waitClockRemoved();
-    ZephyrCore.busEvent().syncDispatch(new AtomicEvent("RunnableFilesTests"));
+    ZephyrSync.busEvent().syncDispatch(new AtomicEvent("RunnableFilesTests"));
     checkRunnableAllDone();
   }
 }

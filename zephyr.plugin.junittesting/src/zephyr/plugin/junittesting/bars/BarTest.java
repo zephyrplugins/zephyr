@@ -5,7 +5,7 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import zephyr.ZephyrCore;
+import zephyr.plugin.core.ZephyrCore;
 import zephyr.plugin.junittesting.support.RunnableTests;
 import zephyr.plugin.junittesting.support.checklisteners.ControlChecks;
 import zephyr.plugin.junittesting.support.conditions.NumberTickCondition;

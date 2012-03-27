@@ -3,10 +3,10 @@ package zephyr.plugin.filehandling.internal;
 import java.io.IOException;
 import java.util.List;
 
-import zephyr.plugin.core.Utils;
 import zephyr.plugin.core.api.Zephyr;
-import zephyr.plugin.core.api.logfiles.LogFile;
+import zephyr.plugin.core.api.internal.logfiles.LogFile;
 import zephyr.plugin.core.api.synchronization.Clock;
+import zephyr.plugin.core.utils.Misc;
 import zephyr.plugin.filehandling.IFileHandler;
 
 public class DefaultHandler implements IFileHandler {
@@ -18,7 +18,7 @@ public class DefaultHandler implements IFileHandler {
 
   @Override
   public List<String> extensions() {
-    return Utils.asList(".gz", ".bz2");
+    return Misc.asList(".gz", ".bz2");
   }
 
   public static void handle(String filepath) {

@@ -5,7 +5,7 @@ import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchAdvisor;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 
-import zephyr.ZephyrCore;
+import zephyr.plugin.core.ZephyrCore;
 
 public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 

@@ -14,8 +14,8 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 
-import zephyr.ZephyrCore;
-import zephyr.plugin.core.api.logfiles.LogFile;
+import zephyr.plugin.core.ZephyrCore;
+import zephyr.plugin.core.api.internal.logfiles.LogFile;
 import zephyr.plugin.filehandling.IFileHandler;
 
 

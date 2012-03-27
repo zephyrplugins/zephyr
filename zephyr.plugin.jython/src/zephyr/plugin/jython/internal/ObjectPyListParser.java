@@ -2,8 +2,7 @@ package zephyr.plugin.jython.internal;
 
 import org.python.core.PyList;
 
-import zephyr.plugin.core.api.codeparser.parsers.AbstractCollectionParser;
-
+import zephyr.plugin.core.api.internal.codeparser.parsers.AbstractCollectionParser;
 
 public class ObjectPyListParser extends AbstractCollectionParser<PyList> {
   @Override

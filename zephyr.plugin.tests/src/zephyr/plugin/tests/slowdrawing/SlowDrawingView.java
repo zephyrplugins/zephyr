@@ -11,14 +11,14 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 
-import zephyr.plugin.core.api.codeparser.interfaces.CodeNode;
+import zephyr.plugin.core.api.internal.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.synchronization.Chrono;
 import zephyr.plugin.core.api.synchronization.Clock;
-import zephyr.plugin.core.canvas.BackgroundCanvas;
-import zephyr.plugin.core.canvas.Painter;
-import zephyr.plugin.core.helpers.ClassViewProvider;
-import zephyr.plugin.core.utils.Colors;
-import zephyr.plugin.core.views.ProvidedView;
+import zephyr.plugin.core.internal.canvas.BackgroundCanvas;
+import zephyr.plugin.core.internal.canvas.Painter;
+import zephyr.plugin.core.internal.helpers.ClassViewProvider;
+import zephyr.plugin.core.internal.utils.Colors;
+import zephyr.plugin.core.internal.views.ProvidedView;
 
 public class SlowDrawingView extends ViewPart implements ProvidedView, Painter {
   public static class Provider extends ClassViewProvider {

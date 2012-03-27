@@ -10,7 +10,7 @@ import java.util.jar.Attributes;
 import java.util.jar.Attributes.Name;
 import java.util.jar.Manifest;
 
-import zephyr.ZephyrCore;
+import zephyr.plugin.core.ZephyrCore;
 
 public class JarClassLoader extends ClassLoader {
   private final Map<String, Class<? extends Object>> classes = new Hashtable<String, Class<? extends Object>>();

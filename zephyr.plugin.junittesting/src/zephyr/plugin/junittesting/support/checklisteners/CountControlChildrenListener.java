@@ -9,9 +9,9 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
-import zephyr.plugin.core.async.events.Event;
-import zephyr.plugin.core.async.listeners.UIListener;
-import zephyr.plugin.core.views.ViewWithControl;
+import zephyr.plugin.core.internal.async.events.Event;
+import zephyr.plugin.core.internal.async.listeners.UIListener;
+import zephyr.plugin.core.internal.views.ViewWithControl;
 
 public class CountControlChildrenListener extends UIListener {
   @Override
