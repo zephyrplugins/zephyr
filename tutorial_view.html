@@ -8,16 +8,16 @@ layout: tutorials
 <h1>Using Zephyr Plugins:</h1>
 
 Outline of the steps to create a new Zephyr view:
-<br>
+<br/>
 <ol>
 	<li>creating a new Eclipse view</li>
 	<li>declare a <span class='code'>view provider</span> in the plugin extension, so that
 		Zephyr can know that the view can be used to display a given
-		advertized object<br>
+		advertized object<br/>
 	</li>
 	<li>implement a Zephyr interface for synchronization</li>
 	<li>advertize objects so that Zephyr looks in the code for objects
-		for which a matching <span class='code'>view provider</span> can be found<br>
+		for which a matching <span class='code'>view provider</span> can be found<br/>
 	</li>
 </ol>
 
@@ -56,7 +56,7 @@ object that can provide a view (i.e. a view ID represented as a string) for a gi
 	<li>In the new client, on the right, set the class to use as a
 		view provider. The class needs to implement the interface <a
 		href="https://github.com/ThomasDegris/Zephyr/blob/master/zephyr.plugin.core/src/zephyr/plugin/core/views/ViewProvider.java"><span
-			class='code'>zephyr.plugin.core.views.ViewProvider</span></a><br>
+			class='code'>zephyr.plugin.core.views.ViewProvider</span></a><br/>
 	</li>
 </ol>
 See the documentation of the interface
@@ -68,8 +68,8 @@ to implement its methods. Note that you can extend the class
 where the constructor takes two arguments: a class and a view id (a
 string). Such provider will return the view id for any object instance
 of the class given to the constructor.
-<br>
-<br>
+<br/>
+<br/>
 See the internal class Provider of the class
 <a href="https://github.com/ThomasDegris/Zephyr/blob/master/zephyr.example.simpleview/src/zephyr/example/simpleview/SimpleView.java#L13">SimpleView$Provider</a>
 for an example.
@@ -81,7 +81,7 @@ for an example.
 The Eclipse framework provides what is necessary to create a new view
 and display whatever you want inside. Zephyr provides additional mechanism
 to deal with common threading issues:
-<br>
+<br/>
 <ul>
 	<li>display and drawing can take time. So, we do not want a thread
 		controlling a robot for example to wait for a view finishing drawing</li>
@@ -100,13 +100,13 @@ What Zephyr proposes is the
 	class='code'>zephyr.plugin.core.views.SyncView</span></a>
 interface. This interface has two methods that the view needs to
 implement:
-<br>
+<br/>
 <ul>
 	<li>synchronize(Clock clock) : Zephyr will call this method on the
 		view so that the data required for drawing can be copied locally. This
 		method is called inside the thread updating the data, so the minimum
 		of computation should be done for thread requiring real-time
-		interaction.<br>
+		interaction.<br/>
 	</li>
 	<li>repaint() : this method is called when the view needs to be
 		updated (often after synchronize) and outside the thread updating the
@@ -125,8 +125,8 @@ of the interface for more information. Note that
 inherits from
 <span class='code'>SyncView</span>
 .
-<br>
-<br>
+<br/>
+<br/>
 For a complete working example, see the class
 <a
 	href="https://github.com/ThomasDegris/Zephyr/blob/master/zephyr.example.simpleview/src/zephyr/example/simpleview/SimpleView.java"><span
@@ -141,21 +141,41 @@ in the class
 to ask Zephyr to look for objects to monitors and that can be displayed. Use the annotation
 <span class='code'>@Monitor&nbsp;</span> to specify what to parse.
 
+<h3>Going further:</h3>
 
-<h3>Links:</h3>
+<p>
+The class <span class='code'>SimpleView</span> used in this tutorial inherits from the class <span class='code'>ForegroundCanvasView</span>,
+that is a helper class setting a layout for a canvas filling the view. While additional buttons can be added in the toolbar 
+by overriding the method <span class='code'>setToolbar</span>, such layout is limited and not necessarily well suited. 
+</p>
+<p>
+Actually, to be compatible with Eclipse and Zephyr, a view only need to implement the <span class='code'>SyncView</span> interface 
+and either implement the <span class='code'>IViewPart</span> interface or extends the class <span class='code'>ViewPart</span>. The latest has a 
+<span class='code'>createPartControl</span> method in which any SWT widgets and layout can be set up. See in the 
+<a href="tutorial_view.html#links">Links</a> section for more information on SWT. Note that the Eclipse framework takes care 
+of the event loop, display, and the parent widget of the view (which is passed as an argument to <span class='code'>createPartControl</span>). 
+</p>
+Finally, classes in Zephyr can be good examples for how to implement synchronized views.
+
+<h3 id="links">Links:</h3>
 <ul>
 	<li>Source a Zephyr example project with one class to modify data, one class to display it in a view: <a
 		href="http://www.ualberta.ca/%7Edegris/examples/zephyr.example.simpleview.tar.gz">http://www.ualberta.ca/~degris/examples/zephyr.example.simpleview.tar.gz</a></li>
 	<li>The same <a
-		href="https://github.com/ThomasDegris/Zephyr/tree/master/zephyr.example.simpleview">example project</a> on github<br>
+		href="https://github.com/ThomasDegris/Zephyr/tree/master/zephyr.example.simpleview">example project</a> on github<br/>
 	</li>
 	<li>Creating Eclipse plugins: <a
 		href="http://www.vogella.de/articles/EclipsePlugIn/article.html">http://www.vogella.de/articles/EclipsePlugIn/article.html</a></li>
-	<li>Eclipse RCP tutorial (how to create menu items, commands,
-		views, ...): <a
-		href="http://www.vogella.de/articles/EclipseRCP/article.html">http://www.vogella.de/articles/EclipseRCP/article.html</a><br>
+	<li>Eclipse RCP tutorial (how to create menu items, commands, views, ...): <a
+		href="http://www.vogella.de/articles/EclipseRCP/article.html">http://www.vogella.de/articles/EclipseRCP/article.html</a><br/>
 	</li>
-	<li><a href="http://www.eclipsepluginsite.com/">http://www.eclipsepluginsite.com/</a><br>
+	<li>SWT tutorial: <a
+		href="http://www.vogella.de/articles/SWT/article.html">http://www.vogella.de/articles/SWT/article.html</a><br/>
+	</li>
+	<li>SWT Snippets: <a
+		href="http://www.eclipse.org/swt/snippets/">http://www.eclipse.org/swt/snippets/</a><br/>
+	</li>
+	<li><a href="http://www.eclipsepluginsite.com/">http://www.eclipsepluginsite.com/</a><br/>
 	</li>
 </ul>
 
