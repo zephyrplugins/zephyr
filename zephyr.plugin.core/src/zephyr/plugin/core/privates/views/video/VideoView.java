@@ -1,4 +1,4 @@
-package zephyr.plugin.core.privates.video;
+package zephyr.plugin.core.privates.views.video;
 
 import org.eclipse.swt.graphics.GC;
 

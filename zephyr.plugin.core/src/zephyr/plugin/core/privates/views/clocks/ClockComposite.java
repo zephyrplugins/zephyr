@@ -1,4 +1,4 @@
-package zephyr.plugin.core.privates.views;
+package zephyr.plugin.core.privates.views.clocks;
 
 import java.util.HashSet;
 import java.util.LinkedHashMap;

@@ -391,7 +391,7 @@
          point="org.eclipse.ui.views">
       <view
             allowMultiple="false"
-            class="zephyr.plugin.core.privates.views.ClocksView"
+            class="zephyr.plugin.core.privates.views.clocks.ClocksView"
             icon="icons/view_clocks.png"
             id="zephyr.plugin.core.clocksview"
             name="Clocks"
@@ -407,7 +407,7 @@
       </view>
       <view
             allowMultiple="true"
-            class="zephyr.plugin.core.privates.video.VideoView"
+            class="zephyr.plugin.core.privates.views.video.VideoView"
             icon="icons/film.png"
             id="zephyr.plugin.core.videoview"
             name="Video"
@@ -417,13 +417,13 @@
    <extension
          point="zephyr.viewprovider">
       <client
-            class="zephyr.plugin.core.privates.views.ClocksView$Provider"
+            class="zephyr.plugin.core.privates.views.clocks.ClocksView$Provider"
             icon="icons/view_clocks.png"
             name="Clocks View"
             viewid="zephyr.plugin.core.clocksview">
       </client>
       <client
-            class="zephyr.plugin.core.privates.video.VideoView$VideoViewProvider"
+            class="zephyr.plugin.core.privates.views.video.VideoView$VideoViewProvider"
             icon="icons/film.png"
             name="Video"
             viewid="zephyr.plugin.core.videoview">

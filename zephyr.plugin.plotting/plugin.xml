@@ -11,6 +11,14 @@
             name="Plot"
             restorable="true">
       </view>
+      <view
+            allowMultiple="true"
+            class="zephyr.plugin.plotting.privates.view.HeatMapView"
+            icon="icons/view_heatmap.png"
+            id="zephyr.plugin.plotting.view.heatmap"
+            name="Value Function"
+            restorable="true">
+      </view>
    </extension>
    <extension
          point="org.eclipse.ui.commands">
@@ -242,6 +250,12 @@
             icon="icons/view_plotting.png"
             name="Plot View"
             viewid="zephyr.plugin.plotting.view.plot">
+      </client>
+      <client
+            class="zephyr.plugin.plotting.privates.view.HeatMapView$Provider"
+            icon="icons/view_heatmap.png"
+            name="Value Function"
+            viewid="zephyr.plugin.plotting.view.heatmap">
       </client>
    </extension>
    <extension
