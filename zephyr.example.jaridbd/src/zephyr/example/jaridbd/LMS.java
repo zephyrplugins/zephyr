@@ -1,7 +1,7 @@
 package zephyr.example.jaridbd;
 
+import zephyr.plugin.core.api.internal.monitoring.wrappers.Squared;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
-import zephyr.plugin.core.api.monitoring.wrappers.Squared;
 
 public class LMS {
   private final double stepSize;
