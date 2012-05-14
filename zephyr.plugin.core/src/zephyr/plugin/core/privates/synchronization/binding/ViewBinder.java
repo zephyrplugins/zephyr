@@ -11,7 +11,6 @@ import org.eclipse.ui.IViewReference;
 import zephyr.plugin.core.api.internal.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.internal.views.SyncView;
-import zephyr.plugin.core.privates.ZephyrPluginCore;
 import zephyr.plugin.core.privates.synchronization.providers.ViewProviderReference;
 import zephyr.plugin.core.privates.synchronization.providers.ViewProviders;
 import zephyr.plugin.core.privates.synchronization.tasks.ViewReference;
@@ -102,11 +101,8 @@ public class ViewBinder {
   }
 
   public void disposeView(SyncView view) {
-    synchronized (clockToView) {
-      for (Map.Entry<Clock, ClockViews> entry : clockToView.entrySet())
-        entry.getValue().removeView(view);
-    }
-    ZephyrPluginCore.viewScheduler().disposeView(view);
+    for (ClockViews clockViews : clockToView.values())
+      clockViews.removeView(view);
   }
 
   public ClockViews clockViews(Clock clock) {

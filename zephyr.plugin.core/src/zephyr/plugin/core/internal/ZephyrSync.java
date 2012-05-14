@@ -39,4 +39,14 @@ public class ZephyrSync {
   public static BusEvent busEvent() {
     return ZephyrPluginCore.busEvent();
   }
+
+  public static void removeView(final SyncView view) {
+    ZephyrPluginCore.viewScheduler().schedule(new Runnable() {
+      @Override
+      public void run() {
+        ZephyrPluginCore.viewBinder().disposeView(view);
+        ZephyrPluginCore.viewScheduler().disposeView(view);
+      }
+    });
+  }
 }

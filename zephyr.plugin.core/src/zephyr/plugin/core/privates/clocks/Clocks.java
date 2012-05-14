@@ -19,6 +19,7 @@ public class Clocks {
   public void register(Clock clock) {
     if (clocks.containsKey(clock))
       return;
+    clock.setEnableDataLock(true);
     clocks.put(clock, new ClockStat());
     ZephyrSync.busEvent().dispatch(new ClockEvent(ClockEvent.AddedID, clock));
   }
@@ -28,6 +29,7 @@ public class Clocks {
       return;
     clocks.remove(clock);
     ZephyrSync.busEvent().dispatch(new ClockEvent(ClockEvent.RemovedID, clock));
+    clock.setEnableDataLock(false);
   }
 
   public List<Clock> getClocks() {
