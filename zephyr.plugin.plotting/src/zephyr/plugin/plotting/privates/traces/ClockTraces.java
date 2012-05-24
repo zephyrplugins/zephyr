@@ -63,7 +63,7 @@ public class ClockTraces {
     return ((MonitorContainerNode) trace.codeNode).createMonitored(trace.label);
   }
 
-  public void gc() {
+  synchronized public void gc() {
     List<TraceData> datas = new ArrayList<TraceData>(traces.values());
     for (TraceData traceData : datas)
       if (traceData.ref() == 0)
