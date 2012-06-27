@@ -60,7 +60,7 @@ public abstract class EnvironmentView<T> extends ClassTypeView<T> {
   }
 
   protected void synchronize(double[] currentObservation) {
-    if (currentObservation == null)
+    if (currentObservation == null || obsLayout == null)
       return;
     for (ObsWidget widget : obsLayout)
       widget.updateValue(currentObservation);
