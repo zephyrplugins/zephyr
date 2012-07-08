@@ -233,14 +233,12 @@ public class CBZip2InputStream extends InputStream {
     magic4 = bsGetUChar();
     magic5 = bsGetUChar();
     magic6 = bsGetUChar();
-    if (magic1 == 0x17 && magic2 == 0x72 && magic3 == 0x45
-            && magic4 == 0x38 && magic5 == 0x50 && magic6 == 0x90) {
+    if (magic1 == 0x17 && magic2 == 0x72 && magic3 == 0x45 && magic4 == 0x38 && magic5 == 0x50 && magic6 == 0x90) {
       complete();
       return;
     }
 
-    if (magic1 != 0x31 || magic2 != 0x41 || magic3 != 0x59
-            || magic4 != 0x26 || magic5 != 0x53 || magic6 != 0x59) {
+    if (magic1 != 0x31 || magic2 != 0x41 || magic3 != 0x59 || magic4 != 0x26 || magic5 != 0x53 || magic6 != 0x59) {
       badBlockHeader();
       streamEnd = true;
       return;
@@ -266,8 +264,7 @@ public class CBZip2InputStream extends InputStream {
     if (storedBlockCRC != computedBlockCRC)
       crcError();
 
-    computedCombinedCRC = computedCombinedCRC << 1
-            | computedCombinedCRC >>> 31;
+    computedCombinedCRC = computedCombinedCRC << 1 | computedCombinedCRC >>> 31;
     computedCombinedCRC ^= computedBlockCRC;
   }
 
@@ -353,9 +350,8 @@ public class CBZip2InputStream extends InputStream {
     return bsGetint();
   }
 
-  private void hbCreateDecodeTables(int[] limit, int[] base,
-                                      int[] perm, char[] length,
-                                      int minLen, int maxLen, int alphaSize) {
+  private static void hbCreateDecodeTables(int[] limit, int[] base, int[] perm, char[] length, int minLen, int maxLen,
+      int alphaSize) {
     int pp, i, j, vec;
 
     pp = 0;
@@ -464,8 +460,7 @@ public class CBZip2InputStream extends InputStream {
         if (len[t][i] < minLen)
           minLen = len[t][i];
       }
-      hbCreateDecodeTables(limit[t], base[t], perm[t], len[t], minLen,
-                                 maxLen, alphaSize);
+      hbCreateDecodeTables(limit[t], base[t], perm[t], len[t], minLen, maxLen, alphaSize);
       minLens[t] = minLen;
     }
   }

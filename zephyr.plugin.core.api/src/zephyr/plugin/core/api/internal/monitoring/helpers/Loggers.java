@@ -5,10 +5,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 import zephyr.plugin.core.api.internal.monitoring.fileloggers.FileLogger;
 import zephyr.plugin.core.api.internal.monitoring.fileloggers.LoggerRow;
 import zephyr.plugin.core.api.internal.monitoring.fileloggers.TimedFileLogger;
@@ -69,12 +67,12 @@ public class Loggers {
   public static void copyFile(File sourceFile, File destFile) throws IOException {
     if (!destFile.exists() && !destFile.createNewFile())
       throw new RuntimeException("Error creating the new file: " + destFile.getAbsolutePath());
-    FileChannel source = null;
-    FileChannel destination = null;
+    FileInputStream source = null;
+    FileOutputStream destination = null;
     try {
-      source = new FileInputStream(sourceFile).getChannel();
-      destination = new FileOutputStream(destFile).getChannel();
-      destination.transferFrom(source, 0, source.size());
+      source = new FileInputStream(sourceFile);
+      destination = new FileOutputStream(destFile);
+      destination.getChannel().transferFrom(source.getChannel(), 0, source.getChannel().size());
     } finally {
       if (source != null)
         source.close();

@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
 import zephyr.plugin.core.api.labels.Labeled;
 import zephyr.plugin.core.api.monitoring.annotations.LabelProvider;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
@@ -55,7 +54,7 @@ public abstract class LogFile implements Labeled {
     return labels;
   }
 
-  private void makeLabelsUnique(String[] labels) {
+  private static void makeLabelsUnique(String[] labels) {
     Map<String, Integer> nbInstances = new LinkedHashMap<String, Integer>();
     for (int i = 0; i < labels.length; i++) {
       Integer knownInstance = nbInstances.get(labels[i]);

@@ -28,7 +28,7 @@ public class ObjectParser implements FieldParser {
     return node;
   }
 
-  private String extractLabel(Field instanceField) {
+  private static String extractLabel(Field instanceField) {
     if (instanceField == null)
       return "";
     Monitor monitor = instanceField.getAnnotation(Monitor.class);

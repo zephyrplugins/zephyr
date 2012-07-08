@@ -3,10 +3,8 @@ package zephyr.plugin.core.api.internal.codeparser.parsers;
 import java.io.StringWriter;
 import java.util.Collection;
 import java.util.HashSet;
-
 import org.junit.Assert;
 import org.junit.Test;
-
 import zephyr.plugin.core.api.internal.monitoring.fileloggers.FileLogger;
 import zephyr.plugin.core.api.monitoring.abstracts.DataMonitor;
 import zephyr.plugin.core.api.monitoring.abstracts.MonitorContainer;
@@ -70,7 +68,7 @@ public class ParserTest01 {
     }
 
     @LabelProvider(ids = { "logged10ArrayLabeled", "elementLabeled" })
-    private String labelOf(int index) {
+    private static String labelOf(int index) {
       return "element" + index;
     }
   }

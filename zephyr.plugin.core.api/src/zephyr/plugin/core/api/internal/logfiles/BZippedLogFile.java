@@ -5,17 +5,16 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-
 import zephyr.plugin.core.api.internal.bz2.CBZip2InputStream;
 
 public class BZippedLogFile extends LogFile {
-
   private CBZip2InputStream zfile;
 
   public BZippedLogFile(String filepath) throws IOException {
     super(filepath);
   }
 
+  @SuppressWarnings("resource")
   @Override
   protected BufferedReader getReader(String filepath) throws IOException {
     FileInputStream finput;

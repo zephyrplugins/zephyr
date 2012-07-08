@@ -70,7 +70,6 @@ import static zephyr.plugin.core.api.internal.bz2.BZip2Constants.RUNA;
 import static zephyr.plugin.core.api.internal.bz2.BZip2Constants.RUNB;
 import static zephyr.plugin.core.api.internal.bz2.BZip2Constants.baseBlockSize;
 import static zephyr.plugin.core.api.internal.bz2.BZip2Constants.rNums;
-
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -113,8 +112,7 @@ public class CBZip2OutputStream extends OutputStream {
       }
   }
 
-  protected static void hbMakeCodeLengths(char[] len, int[] freq,
-                                            int alphaSize, int maxLen) {
+  protected static void hbMakeCodeLengths(char[] len, int[] freq, int alphaSize, int maxLen) {
     /*
      * Nodes and heap entries run from 1. Entry 0 for both the heap and nodes is
      * a sentinel.
@@ -167,8 +165,7 @@ public class CBZip2OutputStream extends OutputStream {
             yy = zz << 1;
             if (yy > nHeap)
               break;
-            if (yy < nHeap
-                            && weight[heap[yy + 1]] < weight[heap[yy]])
+            if (yy < nHeap && weight[heap[yy + 1]] < weight[heap[yy]])
               yy++;
             if (weight[tmp] < weight[heap[yy]])
               break;
@@ -188,8 +185,7 @@ public class CBZip2OutputStream extends OutputStream {
             yy = zz << 1;
             if (yy > nHeap)
               break;
-            if (yy < nHeap
-                            && weight[heap[yy + 1]] < weight[heap[yy]])
+            if (yy < nHeap && weight[heap[yy + 1]] < weight[heap[yy]])
               yy++;
             if (weight[tmp] < weight[heap[yy]])
               break;
@@ -202,11 +198,10 @@ public class CBZip2OutputStream extends OutputStream {
         parent[n1] = parent[n2] = nNodes;
 
         weight[nNodes] = (weight[n1] & 0xffffff00)
-                                  + (weight[n2] & 0xffffff00)
-                    | 1 + ((weight[n1] & 0x000000ff) >
-                             (weight[n2] & 0x000000ff) ?
-                                 weight[n1] & 0x000000ff :
-                                 weight[n2] & 0x000000ff);
+            + (weight[n2] & 0xffffff00)
+            | 1
+            + ((weight[n1] & 0x000000ff) > (weight[n2] & 0x000000ff) ? weight[n1] & 0x000000ff
+                : weight[n2] & 0x000000ff);
 
         parent[nNodes] = -1;
         nHeap++;
@@ -306,8 +301,7 @@ public class CBZip2OutputStream extends OutputStream {
     this(inStream, 9);
   }
 
-  public CBZip2OutputStream(OutputStream inStream, int p_inBlockSize)
-        throws IOException {
+  public CBZip2OutputStream(OutputStream inStream, int p_inBlockSize) throws IOException {
     block = null;
     quadrant = null;
     zptr = null;
@@ -515,10 +509,8 @@ public class CBZip2OutputStream extends OutputStream {
     bsFinishedWithStream();
   }
 
-  private void hbAssignCodes(int[] code, char[] length, int minLen,
-                                int maxLen, int alphaSize) {
+  private static void hbAssignCodes(int[] code, char[] length, int minLen, int maxLen, int alphaSize) {
     int n, vec, i;
-
     vec = 0;
     for (n = minLen; n <= maxLen; n++) {
       for (i = 0; i < alphaSize; i++)
@@ -626,8 +618,7 @@ public class CBZip2OutputStream extends OutputStream {
           aFreq += mtfFreq[ge];
         }
 
-        if (ge > gs && nPart != nGroups && nPart != 1
-                    && ((nGroups - nPart) & 1) == 1) {
+        if (ge > gs && nPart != nGroups && nPart != 1 && ((nGroups - nPart) & 1) == 1) {
           aFreq -= mtfFreq[ge];
           ge--;
         }
@@ -850,8 +841,7 @@ public class CBZip2OutputStream extends OutputStream {
       if (ge >= nMTF)
         ge = nMTF - 1;
       for (i = gs; i <= ge; i++)
-        bsW(len[selector[selCtr]][szptr[i]],
-                    code[selector[selCtr]][szptr[i]]);
+        bsW(len[selector[selCtr]][szptr[i]], code[selector[selCtr]][szptr[i]]);
 
       gs = ge + 1;
       selCtr++;
@@ -947,7 +937,7 @@ public class CBZip2OutputStream extends OutputStream {
     }
   }
 
-  private char med3(char p_a, char p_b, char p_c) {
+  private static char med3(char p_a, char p_b, char p_c) {
     char a = p_a, b = p_b, c = p_c;
     char t;
     if (a > b) {
@@ -999,9 +989,7 @@ public class CBZip2OutputStream extends OutputStream {
         continue;
       }
 
-      med = med3(block[zptr[lo] + d + 1],
-                       block[zptr[hi] + d + 1],
-                       block[zptr[lo + hi >>> 1] + d + 1]);
+      med = med3(block[zptr[lo] + d + 1], block[zptr[hi] + d + 1], block[zptr[lo + hi >>> 1] + d + 1]);
 
       unLo = ltLo = lo;
       unHi = gtHi = hi;
@@ -1092,7 +1080,7 @@ public class CBZip2OutputStream extends OutputStream {
     int[] copy = new int[256];
     boolean[] bigDone = new boolean[256];
     int c1, c2;
-    
+
 
     /*
      * In the various block-sized structures, live data runs from 0 to
@@ -1430,9 +1418,7 @@ public class CBZip2OutputStream extends OutputStream {
    * Possibly because the number of elems to sort is usually small, typically <=
    * 20.
    */
-  private final int[] incs = { 1, 4, 13, 40, 121, 364, 1093, 3280,
-                           9841, 29524, 88573, 265720,
-                           797161, 2391484 };
+  private final int[] incs = { 1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524, 88573, 265720, 797161, 2391484 };
 
   private void allocateCompressStructures() {
     int n = baseBlockSize * blockSize100k;
@@ -1441,8 +1427,7 @@ public class CBZip2OutputStream extends OutputStream {
     zptr = new int[n];
     ftab = new int[65537];
 
-    if (block == null || quadrant == null || zptr == null
-            || ftab == null) {
+    if (block == null || quadrant == null || zptr == null || ftab == null) {
       // int totalDraw = (n + 1 + NUM_OVERSHOOT_BYTES) + (n +
       // NUM_OVERSHOOT_BYTES) + n + 65537;
       // compressOutOfMemory ( totalDraw, n );
