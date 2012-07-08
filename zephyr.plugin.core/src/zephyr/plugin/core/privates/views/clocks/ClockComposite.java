@@ -1,8 +1,6 @@
 package zephyr.plugin.core.privates.views.clocks;
 
-import java.util.HashSet;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.Map;
 
 import org.eclipse.swt.SWT;
@@ -175,10 +173,9 @@ public class ClockComposite {
     layoutChanged = adjustLabel(timeStepLabel, String.valueOf(timeStep)) || layoutChanged;
     layoutChanged = adjustLabel(modelPeriodLabel, Chrono.toPeriodString(clockStats.modelPeriod())) || layoutChanged;
     layoutChanged = adjustLabel(fullPeriodLabel, Chrono.toPeriodString(clockStats.fullPeriod())) || layoutChanged;
-    HashSet<Map.Entry<String, UpdatableLabelInfo>> labelSet = new LinkedHashSet<Map.Entry<String, UpdatableLabelInfo>>(
-                                                                                                                       captionToLabelInfo
-                                                                                                                           .entrySet());
-    for (Map.Entry<String, UpdatableLabelInfo> entry : labelSet) {
+    Map<String, UpdatableLabelInfo> labelMap = new LinkedHashMap<String, ClockComposite.UpdatableLabelInfo>(
+                                                                                                            captionToLabelInfo);
+    for (Map.Entry<String, UpdatableLabelInfo> entry : labelMap.entrySet()) {
       UpdatableLabelInfo labelInfo = entry.getValue();
       if (labelInfo.label == null) {
         labelInfo.label = createTextLabel(group, entry.getKey(), labelInfo.value, labelInfo.info);

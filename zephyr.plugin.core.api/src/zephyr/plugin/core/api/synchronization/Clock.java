@@ -2,9 +2,7 @@ package zephyr.plugin.core.api.synchronization;
 
 import java.io.Serializable;
 import java.util.concurrent.Semaphore;
-
 import zephyr.plugin.core.api.signals.Signal;
-
 
 public class Clock implements Serializable {
   private static final long serialVersionUID = -1155346148292134613L;

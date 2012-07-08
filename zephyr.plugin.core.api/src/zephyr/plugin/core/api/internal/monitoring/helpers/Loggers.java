@@ -16,7 +16,9 @@ public class Loggers {
   static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmm");
 
   public static String fileNameTimeStamp() {
-    return dateFormat.format(new Date());
+    synchronized (dateFormat) {
+      return dateFormat.format(new Date());
+    }
   }
 
   public static boolean isIndexIncluded(Field field) {
