@@ -2,7 +2,6 @@ package zephyr.plugin.core.privates;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import org.eclipse.ui.AbstractSourceProvider;
 
 public class ZephyrVariables extends AbstractSourceProvider {
@@ -16,7 +15,6 @@ public class ZephyrVariables extends AbstractSourceProvider {
   public void dispose() {
   }
 
-  @SuppressWarnings("rawtypes")
   @Override
   public Map getCurrentState() {
     variableValues.put(ZephyrEnableVariable, ZephyrPluginCore.isZephyrEnabled());

@@ -1,11 +1,9 @@
 package zephyr.plugin.console.internal;
 
 import java.io.PrintStream;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.console.MessageConsoleStream;
-
 import zephyr.plugin.console.ZephyrConsolePlugin;
 import zephyr.plugin.core.internal.startup.StartupJob;
 
@@ -15,7 +13,7 @@ public class ReDirectSystemToConsole implements StartupJob {
     return 0;
   }
 
-  private void setColor(final MessageConsoleStream consoleStream, final int color) {
+  private static void setColor(final MessageConsoleStream consoleStream, final int color) {
     Display.getDefault().syncExec(new Runnable() {
       @Override
       public void run() {
@@ -24,13 +22,12 @@ public class ReDirectSystemToConsole implements StartupJob {
     });
   }
 
-  private PrintStream createConsolePipe(final PrintStream defaultOut, int color, boolean activateOnWrite) {
+  @SuppressWarnings("resource")
+  private static PrintStream createConsolePipe(final PrintStream defaultOut, int color, boolean activateOnWrite) {
     MessageConsoleStream messageConsoleStream = ZephyrConsolePlugin.getDefault().systemConsole().newMessageStream();
     messageConsoleStream.setActivateOnWrite(activateOnWrite);
     setColor(messageConsoleStream, color);
-    PipeStream pipe = new PipeStream(defaultOut, messageConsoleStream);
-    PrintStream print = new PrintStream(pipe);
-    return print;
+    return new PrintStream(new PipeStream(defaultOut, messageConsoleStream));
   }
 
   @Override

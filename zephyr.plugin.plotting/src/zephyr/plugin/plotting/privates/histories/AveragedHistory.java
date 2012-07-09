@@ -4,6 +4,7 @@ package zephyr.plugin.plotting.privates.histories;
 public class AveragedHistory extends LazyHistory {
   public final int period;
   private int cumPeriod = 0;
+  @SuppressWarnings("hiding")
   private float sum = 0.0f;
 
   public AveragedHistory(int period, int length) {

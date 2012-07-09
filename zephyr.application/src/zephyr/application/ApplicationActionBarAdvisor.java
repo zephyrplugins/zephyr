@@ -51,7 +51,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
     helpMenu.add(new Separator());
   }
 
-  private boolean isMac() {
+  private static boolean isMac() {
     String platform = SWT.getPlatform();
     return platform.equals("carbon") || platform.equals("cocoa");
   }

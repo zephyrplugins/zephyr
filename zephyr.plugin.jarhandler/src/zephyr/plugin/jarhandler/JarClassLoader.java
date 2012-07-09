@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.jar.Attributes;
 import java.util.jar.Attributes.Name;
 import java.util.jar.Manifest;
-
 import zephyr.plugin.core.ZephyrCore;
 
 public class JarClassLoader extends ClassLoader {
@@ -56,7 +55,7 @@ public class JarClassLoader extends ClassLoader {
     return loadClass(className, false);
   }
 
-  private Class<? extends Object> loadZephyrFrameworkClass(String className) {
+  private static Class<? extends Object> loadZephyrFrameworkClass(String className) {
     try {
       return ZephyrCore.classLoader().loadClass(className);
     } catch (ClassNotFoundException e) {
@@ -76,8 +75,7 @@ public class JarClassLoader extends ClassLoader {
     return null;
   }
 
-  protected Package definePackage(String name)
-      throws IllegalArgumentException {
+  protected Package definePackage(String name) throws IllegalArgumentException {
     String path = name.replace('.', '/').concat("/");
     String specTitle = null, specVersion = null, specVendor = null;
     String implTitle = null, implVersion = null, implVendor = null;
@@ -107,8 +105,7 @@ public class JarClassLoader extends ClassLoader {
       if (implVendor == null)
         implVendor = attributes.getValue(Name.IMPLEMENTATION_VENDOR);
     }
-    return definePackage(name, specTitle, specVersion, specVendor,
-                         implTitle, implVersion, implVendor, sealBase);
+    return definePackage(name, specTitle, specVersion, specVendor, implTitle, implVersion, implVendor, sealBase);
   }
 
   @Override

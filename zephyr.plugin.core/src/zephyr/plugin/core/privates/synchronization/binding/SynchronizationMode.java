@@ -5,9 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-
 import org.eclipse.jface.preference.IPreferenceStore;
-
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.privates.ZephyrPluginCore;
 import zephyr.plugin.core.privates.clocks.ClockStat;
@@ -35,7 +33,7 @@ public class SynchronizationMode {
       }
   }
 
-  private void waitCompletion(List<Future<?>> futures) {
+  private static void waitCompletion(List<Future<?>> futures) {
     for (Future<?> future : futures)
       try {
         future.get();

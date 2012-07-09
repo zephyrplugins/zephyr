@@ -44,7 +44,7 @@ public class LineLayout extends Layout {
     }
   }
 
-  private boolean isResizable(Control control) {
+  private static boolean isResizable(Control control) {
     LineData lineData = (LineData) control.getLayoutData();
     if (lineData == null)
       return true;

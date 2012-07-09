@@ -1,7 +1,6 @@
 package zephyr.plugin.filehandling.internal.ui;
 
 import java.io.File;
-
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -10,7 +9,6 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.ui.handlers.HandlerUtil;
-
 import zephyr.plugin.filehandling.internal.FileLoader;
 
 public class OpenFile extends AbstractHandler {
@@ -54,7 +52,7 @@ public class OpenFile extends AbstractHandler {
     instanceScope.put(FolderKey, new File(filepath).getParent());
   }
 
-  private void reorderExtensions(String defaultExtension, String[] extensions) {
+  private static void reorderExtensions(String defaultExtension, String[] extensions) {
     for (int i = 0; i < extensions.length; i++) {
       if (!extensions[i].endsWith(defaultExtension))
         continue;

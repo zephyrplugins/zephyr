@@ -2,7 +2,6 @@ package zephyr.plugin.core.privates;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
 import org.osgi.framework.Bundle;
@@ -37,7 +36,7 @@ public class ZephyrClassLoaderInternal extends ClassLoader {
     throw new ClassNotFoundException(name);
   }
 
-  private List<Bundle> initializeZephyrClasspathBundles() {
+  private static List<Bundle> initializeZephyrClasspathBundles() {
     List<Bundle> loaders = new ArrayList<Bundle>();
     IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor("zephyr.classpath");
     for (IConfigurationElement element : config)

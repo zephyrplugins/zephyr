@@ -2,9 +2,7 @@ package zephyr.plugin.plotting.privates.plots;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.eclipse.swt.graphics.Point;
-
 import zephyr.plugin.core.api.internal.codeparser.codetree.CodeTrees;
 import zephyr.plugin.core.api.internal.parsing.LabelBuilder;
 import zephyr.plugin.core.api.synchronization.Chrono;
@@ -41,7 +39,7 @@ public class PlotOverTimeRequestResult implements RequestResult {
     this.axes = axes;
   }
 
-  private String name(Trace trace) {
+  private static String name(Trace trace) {
     return CodeTrees.mergePath(trace.path()) + trace.label;
   }
 

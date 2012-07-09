@@ -1,7 +1,6 @@
 package zephyr.plugin.core.privates.async;
 
 import java.util.Set;
-
 import zephyr.plugin.core.api.signals.Signal;
 import zephyr.plugin.core.internal.async.events.Event;
 import zephyr.plugin.core.internal.async.listeners.EventListener;
@@ -29,7 +28,7 @@ public class EventProcessor implements Runnable {
     onEventProcessed.fire(event);
   }
 
-  private void process(Event event, EventListener listener) {
+  private static void process(Event event, EventListener listener) {
     try {
       listener.listen(event);
     } catch (Throwable throwable) {

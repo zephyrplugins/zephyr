@@ -3,7 +3,6 @@ package zephyr.plugin.core.internal.views;
 
 import org.eclipse.swt.dnd.ByteArrayTransfer;
 import org.eclipse.swt.dnd.TransferData;
-
 import zephyr.plugin.core.api.internal.codeparser.interfaces.CodeNode;
 
 public class CodeNodeTransfert extends ByteArrayTransfer {
@@ -26,7 +25,7 @@ public class CodeNodeTransfert extends ByteArrayTransfer {
     return selection;
   }
 
-  private boolean isInvalidNativeType(Object result) {
+  private static boolean isInvalidNativeType(Object result) {
     return !(result instanceof byte[]) || !TypeName.equals(new String((byte[]) result));
   }
 

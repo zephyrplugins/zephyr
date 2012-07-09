@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-
 import zephyr.plugin.core.api.internal.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.privates.ZephyrPluginCore;
 import zephyr.plugin.core.privates.synchronization.binding.ViewBinder;
@@ -26,7 +25,7 @@ public class ViewAssociator {
     }
   }
 
-  private void displayInView(final ViewProviderReference reference, final List<CodeNode> codeNodes) {
+  private static void displayInView(final ViewProviderReference reference, final List<CodeNode> codeNodes) {
     ZephyrPluginCore.viewScheduler().schedule(new Runnable() {
       @Override
       public void run() {
@@ -38,7 +37,7 @@ public class ViewAssociator {
     });
   }
 
-  private List<CodeNode> filter(ViewProviderReference reference, CodeNode[] codeNodes) {
+  private static List<CodeNode> filter(ViewProviderReference reference, CodeNode[] codeNodes) {
     List<CodeNode> result = new ArrayList<CodeNode>();
     for (CodeNode codeNode : codeNodes)
       if (reference.provider().canViewDraw(codeNode))

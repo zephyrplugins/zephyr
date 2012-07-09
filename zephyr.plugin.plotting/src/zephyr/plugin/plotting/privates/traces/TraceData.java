@@ -26,7 +26,7 @@ public class TraceData {
     histories = createHistories();
   }
 
-  private History[] createHistories() {
+  private static History[] createHistories() {
     History[] histories = new History[toHistoryIndex(MaxTimeLength)];
     History shortTimeHistory = new History(HistoryLength);
     for (int timeScale = 0; timeScale < histories.length; timeScale++)

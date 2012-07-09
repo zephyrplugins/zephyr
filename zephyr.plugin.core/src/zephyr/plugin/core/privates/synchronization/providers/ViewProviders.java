@@ -2,18 +2,16 @@ package zephyr.plugin.core.privates.synchronization.providers;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
-
 import zephyr.plugin.core.api.internal.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.internal.views.ViewProvider;
 
 public class ViewProviders {
   private List<ViewProviderReference> providerReferences = null;
 
-  private ViewProviderReference createReference(IConfigurationElement element) {
+  private static ViewProviderReference createReference(IConfigurationElement element) {
     Object o = null;
     try {
       o = element.createExecutableExtension("class");
@@ -25,7 +23,7 @@ public class ViewProviders {
     return new ViewProviderReference(element, (ViewProvider) o);
   }
 
-  private List<ViewProviderReference> createProviders() {
+  private static List<ViewProviderReference> createProviders() {
     List<ViewProviderReference> providers = new ArrayList<ViewProviderReference>();
     IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor("zephyr.viewprovider");
     for (IConfigurationElement element : config) {

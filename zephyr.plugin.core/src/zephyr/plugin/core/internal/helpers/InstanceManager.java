@@ -2,7 +2,6 @@ package zephyr.plugin.core.internal.helpers;
 
 
 import org.eclipse.ui.IMemento;
-
 import zephyr.plugin.core.api.internal.codeparser.codetree.ClassNode;
 import zephyr.plugin.core.api.internal.codeparser.codetree.CodeTrees;
 import zephyr.plugin.core.api.internal.codeparser.interfaces.CodeNode;
@@ -85,7 +84,6 @@ public class InstanceManager<T> {
     return instance;
   }
 
-  @SuppressWarnings("unchecked")
   void set(CodeNode codeNode) {
     unset();
     instance = (T) ((ClassNode) codeNode).instance();

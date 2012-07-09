@@ -9,7 +9,6 @@ import org.eclipse.swt.graphics.ImageLoader;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
-
 import zephyr.plugin.core.ZephyrCore;
 import zephyr.plugin.core.internal.utils.Helper;
 
@@ -40,7 +39,7 @@ public class ScreenShotAction extends Action {
     screenshot.dispose();
   }
 
-  private String selectFile() {
+  private static String selectFile() {
     Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
     FileDialog fd = new FileDialog(shell, SWT.SAVE);
     fd.setText("Save Image");

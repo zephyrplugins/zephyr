@@ -19,21 +19,21 @@ public class ColorMap {
     return 0;
   }
 
-  private Interval[] rangePreprocessing(int[][] landmarks, double colorResolution) {
+  private static Interval[] rangePreprocessing(int[][] landmarks, double colorResolution) {
     Interval[] ranges = new Interval[landmarks.length - 1];
     for (int i = 0; i < ranges.length; i++)
       ranges[i] = new Interval(i * colorResolution, (i + 1) * colorResolution);
     return ranges;
   }
 
-  private int[][] colorPreprocessing(int[][] landmarks) {
+  private static int[][] colorPreprocessing(int[][] landmarks) {
     int[][] diffs = new int[landmarks.length - 1][];
     for (int i = 0; i < diffs.length; i++)
       diffs[i] = computeDiff(landmarks[i + 1], landmarks[i]);
     return diffs;
   }
 
-  private int[] computeDiff(int[] colorA, int[] colorB) {
+  private static int[] computeDiff(int[] colorA, int[] colorB) {
     return new int[] { colorA[0] - colorB[0], colorA[1] - colorB[1], colorA[2] - colorB[2] };
   }
 

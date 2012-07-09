@@ -2,7 +2,6 @@ package zephyr.plugin.core.privates.views.clocks;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
@@ -14,7 +13,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
-
 import zephyr.plugin.core.ZephyrCore;
 import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.synchronization.Chrono;
@@ -130,14 +128,14 @@ public class ClockComposite {
     return button;
   }
 
-  private Label createTextLabel(Composite parent, String stringLabel, String constantValue, String tooltip) {
+  private static Label createTextLabel(Composite parent, String stringLabel, String constantValue, String tooltip) {
     Label valueLabel = updatedShortTextLabel(parent, stringLabel);
     valueLabel.setText(constantValue);
     valueLabel.setToolTipText(tooltip);
     return valueLabel;
   }
 
-  private Label updatedShortTextLabel(Composite parent, String stringLabel) {
+  private static Label updatedShortTextLabel(Composite parent, String stringLabel) {
     Label label = new Label(parent, SWT.NONE);
     label.setText(stringLabel);
     Label valueLabel = new Label(parent, SWT.NONE);
@@ -162,7 +160,7 @@ public class ClockComposite {
     }
   }
 
-  private boolean adjustLabel(Label label, String text) {
+  private static boolean adjustLabel(Label label, String text) {
     boolean labelLengthChanged = label.getText().length() != text.length();
     label.setText(text);
     return labelLengthChanged;

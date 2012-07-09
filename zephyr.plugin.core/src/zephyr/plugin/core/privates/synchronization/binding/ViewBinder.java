@@ -5,9 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.eclipse.ui.IViewReference;
-
 import zephyr.plugin.core.api.internal.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.internal.views.SyncView;
@@ -20,7 +18,7 @@ public class ViewBinder {
   protected final Map<Clock, ClockViews> clockToView = Collections.synchronizedMap(new HashMap<Clock, ClockViews>());
   private final ViewProviders viewProviders = new ViewProviders();
 
-  private void bindWithNewView(CodeNode[] codeNodes, ViewFinder viewFinder) {
+  private static void bindWithNewView(CodeNode[] codeNodes, ViewFinder viewFinder) {
     CodeNode[] remainToDisplay = codeNodes;
     while (remainToDisplay.length > 0) {
       ViewReference viewRef = viewFinder.provideNewView();
@@ -34,7 +32,7 @@ public class ViewBinder {
     }
   }
 
-  private CodeNode[] bindWithOpenedViews(CodeNode[] codeNodes, ViewFinder viewFinder) {
+  private static CodeNode[] bindWithOpenedViews(CodeNode[] codeNodes, ViewFinder viewFinder) {
     CodeNode[] remainToDisplay = codeNodes;
     for (IViewReference reference : viewFinder.existingViews()) {
       ViewReference viewRef = viewFinder.showView(reference);
@@ -48,7 +46,7 @@ public class ViewBinder {
     return remainToDisplay;
   }
 
-  private CodeNode[] removeDisplayed(boolean[] displayed, CodeNode[] codeNodes) {
+  private static CodeNode[] removeDisplayed(boolean[] displayed, CodeNode[] codeNodes) {
     List<CodeNode> remainToDisplay = new ArrayList<CodeNode>();
     for (int i = 0; i < codeNodes.length; i++)
       if (!displayed[i])

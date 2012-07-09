@@ -2,7 +2,6 @@ package zephyr.plugin.core.privates.treeview;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -15,7 +14,6 @@ import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
-
 import zephyr.plugin.core.api.internal.codeparser.codetree.AbstractPrimitives;
 import zephyr.plugin.core.api.internal.codeparser.codetree.ClassNode;
 import zephyr.plugin.core.api.internal.codeparser.codetree.ClockNode;
@@ -111,7 +109,7 @@ public class StructureExplorerView extends ViewPart implements ItemProvider, Vie
     return codeNode.label();
   }
 
-  private boolean hasChildren(CodeNode codeNode) {
+  private static boolean hasChildren(CodeNode codeNode) {
     if (!(codeNode instanceof ParentNode))
       return false;
     return ((ParentNode) codeNode).nbChildren() > 0;

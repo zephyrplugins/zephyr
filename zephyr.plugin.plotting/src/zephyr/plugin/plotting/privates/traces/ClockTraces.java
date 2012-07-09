@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
 import zephyr.plugin.core.api.internal.monitoring.abstracts.MonitorContainerNode;
 import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
 import zephyr.plugin.core.api.signals.Listener;
@@ -52,7 +51,7 @@ public class ClockTraces {
     return traceData;
   }
 
-  private Monitored findMonitored(Trace trace, Monitored monitored) {
+  private static Monitored findMonitored(Trace trace, Monitored monitored) {
     Monitored result = monitored;
     if (result != null)
       return result;

@@ -12,15 +12,14 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.views.IViewDescriptor;
 import org.eclipse.ui.views.IViewRegistry;
-
 import zephyr.plugin.core.api.internal.codeparser.codetree.ClassNode;
 import zephyr.plugin.core.api.internal.codeparser.codetree.CodeTrees;
 import zephyr.plugin.core.api.internal.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.internal.ZephyrSync;
 import zephyr.plugin.core.internal.helpers.InstanceManager;
-import zephyr.plugin.core.internal.helpers.SyncViewDropTarget;
 import zephyr.plugin.core.internal.helpers.InstanceManager.InstanceListener;
+import zephyr.plugin.core.internal.helpers.SyncViewDropTarget;
 import zephyr.plugin.core.internal.views.DropTargetView;
 import zephyr.plugin.core.internal.views.ProvidedView;
 import zephyr.plugin.core.internal.views.ViewWithControl;
@@ -107,7 +106,6 @@ public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView,
     instance.unset();
   }
 
-  @SuppressWarnings("unchecked")
   protected void setViewName() {
     CodeNode codeNode = instance.codeNode();
     if (codeNode == null) {

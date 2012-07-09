@@ -3,7 +3,6 @@ package zephyr.plugin.clojure.internal;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-
 import zephyr.plugin.core.utils.Misc;
 import zephyr.plugin.filehandling.IFileHandler;
 import clojure.lang.Compiler;
@@ -27,7 +26,7 @@ public class ClojureFileHandler implements IFileHandler {
     }
   }
 
-  private void setClassLoader() {
+  private static void setClassLoader() {
     ClassLoader parentClassLoader = Thread.currentThread().getContextClassLoader();
     final LoaderProxy loaderProxy = new LoaderProxy(parentClassLoader);
     ZephyrClassLoader zephyrClassLoader = new ZephyrClassLoader(loaderProxy);
@@ -40,7 +39,7 @@ public class ClojureFileHandler implements IFileHandler {
     Thread.currentThread().setContextClassLoader(zephyrClassLoader);
   }
 
-  private String extractNamespace(String filepath) {
+  private static String extractNamespace(String filepath) {
     String fileName = new File(filepath).getName();
     int extensionIndex = fileName.indexOf(".");
     return extensionIndex != -1 ? fileName.substring(0, extensionIndex) : fileName;

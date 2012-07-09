@@ -8,7 +8,6 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
-
 import zephyr.plugin.core.internal.async.events.Event;
 import zephyr.plugin.core.internal.async.listeners.UIListener;
 import zephyr.plugin.core.internal.views.ViewWithControl;
@@ -21,7 +20,7 @@ public class CountControlChildrenListener extends UIListener {
     checkEvent.setResult(countChildrenRecursive(control));
   }
 
-  private Control findControl(String viewID) {
+  private static Control findControl(String viewID) {
     IWorkbench workbench = PlatformUI.getWorkbench();
     IWorkbenchWindow window = workbench.getActiveWorkbenchWindow();
     IWorkbenchPage page = window.getActivePage();

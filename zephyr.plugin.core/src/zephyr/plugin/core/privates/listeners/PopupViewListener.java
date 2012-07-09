@@ -2,7 +2,6 @@ package zephyr.plugin.core.privates.listeners;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import zephyr.plugin.core.api.internal.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.internal.async.events.Event;
 import zephyr.plugin.core.internal.async.listeners.EventListener;
@@ -19,7 +18,7 @@ public class PopupViewListener implements EventListener {
     }
   }
 
-  private List<CodeNode> pullRegistred() {
+  private static List<CodeNode> pullRegistred() {
     List<CodeNode> result;
     synchronized (registered) {
       result = new ArrayList<CodeNode>(registered);
@@ -28,7 +27,7 @@ public class PopupViewListener implements EventListener {
     return result;
   }
 
-  private boolean isEmpty() {
+  private static boolean isEmpty() {
     synchronized (registered) {
       return registered.isEmpty();
     }

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -12,7 +11,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-
 import zephyr.plugin.core.internal.startup.StartupJob;
 
 public class StartupJobs extends Job {
@@ -37,9 +35,8 @@ public class StartupJobs extends Job {
     return Status.OK_STATUS;
   }
 
-  private List<StartupJob> buildJobList() {
-    IConfigurationElement[] config = Platform.getExtensionRegistry()
-          .getConfigurationElementsFor("zephyr.startup");
+  private static List<StartupJob> buildJobList() {
+    IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor("zephyr.startup");
     List<StartupJob> jobs = new ArrayList<StartupJob>();
     for (IConfigurationElement element : config) {
       Object o;

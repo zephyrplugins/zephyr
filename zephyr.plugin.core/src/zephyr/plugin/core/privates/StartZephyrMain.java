@@ -1,11 +1,9 @@
 package zephyr.plugin.core.privates;
 
 import java.util.List;
-
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
-
 import zephyr.plugin.core.RunnableFactory;
 import zephyr.plugin.core.ZephyrCore;
 import zephyr.plugin.core.internal.startup.StartupJob;
@@ -47,7 +45,7 @@ public class StartZephyrMain implements StartupJob {
     };
   }
 
-  private boolean checkForID(List<String> args, String id) {
+  private static boolean checkForID(List<String> args, String id) {
     for (String arg : args)
       if (id.equals(arg))
         return true;

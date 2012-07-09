@@ -5,7 +5,6 @@ import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -21,7 +20,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.ui.dialogs.FilteredItemsSelectionDialog;
-
 import zephyr.plugin.core.api.internal.codeparser.codetree.ClockNode;
 import zephyr.plugin.core.api.internal.codeparser.codetree.CodeTrees;
 import zephyr.plugin.core.api.internal.codeparser.interfaces.CodeNode;
@@ -36,6 +34,7 @@ import zephyr.plugin.plotting.privates.traces.TraceExtended;
 
 public class SelectDataDialog extends FilteredItemsSelectionDialog {
   final class TraceFilter extends ItemsFilter {
+    @SuppressWarnings("hiding")
     private final int level;
 
     public TraceFilter(int level) {

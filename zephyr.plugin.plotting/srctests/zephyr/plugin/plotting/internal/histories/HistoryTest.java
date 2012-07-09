@@ -2,7 +2,6 @@ package zephyr.plugin.plotting.internal.histories;
 
 import org.junit.Assert;
 import org.junit.Test;
-
 import zephyr.plugin.plotting.privates.histories.AveragedHistory;
 import zephyr.plugin.plotting.privates.histories.History;
 import zephyr.plugin.plotting.privates.histories.LazyHistory;
@@ -97,7 +96,7 @@ public class HistoryTest {
     assertEquals(hist04, h.toArray());
   }
 
-  private void assertEquals(float[] expected, float[] actual) {
+  private static void assertEquals(float[] expected, float[] actual) {
     Assert.assertEquals(expected.length, actual.length);
     for (int i = 0; i < expected.length; i++)
       Assert.assertEquals(expected[i], actual[i], 0.0);

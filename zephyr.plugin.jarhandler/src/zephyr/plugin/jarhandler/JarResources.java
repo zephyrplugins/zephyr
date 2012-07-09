@@ -25,6 +25,7 @@ public final class JarResources {
     buildJarDictionary();
   }
 
+  @SuppressWarnings("resource")
   public Manifest getManifest() {
     InputStream resource = getResourceAsStream("META-INF/MANIFEST.MF");
     if (resource == null)

@@ -3,7 +3,6 @@ package zephyr.plugin.core.privates.observations;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
-
 import zephyr.plugin.core.internal.utils.Colors;
 
 /*
@@ -64,41 +63,36 @@ public class RichDisplayBar {
   private void drawCurrentValue(Rectangle barRectangle, GC gc) {
     gc.setBackground(colors.color(gc, Colors.COLOR_RED));
     int currentPosition = scaledValueToYPosition(barRectangle, scale(obsStat.current));
-    gc.fillRectangle(barRectangle.x,
-                     currentPosition - CurrentHeight / 2,
-                     barRectangle.width, CurrentHeight);
+    gc.fillRectangle(barRectangle.x, currentPosition - CurrentHeight / 2, barRectangle.width, CurrentHeight);
     drawSideCursor(barRectangle, gc, currentPosition);
   }
 
-  private void drawSideCursor(Rectangle barRectangle, GC gc, int y) {
+  private static void drawSideCursor(Rectangle barRectangle, GC gc, int y) {
     Point left = new Point(barRectangle.x + barRectangle.width, y);
-    gc.fillPolygon(new int[] { left.x, left.y,
-        left.x + SideCursorWidth, left.y - SideCursorHeight / 2,
+    gc.fillPolygon(new int[] { left.x, left.y, left.x + SideCursorWidth, left.y - SideCursorHeight / 2,
         left.x + SideCursorWidth, left.y + SideCursorHeight / 2 });
   }
 
   private void drawMean(Rectangle barRectangle, GC gc, int meanPosition) {
     gc.setBackground(colors.color(gc, Colors.COLOR_DARK_GRAY));
-    gc.fillRectangle(barRectangle.x, meanPosition - MeanHeight / 2,
-                     barRectangle.width, MeanHeight);
+    gc.fillRectangle(barRectangle.x, meanPosition - MeanHeight / 2, barRectangle.width, MeanHeight);
   }
 
-  private int scaledValueToYPosition(Rectangle barRectangle, double scaledValue) {
+  private static int scaledValueToYPosition(Rectangle barRectangle, double scaledValue) {
     return barRectangle.y + barRectangle.height - (int) (scaledValue * barRectangle.height);
   }
 
   private void drawStandardDeviation(Rectangle barRectangle, GC gc, int meanPosition) {
     int stddevLength = Math.max(1, (int) (obsStat.scaledStdDev() * barRectangle.height));
     gc.setBackground(colors.color(gc, Colors.COLOR_LIGHT_RED));
-    gc.fillRectangle(barRectangle.x, meanPosition - stddevLength / 2,
-                     barRectangle.width, stddevLength);
+    gc.fillRectangle(barRectangle.x, meanPosition - stddevLength / 2, barRectangle.width, stddevLength);
   }
 
-  private Rectangle computeBarRectangle(Rectangle clipping) {
+  private static Rectangle computeBarRectangle(Rectangle clipping) {
     int barWidth = Math.min(clipping.width - 2 * VerticalMargin - SideCursorWidth, MaxWidth);
     int verticalMargins = (clipping.width - barWidth) / 2;
-    Rectangle barRectangle = new Rectangle(verticalMargins, HorizontalMargin,
-                                           barWidth, clipping.height - 2 * HorizontalMargin);
+    Rectangle barRectangle = new Rectangle(verticalMargins, HorizontalMargin, barWidth, clipping.height - 2
+        * HorizontalMargin);
     return barRectangle;
   }
 

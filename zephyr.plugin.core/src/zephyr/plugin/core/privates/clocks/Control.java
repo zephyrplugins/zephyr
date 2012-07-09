@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
 import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.signals.Signal;
 import zephyr.plugin.core.api.synchronization.Clock;
@@ -78,7 +77,7 @@ public class Control implements Listener<Clock> {
     }
   }
 
-  private boolean isSuspendedValue(Integer authorizedStep) {
+  private static boolean isSuspendedValue(Integer authorizedStep) {
     return authorizedStep != null && authorizedStep == 0;
   }
 

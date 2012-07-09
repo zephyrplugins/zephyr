@@ -8,7 +8,6 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.List;
 import java.util.jar.Manifest;
-
 import zephyr.plugin.core.utils.Misc;
 import zephyr.plugin.filehandling.IFileHandler;
 
@@ -45,7 +44,7 @@ public class JarFileHandler implements IFileHandler {
     }
   }
 
-  private Method retrieveMainMethod(JarClassLoader jarLoader, String className) {
+  private static Method retrieveMainMethod(JarClassLoader jarLoader, String className) {
     Method method = null;
     try {
       method = jarLoader.loadClass(className, true).getMethod("main", String[].class);
@@ -73,7 +72,7 @@ public class JarFileHandler implements IFileHandler {
     return method;
   }
 
-  private String retrieveClassName(JarClassLoader jarLoader) {
+  private static String retrieveClassName(JarClassLoader jarLoader) {
     Manifest manifest = jarLoader.jar().getManifest();
     if (manifest == null)
       return null;
