@@ -305,6 +305,17 @@
       </perspective>
    </extension>
    <extension
+         point="org.eclipse.ui.activities">
+      <activity
+            id="zephyr.plugin.core.activity"
+            name="Zephyr Activity">
+      </activity>
+      <activityPatternBinding
+            activityId="zephyr.plugin.core.activity"
+            pattern="zephyr.*">
+      </activityPatternBinding>
+   </extension>
+   <extension
          point="org.eclipse.ui.bindings">
       <scheme
             id="zephyr.plugin.core.scheme"

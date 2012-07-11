@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IPageListener;
@@ -20,7 +19,6 @@ import org.eclipse.ui.activities.IActivityManager;
 import org.eclipse.ui.activities.IWorkbenchActivitySupport;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
-
 import zephyr.plugin.core.RunnableFactory;
 import zephyr.plugin.core.api.Zephyr;
 import zephyr.plugin.core.api.Zephyr.AdvertisementInfo;
@@ -205,7 +203,7 @@ public class ZephyrPluginCore extends AbstractUIPlugin {
 
   static public void enableZephyrActivity() {
     zephyrEnabled = true;
-    // enableActivities("zephyr.plugin.core.activity");
+    enableActivities("zephyr.plugin.core.activity");
   }
 
   static void enableActivities(String... ids) {
