@@ -27,7 +27,6 @@ public class ParserTest01 {
       "logged11CollectionLabeled/[0:element0]/logged", "logged11CollectionLabeled/[1:element1]/logged",
       "logged12ClassLogged/logged", "logged01AddedFromInterface" };
 
-  @SuppressWarnings("unused")
   static public class TestAddLog01 implements MonitorContainer {
     public double notLogged;
     @Monitor
