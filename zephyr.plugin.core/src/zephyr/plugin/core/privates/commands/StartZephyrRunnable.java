@@ -1,12 +1,10 @@
 package zephyr.plugin.core.privates.commands;
 
 import java.util.Map;
-
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.runtime.IConfigurationElement;
-
+import zephyr.plugin.core.RunnableFactory;
 import zephyr.plugin.core.ZephyrCore;
 
 public class StartZephyrRunnable extends AbstractHandler {
@@ -20,12 +18,12 @@ public class StartZephyrRunnable extends AbstractHandler {
     String runnableID = (String) parameters.get(ParameterRunnableID);
     if (runnableID == null)
       return null;
-    IConfigurationElement configurationElement = ZephyrCore.findRunnable(runnableID);
-    if (configurationElement == null) {
+    RunnableFactory runnableFactory = ZephyrCore.findRunnable(runnableID);
+    if (runnableFactory == null) {
       System.err.println("Zephyr error: " + runnableID + " runnable id not found");
       return null;
     }
-    ZephyrCore.start(configurationElement);
+    ZephyrCore.start(runnableFactory);
     return null;
   }
 }

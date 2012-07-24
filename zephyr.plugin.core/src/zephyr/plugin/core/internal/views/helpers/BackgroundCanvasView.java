@@ -5,7 +5,6 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-
 import zephyr.plugin.core.internal.canvas.BackgroundCanvas;
 import zephyr.plugin.core.internal.canvas.Painter;
 
@@ -37,7 +36,7 @@ public abstract class BackgroundCanvasView<T> extends ClassTypeView<T> implement
   public void paint(PainterMonitor painterListener, Image image, GC gc) {
     if (!viewLock.acquire())
       return;
-    if (instance.current() != null && hasBeenSynchronized())
+    if (hasBeenSynchronized())
       paint(painterListener, gc);
     else
       defaultPainting(gc);

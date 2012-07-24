@@ -1,7 +1,6 @@
 package zephyr.plugin.core.privates.views.video;
 
 import org.eclipse.swt.graphics.GC;
-
 import zephyr.plugin.core.api.viewable.ImageProvider;
 import zephyr.plugin.core.internal.helpers.ClassViewProvider;
 import zephyr.plugin.core.internal.utils.ImageAdapter;
@@ -22,15 +21,12 @@ public class VideoView extends ForegroundCanvasView<ImageProvider> {
   }
 
   @Override
-  protected boolean synchronize() {
+  protected boolean synchronize(ImageProvider provider) {
     return true;
   }
 
   @Override
-  protected void unprotectedSynchronization() {
-    ImageProvider provider = instance.current();
-    if (provider == null)
-      return;
+  protected void unprotectedSynchronization(ImageProvider provider) {
     imageAdapter.update(provider.image());
   }
 

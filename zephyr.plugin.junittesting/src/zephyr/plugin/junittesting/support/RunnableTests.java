@@ -1,8 +1,7 @@
 package zephyr.plugin.junittesting.support;
 
-import org.eclipse.core.runtime.IConfigurationElement;
 import org.junit.Assert;
-
+import zephyr.plugin.core.RunnableFactory;
 import zephyr.plugin.core.ZephyrCore;
 import zephyr.plugin.core.internal.ZephyrSync;
 import zephyr.plugin.core.internal.events.AtomicEvent;
@@ -18,19 +17,18 @@ public class RunnableTests {
     Assert.assertEquals(0, ZephyrSync.syncCode().getClockNodes().size());
   }
 
-  static public void startRunnable(String runnableID, Condition... conditions) {
+  static public void startRunnable(String elementID, Condition... conditions) {
+    startRunnable(ZephyrCore.findRunnable(elementID), conditions);
+  }
+
+  static public void startRunnable(RunnableFactory runnableFactory, Condition... conditions) {
+    Assert.assertNotNull(runnableFactory);
     ClockListener listener = new ClockListener();
     for (Condition condition : conditions)
       listener.registerCondition(condition);
-    startRunnable(runnableID);
+    ZephyrCore.start(runnableFactory);
     listener.waitClockRemoved();
     RunnableTests.checkRunnableAllDone();
-  }
-
-  private static void startRunnable(String runnableID) {
-    IConfigurationElement element = ZephyrCore.findRunnable(runnableID);
-    Assert.assertNotNull(element);
-    ZephyrCore.start(element);
   }
 
   static public void testFileLoading(String filepath, int nbClockTick) {
@@ -41,5 +39,23 @@ public class RunnableTests {
     listener.waitClockRemoved();
     ZephyrSync.busEvent().syncDispatch(new AtomicEvent("RunnableFilesTests"));
     checkRunnableAllDone();
+  }
+
+  public static void startRunnable(final Class<? extends Runnable> runnableClass, Condition... conditions) {
+    startRunnable(new RunnableFactory() {
+      @Override
+      public Runnable createRunnable() {
+        Runnable runnable = null;
+        try {
+          runnable = runnableClass.newInstance();
+        } catch (InstantiationException e) {
+          e.printStackTrace();
+        } catch (IllegalAccessException e) {
+          e.printStackTrace();
+        }
+        Assert.assertNotNull(runnable);
+        return runnable;
+      }
+    }, conditions);
   }
 }

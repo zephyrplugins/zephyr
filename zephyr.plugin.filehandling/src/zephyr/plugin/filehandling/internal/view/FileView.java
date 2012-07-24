@@ -1,13 +1,11 @@
 package zephyr.plugin.filehandling.internal.view;
 
 import java.io.File;
-
 import org.eclipse.jface.action.IToolBarManager;
-
 import zephyr.plugin.core.ZephyrCore;
 import zephyr.plugin.core.api.internal.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.internal.logfiles.LogFile;
-import zephyr.plugin.core.api.synchronization.Closeable;
+import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.internal.actions.RestartAction;
 import zephyr.plugin.core.internal.actions.TerminateAction;
 import zephyr.plugin.core.internal.helpers.ClassViewProvider;
@@ -18,13 +16,14 @@ import zephyr.plugin.core.internal.observations.SensorGroup;
 import zephyr.plugin.core.internal.views.Restartable;
 import zephyr.plugin.filehandling.internal.DefaultHandler;
 
-public class FileView extends EnvironmentView<LogFile> implements Closeable, Restartable {
+public class FileView extends EnvironmentView<LogFile> implements Restartable {
   static public class Provider extends ClassViewProvider {
     public Provider() {
       super(LogFile.class);
     }
   }
 
+  String filepath;
   private final TerminateAction terminateAction;
   private final RestartAction restartAction;
 
@@ -36,8 +35,8 @@ public class FileView extends EnvironmentView<LogFile> implements Closeable, Res
   }
 
   @Override
-  protected ObsLayout getObservationLayout() {
-    String[] labels = instance.current().labels();
+  protected ObsLayout getObservationLayout(Clock clock, LogFile current) {
+    String[] labels = current.labels();
     int nbLine = (int) Math.sqrt(labels.length);
     int nbItems = labels.length / nbLine;
     ObsWidget[][] widgets = new ObsWidget[nbLine][];
@@ -60,7 +59,6 @@ public class FileView extends EnvironmentView<LogFile> implements Closeable, Res
 
   @Override
   public void restart() {
-    final String filepath = instance.current().filepath;
     close();
     ZephyrCore.start(new Runnable() {
       @Override
@@ -76,10 +74,11 @@ public class FileView extends EnvironmentView<LogFile> implements Closeable, Res
   }
 
   @Override
-  protected void setLayout() {
-    super.setLayout();
+  protected void setLayout(Clock clock, LogFile current) {
+    super.setLayout(clock, current);
     restartAction.setEnabled(true);
     terminateAction.setEnabled(true);
+    filepath = current.filepath;
   }
 
   @Override
@@ -89,8 +88,8 @@ public class FileView extends EnvironmentView<LogFile> implements Closeable, Res
 
 
   @Override
-  protected boolean synchronize() {
-    double[] currentLine = instance.current().currentLine();
+  protected boolean synchronize(LogFile current) {
+    double[] currentLine = current.currentLine();
     synchronize(currentLine);
     return currentLine != null;
   }
@@ -100,10 +99,5 @@ public class FileView extends EnvironmentView<LogFile> implements Closeable, Res
     super.unsetLayout();
     restartAction.setEnabled(false);
     terminateAction.setEnabled(false);
-  }
-
-  @Override
-  public void close() {
-    instance.unset();
   }
 }

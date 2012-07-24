@@ -1,14 +1,14 @@
 package zephyr.plugin.plotting.privates.view;
 
 import java.awt.geom.Point2D;
-
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
-
+import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.api.viewable.ContinuousFunction2D;
+import zephyr.plugin.core.api.viewable.PositionFunction2D;
 import zephyr.plugin.core.internal.helpers.ClassViewProvider;
 import zephyr.plugin.core.internal.utils.Colors;
 import zephyr.plugin.core.internal.views.helpers.ForegroundCanvasView;
@@ -64,23 +64,22 @@ public class HeatMapView extends ForegroundCanvasView<ContinuousFunction2D> {
   }
 
   @Override
-  protected boolean synchronize() {
+  protected boolean synchronize(ContinuousFunction2D current) {
     valueFunctionSampler.updateData(valueFunctionData);
-    position = instance.current().position();
+    if (current instanceof PositionFunction2D)
+      position = ((PositionFunction2D) current).position();
     return true;
   }
 
   @Override
-  public void onInstanceSet() {
-    super.onInstanceSet();
-    ContinuousFunction2D function = instance.current();
+  public void onInstanceSet(Clock clock, ContinuousFunction2D function) {
+    super.onInstanceSet(clock, function);
     valueFunctionData = new MapData(200);
     valueFunctionSampler = new FunctionSampler(function);
-    updateAxes();
+    updateAxes(function);
   }
 
-  private void updateAxes() {
-    ContinuousFunction2D function = instance.current();
+  private void updateAxes(ContinuousFunction2D function) {
     axes.x.reset();
     axes.x.update(function.minX());
     axes.x.update(function.maxX());
@@ -108,8 +107,8 @@ public class HeatMapView extends ForegroundCanvasView<ContinuousFunction2D> {
   }
 
   @Override
-  public void onInstanceUnset() {
-    super.onInstanceUnset();
+  public void onInstanceUnset(Clock clock) {
+    super.onInstanceUnset(clock);
     valueFunctionDrawer.unset();
   }
 }

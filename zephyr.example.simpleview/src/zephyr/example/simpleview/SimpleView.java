@@ -1,7 +1,6 @@
 package zephyr.example.simpleview;
 
 import org.eclipse.swt.graphics.GC;
-
 import zephyr.plugin.core.internal.helpers.ClassViewProvider;
 import zephyr.plugin.core.internal.utils.Colors;
 import zephyr.plugin.core.internal.views.helpers.ForegroundCanvasView;
@@ -25,11 +24,11 @@ public class SimpleView extends ForegroundCanvasView<SimpleModel> {
   }
 
   @Override
-  public boolean synchronize() {
-    if (data.length != instance.current().data.length)
-      data = instance.current().data.clone();
+  public boolean synchronize(SimpleModel model) {
+    if (data.length != model.data.length)
+      data = model.data.clone();
     else
-      System.arraycopy(instance.current().data, 0, data, 0, data.length);
+      System.arraycopy(model.data, 0, data, 0, data.length);
     return true;
   }
 

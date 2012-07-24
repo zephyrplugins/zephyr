@@ -28,17 +28,20 @@ public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView,
     ViewWithControl {
   protected final Runnable uiSetLayout = new Runnable() {
     @Override
+    @SuppressWarnings("synthetic-access")
     public void run() {
-      if (parent.isDisposed() || instance.current() == null)
+      Clock clock = instance.clock();
+      T current = instance.current();
+      if (parent.isDisposed() || clock == null || current == null)
         return;
       if (!viewLock.acquire())
         return;
       setViewName();
-      setLayout();
+      setLayout(clock, current);
       parent.layout(true, true);
       viewLock.release();
       isLayoutReady = true;
-      ZephyrSync.submitView(ClassTypeView.this, instance.clock());
+      ZephyrSync.submitView(ClassTypeView.this, clock);
     }
   };
   protected final Runnable uiUnsetLayout = new Runnable() {
@@ -54,7 +57,7 @@ public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView,
       viewLock.release();
     }
   };
-  protected final InstanceManager<T> instance;
+  private final InstanceManager<T> instance;
   protected final ViewLock viewLock;
   protected Composite parent;
   protected boolean hasBeenSynchronized = false;
@@ -147,16 +150,17 @@ public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView,
     if (!viewLock.acquire())
       return false;
     boolean result = false;
-    if (instance.current() != null) {
-      result = synchronize();
+    T current = instance.current();
+    if (current != null) {
+      result = synchronize(current);
       hasBeenSynchronized = true;
     }
     viewLock.release();
-    unprotectedSynchronization();
+    unprotectedSynchronization(current);
     return result;
   }
 
-  protected void unprotectedSynchronization() {
+  protected void unprotectedSynchronization(T current) {
   }
 
   @Override
@@ -169,13 +173,13 @@ public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView,
   abstract protected boolean isInstanceSupported(Object instance);
 
   @Override
-  public void onInstanceSet() {
+  public void onInstanceSet(Clock clock, T current) {
     hasBeenSynchronized = false;
     Display.getDefault().asyncExec(uiSetLayout);
   }
 
   @Override
-  public void onInstanceUnset() {
+  public void onInstanceUnset(Clock clock) {
     hasBeenSynchronized = false;
     isLayoutReady = false;
     Display.getDefault().asyncExec(uiUnsetLayout);
@@ -192,9 +196,18 @@ public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView,
     return parent;
   }
 
-  abstract protected boolean synchronize();
+  protected void unsetInstance() {
+    instance.unset();
+  }
 
-  abstract protected void setLayout();
+
+  protected CodeNode codeNode() {
+    return instance.codeNode();
+  }
+
+  abstract protected boolean synchronize(T current);
+
+  abstract protected void setLayout(Clock clock, T current);
 
   abstract protected void unsetLayout();
 }

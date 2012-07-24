@@ -1,7 +1,6 @@
 package zephyr.plugin.junittesting.bars;
 
 import org.eclipse.swt.graphics.GC;
-
 import zephyr.plugin.core.internal.helpers.ClassViewProvider;
 import zephyr.plugin.core.internal.views.helpers.ForegroundCanvasView;
 import zephyr.plugin.plotting.internal.bar2d.Bar2D;
@@ -26,8 +25,8 @@ public class BarView extends ForegroundCanvasView<BarModel> {
   }
 
   @Override
-  protected boolean synchronize() {
-    data = instance.current().data();
+  protected boolean synchronize(BarModel current) {
+    data = current.data();
     return true;
   }
 

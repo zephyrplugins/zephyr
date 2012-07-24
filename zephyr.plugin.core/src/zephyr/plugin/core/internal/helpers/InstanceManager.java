@@ -20,9 +20,9 @@ public class InstanceManager<T> {
   public interface InstanceListener<T> extends SyncView {
     boolean isSupported(CodeNode codeNode);
 
-    void onInstanceSet();
+    void onInstanceSet(Clock clock, T current);
 
-    void onInstanceUnset();
+    void onInstanceUnset(Clock clock);
   }
 
   private T instance = null;
@@ -73,7 +73,7 @@ public class InstanceManager<T> {
       return;
     Clock previousClock = clock;
     ZephyrSync.unbind(previousClock, view);
-    view.onInstanceUnset();
+    view.onInstanceUnset(previousClock);
     instance = null;
     codeNode = null;
     clock = null;
@@ -89,7 +89,7 @@ public class InstanceManager<T> {
     instance = (T) ((ClassNode) codeNode).instance();
     this.codeNode = codeNode;
     this.clock = CodeTrees.clockOf(codeNode);
-    view.onInstanceSet();
+    view.onInstanceSet(clock, instance);
     ZephyrSync.bind(clock, view);
   }
 

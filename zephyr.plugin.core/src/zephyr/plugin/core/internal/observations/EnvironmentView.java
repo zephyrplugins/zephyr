@@ -5,11 +5,12 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-
+import zephyr.plugin.core.api.synchronization.Clock;
+import zephyr.plugin.core.api.synchronization.Closeable;
 import zephyr.plugin.core.internal.views.helpers.ClassTypeView;
 import zephyr.plugin.core.privates.observations.LineLayout;
 
-public abstract class EnvironmentView<T> extends ClassTypeView<T> {
+public abstract class EnvironmentView<T> extends ClassTypeView<T> implements Closeable {
   ObsLayout obsLayout;
   private final Runnable repaintWidgets = new Runnable() {
     @Override
@@ -30,11 +31,11 @@ public abstract class EnvironmentView<T> extends ClassTypeView<T> {
   protected void setToolbar(IToolBarManager toolBarManager) {
   }
 
-  abstract protected ObsLayout getObservationLayout();
+  abstract protected ObsLayout getObservationLayout(Clock clock, T current);
 
   @Override
-  protected void setLayout() {
-    obsLayout = getObservationLayout();
+  protected void setLayout(Clock clock, T current) {
+    obsLayout = getObservationLayout(clock, current);
     FillLayout layout = new FillLayout(SWT.VERTICAL);
     parent.setLayout(layout);
     for (ObsWidget[] line : obsLayout.widgetArray()) {
@@ -76,5 +77,10 @@ public abstract class EnvironmentView<T> extends ClassTypeView<T> {
   @Override
   public Control control() {
     return parent;
+  }
+
+  @Override
+  public void close() {
+    unsetInstance();
   }
 }

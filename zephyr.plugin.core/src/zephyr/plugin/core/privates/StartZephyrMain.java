@@ -23,7 +23,7 @@ public class StartZephyrMain implements StartupJob {
       boolean autostart = Boolean.parseBoolean(element.getAttribute("autostart"));
       if (!autostart && !checkForID(args, element.getAttribute("id")))
         continue;
-      ZephyrCore.start(element);
+      ZephyrCore.start(createRunnableFactory(element));
     }
   }
 

@@ -3,12 +3,10 @@ package zephyr.plugin.plotting.privates.view;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.ui.IMemento;
-
 import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.signals.Signal;
 import zephyr.plugin.core.internal.ZephyrSync;
@@ -75,15 +73,11 @@ class HistoryLength {
     historyLength.setMinimum(PlotData.MinimumTimeLength);
     historyLength.setMaximum(PlotData.MaximumTimeLength - 1);
     historyLength.setDigits(0);
-    composite.pack();
-    double nbLetters = Math.floor(Math.log10(PlotData.MaximumTimeLength));
     if (previousHistoryLength != null)
       setHistoryLengthValue(previousHistoryLength);
     else
       setHistoryLengthValue(length());
     historyLength.setSelection(length());
-    historyLength.setLayoutData(new RowData((int) (historyLength.getSize().x / 9.0 * nbLetters), historyLength
-        .getSize().y));
     historyLength.addSelectionListener(new SelectionListener() {
       private void setHistoryLength() {
         try {

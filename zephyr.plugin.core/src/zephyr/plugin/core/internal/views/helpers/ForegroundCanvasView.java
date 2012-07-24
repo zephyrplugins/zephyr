@@ -11,7 +11,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-
+import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.internal.views.helpers.ScreenShotAction.Shotable;
 
 public abstract class ForegroundCanvasView<T> extends ClassTypeView<T> implements Shotable {
@@ -41,7 +41,7 @@ public abstract class ForegroundCanvasView<T> extends ClassTypeView<T> implement
         if (!viewLock.acquire())
           return;
         GC gc = e.gc;
-        if (instance.current() != null && hasBeenSynchronized())
+        if (hasBeenSynchronized())
           paint(gc);
         else
           defaultPainting(gc);
@@ -68,7 +68,7 @@ public abstract class ForegroundCanvasView<T> extends ClassTypeView<T> implement
   }
 
   @Override
-  protected void setLayout() {
+  protected void setLayout(Clock clock, T current) {
     setViewName();
   }
 

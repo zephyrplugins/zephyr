@@ -2,7 +2,6 @@ package zephyr.plugin.core;
 
 import java.util.Collection;
 import java.util.List;
-
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
@@ -17,7 +16,6 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
-
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.internal.ZephyrSync;
 import zephyr.plugin.core.internal.events.AtomicEvent;
@@ -101,11 +99,7 @@ public class ZephyrCore {
     });
   }
 
-  public static void start(IConfigurationElement element) {
-    ZephyrPluginCore.getDefault().startZephyrMain(StartZephyrMain.createRunnableFactory(element));
-  }
-
-  static public IConfigurationElement findRunnable(String runnableID) {
+  static public RunnableFactory findRunnable(String runnableID) {
     IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint("zephyr.runnable");
     IConfigurationElement configurationElement = null;
     for (IExtension extension : extensionPoint.getExtensions())
@@ -114,7 +108,9 @@ public class ZephyrCore {
           configurationElement = element;
           break;
         }
-    return configurationElement;
+    if (configurationElement == null)
+      return null;
+    return StartZephyrMain.createRunnableFactory(configurationElement);
   }
 
   public static List<Clock> registeredClocks() {
