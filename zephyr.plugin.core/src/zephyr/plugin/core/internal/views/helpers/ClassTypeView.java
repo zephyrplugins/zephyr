@@ -87,7 +87,7 @@ public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView,
   }
 
   @Override
-  final public boolean[] provide(CodeNode[] codeNode) {
+  public boolean[] provide(CodeNode[] codeNode) {
     return instance.provide(codeNode);
   }
 
