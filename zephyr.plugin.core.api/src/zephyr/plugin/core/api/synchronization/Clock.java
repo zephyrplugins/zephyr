@@ -47,14 +47,16 @@ public class Clock implements Serializable {
   public void releaseData() {
     if (!enableDataLock || terminated)
       return;
-    if (dataLock == null)
-      dataLock = new Semaphore(0);
+    if (dataLock == null) {
+      dataLock = new Semaphore(1);
+      return;
+    }
     dataLock.release();
   }
 
   public boolean acquireData() {
-    if (dataLock == null || terminated)
-      return true;
+    if (dataLock == null)
+      return false;
     try {
       dataLock.acquire();
     } catch (InterruptedException e) {

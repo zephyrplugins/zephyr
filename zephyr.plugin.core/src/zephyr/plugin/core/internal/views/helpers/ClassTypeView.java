@@ -78,7 +78,7 @@ public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView,
   }
 
   @Override
-  final public void drop(CodeNode[] supported) {
+  public void drop(CodeNode[] supported) {
     instance.drop(supported);
   }
 
@@ -149,14 +149,18 @@ public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView,
   final public boolean synchronize(Clock clock) {
     if (!viewLock.acquire())
       return false;
-    boolean result = false;
     T current = instance.current();
-    if (current != null) {
-      result = synchronize(current);
-      hasBeenSynchronized = true;
-    }
+    boolean result = lockAndSynchronize(clock, current);
     viewLock.release();
     unprotectedSynchronization(current);
+    return result;
+  }
+
+  private boolean lockAndSynchronize(Clock clock, T current) {
+    if (clock == null || current == null)
+      return false;
+    boolean result = synchronize(current);
+    hasBeenSynchronized = true;
     return result;
   }
 

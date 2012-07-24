@@ -1,7 +1,6 @@
 package zephyr.plugin.core.privates.synchronization.tasks;
 
 import java.util.concurrent.Future;
-
 import zephyr.plugin.core.api.synchronization.Clock;
 
 public class ViewTask implements Runnable {
@@ -57,7 +56,14 @@ public class ViewTask implements Runnable {
   public Future<?> refresh(Clock clock) {
     synchronized (view) {
       lastSyncClock = clock;
-      view.synchronize(clock);
+      if (clock.acquireData()) {
+        try {
+          view.synchronize(clock);
+        } catch (Throwable t) {
+          t.printStackTrace();
+        }
+        clock.releaseData();
+      }
     }
     return redraw();
   }

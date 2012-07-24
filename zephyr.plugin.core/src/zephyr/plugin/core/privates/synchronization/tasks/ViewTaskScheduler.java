@@ -3,7 +3,6 @@ package zephyr.plugin.core.privates.synchronization.tasks;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-
 import zephyr.plugin.core.api.signals.Signal;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.internal.views.SyncView;
@@ -45,12 +44,8 @@ public class ViewTaskScheduler {
   }
 
   void synchronizeRedrawView(ViewTask task, Clock[] clocks) {
-    for (Clock clock : clocks) {
-      if (!clock.acquireData())
-        break;
+    for (Clock clock : clocks)
       task.refresh(clock);
-      clock.releaseData();
-    }
   }
 
   public void schedule(Runnable runnable) {
