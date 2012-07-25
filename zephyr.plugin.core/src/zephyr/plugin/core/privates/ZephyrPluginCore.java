@@ -23,6 +23,7 @@ import zephyr.plugin.core.RunnableFactory;
 import zephyr.plugin.core.api.Zephyr;
 import zephyr.plugin.core.api.Zephyr.AdvertisementInfo;
 import zephyr.plugin.core.api.signals.Listener;
+import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.internal.SyncCode;
 import zephyr.plugin.core.internal.async.BusEvent;
 import zephyr.plugin.core.internal.async.recognizers.OnEventBlocker;
@@ -49,6 +50,7 @@ public class ZephyrPluginCore extends AbstractUIPlugin {
   private final Clocks clocks = new Clocks();
 
   public ZephyrPluginCore() {
+    Clock.setEnableDataLock(true);
     classLoader = AccessController.doPrivileged(new PrivilegedAction<ZephyrClassLoaderInternal>() {
       @Override
       public ZephyrClassLoaderInternal run() {

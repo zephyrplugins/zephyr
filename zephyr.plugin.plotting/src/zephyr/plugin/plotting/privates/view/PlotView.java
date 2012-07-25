@@ -25,6 +25,7 @@ import zephyr.plugin.core.internal.helpers.SyncViewDropTarget;
 import zephyr.plugin.core.internal.views.DropTargetView;
 import zephyr.plugin.core.internal.views.ProvidedView;
 import zephyr.plugin.plotting.internal.actions.CenterPlotAction;
+import zephyr.plugin.plotting.internal.actions.SynchronizeAction;
 import zephyr.plugin.plotting.internal.actions.CenterPlotAction.ViewCenterable;
 import zephyr.plugin.plotting.internal.mousesearch.MouseSearch;
 import zephyr.plugin.plotting.internal.mousesearch.MouseSearchable;

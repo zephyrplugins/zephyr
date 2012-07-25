@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.internal.ZephyrSync;
 import zephyr.plugin.core.internal.events.ClockEvent;
@@ -19,7 +18,6 @@ public class Clocks {
   public void register(Clock clock) {
     if (clocks.containsKey(clock))
       return;
-    clock.setEnableDataLock(true);
     clocks.put(clock, new ClockStat());
     ZephyrSync.busEvent().dispatch(new ClockEvent(ClockEvent.AddedID, clock));
   }
@@ -29,7 +27,6 @@ public class Clocks {
       return;
     clocks.remove(clock);
     ZephyrSync.busEvent().dispatch(new ClockEvent(ClockEvent.RemovedID, clock));
-    clock.setEnableDataLock(false);
   }
 
   public List<Clock> getClocks() {

@@ -6,6 +6,7 @@ import zephyr.plugin.core.api.signals.Signal;
 
 public class Clock implements Serializable {
   private static final long serialVersionUID = -1155346148292134613L;
+  static private boolean enableDataLock = false;
   public final transient Signal<Clock> onTick = new Signal<Clock>();
   public final transient Signal<Clock> onTerminate = new Signal<Clock>();
   private long timeStep = -1;
@@ -15,7 +16,6 @@ public class Clock implements Serializable {
   private boolean terminated = false;
   private final ClockInfo info;
   private Semaphore dataLock = null;
-  private boolean enableDataLock = false;
 
   public Clock() {
     this("NoName");
@@ -45,18 +45,18 @@ public class Clock implements Serializable {
   }
 
   public void releaseData() {
-    if (!enableDataLock || terminated)
+    if (!enableDataLock)
       return;
-    if (dataLock == null) {
-      dataLock = new Semaphore(1);
-      return;
-    }
+    if (dataLock == null)
+      dataLock = new Semaphore(0);
     dataLock.release();
   }
 
   public boolean acquireData() {
+    if (!enableDataLock)
+      return true;
     if (dataLock == null)
-      return false;
+      dataLock = new Semaphore(1);
     try {
       dataLock.acquire();
     } catch (InterruptedException e) {
@@ -99,9 +99,7 @@ public class Clock implements Serializable {
     return info;
   }
 
-  public void setEnableDataLock(boolean enabled) {
+  static public void setEnableDataLock(boolean enabled) {
     enableDataLock = enabled;
-    if (!enabled)
-      dataLock = null;
   }
 }

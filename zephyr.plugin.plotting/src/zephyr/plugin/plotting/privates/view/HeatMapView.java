@@ -13,6 +13,7 @@ import zephyr.plugin.core.internal.helpers.ClassViewProvider;
 import zephyr.plugin.core.internal.utils.Colors;
 import zephyr.plugin.core.internal.views.helpers.ForegroundCanvasView;
 import zephyr.plugin.core.internal.views.helpers.ScreenShotAction;
+import zephyr.plugin.plotting.internal.actions.SynchronizeAction;
 import zephyr.plugin.plotting.internal.axes.Axes;
 import zephyr.plugin.plotting.internal.heatmap.ColorMapAction;
 import zephyr.plugin.plotting.internal.heatmap.Function2DDrawer;
@@ -33,23 +34,24 @@ public class HeatMapView extends ForegroundCanvasView<ContinuousFunction2D> {
 
   static private final int PositionSize = 4;
   private final Colors colors = new Colors();
-  private final Function2DDrawer valueFunctionDrawer = new Function2DDrawer(colors);
+  private final Function2DDrawer drawer = new Function2DDrawer(colors);
   private final Axes axes = new Axes();
-  private final ColorMapAction colorMapAction = new ColorMapAction(this, valueFunctionDrawer);
+  private final ColorMapAction colorMapAction = new ColorMapAction(this, drawer);
+  private final SynchronizeAction synchronizeAction = new SynchronizeAction();
   private Point2D position;
-  private MapData valueFunctionData;
-  private FunctionSampler valueFunctionSampler;
+  private MapData data;
+  private FunctionSampler sampler;
 
   @Override
   protected void paint(GC gc) {
     axes.updateScaling(gc.getClipping());
-    valueFunctionDrawer.paint(gc, canvas, valueFunctionData, true);
+    drawer.paint(gc, canvas, data, true);
     if (position != null)
       drawPosition(gc);
   }
 
   private void drawPosition(GC gc) {
-    gc.setBackground(colors.color(gc, valueFunctionDrawer.spriteColor()));
+    gc.setBackground(colors.color(gc, drawer.spriteColor()));
     gc.fillOval(axes.toGX(position.getX()) - (PositionSize / 2), axes.toGY(position.getY()) - (PositionSize / 2),
                 PositionSize, PositionSize);
   }
@@ -65,7 +67,9 @@ public class HeatMapView extends ForegroundCanvasView<ContinuousFunction2D> {
 
   @Override
   protected boolean synchronize(ContinuousFunction2D current) {
-    valueFunctionSampler.updateData(valueFunctionData);
+    if (!synchronizeAction.synchronizedData())
+      return false;
+    sampler.updateData(data);
     if (current instanceof PositionFunction2D)
       position = ((PositionFunction2D) current).position();
     return true;
@@ -74,8 +78,8 @@ public class HeatMapView extends ForegroundCanvasView<ContinuousFunction2D> {
   @Override
   public void onInstanceSet(Clock clock, ContinuousFunction2D function) {
     super.onInstanceSet(clock, function);
-    valueFunctionData = new MapData(200);
-    valueFunctionSampler = new FunctionSampler(function);
+    data = new MapData(200);
+    sampler = new FunctionSampler(function);
     updateAxes(function);
   }
 
@@ -92,6 +96,7 @@ public class HeatMapView extends ForegroundCanvasView<ContinuousFunction2D> {
   protected void setToolbar(IToolBarManager toolbarManager) {
     toolbarManager.add(new ScreenShotAction(this));
     toolbarManager.add(colorMapAction);
+    toolbarManager.add(synchronizeAction);
   }
 
   @Override
@@ -109,6 +114,6 @@ public class HeatMapView extends ForegroundCanvasView<ContinuousFunction2D> {
   @Override
   public void onInstanceUnset(Clock clock) {
     super.onInstanceUnset(clock);
-    valueFunctionDrawer.unset();
+    drawer.unset();
   }
 }
