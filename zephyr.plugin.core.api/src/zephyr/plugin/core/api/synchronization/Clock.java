@@ -15,7 +15,7 @@ public class Clock implements Serializable {
   private boolean terminating = false;
   private boolean terminated = false;
   private final ClockInfo info;
-  private Semaphore dataLock = null;
+  private final Semaphore dataLock = enableDataLock ? new Semaphore(0) : null;
 
   public Clock() {
     this("NoName");
@@ -47,22 +47,20 @@ public class Clock implements Serializable {
   public void releaseData() {
     if (!enableDataLock)
       return;
-    if (dataLock == null)
-      dataLock = new Semaphore(0);
+    assert dataLock.availablePermits() == 0;
     dataLock.release();
   }
 
   public boolean acquireData() {
     if (!enableDataLock)
       return true;
-    if (dataLock == null)
-      dataLock = new Semaphore(1);
     try {
       dataLock.acquire();
     } catch (InterruptedException e) {
       prepareTermination();
       return false;
     }
+    assert dataLock.availablePermits() == 0;
     return true;
   }
 
