@@ -12,6 +12,13 @@ public class Interval {
   }
 
   final public double scale(double value) {
+    if (length == 0)
+      return 0;
     return Math.min(Math.max((value - min) / length, 0.0), 1.0);
+  }
+
+  @Override
+  public String toString() {
+    return String.format("(%f,%f)", min, max);
   }
 }

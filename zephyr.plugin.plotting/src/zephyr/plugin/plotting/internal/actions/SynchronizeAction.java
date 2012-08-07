@@ -7,10 +7,12 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
+import org.eclipse.ui.IMemento;
 import zephyr.ZephyrPlotting;
 import zephyr.plugin.core.internal.utils.Helper;
 
 public final class SynchronizeAction extends Action {
+  private static final String SynchronizedActionKey = "SynchronizedAction";
   private boolean synchronizedData = true;
 
   public SynchronizeAction() {
@@ -41,5 +43,18 @@ public final class SynchronizeAction extends Action {
 
   public boolean synchronizedData() {
     return synchronizedData;
+  }
+
+  public void init(IMemento memento) {
+    Boolean saved = memento != null ? memento.getBoolean(SynchronizedActionKey) : null;
+    if (saved != null) {
+      synchronizedData = saved;
+      setChecked(saved);
+      setImageDescriptor();
+    }
+  }
+
+  public void saveState(IMemento memento) {
+    memento.putBoolean(SynchronizedActionKey, isChecked());
   }
 }

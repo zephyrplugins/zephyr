@@ -36,7 +36,6 @@ public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView,
         return;
       if (!viewLock.acquire())
         return;
-      setViewName();
       setLayout(clock, current);
       parent.layout(true, true);
       viewLock.release();
@@ -127,7 +126,7 @@ public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView,
     setViewName(codeNode.label(), CodeTrees.mergePath(codeNode.path()));
   }
 
-  protected void setViewName(final String viewName, final String toolTip) {
+  public void setViewName(final String viewName, final String toolTip) {
     Display.getDefault().asyncExec(new Runnable() {
       @SuppressWarnings("synthetic-access")
       @Override
@@ -189,7 +188,7 @@ public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView,
     Display.getDefault().asyncExec(uiUnsetLayout);
   }
 
-  protected void setDefaultName() {
+  public void setDefaultName() {
     IViewRegistry viewRegistry = PlatformUI.getWorkbench().getViewRegistry();
     IViewDescriptor descriptor = viewRegistry.find(getSite().getId());
     setViewName(descriptor.getLabel(), "");

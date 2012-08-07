@@ -3,7 +3,7 @@ package zephyr.plugin.plotting.internal.heatmap;
 public class MapData {
   final public int resolution;
   private final float[][] imageData;
-  private Interval rangeValue = new Interval(-1.0, 1.0);
+  private Interval rangeValue = new Interval(0, 0);
 
   public MapData(int resolution) {
     this.resolution = resolution;

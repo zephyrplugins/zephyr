@@ -27,5 +27,4 @@ public class FunctionSampler {
     }
     data.setRangeValue(new Interval(minValue, maxValue));
   }
-
 }

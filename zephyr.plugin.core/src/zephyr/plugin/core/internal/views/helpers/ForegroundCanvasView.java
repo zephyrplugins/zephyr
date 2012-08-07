@@ -69,7 +69,6 @@ public abstract class ForegroundCanvasView<T> extends ClassTypeView<T> implement
 
   @Override
   protected void setLayout(Clock clock, T current) {
-    setViewName();
   }
 
   @Override

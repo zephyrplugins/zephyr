@@ -103,12 +103,14 @@ public class HeatMapView extends ForegroundCanvasView<ContinuousFunction2D> {
   public void init(IViewSite site, IMemento memento) throws PartInitException {
     super.init(site, memento);
     colorMapAction.init(memento);
+    synchronizeAction.init(memento);
   }
 
   @Override
   public void saveState(IMemento memento) {
     super.saveState(memento);
     colorMapAction.saveState(memento);
+    synchronizeAction.saveState(memento);
   }
 
   @Override
