@@ -11,10 +11,10 @@ import zephyr.plugin.core.internal.views.SyncView;
 
 public class ColorMapAction extends Action {
   private static final String ColorMapActionKey = "ColorMapAction";
-  private final Function2DDrawer drawer;
+  private final AbstractDrawer drawer;
   private final SyncView view;
 
-  public ColorMapAction(SyncView view, Function2DDrawer drawer) {
+  public ColorMapAction(SyncView view, AbstractDrawer drawer) {
     super("Color Map", IAction.AS_CHECK_BOX);
     this.view = view;
     this.drawer = drawer;
@@ -23,7 +23,7 @@ public class ColorMapAction extends Action {
 
   @Override
   public void run() {
-    drawer.setColorMap(isChecked() ? Function2DDrawer.BWColorMap : Function2DDrawer.DarkBlueColorMap);
+    drawer.setColorMap(isChecked() ? AbstractDrawer.BWColorMap : AbstractDrawer.DarkBlueColorMap);
     ZephyrSync.submitView(view);
   }
 

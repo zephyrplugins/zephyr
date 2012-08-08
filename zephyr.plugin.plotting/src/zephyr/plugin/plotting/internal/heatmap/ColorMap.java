@@ -42,6 +42,11 @@ public class ColorMap {
     return 0xFF000000 | (r << 16) | (g << 8) | b;
   }
 
+  public RGB valueToRGB(double value) {
+    int color = valueToColor(value);
+    return new RGB((0x00FF0000 & color) >> 16, (0x0000FF00 & color) >> 8, 0x000000FF & color);
+  }
+
   public int valueToColor(double value) {
     double adjustedValue = Math.min(value, 1.0 - 1e-10);
     int colorIndex = (int) Math.floor(adjustedValue * (landmarks.length - 1));

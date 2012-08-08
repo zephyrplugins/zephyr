@@ -1,35 +1,24 @@
 package zephyr.plugin.plotting.internal.heatmap;
 
 import java.awt.image.BufferedImage;
-
 import org.eclipse.swt.graphics.GC;
-import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Canvas;
-
 import zephyr.plugin.core.internal.utils.Colors;
 import zephyr.plugin.core.internal.utils.ImageAdapter;
 
-public class Function2DDrawer {
-  static final ColorMapDescriptor BWColorMap = new ColorMapDescriptor(new int[][] { new int[] { 0, 0, 0 },
-      new int[] { 255, 255, 255 } }, new int[] { 0, 0, 255 });
-  static final ColorMapDescriptor PinkColorMap = new ColorMapDescriptor(new int[][] { new int[] { 155, 0, 0 },
-      new int[] { 255, 255, 0 }, new int[] { 0, 255, 255 }, new int[] { 255, 100, 255 } }, new int[] { 0, 0, 0 });
-  static final ColorMapDescriptor DarkBlueColorMap = new ColorMapDescriptor(new int[][] { new int[] { 0, 0, 100 },
-      new int[] { 0, 255, 255 }, new int[] { 255, 255, 0 }, new int[] { 155, 0, 0 } }, new int[] { 0, 0, 0 });
-  private final Colors colors;
+public class Function2DBufferedDrawer extends AbstractDrawer {
   private final ImageAdapter imageAdapter = new ImageAdapter();
-  private BufferedImage bufferedImage = null;
-  private boolean dirty = false;
-  private ColorMap colorMap;
+  BufferedImage bufferedImage = null;
+  boolean dirty = false;
 
-  public Function2DDrawer(Colors colors) {
-    this.colors = colors;
-    colorMap = new ColorMap(DarkBlueColorMap);
+  public Function2DBufferedDrawer(Colors colors) {
+    super(colors);
   }
 
-  synchronized void setColorMap(ColorMapDescriptor descriptor) {
-    colorMap = new ColorMap(descriptor);
+  @Override
+  synchronized public void setColorMap(ColorMapDescriptor descriptor) {
+    super.setColorMap(descriptor);
     dirty = true;
   }
 
@@ -44,10 +33,6 @@ public class Function2DDrawer {
     imageAdapter.paint(gc, canvas);
   }
 
-  public RGB spriteColor() {
-    return colorMap.spriteColor();
-  }
-
   private void updateBufferedImage(Rectangle rectangle, MapData data) {
     if (bufferedImage != null
         && (bufferedImage.getWidth() != rectangle.width || bufferedImage.getHeight() != rectangle.height))
@@ -58,8 +43,8 @@ public class Function2DDrawer {
     }
     if (!dirty)
       return;
-    final float pixelSizeX = (float) rectangle.width / data.resolution;
-    final float pixelSizeY = (float) rectangle.height / data.resolution;
+    final float pixelSizeX = (float) rectangle.width / data.resolutionX;
+    final float pixelSizeY = (float) rectangle.height / data.resolutionY;
     float[][] imageData = data.imageData();
     Interval rangeValue = data.rangeValue();
     final int imageDataX = imageData.length;
@@ -85,6 +70,7 @@ public class Function2DDrawer {
       }
     }
   }
+
 
   public void unset() {
     bufferedImage = null;

@@ -86,6 +86,8 @@ public class ZephyrCore {
         IWorkbenchWindow window = wb.getActiveWorkbenchWindow();
         IWorkbenchPage page = window.getActivePage();
         IWorkbenchPart part = page.getActivePart();
+        if (part == null)
+          return;
         IWorkbenchPartSite site = part.getSite();
         IViewSite vSite = (IViewSite) site;
         IActionBars actionBars = vSite.getActionBars();

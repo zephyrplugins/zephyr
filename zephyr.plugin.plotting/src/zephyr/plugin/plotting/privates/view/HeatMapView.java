@@ -16,7 +16,7 @@ import zephyr.plugin.core.internal.views.helpers.ScreenShotAction;
 import zephyr.plugin.plotting.internal.actions.SynchronizeAction;
 import zephyr.plugin.plotting.internal.axes.Axes;
 import zephyr.plugin.plotting.internal.heatmap.ColorMapAction;
-import zephyr.plugin.plotting.internal.heatmap.Function2DDrawer;
+import zephyr.plugin.plotting.internal.heatmap.Function2DBufferedDrawer;
 import zephyr.plugin.plotting.internal.heatmap.FunctionSampler;
 import zephyr.plugin.plotting.internal.heatmap.MapData;
 
@@ -34,7 +34,7 @@ public class HeatMapView extends ForegroundCanvasView<ContinuousFunction2D> {
 
   static private final int PositionSize = 4;
   private final Colors colors = new Colors();
-  private final Function2DDrawer drawer = new Function2DDrawer(colors);
+  private final Function2DBufferedDrawer drawer = new Function2DBufferedDrawer(colors);
   private final Axes axes = new Axes();
   private final ColorMapAction colorMapAction = new ColorMapAction(this, drawer);
   private final SynchronizeAction synchronizeAction = new SynchronizeAction();
@@ -116,6 +116,5 @@ public class HeatMapView extends ForegroundCanvasView<ContinuousFunction2D> {
   @Override
   public void onInstanceUnset(Clock clock) {
     super.onInstanceUnset(clock);
-    drawer.unset();
   }
 }

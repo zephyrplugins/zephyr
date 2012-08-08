@@ -1,19 +1,25 @@
 package zephyr.plugin.plotting.internal.heatmap;
 
 public class MapData {
-  final public int resolution;
+  final public int resolutionX;
+  final public int resolutionY;
   private final float[][] imageData;
   private Interval rangeValue = new Interval(0, 0);
 
   public MapData(int resolution) {
-    this.resolution = resolution;
+    this(resolution, resolution);
+  }
+
+  public MapData(int resolutionX, int resolutionY) {
+    this.resolutionX = resolutionX;
+    this.resolutionY = resolutionY;
     this.imageData = createImageData();
   }
 
   private float[][] createImageData() {
-    float[][] imageData = new float[resolution][];
+    float[][] imageData = new float[resolutionX][];
     for (int i = 0; i < imageData.length; i++)
-      imageData[i] = new float[resolution];
+      imageData[i] = new float[resolutionY];
     return imageData;
   }
 

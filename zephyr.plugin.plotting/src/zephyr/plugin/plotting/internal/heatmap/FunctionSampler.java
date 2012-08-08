@@ -15,10 +15,10 @@ public class FunctionSampler {
     double minValue = Double.MAX_VALUE;
     double maxValue = -Double.MAX_VALUE;
     float[][] imageData = data.imageData();
-    for (int ax = 0; ax < data.resolution; ax++) {
-      double x = xRange.min + ((double) ax / data.resolution) * xRange.length;
-      for (int ay = 0; ay < data.resolution; ay++) {
-        double y = yRange.min + ((double) ay / data.resolution) * yRange.length;
+    for (int ax = 0; ax < data.resolutionX; ax++) {
+      double x = xRange.min + ((double) ax / data.resolutionX) * xRange.length;
+      for (int ay = 0; ay < data.resolutionY; ay++) {
+        double y = yRange.min + ((double) ay / data.resolutionY) * yRange.length;
         double value = function.value(x, y);
         minValue = Math.min(minValue, value);
         maxValue = Math.max(maxValue, value);
