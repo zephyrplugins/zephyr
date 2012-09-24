@@ -3,7 +3,6 @@ package zephyr.plugin.core.privates.synchronization.binding;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Future;
-
 import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.internal.views.SyncView;
@@ -54,13 +53,33 @@ public class ClockViews {
     return futures;
   }
 
-  synchronized public void addView(SyncView view) {
+  public void addView(final SyncView view) {
+    ZephyrPluginCore.viewScheduler().schedule(new Runnable() {
+      @SuppressWarnings("synthetic-access")
+      @Override
+      public void run() {
+        syncAddView(view);
+      }
+    });
+  }
+
+  synchronized private void syncAddView(SyncView view) {
     ViewTask task = ZephyrPluginCore.viewScheduler().task(view);
     if (!viewTasks.contains(task))
       viewTasks.add(task);
   }
 
-  synchronized public void removeView(SyncView view) {
+  public void removeView(final SyncView view) {
+    ZephyrPluginCore.viewScheduler().schedule(new Runnable() {
+      @SuppressWarnings("synthetic-access")
+      @Override
+      public void run() {
+        syncRemoveView(view);
+      }
+    });
+  }
+
+  synchronized private void syncRemoveView(SyncView view) {
     viewTasks.remove(ZephyrPluginCore.viewScheduler().task(view));
   }
 
