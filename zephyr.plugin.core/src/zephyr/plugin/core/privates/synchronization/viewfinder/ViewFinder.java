@@ -2,7 +2,6 @@ package zephyr.plugin.core.privates.synchronization.viewfinder;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IViewReference;
@@ -12,7 +11,6 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.IViewDescriptor;
 import org.eclipse.ui.views.IViewRegistry;
-
 import zephyr.plugin.core.internal.views.ProvidedView;
 import zephyr.plugin.core.privates.ZephyrPluginCore;
 import zephyr.plugin.core.privates.synchronization.tasks.ViewReference;
@@ -73,8 +71,12 @@ public class ViewFinder {
 
   private ViewReference showView(final String secondaryID) {
     IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-    if (window == null)
-      window = PlatformUI.getWorkbench().getWorkbenchWindows()[0];
+    if (window == null) {
+      IWorkbenchWindow[] windows = PlatformUI.getWorkbench().getWorkbenchWindows();
+      if (windows.length == 0)
+        return null;
+      window = windows[0];
+    }
     return showView(secondaryID, window.getActivePage());
   }
 
