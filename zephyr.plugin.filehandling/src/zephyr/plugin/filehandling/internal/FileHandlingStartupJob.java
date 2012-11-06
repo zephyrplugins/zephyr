@@ -3,7 +3,7 @@ package zephyr.plugin.filehandling.internal;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
-
+import org.eclipse.swt.SWTError;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTarget;
 import org.eclipse.swt.dnd.DropTargetAdapter;
@@ -12,7 +12,6 @@ import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
-
 import zephyr.plugin.core.ZephyrCore;
 
 public class FileHandlingStartupJob implements zephyr.plugin.core.internal.startup.StartupJob {
@@ -34,7 +33,13 @@ public class FileHandlingStartupJob implements zephyr.plugin.core.internal.start
 
   protected void registerDragAndDropTarget() {
     for (Shell shell : PlatformUI.getWorkbench().getDisplay().getShells()) {
-      DropTarget dt = new DropTarget(shell, DND.DROP_DEFAULT | DND.DROP_MOVE);
+      DropTarget dt = null;
+      try {
+        dt = new DropTarget(shell, DND.DROP_DEFAULT | DND.DROP_MOVE);
+      } catch (SWTError e) {
+        System.err.println(e.getLocalizedMessage());
+        continue;
+      }
       dt.setTransfer(new Transfer[] { FileTransfer.getInstance() });
       dt.addDropListener(new DropTargetAdapter() {
         @Override
