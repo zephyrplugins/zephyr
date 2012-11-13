@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/zephyr.feature.main_1.0.0.qualifier.jar" id="zephyr.feature.main" version="1.0.0.qualifier">
+      <category name="zephyr"/>
+   </feature>
+   <category-def name="zephyr" label="Zephyr"/>
+</site>
