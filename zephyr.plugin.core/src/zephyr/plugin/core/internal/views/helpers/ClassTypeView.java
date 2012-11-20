@@ -73,7 +73,8 @@ public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView,
     this.parent = parent;
     backgroundColor = parent.getBackground();
     new SyncViewDropTarget(this, parent);
-    setDefaultName();
+    if (instance.current() == null)
+      setDefaultName();
   }
 
   @Override
