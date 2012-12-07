@@ -1,10 +1,8 @@
 package zephyr.plugin.junittesting.bars;
 
 import junit.framework.Assert;
-
 import org.junit.Before;
 import org.junit.Test;
-
 import zephyr.plugin.core.ZephyrCore;
 import zephyr.plugin.junittesting.support.RunnableTests;
 import zephyr.plugin.junittesting.support.checklisteners.ControlChecks;
@@ -20,7 +18,7 @@ public class BarTest {
 
   class BarDrawingCondition extends NumberTickCondition {
     public BarDrawingCondition() {
-      super(10);
+      super(100);
     }
 
     @Override

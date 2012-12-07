@@ -2,7 +2,6 @@ package zephyr.plugin.plotting.privates.view;
 
 import java.util.HashSet;
 import java.util.Set;
-
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
@@ -14,7 +13,6 @@ import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
-
 import zephyr.plugin.core.api.internal.codeparser.codetree.CodeTrees;
 import zephyr.plugin.core.api.internal.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.internal.monitoring.abstracts.MonitorContainerNode;
@@ -25,8 +23,8 @@ import zephyr.plugin.core.internal.helpers.SyncViewDropTarget;
 import zephyr.plugin.core.internal.views.DropTargetView;
 import zephyr.plugin.core.internal.views.ProvidedView;
 import zephyr.plugin.plotting.internal.actions.CenterPlotAction;
-import zephyr.plugin.plotting.internal.actions.SynchronizeAction;
 import zephyr.plugin.plotting.internal.actions.CenterPlotAction.ViewCenterable;
+import zephyr.plugin.plotting.internal.actions.SynchronizeAction;
 import zephyr.plugin.plotting.internal.mousesearch.MouseSearch;
 import zephyr.plugin.plotting.internal.mousesearch.MouseSearchable;
 import zephyr.plugin.plotting.internal.mousesearch.RequestResult;

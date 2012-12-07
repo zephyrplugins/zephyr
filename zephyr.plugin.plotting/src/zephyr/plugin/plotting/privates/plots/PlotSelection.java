@@ -5,9 +5,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import org.eclipse.ui.IMemento;
-
 import zephyr.plugin.core.ZephyrCore;
 import zephyr.plugin.core.api.internal.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.signals.Signal;
@@ -82,10 +80,11 @@ public class PlotSelection {
     fireSelectedTracesChanged();
   }
 
-  synchronized private void derefSelection() {
+  synchronized public void derefSelection() {
     for (TraceData traceData : selected)
       traceData.decRef();
     selected.clear();
+    persistentSelection.clear();
   }
 
   protected void fireSelectedTracesChanged() {

@@ -15,7 +15,7 @@ public class Clock implements Serializable {
   private boolean terminating = false;
   private boolean terminated = false;
   private final ClockInfo info;
-  private final Semaphore dataLock = enableDataLock ? new Semaphore(0) : null;
+  private final Semaphore dataLock = enableDataLock ? new Semaphore(0, true) : null;
 
   public Clock() {
     this("NoName");

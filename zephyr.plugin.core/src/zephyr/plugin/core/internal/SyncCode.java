@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
 import zephyr.plugin.core.api.internal.codeparser.codetree.ClockNode;
 import zephyr.plugin.core.api.internal.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.internal.codeparser.interfaces.CodeParser;
@@ -49,15 +48,20 @@ public class SyncCode {
   }
 
   public CodeNode findNode(String[] loadedPath) {
-    ClockNode selectedClockNode = null;
-    for (ClockNode clockNode : clockNodes.values())
-      if (clockNode.label().equals(loadedPath[0])) {
-        selectedClockNode = clockNode;
-        break;
-      }
+    for (ClockNode clockNode : clockNodes.values()) {
+      if (!clockNode.label().equals(loadedPath[0]))
+        continue;
+      CodeNode found = findNode(clockNode, loadedPath);
+      if (found != null)
+        return found;
+    }
+    return null;
+  }
+
+  private static CodeNode findNode(ClockNode clockNode, String[] loadedPath) {
     if (loadedPath.length == 1)
-      return selectedClockNode;
-    CodeNode currentNode = selectedClockNode;
+      return clockNode;
+    CodeNode currentNode = clockNode;
     for (int i = 1; i < loadedPath.length; i++) {
       if (currentNode == null)
         return null;

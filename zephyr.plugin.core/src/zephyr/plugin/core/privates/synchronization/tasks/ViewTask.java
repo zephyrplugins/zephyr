@@ -54,8 +54,8 @@ public class ViewTask implements Runnable {
   }
 
   public Future<?> refresh(Clock clock) {
+    lastSyncClock = clock;
     synchronized (view) {
-      lastSyncClock = clock;
       if (clock.acquireData()) {
         try {
           view.synchronize(clock);
@@ -64,6 +64,7 @@ public class ViewTask implements Runnable {
         }
         clock.releaseData();
       }
+      lastSyncClock = null;
     }
     return redraw();
   }
