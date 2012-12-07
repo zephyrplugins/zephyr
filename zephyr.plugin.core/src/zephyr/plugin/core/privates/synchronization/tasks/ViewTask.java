@@ -2,24 +2,24 @@ package zephyr.plugin.core.privates.synchronization.tasks;
 
 import java.util.concurrent.Future;
 import zephyr.plugin.core.api.synchronization.Clock;
+import zephyr.plugin.core.privates.synchronization.Syncins;
 
 public class ViewTask implements Runnable {
-  final ViewReference view;
+  final Syncins<ViewReference> syncView;
   private Future<?> future;
   private final ViewTaskExecutor executor;
-  private Clock lastSyncClock = null;
 
   protected ViewTask(ViewTaskExecutor executor, ViewReference view) {
     this.executor = executor;
-    this.view = view;
+    this.syncView = new Syncins<ViewReference>(view);
   }
 
   @Override
   public void run() {
     try {
-      synchronized (view) {
-        view.repaint();
-      }
+      Syncins<ViewReference>.Handle viewHandle = syncView.acquire();
+      viewHandle.h().repaint();
+      viewHandle.release();
     } catch (Throwable t) {
       t.printStackTrace();
     }
@@ -48,28 +48,32 @@ public class ViewTask implements Runnable {
 
   public Future<?> refreshIFN(Clock clock) {
     Future<?> pending = isDone();
-    if (pending != null && lastSyncClock == clock)
+    if (pending != null)
       return pending;
-    return refresh(clock);
+    Syncins<ViewReference>.Handle viewHandle = syncView.tryAcquire();
+    if (viewHandle == null)
+      return null;
+    return refresh(clock, viewHandle);
   }
 
   public Future<?> refresh(Clock clock) {
-    lastSyncClock = clock;
-    synchronized (view) {
-      if (clock.acquireData()) {
-        try {
-          view.synchronize(clock);
-        } catch (Throwable t) {
-          t.printStackTrace();
-        }
-        clock.releaseData();
+    return refresh(clock, syncView.acquire());
+  }
+
+  private Future<?> refresh(Clock clock, Syncins<ViewReference>.Handle viewHandle) {
+    if (clock.acquireData()) {
+      try {
+        viewHandle.h().synchronize(clock);
+      } catch (Throwable t) {
+        t.printStackTrace();
       }
-      lastSyncClock = null;
+      clock.releaseData();
     }
+    viewHandle.release();
     return redraw();
   }
 
   public ViewReference viewRef() {
-    return view;
+    return syncView.instance();
   }
 }
