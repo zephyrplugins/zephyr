@@ -11,6 +11,10 @@ import zephyr.plugin.core.internal.async.events.Event;
 import zephyr.plugin.core.internal.async.listeners.UIListener;
 
 public class CountColorsListener extends UIListener {
+  public CountColorsListener() {
+    super(true);
+  }
+
   @Override
   protected void listenInUIThread(Event event) {
     CheckEvent checkEvent = (CheckEvent) event;
