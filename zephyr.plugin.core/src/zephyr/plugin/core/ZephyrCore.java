@@ -84,7 +84,11 @@ public class ZephyrCore {
       public void run() {
         IWorkbench wb = PlatformUI.getWorkbench();
         IWorkbenchWindow window = wb.getActiveWorkbenchWindow();
+        if (window == null)
+          return;
         IWorkbenchPage page = window.getActivePage();
+        if (page == null)
+          return;
         IWorkbenchPart part = page.getActivePart();
         if (part == null)
           return;
