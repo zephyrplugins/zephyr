@@ -214,7 +214,7 @@ litigation.
    </license>
 
    <url>
-      <update label="Zephyr" url="http://www.ualberta.ca/~degris/zephyr"/>
+      <update label="Zephyr" url="http://people.bordeaux.inria.fr/degris/public/zephyr"/>
    </url>
 
    <includes

@@ -104,7 +104,7 @@ This Agreement is governed by the laws of the State of New York and the intellec
    </license>
 
    <url>
-      <update label="Zephyr" url="http://ualberta.ca/~degris/zephyr"/>
+      <update label="Zephyr" url="http://people.bordeaux.inria.fr/degris/public/zephyr"/>
    </url>
 
    <includes
@@ -233,6 +233,13 @@ This Agreement is governed by the laws of the State of New York and the intellec
 
    <plugin
          id="org.eclipse.ui.forms"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.equinox.ds"
          download-size="0"
          install-size="0"
          version="0.0.0"
