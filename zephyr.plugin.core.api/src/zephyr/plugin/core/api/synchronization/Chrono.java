@@ -13,11 +13,15 @@ public class Chrono {
   }
 
   public Chrono(long creationTime) {
-    this.creationTime = creationTime;
+    start(creationTime);
   }
 
   public void start() {
-    creationTime = System.nanoTime();
+    start(System.nanoTime());
+  }
+
+  public void start(long creationTime) {
+    this.creationTime = creationTime;
   }
 
   public long getCurrentNano() {
