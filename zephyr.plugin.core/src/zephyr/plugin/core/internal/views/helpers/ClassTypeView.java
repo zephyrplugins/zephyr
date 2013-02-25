@@ -159,8 +159,13 @@ public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView,
   private boolean lockAndSynchronize(Clock clock, T current) {
     if (clock == null || current == null)
       return false;
-    boolean result = synchronize(current);
-    hasBeenSynchronized = true;
+    boolean result = false;
+    try {
+      result = synchronize(current);
+      hasBeenSynchronized = true;
+    } catch (Throwable t) {
+      t.printStackTrace();
+    }
     return result;
   }
 
