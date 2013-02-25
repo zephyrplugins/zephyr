@@ -36,9 +36,15 @@ public class InstanceManager<T> {
       setCodetree();
     }
   };
+  private CodeNodeToInstance<T> toInstance;
 
   public InstanceManager(InstanceListener<T> view) {
+    this(view, null);
+  }
+
+  public InstanceManager(InstanceListener<T> view, CodeNodeToInstance<T> instanceAdapter) {
     this.view = view;
+    this.toInstance = instanceAdapter != null ? instanceAdapter : new CodeNodeToInstance.Default<T>();
     ZephyrSync.busEvent().register(ClockEvent.RemovedID, new CastedEventListener<ClockEvent>() {
       @Override
       protected void listenEvent(ClockEvent event) {
@@ -47,6 +53,10 @@ public class InstanceManager<T> {
       }
     });
     ZephyrSync.busEvent().register(CodeStructureEvent.ParsedID, treeLoadedListener);
+  }
+
+  public void setNodeToInstance(CodeNodeToInstance<T> toInstance) {
+    this.toInstance = toInstance;
   }
 
   protected void setCodetree() {
@@ -86,7 +96,7 @@ public class InstanceManager<T> {
 
   void set(CodeNode codeNode) {
     unset();
-    instance = (T) ((ClassNode) codeNode).instance();
+    instance = toInstance.toInstance((ClassNode) codeNode);
     this.codeNode = codeNode;
     this.clock = CodeTrees.clockOf(codeNode);
     view.onInstanceSet(clock, instance);

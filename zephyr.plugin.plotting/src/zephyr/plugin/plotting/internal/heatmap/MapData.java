@@ -34,4 +34,11 @@ public class MapData {
   public float[][] imageData() {
     return imageData;
   }
+
+  public MapData copy() {
+    MapData result = new MapData(resolutionX, resolutionY);
+    for (int i = 0; i < imageData.length; i++)
+      System.arraycopy(imageData[i], 0, result.imageData[i], 0, imageData[i].length);
+    return result;
+  }
 }

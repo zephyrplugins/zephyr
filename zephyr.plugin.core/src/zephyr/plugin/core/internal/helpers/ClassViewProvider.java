@@ -5,10 +5,10 @@ import zephyr.plugin.core.api.internal.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.internal.views.ViewProvider;
 
 public class ClassViewProvider implements ViewProvider {
-  protected final Class<?> drawnClass;
+  protected final Class<?>[] drawnClasses;
 
-  public ClassViewProvider(Class<?> drawnClass) {
-    this.drawnClass = drawnClass;
+  public ClassViewProvider(Class<?>... drawnClasses) {
+    this.drawnClasses = drawnClasses;
   }
 
   @Override
@@ -20,6 +20,9 @@ public class ClassViewProvider implements ViewProvider {
   }
 
   protected boolean isInstanceSupported(Object instance) {
-    return drawnClass.isInstance(instance);
+    for (Class<?> drawnClass : drawnClasses)
+      if (drawnClass.isInstance(instance))
+        return true;
+    return false;
   }
 }

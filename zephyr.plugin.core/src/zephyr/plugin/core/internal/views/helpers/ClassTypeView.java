@@ -19,6 +19,7 @@ import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.internal.ZephyrSync;
 import zephyr.plugin.core.internal.helpers.InstanceManager;
 import zephyr.plugin.core.internal.helpers.InstanceManager.InstanceListener;
+import zephyr.plugin.core.internal.helpers.CodeNodeToInstance;
 import zephyr.plugin.core.internal.helpers.SyncViewDropTarget;
 import zephyr.plugin.core.internal.views.DropTargetView;
 import zephyr.plugin.core.internal.views.ProvidedView;
@@ -212,6 +213,10 @@ public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView,
 
   protected CodeNode codeNode() {
     return instance.codeNode();
+  }
+
+  protected void setNodeToInstance(CodeNodeToInstance<T> toInstance) {
+    instance.setNodeToInstance(toInstance);
   }
 
   abstract protected boolean synchronize(T current);
