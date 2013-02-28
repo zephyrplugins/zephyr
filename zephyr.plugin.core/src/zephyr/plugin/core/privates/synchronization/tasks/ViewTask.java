@@ -16,13 +16,15 @@ public class ViewTask implements Runnable {
 
   @Override
   public void run() {
+    Syncins<ViewReference>.Handle viewHandle = syncView.acquire();
+    if (viewHandle == null)
+      return;
     try {
-      Syncins<ViewReference>.Handle viewHandle = syncView.acquire();
       viewHandle.h().repaint();
-      viewHandle.release();
     } catch (Throwable t) {
       t.printStackTrace();
     }
+    viewHandle.release();
   }
 
   private Future<?> isDone() {
