@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>zephyr</groupId>
+	<artifactId>parent</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<modules>
+		<module>../zephyr.application</module>
+		<module>../zephyr.plugin.clojure</module>
+		<module>../zephyr.plugin.console</module>
+		<module>../zephyr.plugin.core</module>
+		<module>../zephyr.plugin.core.api</module>
+		<module>../zephyr.plugin.filehandling</module>
+		<module>../zephyr.plugin.jarhandler</module>
+		<module>../zephyr.plugin.junittesting</module>
+		<module>../zephyr.plugin.jython</module>
+		<module>../zephyr.plugin.plotting</module>
+
+		<module>../zephyr.feature.e4</module>
+		<module>../zephyr.feature.platform</module>
+		<module>../zephyr.feature.main</module>
+
+		<module>../zephyr.site</module>
+	</modules>
+
+	<properties>
+		<tycho-version>0.16.0</tycho-version>
+	</properties>
+
+	<repositories>
+		<repository>
+			<id>juno</id>
+			<layout>p2</layout>
+			<url>http://download.eclipse.org/releases/juno</url>
+		</repository>
+	</repositories>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-maven-plugin</artifactId>
+				<version>${tycho-version}</version>
+				<extensions>true</extensions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-p2-director-plugin</artifactId>
+				<version>${tycho-version}</version>
+				<executions>
+					<execution>
+						<id>materialize-products</id>
+						<goals>
+							<goal>materialize-products</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>archive-products</id>
+						<goals>
+							<goal>archive-products</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+</project> 

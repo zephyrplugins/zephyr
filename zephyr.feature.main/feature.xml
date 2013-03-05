@@ -217,10 +217,6 @@ litigation.
       <update label="Zephyr" url="http://people.bordeaux.inria.fr/degris/public/zephyr"/>
    </url>
 
-   <includes
-         id="zephyr.feature.main.source"
-         version="1.0.0.qualifier"/>
-
    <plugin
          id="zephyr.application"
          download-size="0"
