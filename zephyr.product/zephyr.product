@@ -25,7 +25,7 @@ http://thomasdegris.github.com/Zephyr/
 
 
    <launcher name="Zephyr">
-      <linux icon="zephyr48.xpm"/>
+      <linux icon="images/zephyr48.xpm"/>
       <macosx icon="images/zephyr128.icns"/>
       <solaris/>
       <win useIco="false">
