@@ -9,6 +9,6 @@
     <version>1.0.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>zephyr.application</artifactId>
+  <artifactId>zephyr.plugin.application</artifactId>
   <packaging>eclipse-plugin</packaging>
 </project> 

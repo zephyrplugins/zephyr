@@ -5,7 +5,7 @@ Bundle-SymbolicName: zephyr.plugin.junittesting;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.junit;bundle-version="4.8.2";resolution:=optional,
- zephyr.application;bundle-version="1.0.0",
+ zephyr.plugin.application;bundle-version="1.0.0",
  zephyr.plugin.clojure;bundle-version="1.0.0",
  zephyr.plugin.console;bundle-version="1.0.0",
  zephyr.plugin.core;bundle-version="1.0.0",

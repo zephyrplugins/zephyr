@@ -218,7 +218,7 @@ litigation.
    </url>
 
    <plugin
-         id="zephyr.application"
+         id="zephyr.plugin.application"
          download-size="0"
          install-size="0"
          version="0.0.0"

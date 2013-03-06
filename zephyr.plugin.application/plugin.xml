@@ -62,4 +62,24 @@
          </property>
       </product>
    </extension>
+   <extension
+         id="zephyrproduct"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="zephyr.plugin.application.application"
+            name="Zephyr">
+         <property
+               name="windowImages"
+               value="/zephyr.product/images/zephyr16.png,/zephyr.product/images/zephyr32.png,/zephyr.product/images/zephyr48.png,/zephyr.product/images/zephyr64.png,/zephyr.product/images/zephyr128.png">
+         </property>
+         <property
+               name="aboutText"
+               value="Zephyr&#x0A;Thomas Degris&#x0A;http://thomasdegris.github.com/Zephyr/">
+         </property>
+         <property
+               name="aboutImage"
+               value="images/zephyr128.png">
+         </property>
+      </product>
+   </extension>
 </plugin>

@@ -6,7 +6,7 @@
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<modules>
-		<module>../zephyr.application</module>
+		<module>../zephyr.plugin.application</module>
 		<module>../zephyr.plugin.clojure</module>
 		<module>../zephyr.plugin.console</module>
 		<module>../zephyr.plugin.core</module>
@@ -22,10 +22,12 @@
 		<module>../zephyr.feature.main</module>
 
 		<module>../zephyr.site</module>
+		<module>../zephyr.product</module>
 	</modules>
 
 	<properties>
 		<tycho-version>0.16.0</tycho-version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
 	<repositories>
@@ -42,26 +44,6 @@
 				<artifactId>tycho-maven-plugin</artifactId>
 				<version>${tycho-version}</version>
 				<extensions>true</extensions>
-			</plugin>
-
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>tycho-p2-director-plugin</artifactId>
-				<version>${tycho-version}</version>
-				<executions>
-					<execution>
-						<id>materialize-products</id>
-						<goals>
-							<goal>materialize-products</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>archive-products</id>
-						<goals>
-							<goal>archive-products</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 	</build>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="Zephyr" uid="zephyr.product" id="zephyr.application.product" application="zephyr.application.application" version="1.0.0.qualifier" useFeatures="true" includeLaunchers="true">
+<product name="Zephyr" uid="zephyr.product" id="zephyr.plugin.application.zephyrproduct" application="zephyr.plugin.application.application" version="1.0.0.qualifier" useFeatures="true" includeLaunchers="true">
 
    <aboutInfo>
       <image path="images/zephyr128.png"/>
@@ -21,17 +21,16 @@ http://thomasdegris.github.com/Zephyr/
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
    </launcherArgs>
 
-   <windowImages i16="/zephyr.application/images/zephyr16.png" i32="/zephyr.application/images/zephyr32.png" i48="/zephyr.application/images/zephyr48.png" i64="/zephyr.application/images/zephyr64.png" i128="/zephyr.application/images/zephyr128.png"/>
+   <windowImages i16="/zephyr.product/images/zephyr16.png" i32="/zephyr.product/images/zephyr32.png" i48="/zephyr.product/images/zephyr48.png" i64="/zephyr.product/images/zephyr64.png" i128="/zephyr.product/images/zephyr128.png"/>
 
    <launcher name="Zephyr">
-      <linux icon="/zephyr.application/images/zephyr48.xpm"/>
-      <macosx icon="/zephyr.application/images/zephyr128.icns"/>
+      <linux icon="/images/zephyr48.xpm"/>
+      <macosx icon="/images/zephyr128.icns"/>
       <solaris/>
       <win useIco="false">
          <bmp/>
       </win>
    </launcher>
-
 
    <vm>
    </vm>
@@ -135,7 +134,14 @@ This Agreement is governed by the laws of the State of New York and the intellec
    <features>
       <feature id="zephyr.feature.platform"/>
       <feature id="zephyr.feature.main"/>
+      <feature id="zephyr.feature.e4" version="1.0.0.qualifier"/>
    </features>
 
+   <configurations>
+      <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="4" />
+      <plugin id="org.eclipse.equinox.common" autoStart="true" startLevel="2" />
+      <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="2" />
+      <plugin id="org.eclipse.equinox.simpleconfigurator" autoStart="true" startLevel="1" />
+   </configurations>
 
 </product>
