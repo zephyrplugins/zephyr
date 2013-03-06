@@ -80,6 +80,10 @@
                name="aboutImage"
                value="images/zephyr128.png">
          </property>
+         <property
+               name="appName"
+               value="Zephyr">
+         </property>
       </product>
    </extension>
 </plugin>
