@@ -17,6 +17,7 @@ import zephyr.plugin.core.privates.synchronization.viewfinder.ViewFinder;
 public class ViewBinder {
   protected final Map<Clock, ClockViews> clockToView = Collections.synchronizedMap(new HashMap<Clock, ClockViews>());
   private final ViewProviders viewProviders = new ViewProviders();
+  private final Map<String, ViewFinder> viewFinders = new HashMap<String, ViewFinder>();
 
   private static void bindWithNewView(CodeNode[] codeNodes, ViewFinder viewFinder) {
     CodeNode[] remainToDisplay = codeNodes;
@@ -60,11 +61,15 @@ public class ViewBinder {
   // a UI thread inside a syncExec. Therefore, this method cannot be
   // synchronized
   public void displayAndBindView(CodeNode[] codeNodes, String viewID) {
-    ViewFinder viewFinder = new ViewFinder(viewID);
+    ViewFinder viewFinder = viewFinders.get(viewID);
+    if (viewFinder == null) {
+      viewFinder = new ViewFinder(viewID);
+      viewFinders.put(viewID, viewFinder);
+    }
     CodeNode[] remainToDisplay = bindWithOpenedViews(codeNodes, viewFinder);
     if (remainToDisplay.length == 0)
       return;
-    bindWithNewView(codeNodes, viewFinder);
+    bindWithNewView(remainToDisplay, viewFinder);
   }
 
   public void displayAndBindView(CodeNode codeNodes, String viewID) {

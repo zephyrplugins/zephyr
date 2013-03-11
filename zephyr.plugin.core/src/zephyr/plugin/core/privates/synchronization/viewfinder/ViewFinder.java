@@ -18,12 +18,23 @@ import zephyr.plugin.core.utils.Eclipse;
 
 public class ViewFinder {
   final String viewID;
+  private int nextSecondaryID = 0;
   private final List<IViewReference> existingViews;
   ProvidedView showViewResult = null;
 
   public ViewFinder(String viewID) {
     this.viewID = viewID;
     existingViews = createExistingViewList();
+    for (IViewReference reference : existingViews) {
+      Integer secondary = null;
+      try {
+        secondary = Integer.parseInt(reference.getSecondaryId());
+      } catch (Throwable t) {
+      }
+      if (secondary == null)
+        continue;
+      nextSecondaryID = Math.max(nextSecondaryID, secondary + 1);
+    }
   }
 
   public List<IViewReference> createExistingViewList() {
@@ -32,9 +43,13 @@ public class ViewFinder {
     for (IWorkbenchWindow window : windows) {
       IWorkbenchPage[] pages = window.getPages();
       for (IWorkbenchPage page : pages) {
-        for (IViewReference reference : page.getViewReferences())
-          if (viewID.equals(reference.getId()))
+        for (IViewReference reference : page.getViewReferences()) {
+          String referenceID = reference.getId();
+          if (referenceID.indexOf(':') > -1)
+            referenceID = referenceID.substring(0, referenceID.indexOf(':'));
+          if (viewID.equals(referenceID))
             result.add(reference);
+        }
       }
     }
     return result;
@@ -96,20 +111,8 @@ public class ViewFinder {
   }
 
   private String findAvailableSecondaryID() {
-    int secondaryIndex = -1;
-    String secondaryID = null;
-    boolean viewFound = true;
-    while (viewFound) {
-      viewFound = false;
-      secondaryIndex++;
-      secondaryID = String.valueOf(secondaryIndex);
-      for (IViewReference reference : existingViews) {
-        if (secondaryID.equals(reference.getSecondaryId())) {
-          viewFound = true;
-          break;
-        }
-      }
-    }
-    return secondaryID;
+    String result = String.valueOf(nextSecondaryID);
+    nextSecondaryID++;
+    return result;
   }
 }
