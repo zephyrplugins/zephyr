@@ -26,6 +26,7 @@
 						<product>
 							<id>zephyr.product</id>
 							<rootFolder>zephyr</rootFolder>
+							<archiveFileName>zephyr</archiveFileName>
 						</product>
 					</products>
 					<installFeatures>true</installFeatures>
