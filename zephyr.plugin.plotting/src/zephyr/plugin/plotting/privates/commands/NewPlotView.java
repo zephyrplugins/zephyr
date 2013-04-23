@@ -8,11 +8,9 @@ import org.eclipse.ui.IViewReference;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.handlers.HandlerUtil;
-
 import zephyr.plugin.plotting.privates.view.PlotView;
 
 public class NewPlotView extends AbstractHandler {
-
   @Override
   public Object execute(ExecutionEvent event) throws ExecutionException {
     IWorkbenchPage activePage = HandlerUtil.getActiveWorkbenchWindowChecked(event).getActivePage();
@@ -22,7 +20,7 @@ public class NewPlotView extends AbstractHandler {
     while (secondaryID == null || referenceView != null) {
       secondaryIndex++;
       secondaryID = String.valueOf(secondaryIndex);
-      referenceView = activePage.findViewReference(PlotView.ID, secondaryID);
+      referenceView = activePage.findViewReference(PlotView.ID + ":" + secondaryID, secondaryID);
     }
     try {
       activePage.showView(PlotView.ID, secondaryID, IWorkbenchPage.VIEW_ACTIVATE);
