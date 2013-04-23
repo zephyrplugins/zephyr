@@ -13,6 +13,8 @@ import zephyr.plugin.core.internal.helpers.ClassViewProvider;
 import zephyr.plugin.core.internal.utils.Colors;
 import zephyr.plugin.core.internal.views.helpers.ForegroundCanvasView;
 import zephyr.plugin.core.internal.views.helpers.ScreenShotAction;
+import zephyr.plugin.plotting.internal.actions.CenterPlotAction;
+import zephyr.plugin.plotting.internal.actions.CenterPlotAction.ViewCenterable;
 import zephyr.plugin.plotting.internal.actions.SynchronizeAction;
 import zephyr.plugin.plotting.internal.axes.Axes;
 import zephyr.plugin.plotting.internal.heatmap.ColorMapAction;
@@ -20,7 +22,7 @@ import zephyr.plugin.plotting.internal.heatmap.Function2DBufferedDrawer;
 import zephyr.plugin.plotting.internal.heatmap.FunctionSampler;
 import zephyr.plugin.plotting.internal.heatmap.MapData;
 
-public class HeatMapView extends ForegroundCanvasView<ContinuousFunction2D> {
+public class HeatMapView extends ForegroundCanvasView<ContinuousFunction2D> implements ViewCenterable {
   public static class Provider extends ClassViewProvider {
     public Provider() {
       super(ContinuousFunction2D.class);
@@ -78,6 +80,7 @@ public class HeatMapView extends ForegroundCanvasView<ContinuousFunction2D> {
   @Override
   public void onInstanceSet(Clock clock, ContinuousFunction2D function) {
     super.onInstanceSet(clock, function);
+    setViewName();
     data = new MapData(200);
     sampler = new FunctionSampler(function);
     updateAxes(function);
@@ -94,6 +97,7 @@ public class HeatMapView extends ForegroundCanvasView<ContinuousFunction2D> {
 
   @Override
   protected void setToolbar(IToolBarManager toolbarManager) {
+    toolbarManager.add(new CenterPlotAction(this));
     toolbarManager.add(new ScreenShotAction(this));
     toolbarManager.add(colorMapAction);
     toolbarManager.add(synchronizeAction);
@@ -116,5 +120,10 @@ public class HeatMapView extends ForegroundCanvasView<ContinuousFunction2D> {
   @Override
   public void onInstanceUnset(Clock clock) {
     super.onInstanceUnset(clock);
+  }
+
+  @Override
+  public void center() {
+    sampler.resetRange();
   }
 }

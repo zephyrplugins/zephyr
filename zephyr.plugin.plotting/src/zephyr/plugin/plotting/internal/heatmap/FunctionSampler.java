@@ -4,16 +4,21 @@ import zephyr.plugin.core.api.viewable.ContinuousFunction2D;
 
 public class FunctionSampler {
   private final ContinuousFunction2D function;
+  private double minValue = Double.MAX_VALUE;
+  private double maxValue = -Double.MAX_VALUE;
 
   public FunctionSampler(ContinuousFunction2D continuousFunction) {
     this.function = continuousFunction;
   }
 
+  public void resetRange() {
+    minValue = Double.MAX_VALUE;
+    maxValue = -Double.MAX_VALUE;
+  }
+
   public void updateData(MapData data) {
     Interval xRange = new Interval(function.minX(), function.maxX());
     Interval yRange = new Interval(function.minY(), function.maxY());
-    double minValue = Double.MAX_VALUE;
-    double maxValue = -Double.MAX_VALUE;
     float[][] imageData = data.imageData();
     for (int ax = 0; ax < data.resolutionX; ax++) {
       double x = xRange.min + ((double) ax / data.resolutionX) * xRange.length;
