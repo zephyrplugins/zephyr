@@ -63,15 +63,18 @@ public class ViewTask implements Runnable {
   }
 
   private Future<?> refresh(Clock clock, Syncins<ViewReference>.Handle viewHandle) {
+    boolean synced = false;
     if (clock.acquireData()) {
       try {
-        viewHandle.h().synchronize(clock);
+        synced = viewHandle.h().synchronize(clock);
       } catch (Throwable t) {
         t.printStackTrace();
       }
       clock.releaseData();
     }
     viewHandle.release();
+    if (!synced)
+      return null;
     return redraw();
   }
 

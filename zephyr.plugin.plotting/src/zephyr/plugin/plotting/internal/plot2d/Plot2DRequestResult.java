@@ -1,7 +1,6 @@
 package zephyr.plugin.plotting.internal.plot2d;
 
 import org.eclipse.swt.graphics.Point;
-
 import zephyr.plugin.plotting.internal.axes.Axes;
 import zephyr.plugin.plotting.internal.data.Data2D;
 import zephyr.plugin.plotting.internal.mousesearch.RequestResult;
@@ -44,6 +43,8 @@ public class Plot2DRequestResult implements RequestResult {
   }
 
   private void refreshDataPosition() {
+    if (xIndex < 0)
+      return;
     xPosition = data.xdata[xIndex];
     yPosition = data.ydata[xIndex];
   }

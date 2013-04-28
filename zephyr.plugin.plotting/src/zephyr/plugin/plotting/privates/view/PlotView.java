@@ -17,13 +17,11 @@ import zephyr.plugin.core.api.internal.codeparser.codetree.CodeTrees;
 import zephyr.plugin.core.api.internal.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.internal.monitoring.abstracts.MonitorContainerNode;
 import zephyr.plugin.core.api.synchronization.Clock;
-import zephyr.plugin.core.internal.ZephyrSync;
 import zephyr.plugin.core.internal.canvas.BackgroundCanvas;
 import zephyr.plugin.core.internal.helpers.SyncViewDropTarget;
 import zephyr.plugin.core.internal.views.DropTargetView;
 import zephyr.plugin.core.internal.views.ProvidedView;
-import zephyr.plugin.plotting.internal.actions.CenterPlotAction;
-import zephyr.plugin.plotting.internal.actions.CenterPlotAction.ViewCenterable;
+import zephyr.plugin.plotting.internal.actions.EnableScaleAction;
 import zephyr.plugin.plotting.internal.actions.SynchronizeAction;
 import zephyr.plugin.plotting.internal.mousesearch.MouseSearch;
 import zephyr.plugin.plotting.internal.mousesearch.MouseSearchable;
@@ -37,7 +35,7 @@ import zephyr.plugin.plotting.privates.view.actions.AddTracesAction;
 import zephyr.plugin.plotting.privates.view.actions.RemoveAllTracesAction;
 import zephyr.plugin.plotting.privates.view.actions.SelectTracesAction;
 
-public class PlotView extends ViewPart implements ProvidedView, DropTargetView, ViewCenterable, MouseSearchable {
+public class PlotView extends ViewPart implements ProvidedView, DropTargetView, MouseSearchable {
   final public static String ID = "zephyr.plugin.plotting.view.plot";
 
   protected final PlotSelection plotSelection;
@@ -48,6 +46,7 @@ public class PlotView extends ViewPart implements ProvidedView, DropTargetView, 
   protected ClockGraphBindings clockGraphBindings;
   private BackgroundCanvas backgroundCanvas;
   private final SynchronizeAction synchronizeAction;
+  private final EnableScaleAction centerAction = new EnableScaleAction();
 
   public PlotView() {
     plotSelection = new PlotSelection();
@@ -76,8 +75,8 @@ public class PlotView extends ViewPart implements ProvidedView, DropTargetView, 
   }
 
   private void setupToolbar(IToolBarManager toolBarManager) {
-    toolBarManager.add(new CenterPlotAction(this));
     toolBarManager.add(new RemoveAllTracesAction(this));
+    toolBarManager.add(centerAction);
     toolBarManager.add(new SelectTracesAction(this));
     toolBarManager.add(new AddTracesAction(this));
     toolBarManager.add(synchronizeAction);
@@ -121,6 +120,8 @@ public class PlotView extends ViewPart implements ProvidedView, DropTargetView, 
   public boolean synchronize(Clock clock) {
     if (!synchronizeAction.synchronizedData() || backgroundCanvas == null)
       return false;
+    if (centerAction.scaleEnabled())
+      center();
     return plotdata.synchronize(clock);
   }
 
@@ -143,12 +144,6 @@ public class PlotView extends ViewPart implements ProvidedView, DropTargetView, 
 
   public Control canvas() {
     return backgroundCanvas.canvas();
-  }
-
-  @Override
-  public void center() {
-    plotOverTime.resetAxes(true);
-    ZephyrSync.submitView(this);
   }
 
   @Override
@@ -187,5 +182,9 @@ public class PlotView extends ViewPart implements ProvidedView, DropTargetView, 
 
   public Clock[] clocks() {
     return clockGraphBindings.clocks();
+  }
+
+  public void center() {
+    plotOverTime.resetAxes(true);
   }
 }

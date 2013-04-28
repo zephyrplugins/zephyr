@@ -151,13 +151,13 @@ public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView,
     if (!viewLock.acquire())
       return false;
     T current = instance.current();
-    boolean result = lockAndSynchronize(clock, current);
+    boolean result = synchronizeIFN(clock, current);
     viewLock.release();
     unprotectedSynchronization(current);
     return result;
   }
 
-  private boolean lockAndSynchronize(Clock clock, T current) {
+  private boolean synchronizeIFN(Clock clock, T current) {
     if (clock == null || current == null)
       return false;
     boolean result = false;

@@ -13,8 +13,7 @@ import zephyr.plugin.core.internal.helpers.ClassViewProvider;
 import zephyr.plugin.core.internal.utils.Colors;
 import zephyr.plugin.core.internal.views.helpers.ForegroundCanvasView;
 import zephyr.plugin.core.internal.views.helpers.ScreenShotAction;
-import zephyr.plugin.plotting.internal.actions.CenterPlotAction;
-import zephyr.plugin.plotting.internal.actions.CenterPlotAction.ViewCenterable;
+import zephyr.plugin.plotting.internal.actions.EnableScaleAction;
 import zephyr.plugin.plotting.internal.actions.SynchronizeAction;
 import zephyr.plugin.plotting.internal.axes.Axes;
 import zephyr.plugin.plotting.internal.heatmap.ColorMapAction;
@@ -22,7 +21,7 @@ import zephyr.plugin.plotting.internal.heatmap.Function2DBufferedDrawer;
 import zephyr.plugin.plotting.internal.heatmap.FunctionSampler;
 import zephyr.plugin.plotting.internal.heatmap.MapData;
 
-public class HeatMapView extends ForegroundCanvasView<ContinuousFunction2D> implements ViewCenterable {
+public class HeatMapView extends ForegroundCanvasView<ContinuousFunction2D> {
   public static class Provider extends ClassViewProvider {
     public Provider() {
       super(ContinuousFunction2D.class);
@@ -39,6 +38,7 @@ public class HeatMapView extends ForegroundCanvasView<ContinuousFunction2D> impl
   private final Function2DBufferedDrawer drawer = new Function2DBufferedDrawer(colors);
   private final Axes axes = new Axes();
   private final ColorMapAction colorMapAction = new ColorMapAction(this, drawer);
+  private final EnableScaleAction centerAction = new EnableScaleAction();
   private final SynchronizeAction synchronizeAction = new SynchronizeAction();
   private Point2D position;
   private MapData data;
@@ -69,6 +69,8 @@ public class HeatMapView extends ForegroundCanvasView<ContinuousFunction2D> impl
 
   @Override
   protected boolean synchronize(ContinuousFunction2D current) {
+    if (centerAction.scaleEnabled())
+      sampler.resetRange();
     if (!synchronizeAction.synchronizedData())
       return false;
     sampler.updateData(data);
@@ -97,7 +99,7 @@ public class HeatMapView extends ForegroundCanvasView<ContinuousFunction2D> impl
 
   @Override
   protected void setToolbar(IToolBarManager toolbarManager) {
-    toolbarManager.add(new CenterPlotAction(this));
+    toolbarManager.add(centerAction);
     toolbarManager.add(new ScreenShotAction(this));
     toolbarManager.add(colorMapAction);
     toolbarManager.add(synchronizeAction);
@@ -120,10 +122,5 @@ public class HeatMapView extends ForegroundCanvasView<ContinuousFunction2D> impl
   @Override
   public void onInstanceUnset(Clock clock) {
     super.onInstanceUnset(clock);
-  }
-
-  @Override
-  public void center() {
-    sampler.resetRange();
   }
 }

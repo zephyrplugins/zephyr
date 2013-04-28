@@ -5,20 +5,14 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-
 import zephyr.plugin.core.internal.views.helpers.BackgroundCanvasView;
-import zephyr.plugin.plotting.internal.actions.CenterPlotAction;
-import zephyr.plugin.plotting.internal.actions.CenterPlotAction.ViewCenterable;
+import zephyr.plugin.plotting.internal.actions.EnableScaleAction;
 import zephyr.plugin.plotting.internal.mousesearch.MouseSearch;
 
-abstract public class Plot2DView<T> extends BackgroundCanvasView<T> implements ViewCenterable {
+abstract public class Plot2DView<T> extends BackgroundCanvasView<T> {
+  protected final EnableScaleAction centerAction = new EnableScaleAction();
   protected final Plot2D plot = new Plot2D();
   private MouseSearch mouseSearch;
-
-  @Override
-  public void center() {
-    plot.resetAxes();
-  }
 
   @Override
   public void createPartControl(Composite parent) {
@@ -41,7 +35,7 @@ abstract public class Plot2DView<T> extends BackgroundCanvasView<T> implements V
   }
 
   protected void setupToolbar(IToolBarManager toolBarManager) {
-    toolBarManager.add(new CenterPlotAction(this));
+    toolBarManager.add(centerAction);
   }
 
   @Override
