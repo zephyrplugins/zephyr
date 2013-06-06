@@ -99,7 +99,7 @@ public class ZephyrPluginCore extends AbstractUIPlugin {
       }
     });
     runnableThread.setName("ZephyrRunnable-" + threadGroup.activeCount());
-    runnableThread.setDaemon(true);
+    runnableThread.setDaemon(false);
     runnableThread.start();
   }
 
