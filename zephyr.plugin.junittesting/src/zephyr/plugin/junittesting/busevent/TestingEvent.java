@@ -1,6 +1,6 @@
 package zephyr.plugin.junittesting.busevent;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import zephyr.plugin.core.internal.async.events.Event;
 
 public class TestingEvent implements Event {

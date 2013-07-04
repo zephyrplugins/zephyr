@@ -1,6 +1,6 @@
 package zephyr.plugin.core.api.internal.synchronization;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import org.junit.Test;
 
