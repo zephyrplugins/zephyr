@@ -3,6 +3,8 @@ package zephyr.plugin.plotting.privates.view;
 import java.awt.geom.Point2D;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
@@ -20,8 +22,11 @@ import zephyr.plugin.plotting.internal.heatmap.ColorMapAction;
 import zephyr.plugin.plotting.internal.heatmap.Function2DBufferedDrawer;
 import zephyr.plugin.plotting.internal.heatmap.FunctionSampler;
 import zephyr.plugin.plotting.internal.heatmap.MapData;
+import zephyr.plugin.plotting.internal.mousesearch.MouseSearch;
+import zephyr.plugin.plotting.internal.mousesearch.MouseSearchable;
+import zephyr.plugin.plotting.internal.mousesearch.RequestResult;
 
-public class HeatMapView extends ForegroundCanvasView<ContinuousFunction2D> {
+public class HeatMapView extends ForegroundCanvasView<ContinuousFunction2D> implements MouseSearchable {
   public static class Provider extends ClassViewProvider {
     public Provider() {
       super(ContinuousFunction2D.class);
@@ -41,13 +46,21 @@ public class HeatMapView extends ForegroundCanvasView<ContinuousFunction2D> {
   private final EnableScaleAction centerAction = new EnableScaleAction();
   private final SynchronizeAction synchronizeAction = new SynchronizeAction();
   private Point2D position;
-  private MapData data;
-  private FunctionSampler sampler;
+  MapData data;
+  FunctionSampler sampler;
 
   @Override
-  protected void paint(GC gc) {
-    axes.updateScaling(gc.getClipping());
-    drawer.paint(gc, canvas, data, true);
+  public void createPartControl(Composite parent) {
+    super.createPartControl(parent);
+    new MouseSearch(this, canvas);
+  }
+
+  @Override
+  synchronized protected void paint(GC gc) {
+    synchronized (data) {
+      axes.updateScaling(gc.getClipping());
+      drawer.paint(gc, canvas, data, true);
+    }
     if (position != null)
       drawPosition(gc);
   }
@@ -69,14 +82,16 @@ public class HeatMapView extends ForegroundCanvasView<ContinuousFunction2D> {
 
   @Override
   protected boolean synchronize(ContinuousFunction2D current) {
-    if (centerAction.scaleEnabled())
-      sampler.resetRange();
-    if (!synchronizeAction.synchronizedData())
-      return false;
-    sampler.updateData(data);
-    if (current instanceof PositionFunction2D)
-      position = ((PositionFunction2D) current).position();
-    return true;
+    synchronized (data) {
+      if (centerAction.scaleEnabled())
+        sampler.resetRange();
+      if (!synchronizeAction.synchronizedData())
+        return false;
+      sampler.updateData(data);
+      if (current instanceof PositionFunction2D)
+        position = ((PositionFunction2D) current).position();
+      return true;
+    }
   }
 
   @Override
@@ -84,8 +99,10 @@ public class HeatMapView extends ForegroundCanvasView<ContinuousFunction2D> {
     super.onInstanceSet(clock, function);
     setViewName();
     data = new MapData(200);
-    sampler = new FunctionSampler(function);
-    updateAxes(function);
+    synchronized (data) {
+      sampler = new FunctionSampler(function);
+      updateAxes(function);
+    }
   }
 
   private void updateAxes(ContinuousFunction2D function) {
@@ -122,5 +139,43 @@ public class HeatMapView extends ForegroundCanvasView<ContinuousFunction2D> {
   @Override
   public void onInstanceUnset(Clock clock) {
     super.onInstanceUnset(clock);
+  }
+
+  @Override
+  public RequestResult search(final Point mousePosition) {
+    if (data == null)
+      return null;
+    final Point2D.Double position = axes.toD(mousePosition);
+    return new RequestResult() {
+
+      @Override
+      public String tooltipLabel() {
+        return "";
+      }
+
+      @Override
+      public String fieldLabel() {
+        if (data == null)
+          return null;
+        synchronized (data) {
+          return String.valueOf(sampler.valueOf(data, position));
+        }
+      }
+
+      @Override
+      public boolean dynamicText() {
+        return true;
+      }
+
+      @Override
+      public Point computeMousePosition() {
+        return mousePosition;
+      }
+    };
+  }
+
+  @Override
+  public boolean emptySearch() {
+    return false;
   }
 }

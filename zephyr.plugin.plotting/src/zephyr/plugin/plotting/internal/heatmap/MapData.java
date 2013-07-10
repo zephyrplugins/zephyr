@@ -1,5 +1,6 @@
 package zephyr.plugin.plotting.internal.heatmap;
 
+
 public class MapData {
   final public int resolutionX;
   final public int resolutionY;
