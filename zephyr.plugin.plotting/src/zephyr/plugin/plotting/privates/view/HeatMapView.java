@@ -99,10 +99,8 @@ public class HeatMapView extends ForegroundCanvasView<ContinuousFunction2D> impl
     super.onInstanceSet(clock, function);
     setViewName();
     data = new MapData(200);
-    synchronized (data) {
-      sampler = new FunctionSampler(function);
-      updateAxes(function);
-    }
+    sampler = new FunctionSampler(function);
+    updateAxes(function);
   }
 
   private void updateAxes(ContinuousFunction2D function) {
