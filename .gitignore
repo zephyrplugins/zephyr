@@ -7,4 +7,6 @@ simpleclient.jar
 zephyr.e4app
 target
 workspace
+.metadata
+RemoteSystemsTempFiles
 

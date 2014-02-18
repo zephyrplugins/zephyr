@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="Zephyr" uid="zephyr.product" id="zephyr.product.product" application="zephyr.plugin.application.application" version="1.0.0.qualifier" useFeatures="true" includeLaunchers="true">
+<product name="Zephyr" uid="zephyr.product.product" id="zephyr.product.product" application="zephyr.plugin.application.application" version="1.0.0.qualifier" useFeatures="true" includeLaunchers="true">
 
    <aboutInfo>
       <image path="/zephyr.product/images/zephyr128.png"/>
