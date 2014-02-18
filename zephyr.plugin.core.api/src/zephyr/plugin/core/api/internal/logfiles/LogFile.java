@@ -9,10 +9,12 @@ import zephyr.plugin.core.api.labels.Labeled;
 import zephyr.plugin.core.api.monitoring.annotations.LabelProvider;
 import zephyr.plugin.core.api.monitoring.annotations.Monitor;
 
-@Monitor
+
 public abstract class LogFile implements Labeled {
   protected BufferedReader reader;
+  @Monitor
   final public String filepath;
+  @Monitor
   private final double[] current;
   private final String[] labels;
 
