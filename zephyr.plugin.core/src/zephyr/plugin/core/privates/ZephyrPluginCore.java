@@ -46,6 +46,7 @@ public class ZephyrPluginCore extends AbstractUIPlugin {
   private final ThreadGroup threadGroup = new ThreadGroup("ZephyrRunnable");
   private final ZephyrClassLoaderInternal classLoader;
   private final Control control = new Control();
+  private final ThreadStarter threadStarter = new ThreadStarter();
   final ZephyrBusEvent busEvent = new ZephyrBusEvent();
   private final Clocks clocks = new Clocks();
 
@@ -100,6 +101,7 @@ public class ZephyrPluginCore extends AbstractUIPlugin {
     });
     runnableThread.setName("ZephyrRunnable-" + threadGroup.activeCount());
     runnableThread.setDaemon(false);
+    threadStarter.register(runnableFactory, runnableThread);
     runnableThread.start();
   }
 
@@ -238,5 +240,9 @@ public class ZephyrPluginCore extends AbstractUIPlugin {
 
   public static Clocks clocks() {
     return plugin.clocks;
+  }
+
+  public static ThreadStarter threadStarter() {
+    return plugin.threadStarter;
   }
 }

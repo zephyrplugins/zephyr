@@ -13,11 +13,14 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import zephyr.plugin.core.RunnableFactory;
 import zephyr.plugin.core.ZephyrCore;
 import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.synchronization.Chrono;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.api.synchronization.ClockInfo;
+import zephyr.plugin.core.internal.ZephyrSync;
+import zephyr.plugin.core.internal.events.StartRunnableEvent;
 import zephyr.plugin.core.internal.helpers.ImageManager;
 import zephyr.plugin.core.privates.ZephyrPluginCore;
 import zephyr.plugin.core.privates.clocks.ClockStat;
@@ -46,6 +49,8 @@ public class ClockComposite {
   final ImageManager imageManager = new ImageManager();
   private Listener<Control> pauseResumeListener;
   private final ClockStat clockStats;
+  Composite buttons;
+  private boolean runnableFactoryRegistered;
 
   public ClockComposite(Composite parent, Clock clock) {
     this.clock = clock;
@@ -63,7 +68,7 @@ public class ClockComposite {
   private void createLabelLine(Composite parent) {
     Label label = new Label(parent, SWT.NONE);
     label.setText(clock.info().label());
-    Composite buttons = new Composite(parent, SWT.NONE);
+    buttons = new Composite(parent, SWT.NONE);
     GridData griddata = new GridData(SWT.RIGHT, SWT.UP, true, false);
     buttons.setLayoutData(griddata);
     RowLayout buttonsLayout = new RowLayout();
@@ -146,6 +151,8 @@ public class ClockComposite {
   }
 
   public void synchronize() {
+    if (!runnableFactoryRegistered)
+      registerThread(Thread.currentThread());
     timeStep = clock.timeStep();
     ClockInfo clockInfo = clock.info();
     for (String caption : clockInfo.captions()) {
@@ -158,6 +165,27 @@ public class ClockComposite {
       labelInfo.value = clockInfo.value(caption);
       labelInfo.info = clockInfo.info(caption);
     }
+  }
+
+  private void registerThread(Thread thread) {
+    final RunnableFactory runnableFactory = ZephyrPluginCore.threadStarter().factory(thread);
+    runnableFactoryRegistered = true;
+    if (runnableFactory == null)
+      return;
+    Display.getDefault().asyncExec(new Runnable() {
+      @Override
+      public void run() {
+        Button button = addButton(buttons, "icons/action_restart.gif");
+        button.addMouseListener(new MouseAdapter() {
+          @Override
+          public void mouseUp(MouseEvent e) {
+            clock.prepareTermination();
+            ZephyrCore.removeClock(clock);
+            ZephyrSync.busEvent().dispatch(new StartRunnableEvent(runnableFactory));
+          }
+        });
+      }
+    });
   }
 
   private static boolean adjustLabel(Label label, String text) {
@@ -197,5 +225,6 @@ public class ClockComposite {
     group.dispose();
     captionToLabelInfo.clear();
     imageManager.dispose();
+    buttons.dispose();
   }
 }

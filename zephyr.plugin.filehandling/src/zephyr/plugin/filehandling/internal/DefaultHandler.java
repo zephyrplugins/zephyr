@@ -2,7 +2,6 @@ package zephyr.plugin.filehandling.internal;
 
 import java.io.IOException;
 import java.util.List;
-
 import zephyr.plugin.core.api.Zephyr;
 import zephyr.plugin.core.api.internal.logfiles.LogFile;
 import zephyr.plugin.core.api.synchronization.Clock;
@@ -28,5 +27,6 @@ public class DefaultHandler implements IFileHandler {
     while (clock.tick() && !logfile.eof())
       logfile.step();
     logfile.close();
+    clock.terminate();
   }
 }

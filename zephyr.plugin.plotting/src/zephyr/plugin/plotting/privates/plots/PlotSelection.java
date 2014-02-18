@@ -59,7 +59,16 @@ public class PlotSelection {
       setCurrentSelection(selection);
   }
 
-  synchronized protected void checkRemovedTrace(Clock clock) {
+  synchronized public void checkRemovedTrace(Clock clock) {
+    List<TraceData> oldSelection = new ArrayList<TraceData>(selected);
+    for (TraceData traceData : oldSelection) {
+      if (traceData.trace.clock() != clock)
+        continue;
+      Trace trace = traceData.trace;
+      persistentSelection.add(new PersistentTrace(trace.label, trace.path()));
+      selected.remove(traceData);
+      traceData.decRef();
+    }
   }
 
   synchronized public void setCurrentSelection(Set<Trace> newSelection) {

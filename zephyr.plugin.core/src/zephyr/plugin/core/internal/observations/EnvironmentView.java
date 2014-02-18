@@ -5,6 +5,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import zephyr.plugin.core.ZephyrCore;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.api.synchronization.Closeable;
 import zephyr.plugin.core.internal.views.helpers.ClassTypeView;
@@ -21,6 +22,7 @@ public abstract class EnvironmentView<T> extends ClassTypeView<T> implements Clo
         widget.repaint();
     }
   };
+  private Clock clock;
 
   @Override
   public void createPartControl(Composite parent) {
@@ -35,6 +37,7 @@ public abstract class EnvironmentView<T> extends ClassTypeView<T> implements Clo
 
   @Override
   protected void setLayout(Clock clock, T current) {
+    this.clock = clock;
     obsLayout = getObservationLayout(clock, current);
     FillLayout layout = new FillLayout(SWT.VERTICAL);
     parent.setLayout(layout);
@@ -51,6 +54,7 @@ public abstract class EnvironmentView<T> extends ClassTypeView<T> implements Clo
 
   @Override
   protected void unsetLayout() {
+    this.clock = null;
   }
 
   static protected boolean hasContent(ObsWidget[] line) {
@@ -69,7 +73,7 @@ public abstract class EnvironmentView<T> extends ClassTypeView<T> implements Clo
 
   @Override
   public void repaint() {
-    if (obsLayout == null)
+    if (obsLayout == null || parent.isDisposed())
       return;
     parent.getDisplay().syncExec(repaintWidgets);
   }
@@ -81,6 +85,10 @@ public abstract class EnvironmentView<T> extends ClassTypeView<T> implements Clo
 
   @Override
   public void close() {
+    if (clock != null) {
+      clock.prepareTermination();
+      ZephyrCore.removeClock(clock);
+    }
     unsetInstance();
   }
 }

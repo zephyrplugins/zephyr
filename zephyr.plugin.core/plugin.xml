@@ -15,8 +15,8 @@
 		<commandParameter
 		         id="org.eclipse.ui.commands.radioStateParameter"
 		         name="State"
-		         optional="false"> 
-        </commandParameter>    
+		         optional="false">
+        </commandParameter>
 		   <state
 		         id="org.eclipse.ui.commands.radioState">
 		      <class
@@ -472,6 +472,11 @@
             class="zephyr.plugin.core.privates.listeners.RemoveNodeCodeWhenClockRemovedListener"
             eventid="zephyr.event.clockremoved"
             name="RemoveNodeCodeWhenClockRemovedListener">
+      </listener>
+      <listener
+            class="zephyr.plugin.core.privates.listeners.StartRunnableListener"
+            eventid="zephyr.event.startrunnable"
+            name="StartRunnableListener">
       </listener>
    </extension>
    <extension

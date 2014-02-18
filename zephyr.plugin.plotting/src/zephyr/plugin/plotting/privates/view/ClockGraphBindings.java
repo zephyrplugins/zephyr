@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-
 import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.internal.ZephyrSync;
@@ -47,6 +46,7 @@ public class ClockGraphBindings {
 
   protected void unbind(Clock clock) {
     if (clockTracesSelection.remove(clock)) {
+      plotView.plotSelection.checkRemovedTrace(clock);
       ZephyrSync.unbind(clock, plotView);
       ZephyrSync.submitView(plotView);
     }
