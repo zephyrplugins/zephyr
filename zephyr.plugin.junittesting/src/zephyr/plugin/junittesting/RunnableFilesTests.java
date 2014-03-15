@@ -15,6 +15,7 @@ public class RunnableFilesTests {
 
   @Before
   public void before() {
+    setZephyrRoot(System.getProperty("zephyr.root"));
     // ClockListener.enableVerbose();
   }
 

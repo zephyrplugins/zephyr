@@ -1,7 +1,6 @@
 package zephyr.plugin.core.api.internal.codeparser.codetree;
 
-import java.lang.reflect.Field;
-
+import zephyr.plugin.core.api.internal.codeparser.interfaces.CodeHook;
 import zephyr.plugin.core.api.internal.codeparser.interfaces.ParentNode;
 import zephyr.plugin.core.api.internal.monitoring.abstracts.MonitorContainerNode;
 import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
@@ -9,7 +8,7 @@ import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
 public class PrimitiveNode extends AbstractCodeNode implements MonitorContainerNode {
   private final Monitored monitored;
 
-  public PrimitiveNode(String label, ParentNode parent, Field field, Object container, int level) {
+  public PrimitiveNode(String label, ParentNode parent, CodeHook field, Object container, int level) {
     this(label, parent, createMonitored(field, container), level);
   }
 
@@ -22,13 +21,13 @@ public class PrimitiveNode extends AbstractCodeNode implements MonitorContainerN
     return monitored;
   }
 
-  static private Monitored createMonitored(Field field, Object container) {
+  static private Monitored createMonitored(CodeHook field, Object container) {
     if (field.getType().equals(Boolean.TYPE))
       return createBooleanLogged(field, container);
     return createValueLogged(field, container);
   }
 
-  static private Monitored createValueLogged(final Field field, final Object container) {
+  static private Monitored createValueLogged(final CodeHook field, final Object container) {
     return new Monitored() {
       @Override
       public double monitoredValue() {
@@ -44,7 +43,7 @@ public class PrimitiveNode extends AbstractCodeNode implements MonitorContainerN
     };
   }
 
-  static private Monitored createBooleanLogged(final Field field, final Object container) {
+  static private Monitored createBooleanLogged(final CodeHook field, final Object container) {
     return new Monitored() {
       @Override
       public double monitoredValue() {

@@ -1,9 +1,8 @@
 package zephyr.plugin.core.api.internal.codeparser.parsers;
 
-import java.lang.reflect.Field;
-
 import zephyr.plugin.core.api.internal.codeparser.codetree.ClassNode;
 import zephyr.plugin.core.api.internal.codeparser.codetree.CodeTrees;
+import zephyr.plugin.core.api.internal.codeparser.interfaces.CodeHook;
 import zephyr.plugin.core.api.internal.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.internal.codeparser.interfaces.CodeParser;
 import zephyr.plugin.core.api.internal.codeparser.interfaces.FieldParser;
@@ -18,8 +17,8 @@ public class ObjectParser implements FieldParser {
   }
 
   @Override
-  public CodeNode parse(CodeParser codeParser, MutableParentNode parentNode, Field instanceField, String instanceLabel,
-      Object instance) {
+  public CodeNode parse(CodeParser codeParser, MutableParentNode parentNode, CodeHook instanceField,
+      String instanceLabel, Object instance) {
     String label = instanceLabel != null ? instanceLabel : extractLabel(instanceField);
     ClassNode node = new ClassNode(label, parentNode, instance, instanceField);
     parentNode.addChild(node);
@@ -28,7 +27,7 @@ public class ObjectParser implements FieldParser {
     return node;
   }
 
-  private static String extractLabel(Field instanceField) {
+  private static String extractLabel(CodeHook instanceField) {
     if (instanceField == null)
       return "";
     Monitor monitor = instanceField.getAnnotation(Monitor.class);

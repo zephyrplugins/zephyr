@@ -10,10 +10,10 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Stack;
-
 import zephyr.plugin.core.api.internal.codeparser.codetree.ClassNode;
 import zephyr.plugin.core.api.internal.codeparser.codetree.CodeTrees;
 import zephyr.plugin.core.api.internal.codeparser.codetree.PrimitiveNode;
+import zephyr.plugin.core.api.internal.codeparser.interfaces.CodeHook;
 import zephyr.plugin.core.api.internal.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.internal.codeparser.interfaces.CodeParser;
 import zephyr.plugin.core.api.internal.codeparser.interfaces.FieldParser;
@@ -114,7 +114,7 @@ public class CodeTreeParser implements CodeParser {
   }
 
   @Override
-  public CodeNode recursiveParseInstance(MutableParentNode parentNode, Field fieldInstance, String instanceLabel,
+  public CodeNode recursiveParseInstance(MutableParentNode parentNode, CodeHook fieldInstance, String instanceLabel,
       Object instance) {
     for (FieldParser parser : parsers) {
       if (parser.canParse(instance)) {
@@ -137,7 +137,7 @@ public class CodeTreeParser implements CodeParser {
         if (isMonitored(classNode, field)) {
           Object fieldValue = CodeTrees.getValueFromField(field, classNode.instance());
           if (fieldValue != null)
-            recursiveParseInstance(classNode, field, null, fieldValue);
+            recursiveParseInstance(classNode, new FieldHook(field), null, fieldValue);
         }
       }
       objectClass = objectClass.getSuperclass();
@@ -176,7 +176,7 @@ public class CodeTreeParser implements CodeParser {
   }
 
   @Override
-  public CollectionLabelBuilder newCollectionLabelBuilder(Field field, int length) {
+  public CollectionLabelBuilder newCollectionLabelBuilder(CodeHook field, int length) {
     String id = "";
     boolean arrayDecoration = true;
     if (field != null && field.isAnnotationPresent(Monitor.class)) {

@@ -1,10 +1,9 @@
 package zephyr.plugin.core.api.internal.codeparser.parsers;
 
-import java.lang.reflect.Field;
 import java.util.List;
-
 import zephyr.plugin.core.api.internal.codeparser.codetree.CodeTrees;
 import zephyr.plugin.core.api.internal.codeparser.codetree.PrimitiveCollectionNode;
+import zephyr.plugin.core.api.internal.codeparser.interfaces.CodeHook;
 import zephyr.plugin.core.api.internal.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.internal.codeparser.interfaces.CodeParser;
 import zephyr.plugin.core.api.internal.codeparser.interfaces.FieldParser;
@@ -28,7 +27,7 @@ public class PrimitiveCollectionParser implements FieldParser {
 
   @SuppressWarnings("unchecked")
   @Override
-  public CodeNode parse(CodeParser codeParser, MutableParentNode parentNode, Field instanceField, String instanceLabel, Object instance) {
+  public CodeNode parse(CodeParser codeParser, MutableParentNode parentNode, CodeHook instanceField, String instanceLabel, Object instance) {
     int level = CodeTrees.levelOf(instanceField);
     String label = CodeTrees.labelOf(instanceField);
     List<? extends Number> list = ((List<? extends Number>) instance);

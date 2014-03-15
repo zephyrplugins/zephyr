@@ -1,9 +1,9 @@
 package zephyr.plugin.core.api.internal.codeparser.parsers;
 
-import java.lang.reflect.Field;
 import zephyr.plugin.core.api.internal.codeparser.codetree.ClassNode;
 import zephyr.plugin.core.api.internal.codeparser.codetree.CodeTrees;
 import zephyr.plugin.core.api.internal.codeparser.codetree.ObjectCollectionNode;
+import zephyr.plugin.core.api.internal.codeparser.interfaces.CodeHook;
 import zephyr.plugin.core.api.internal.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.internal.codeparser.interfaces.CodeParser;
 import zephyr.plugin.core.api.internal.codeparser.interfaces.FieldParser;
@@ -12,7 +12,7 @@ import zephyr.plugin.core.api.internal.parsing.CollectionLabelBuilder;
 
 public abstract class AbstractCollectionParser<T> implements FieldParser {
   @Override
-  public CodeNode parse(CodeParser codeParser, MutableParentNode parentNode, Field instanceField, String instanceLabel,
+  public CodeNode parse(CodeParser codeParser, MutableParentNode parentNode, CodeHook instanceField, String instanceLabel,
       Object instance) {
     @SuppressWarnings("unchecked")
     T container = (T) instance;
@@ -40,7 +40,7 @@ public abstract class AbstractCollectionParser<T> implements FieldParser {
   }
 
   private static void parseElement(CodeParser codeParser, MutableParentNode parentNode, String elementLabel,
-      Object element, Field field) {
+      Object element, CodeHook field) {
     ClassNode childNode;
     if (element.getClass().isArray()) {
       childNode = new ObjectCollectionNode(elementLabel, parentNode, element, field);

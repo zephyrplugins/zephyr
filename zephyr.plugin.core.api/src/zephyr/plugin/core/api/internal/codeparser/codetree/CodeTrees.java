@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
+import zephyr.plugin.core.api.internal.codeparser.interfaces.CodeHook;
 import zephyr.plugin.core.api.internal.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.internal.codeparser.interfaces.CodeParser;
 import zephyr.plugin.core.api.internal.codeparser.interfaces.ParentNode;
@@ -51,7 +51,7 @@ public class CodeTrees {
     traverser.outNode(root);
   }
 
-  public static String labelOf(Field field) {
+  public static String labelOf(CodeHook field) {
     if (field == null)
       return "";
     Monitor annotation = field.getAnnotation(Monitor.class);
@@ -63,7 +63,7 @@ public class CodeTrees {
     return label;
   }
 
-  public static int levelOf(Field field) {
+  public static int levelOf(CodeHook field) {
     if (field == null)
       return 0;
     Monitor annotation = field.getAnnotation(Monitor.class);
@@ -172,7 +172,7 @@ public class CodeTrees {
     return result;
   }
 
-  public static void popupIFN(CodeParser codeParser, Field field, CodeNode codeNode) {
+  public static void popupIFN(CodeParser codeParser, CodeHook field, CodeNode codeNode) {
     if (field == null || codeNode == null)
       return;
     if (!field.isAnnotationPresent(Popup.class))
