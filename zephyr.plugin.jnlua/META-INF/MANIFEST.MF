@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Jnlua
+Bundle-SymbolicName: zephyr.plugin.jnlua;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: Thomas
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-ClassPath: .
+Require-Bundle: com.naef.jnlua;bundle-version="0.9.1",
+ zephyr.plugin.core;bundle-version="1.0.0",
+ zephyr.plugin.core.api;bundle-version="1.0.0",
+ zephyr.plugin.filehandling;bundle-version="1.0.0"

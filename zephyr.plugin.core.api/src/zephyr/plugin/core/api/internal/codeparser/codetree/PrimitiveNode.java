@@ -6,6 +6,7 @@ import zephyr.plugin.core.api.internal.monitoring.abstracts.MonitorContainerNode
 import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
 
 public class PrimitiveNode extends AbstractCodeNode implements MonitorContainerNode {
+  private static double initialValue;
   private final Monitored monitored;
 
   public PrimitiveNode(String label, ParentNode parent, CodeHook field, Object container, int level) {
@@ -22,9 +23,13 @@ public class PrimitiveNode extends AbstractCodeNode implements MonitorContainerN
   }
 
   static private Monitored createMonitored(CodeHook field, Object container) {
+    Monitored monitored;
     if (field.getType().equals(Boolean.TYPE))
-      return createBooleanLogged(field, container);
-    return createValueLogged(field, container);
+      monitored = createBooleanLogged(field, container);
+    else
+      monitored = createValueLogged(field, container);
+    initialValue = monitored.monitoredValue();
+    return monitored;
   }
 
   static private Monitored createValueLogged(final CodeHook field, final Object container) {
@@ -59,8 +64,8 @@ public class PrimitiveNode extends AbstractCodeNode implements MonitorContainerN
     };
   }
 
-  public double value() {
-    return monitored.monitoredValue();
+  public double initialValue() {
+    return initialValue;
   }
 
   @Override

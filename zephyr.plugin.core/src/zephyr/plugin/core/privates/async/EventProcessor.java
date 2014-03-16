@@ -21,7 +21,7 @@ public class EventProcessor implements Runnable {
       processEvent(pendingEvents.waitEvent());
   }
 
-  public void processEvent(Event event) {
+  synchronized public void processEvent(Event event) {
     Set<EventListener> listeners = registeredListeners.getListeners(event);
     for (EventListener listener : listeners)
       process(event, listener);

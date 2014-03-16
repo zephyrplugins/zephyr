@@ -26,7 +26,6 @@ import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.internal.SyncCode;
 import zephyr.plugin.core.internal.async.BusEvent;
-import zephyr.plugin.core.internal.async.recognizers.OnEventBlocker;
 import zephyr.plugin.core.internal.events.AdvertizeEvent;
 import zephyr.plugin.core.internal.views.SyncView;
 import zephyr.plugin.core.privates.async.ZephyrBusEvent;
@@ -64,10 +63,11 @@ public class ZephyrPluginCore extends AbstractUIPlugin {
         RecognizeZephyrInitialization recognizer = new RecognizeZephyrInitialization(eventInfo);
         if (recognizer.isSatisfied())
           return;
-        OnEventBlocker codeParsedBlocker = busEvent.createWaiter(recognizer);
-        codeParsedBlocker.connect();
-        busEvent.dispatch(new AdvertizeEvent(eventInfo));
-        codeParsedBlocker.block();
+        busEvent.processor().processEvent(new AdvertizeEvent(eventInfo));
+        // OnEventBlocker codeParsedBlocker = busEvent.createWaiter(recognizer);
+        // codeParsedBlocker.connect();
+        // busEvent.dispatch(new AdvertizeEvent(eventInfo));
+        // codeParsedBlocker.block();
       }
     });
   }
