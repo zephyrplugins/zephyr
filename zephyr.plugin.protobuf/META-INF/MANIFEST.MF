@@ -5,6 +5,8 @@ Bundle-SymbolicName: zephyr.plugin.protobuf;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: Thomas
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ClassPath: libs/protobuf-java-2.5.0.jar,
+ .
 Require-Bundle: zephyr.plugin.core;bundle-version="1.0.0",
  zephyr.plugin.core.api;bundle-version="1.0.0",
  zephyr.plugin.plotting;bundle-version="1.0.0",
