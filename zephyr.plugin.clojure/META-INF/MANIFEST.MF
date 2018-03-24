@@ -10,3 +10,4 @@ Bundle-ClassPath: clojure-1.2.0/clojure.jar,
 Require-Bundle: zephyr.plugin.core;bundle-version="1.0.0",
  zephyr.plugin.core.api;bundle-version="1.0.0",
  zephyr.plugin.filehandling;bundle-version="1.0.0"
+Automatic-Module-Name: zephyr.plugin.clojure

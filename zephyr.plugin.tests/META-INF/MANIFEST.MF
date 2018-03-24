@@ -12,3 +12,4 @@ Require-Bundle: zephyr.plugin.core;bundle-version="1.0.0",
  zephyr.plugin.core.api;bundle-version="1.0.0"
 Bundle-Activator: zephyr.plugin.tests.ZephyrTestsPlugin
 Bundle-ActivationPolicy: lazy
+Automatic-Module-Name: zephyr.plugin.tests

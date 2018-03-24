@@ -10,3 +10,4 @@ Require-Bundle: com.naef.jnlua;bundle-version="0.9.1",
  zephyr.plugin.core;bundle-version="1.0.0",
  zephyr.plugin.core.api;bundle-version="1.0.0",
  zephyr.plugin.filehandling;bundle-version="1.0.0"
+Automatic-Module-Name: zephyr.plugin.jnlua

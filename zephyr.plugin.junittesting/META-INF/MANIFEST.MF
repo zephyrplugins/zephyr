@@ -21,3 +21,4 @@ Export-Package: zephyr.plugin.junittesting,
  zephyr.plugin.junittesting.support.checklisteners,
  zephyr.plugin.junittesting.support.conditions
 Bundle-Vendor: Thomas
+Automatic-Module-Name: zephyr.plugin.junittesting

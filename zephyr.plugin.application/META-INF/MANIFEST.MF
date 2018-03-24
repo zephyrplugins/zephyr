@@ -18,3 +18,4 @@ Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: zephyr.application
 Bundle-Vendor: Thomas
+Automatic-Module-Name: zephyr.plugin.application

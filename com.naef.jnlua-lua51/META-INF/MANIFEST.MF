@@ -16,3 +16,4 @@ Export-Package: com.naef.jnlua,
  com.naef.jnlua.util
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.core.runtime;resolution:=optional
+Automatic-Module-Name: com.naef.jnlua

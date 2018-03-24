@@ -13,3 +13,4 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: zephyr.plugin.filehandling
 Bundle-ActivationPolicy: lazy
 Import-Package: zephyr.plugin.core.api.internal.bz2
+Automatic-Module-Name: zephyr.plugin.filehandling

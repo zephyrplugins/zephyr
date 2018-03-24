@@ -11,3 +11,4 @@ Require-Bundle: zephyr.plugin.opengl;bundle-version="1.0.0",
  zephyr.plugin.core;bundle-version="1.0.0",
  zephyr.plugin.plotting;bundle-version="1.0.0",
  zephyr.plugin.core.api;bundle-version="1.0.0"
+Automatic-Module-Name: zephyr.plugin.opengl.examples

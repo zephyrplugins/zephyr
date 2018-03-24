@@ -25,3 +25,4 @@ Export-Package: javax.media.opengl,
  javax.media.opengl.fixedfunc,
  javax.media.opengl.glu,
  zephyr.plugin.opengl;x-internal:=true
+Automatic-Module-Name: zephyr.plugin.opengl

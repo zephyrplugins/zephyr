@@ -7,8 +7,7 @@ Bundle-Activator: zephyr.plugin.core.privates.ZephyrPluginCore
 Bundle-Vendor: Thomas
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui,
- zephyr.plugin.core.api;bundle-version="1.0.0",
- org.eclipse.core.runtime.compatibility
+ zephyr.plugin.core.api;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: zephyr.plugin.core,
  zephyr.plugin.core.internal;x-friends:="zephyr.plugin.core,zephyr.plugin.plotting,zephyr.plugin.filehandling,zephyr.plugin.jython,zephyr.plugin.console,zephyr.plugin.junittesting,zephyr.plugin.tests",
@@ -27,3 +26,4 @@ Export-Package: zephyr.plugin.core,
  zephyr.plugin.core.internal.views.helpers;x-friends:="zephyr.plugin.core,zephyr.plugin.plotting,zephyr.plugin.filehandling,zephyr.plugin.jython,zephyr.plugin.console,zephyr.plugin.junittesting,zephyr.plugin.tests",
  zephyr.plugin.core.utils
 Bundle-ActivationPolicy: lazy
+Automatic-Module-Name: zephyr.plugin.core

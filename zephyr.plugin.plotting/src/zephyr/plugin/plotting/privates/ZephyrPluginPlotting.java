@@ -26,6 +26,7 @@ public class ZephyrPluginPlotting extends AbstractUIPlugin {
   public void start(BundleContext context) throws Exception {
     super.start(context);
     plugin = this;
+    @SuppressWarnings("cast")
     ICommandService commandService = (ICommandService) PlatformUI.getWorkbench().getService(ICommandService.class);
     Command command = commandService.getCommand(EnableAllTraces.ID);
     State state = command.getState(RegistryToggleState.STATE_ID);

@@ -28,6 +28,7 @@ public class Helper {
   }
 
   static public boolean booleanState(String id, boolean defaultValue) {
+    @SuppressWarnings("cast")
     ICommandService service = (ICommandService) PlatformUI.getWorkbench().getService(ICommandService.class);
     if (service == null)
       return defaultValue;
@@ -48,6 +49,7 @@ public class Helper {
   }
 
   public static Command getCommand(String commandID) {
+    @SuppressWarnings("cast")
     ICommandService service = (ICommandService) PlatformUI.getWorkbench().getService(ICommandService.class);
     return service.getCommand(commandID);
   }

@@ -28,3 +28,4 @@ Export-Package: zephyr.plugin.core.api,
  zephyr.plugin.core.api.synchronization,
  zephyr.plugin.core.api.viewable
 Require-Bundle: org.junit;bundle-version="4.8.2";resolution:=optional
+Automatic-Module-Name: zephyr.plugin.core.api

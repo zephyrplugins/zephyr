@@ -16,3 +16,4 @@ Export-Package: zephyr.plugin.network.adapters,
  zephyr.plugin.network.dialog,
  zephyr.plugin.network.encoding,
  zephyr.plugin.network.parsers
+Automatic-Module-Name: zephyr.plugin.network
