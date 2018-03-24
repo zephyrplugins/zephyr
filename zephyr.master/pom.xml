@@ -15,32 +15,26 @@
 		<module>../zephyr.plugin.jarhandler</module>
 		<module>../zephyr.plugin.junittesting</module>
 		<module>../zephyr.plugin.jython</module>
-    		<module>../zephyr.plugin.plotting</module>
-    		<module>../zephyr.plugin.tensorview</module>
-    		<module>../zephyr.plugin.network</module>
+		<module>../zephyr.plugin.plotting</module>
+		<module>../zephyr.plugin.tensorview</module>
+		<module>../zephyr.plugin.network</module>
 		<module>../zephyr.feature.e4</module>
 		<module>../zephyr.feature.platform</module>
 		<module>../zephyr.feature.main</module>
-
 		<module>../zephyr.site</module>
 		<module>../zephyr.product</module>
 	</modules>
 
 	<properties>
-		<tycho-version>0.16.0</tycho-version>
+		<tycho-version>1.1.0</tycho-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
 	<repositories>
 		<repository>
-			<id>juno</id>
+			<id>eclipse-mars</id>
+			<url>http://download.eclipse.org/releases/mars</url>
 			<layout>p2</layout>
-			<url>http://download.eclipse.org/releases/luna</url>
-		</repository>
-		<repository>
-			<id>update</id>
-			<layout>p2</layout>
-			<url>http://download.eclipse.org/eclipse/updates/4.4</url>
 		</repository>
 	</repositories>
 	<build>
