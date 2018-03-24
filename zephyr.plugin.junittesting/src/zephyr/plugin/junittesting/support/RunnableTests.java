@@ -18,7 +18,7 @@ public class RunnableTests {
   }
 
   static public void startRunnable(String elementID, Condition... conditions) {
-    startRunnable(ZephyrCore.findRunnable(elementID), conditions);
+    startRunnable(ZephyrCore.findRunnable(elementID, new String[] {}), conditions);
   }
 
   static public void startRunnable(RunnableFactory runnableFactory, Condition... conditions) {

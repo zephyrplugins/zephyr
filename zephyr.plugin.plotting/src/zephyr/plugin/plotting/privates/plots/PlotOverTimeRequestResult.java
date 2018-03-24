@@ -62,7 +62,8 @@ public class PlotOverTimeRequestResult implements RequestResult {
 
   @Override
   public String tooltipLabel() {
-    StringBuilder tooltipLabel = new StringBuilder(String.format("T: %d Val: %f\n%s", dataAge, y, label));
+    StringBuilder tooltipLabel = new StringBuilder(String.format("T: %d Val: %s\n%s", dataAge, Double.toString(y),
+                                                                 label));
     int nbLabels = 0;
     for (String secondaryLabel : secondaryLabels) {
       tooltipLabel.append("\n");

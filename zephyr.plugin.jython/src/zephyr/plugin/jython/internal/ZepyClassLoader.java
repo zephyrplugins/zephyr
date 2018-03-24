@@ -2,9 +2,7 @@ package zephyr.plugin.jython.internal;
 
 import java.util.HashSet;
 import java.util.Set;
-
 import org.python.core.imp;
-
 import zephyr.plugin.core.ZephyrCore;
 
 public class ZepyClassLoader extends ClassLoader {

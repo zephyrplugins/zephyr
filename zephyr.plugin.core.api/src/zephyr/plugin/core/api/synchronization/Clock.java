@@ -100,4 +100,8 @@ public class Clock implements Serializable {
   static public void setEnableDataLock(boolean enabled) {
     enableDataLock = enabled;
   }
+
+  public void setTimeStep(long timeStep) {
+    this.timeStep = timeStep;
+  }
 }

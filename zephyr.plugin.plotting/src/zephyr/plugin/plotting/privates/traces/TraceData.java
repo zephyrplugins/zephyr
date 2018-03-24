@@ -2,6 +2,7 @@ package zephyr.plugin.plotting.privates.traces;
 
 import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
 import zephyr.plugin.core.api.synchronization.Clock;
+import zephyr.plugin.core.internal.ReferenceManager;
 import zephyr.plugin.plotting.privates.histories.AveragedHistory;
 import zephyr.plugin.plotting.privates.histories.History;
 
@@ -82,10 +83,12 @@ public class TraceData {
 
   public void incRef() {
     ref++;
+    ReferenceManager.manager().incRef(trace.codeNode);
   }
 
   public boolean decRef() {
     ref--;
+    ReferenceManager.manager().decRef(trace.codeNode);
     return (ref == 0);
   }
 

@@ -148,7 +148,7 @@ public class CodeTrees {
       return instance.getClass().getSimpleName();
     }
     if (codeNode instanceof PrimitiveNode)
-      return String.valueOf(((PrimitiveNode) codeNode).initialValue());
+      return codeNode.label() + "=" + ((PrimitiveNode) codeNode).initialValue();
     if (codeNode instanceof AbstractPrimitives)
       return String.valueOf(((AbstractPrimitives) codeNode).size());
     return "";

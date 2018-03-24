@@ -4,9 +4,7 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
-
 import org.eclipse.swt.graphics.Point;
-
 import zephyr.plugin.core.api.signals.Listener;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.plotting.internal.axes.Axes;
@@ -94,8 +92,6 @@ public class PlotData {
 
   public boolean synchronize(Clock clock) {
     List<TraceData> selection = plotSelection.getSelection();
-    if (selection.isEmpty())
-      return false;
     List<HistoryCached> histories = syncHistory.lockHistory(selection);
     for (int i = 0; i < selection.size(); i++) {
       TraceData traceData = selection.get(i);

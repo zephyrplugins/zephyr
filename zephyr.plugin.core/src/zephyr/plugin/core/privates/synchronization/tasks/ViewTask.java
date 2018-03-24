@@ -35,10 +35,6 @@ public class ViewTask implements Runnable {
   }
 
   public Future<?> redrawIFN() {
-    Future<?> pending = isDone();
-    if (pending != null)
-      return pending;
-    future = null;
     return redraw();
   }
 

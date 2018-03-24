@@ -24,6 +24,7 @@ public class SyncCode {
     ClockNode clockNode = clockNode(clock);
     CodeParser parser = new ZephyrCodeTreeParser(MonitoredDataTraverser.MonitorEverythingLevel);
     CodeNode newNode = parser.parse(clockNode, root, rootLabel);
+    clockNode.addChild(newNode);
     ZephyrSync.busEvent().dispatch(new CodeStructureEvent(CodeStructureEvent.ParsedID, clockNode, newNode));
     return newNode;
   }

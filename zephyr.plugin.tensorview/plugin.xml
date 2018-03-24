@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            allowMultiple="true"
+            class="zephyr.plugin.tensorview.internal.RealVectorMapView"
+            icon="icons/vectormapview.gif"
+            id="zephyr.plugin.tensorview.vectormapview"
+            name="Vector Map"
+            restorable="true">
+      </view>
+      <view
+            allowMultiple="true"
+            class="zephyr.plugin.tensorview.internal.RealVectorBarView"
+            icon="icons/vectorbarview.png"
+            id="zephyr.plugin.tensorview.vectorbarview"
+            name="Vector Bar"
+            restorable="true">
+      </view>
+   </extension>
+   <extension
+         point="zephyr.viewprovider">
+      <client
+            class="zephyr.plugin.tensorview.internal.RealVectorMapView$Provider"
+            icon="icons/vectormapview.gif"
+            name="Vector Map View"
+            viewid="zephyr.plugin.tensorview.vectormapview">
+      </client>
+      <client
+            class="zephyr.plugin.tensorview.internal.RealVectorBarView$Provider"
+            icon="icons/vectorbarview.png"
+            name="Vector Bar View"
+            viewid="zephyr.plugin.tensorview.vectorbarview">
+      </client>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="menu:window?before=zephyr.plugin.core.separator.closeview">
+         <command
+               commandId="zephyr.plugin.core.views.showView"
+               icon="icons/vectormapview.gif"
+               id="zephyr.plugin.core.views.showvectorview"
+               label="New Vector View"
+               style="push">
+            <parameter
+                  name="org.eclipse.ui.views.showView.viewId"
+                  value="zephyr.rlpark.plugin.rltoysview.vectorview">
+            </parameter>
+         </command>
+      </menuContribution>
+   </extension>
+</plugin>

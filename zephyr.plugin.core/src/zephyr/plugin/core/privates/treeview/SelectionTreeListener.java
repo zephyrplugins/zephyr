@@ -3,7 +3,6 @@ package zephyr.plugin.core.privates.treeview;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.TreeItem;
-
 import zephyr.plugin.core.ZephyrCore;
 import zephyr.plugin.core.api.internal.codeparser.codetree.CodeTrees;
 import zephyr.plugin.core.api.internal.codeparser.interfaces.CodeNode;

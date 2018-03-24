@@ -3,7 +3,6 @@ package zephyr.plugin.junittesting.support;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
-
 import org.junit.Assert;
 import zephyr.plugin.core.ZephyrCore;
 import zephyr.plugin.core.api.signals.Listener;

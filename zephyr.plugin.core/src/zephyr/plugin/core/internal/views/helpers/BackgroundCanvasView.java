@@ -29,6 +29,8 @@ public abstract class BackgroundCanvasView<T> extends ClassTypeView<T> implement
 
   @Override
   public void repaint() {
+    if (backgroundCanvas == null)
+      return;
     backgroundCanvas.paint();
   }
 

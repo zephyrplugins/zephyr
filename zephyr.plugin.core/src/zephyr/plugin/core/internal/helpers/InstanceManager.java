@@ -38,10 +38,6 @@ public class InstanceManager<T> {
   };
   private CodeNodeToInstance<T> toInstance;
 
-  public InstanceManager(InstanceListener<T> view) {
-    this(view, null);
-  }
-
   public InstanceManager(InstanceListener<T> view, CodeNodeToInstance<T> instanceAdapter) {
     this.view = view;
     this.toInstance = instanceAdapter != null ? instanceAdapter : new CodeNodeToInstance.Default<T>();

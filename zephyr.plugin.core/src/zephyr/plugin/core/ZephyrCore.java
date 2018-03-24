@@ -20,6 +20,7 @@ import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.internal.ZephyrSync;
 import zephyr.plugin.core.internal.events.AtomicEvent;
 import zephyr.plugin.core.internal.events.Events;
+import zephyr.plugin.core.internal.events.StartRunnableEvent;
 import zephyr.plugin.core.privates.StartZephyrMain;
 import zephyr.plugin.core.privates.ZephyrPluginCore;
 import zephyr.plugin.core.privates.startup.StartupJobs;
@@ -79,33 +80,42 @@ public class ZephyrCore {
   }
 
   public static void sendStatusBarMessage(final String message) {
-    Display.getDefault().syncExec(new Runnable() {
+    Display.getDefault().asyncExec(new Runnable() {
       @Override
       public void run() {
-        IWorkbench wb = PlatformUI.getWorkbench();
-        IWorkbenchWindow window = wb.getActiveWorkbenchWindow();
-        if (window == null)
-          return;
-        IWorkbenchPage page = window.getActivePage();
-        if (page == null)
-          return;
-        IWorkbenchPart part = page.getActivePart();
-        if (part == null)
-          return;
-        IWorkbenchPartSite site = part.getSite();
-        IViewSite vSite = (IViewSite) site;
-        IActionBars actionBars = vSite.getActionBars();
-        if (actionBars == null)
-          return;
-        IStatusLineManager statusLineManager = actionBars.getStatusLineManager();
-        if (statusLineManager == null)
-          return;
-        statusLineManager.setMessage(message.replace("\n", ""));
+        setStatusMessage(message);
       }
     });
   }
 
-  static public RunnableFactory findRunnable(String runnableID) {
+  static public void setStatusMessage(String message) {
+    IWorkbench wb = PlatformUI.getWorkbench();
+    IWorkbenchWindow window = wb.getActiveWorkbenchWindow();
+    if (window == null) {
+      return;
+    }
+    IWorkbenchPage page = window.getActivePage();
+    if (page == null) {
+      return;
+    }
+    IWorkbenchPart part = page.getActivePart();
+    if (part == null) {
+      return;
+    }
+    IWorkbenchPartSite site = part.getSite();
+    IViewSite vSite = (IViewSite) site;
+    IActionBars actionBars = vSite.getActionBars();
+    if (actionBars == null) {
+      return;
+    }
+    IStatusLineManager statusLineManager = actionBars.getStatusLineManager();
+    if (statusLineManager == null) {
+      return;
+    }
+    statusLineManager.setMessage(message.replace("\n", " "));
+  }
+
+  static public RunnableFactory findRunnable(String runnableID, String[] parameters) {
     IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint("zephyr.runnable");
     IConfigurationElement configurationElement = null;
     for (IExtension extension : extensionPoint.getExtensions())
@@ -114,12 +124,23 @@ public class ZephyrCore {
           configurationElement = element;
           break;
         }
-    if (configurationElement == null)
+    if (configurationElement == null) {
       return null;
-    return StartZephyrMain.createRunnableFactory(configurationElement);
+    }
+    return StartZephyrMain.createRunnableFactory(configurationElement, parameters);
   }
 
   public static List<Clock> registeredClocks() {
     return ZephyrPluginCore.clocks().getClocks();
+  }
+
+  public static boolean restartClock(Clock clock) {
+    Thread thread = Thread.currentThread();
+    RunnableFactory factory = ZephyrPluginCore.threadStarter().factory(thread);
+    if (factory == null) {
+      return false;
+    }
+    ZephyrSync.busEvent().dispatch(new StartRunnableEvent(factory));
+    return true;
   }
 }

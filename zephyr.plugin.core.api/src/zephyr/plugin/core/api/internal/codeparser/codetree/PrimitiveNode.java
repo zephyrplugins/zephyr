@@ -6,7 +6,7 @@ import zephyr.plugin.core.api.internal.monitoring.abstracts.MonitorContainerNode
 import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
 
 public class PrimitiveNode extends AbstractCodeNode implements MonitorContainerNode {
-  private static double initialValue;
+  private final double initialValue;
   private final Monitored monitored;
 
   public PrimitiveNode(String label, ParentNode parent, CodeHook field, Object container, int level) {
@@ -16,6 +16,7 @@ public class PrimitiveNode extends AbstractCodeNode implements MonitorContainerN
   public PrimitiveNode(String label, ParentNode parent, Monitored monitored, int level) {
     super(label, parent, level);
     this.monitored = monitored;
+    initialValue = monitored.monitoredValue();
   }
 
   public Monitored monitored() {
@@ -28,16 +29,15 @@ public class PrimitiveNode extends AbstractCodeNode implements MonitorContainerN
       monitored = createBooleanLogged(field, container);
     else
       monitored = createValueLogged(field, container);
-    initialValue = monitored.monitoredValue();
     return monitored;
   }
 
-  static private Monitored createValueLogged(final CodeHook field, final Object container) {
-    return new Monitored() {
+  static private Monitored createValueLogged(final CodeHook hook, final Object container) {
+    return new MonitoredWithCodeHook() {
       @Override
       public double monitoredValue() {
         try {
-          return field.getDouble(container);
+          return hook.getDouble(container);
         } catch (IllegalArgumentException e) {
           e.printStackTrace();
         } catch (IllegalAccessException e) {
@@ -45,21 +45,31 @@ public class PrimitiveNode extends AbstractCodeNode implements MonitorContainerN
         }
         return 0;
       }
+
+      @Override
+      public CodeHook hook() {
+        return hook;
+      }
     };
   }
 
-  static private Monitored createBooleanLogged(final CodeHook field, final Object container) {
-    return new Monitored() {
+  static private Monitored createBooleanLogged(final CodeHook hook, final Object container) {
+    return new MonitoredWithCodeHook() {
       @Override
       public double monitoredValue() {
         try {
-          return field.getBoolean(container) ? 1 : 0;
+          return hook.getBoolean(container) ? 1 : 0;
         } catch (IllegalArgumentException e) {
           e.printStackTrace();
         } catch (IllegalAccessException e) {
           e.printStackTrace();
         }
         return 0.0;
+      }
+
+      @Override
+      public CodeHook hook() {
+        return hook;
       }
     };
   }

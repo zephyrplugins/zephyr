@@ -38,10 +38,6 @@ public class ColorMap {
   }
 
 
-  static private int colorToInt(int r, int g, int b) {
-    return 0xFF000000 | (r << 16) | (g << 8) | b;
-  }
-
   public RGB valueToRGB(double value) {
     int color = valueToColor(value);
     return new RGB((0x00FF0000 & color) >> 16, (0x0000FF00 & color) >> 8, 0x000000FF & color);
@@ -54,8 +50,9 @@ public class ColorMap {
     int[] diffColor = diffs[colorIndex];
     Interval colorRange = colorRanges[colorIndex];
     double scaledValue = colorRange.scale(adjustedValue);
-    return colorToInt(minColor[0] + (int) (scaledValue * diffColor[0]), minColor[1]
-        + (int) (scaledValue * diffColor[1]), minColor[2] + (int) (scaledValue * diffColor[2]));
+    return zephyr.plugin.core.internal.utils.Colors.colorToInt(minColor[0] + (int) (scaledValue * diffColor[0]),
+                                                               minColor[1] + (int) (scaledValue * diffColor[1]),
+                                                               minColor[2] + (int) (scaledValue * diffColor[2]));
   }
 
   public RGB spriteColor() {

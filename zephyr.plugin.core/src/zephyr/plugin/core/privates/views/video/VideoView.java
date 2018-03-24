@@ -22,12 +22,8 @@ public class VideoView extends ForegroundCanvasView<ImageProvider> {
 
   @Override
   protected boolean synchronize(ImageProvider provider) {
-    return true;
-  }
-
-  @Override
-  protected void unprotectedSynchronization(ImageProvider provider) {
     imageAdapter.update(provider.image());
+    return true;
   }
 
   @Override

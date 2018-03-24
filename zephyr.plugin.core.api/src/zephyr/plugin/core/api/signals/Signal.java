@@ -3,7 +3,6 @@ package zephyr.plugin.core.api.signals;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 
 
 public class Signal<T> implements Serializable {
@@ -13,7 +12,7 @@ public class Signal<T> implements Serializable {
     T generate();
   }
 
-  private final List<Listener<T>> listeners = new LinkedList<Listener<T>>();
+  private final LinkedList<Listener<T>> listeners = new LinkedList<Listener<T>>();
 
   public Signal() {
     super();
@@ -23,6 +22,13 @@ public class Signal<T> implements Serializable {
     assert listener != null;
     assert this.listeners.indexOf(listener) == -1;
     this.listeners.add(listener);
+    return listener;
+  }
+
+  synchronized public Listener<T> connectFirst(Listener<T> listener) {
+    assert listener != null;
+    assert this.listeners.indexOf(listener) == -1;
+    this.listeners.addFirst(listener);
     return listener;
   }
 

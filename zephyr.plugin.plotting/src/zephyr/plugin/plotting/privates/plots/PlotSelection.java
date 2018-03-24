@@ -37,7 +37,7 @@ public class PlotSelection {
   private final EventListener removedTraceListener = new EventListener() {
     @Override
     public void listen(Event event) {
-      checkRemovedTrace(((CodeStructureEvent) event).clock());
+      derefSelection(((CodeStructureEvent) event).clock(), true);
     }
   };
 
@@ -59,20 +59,8 @@ public class PlotSelection {
       setCurrentSelection(selection);
   }
 
-  synchronized public void checkRemovedTrace(Clock clock) {
-    List<TraceData> oldSelection = new ArrayList<TraceData>(selected);
-    for (TraceData traceData : oldSelection) {
-      if (traceData.trace.clock() != clock)
-        continue;
-      Trace trace = traceData.trace;
-      persistentSelection.add(new PersistentTrace(trace.label, trace.path()));
-      selected.remove(traceData);
-      traceData.decRef();
-    }
-  }
-
   synchronized public void setCurrentSelection(Set<Trace> newSelection) {
-    derefSelection();
+    derefSelection(false);
     Map<ClockTraces, Set<Trace>> orderedNewTraces = Traces.orderTraces(newSelection);
     for (Map.Entry<ClockTraces, Set<Trace>> entry : orderedNewTraces.entrySet()) {
       ClockTraces clockTraces = entry.getKey();
@@ -89,11 +77,19 @@ public class PlotSelection {
     fireSelectedTracesChanged();
   }
 
-  synchronized public void derefSelection() {
-    for (TraceData traceData : selected)
+  public void derefSelection(boolean saveSelection) {
+    derefSelection(null, saveSelection);
+  }
+
+  synchronized public void derefSelection(Clock clock, boolean saveSelection) {
+    for (TraceData traceData : selected) {
+      if (clock != null && traceData.trace.clock() != clock)
+        continue;
       traceData.decRef();
+      if (saveSelection)
+        persistentSelection.add(new PersistentTrace(traceData.trace.label, traceData.trace.path()));
+    }
     selected.clear();
-    persistentSelection.clear();
   }
 
   protected void fireSelectedTracesChanged() {
@@ -134,7 +130,7 @@ public class PlotSelection {
   }
 
   public void dispose() {
-    derefSelection();
+    derefSelection(true);
     ZephyrPluginPlotting.tracesManager().gc();
     fireSelectedTracesChanged();
   }

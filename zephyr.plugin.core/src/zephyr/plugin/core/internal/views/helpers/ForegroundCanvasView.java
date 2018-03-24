@@ -12,6 +12,7 @@ import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import zephyr.plugin.core.api.synchronization.Clock;
+import zephyr.plugin.core.internal.helpers.CodeNodeToInstance;
 import zephyr.plugin.core.internal.views.helpers.ScreenShotAction.Shotable;
 
 public abstract class ForegroundCanvasView<T> extends ClassTypeView<T> implements Shotable {
@@ -25,6 +26,14 @@ public abstract class ForegroundCanvasView<T> extends ClassTypeView<T> implement
       canvas.update();
     }
   };
+
+  public ForegroundCanvasView() {
+    this(null);
+  }
+
+  public ForegroundCanvasView(CodeNodeToInstance<T> codenodeToInstance) {
+    super(codenodeToInstance);
+  }
 
   @Override
   public void createPartControl(final Composite parent) {

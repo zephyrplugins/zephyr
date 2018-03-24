@@ -43,7 +43,7 @@ public class Plot2DRequestResult implements RequestResult {
   }
 
   private void refreshDataPosition() {
-    if (xIndex < 0)
+    if (xIndex < 0 || xIndex >= data.xdata.length || xIndex >= data.ydata.length)
       return;
     xPosition = data.xdata[xIndex];
     yPosition = data.ydata[xIndex];

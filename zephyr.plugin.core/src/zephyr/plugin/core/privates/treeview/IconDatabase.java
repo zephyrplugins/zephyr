@@ -1,10 +1,8 @@
 package zephyr.plugin.core.privates.treeview;
 
 import java.util.List;
-
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.TreeItem;
-
 import zephyr.plugin.core.ZephyrCore;
 import zephyr.plugin.core.api.internal.codeparser.codetree.ClassNode;
 import zephyr.plugin.core.api.internal.codeparser.codetree.ClockNode;

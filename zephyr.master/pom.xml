@@ -15,8 +15,9 @@
 		<module>../zephyr.plugin.jarhandler</module>
 		<module>../zephyr.plugin.junittesting</module>
 		<module>../zephyr.plugin.jython</module>
-		<module>../zephyr.plugin.plotting</module>
-
+    		<module>../zephyr.plugin.plotting</module>
+    		<module>../zephyr.plugin.tensorview</module>
+    		<module>../zephyr.plugin.network</module>
 		<module>../zephyr.feature.e4</module>
 		<module>../zephyr.feature.platform</module>
 		<module>../zephyr.feature.main</module>
@@ -34,12 +35,12 @@
 		<repository>
 			<id>juno</id>
 			<layout>p2</layout>
-			<url>http://download.eclipse.org/releases/juno</url>
+			<url>http://download.eclipse.org/releases/luna</url>
 		</repository>
 		<repository>
 			<id>update</id>
 			<layout>p2</layout>
-			<url>http://download.eclipse.org/eclipse/updates/4.2</url>
+			<url>http://download.eclipse.org/eclipse/updates/4.4</url>
 		</repository>
 	</repositories>
 	<build>

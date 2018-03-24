@@ -21,7 +21,7 @@ public class ClockTraces {
 
   protected ClockTraces(Clock clock) {
     this.clock = clock;
-    clock.onTick.connect(onTickClockListener);
+    clock.onTick.connectFirst(onTickClockListener);
   }
 
   synchronized protected void update(Clock clock) {

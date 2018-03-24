@@ -46,7 +46,6 @@ public class ClockGraphBindings {
 
   protected void unbind(Clock clock) {
     if (clockTracesSelection.remove(clock)) {
-      plotView.plotSelection.checkRemovedTrace(clock);
       ZephyrSync.unbind(clock, plotView);
       ZephyrSync.submitView(plotView);
     }

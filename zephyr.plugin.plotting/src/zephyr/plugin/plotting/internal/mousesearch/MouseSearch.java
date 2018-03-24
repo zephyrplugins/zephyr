@@ -13,7 +13,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
-
 import zephyr.plugin.core.ZephyrCore;
 import zephyr.plugin.core.internal.canvas.Overlay;
 import zephyr.plugin.core.internal.utils.Colors;
@@ -60,9 +59,7 @@ public class MouseSearch extends Job implements Overlay {
   }
 
   private void refreshDisplay() {
-    if (requestResult != null)
-      ZephyrCore.sendStatusBarMessage(requestResult.tooltipLabel());
-    Display.getDefault().syncExec(new Runnable() {
+    Display.getDefault().asyncExec(new Runnable() {
       @Override
       public void run() {
         String searchLabel = requestResult != null ? requestResult.fieldLabel() : "";
@@ -70,8 +67,9 @@ public class MouseSearch extends Job implements Overlay {
           valueLabel.setText(searchLabel);
           valueLabel.getParent().pack(true);
         }
-        ZephyrCore.sendStatusBarMessage(searchLabel);
-        control.setToolTipText(requestResult != null ? requestResult.tooltipLabel() : "");
+        String tooltipLabel = requestResult != null ? requestResult.tooltipLabel() : "";
+        ZephyrCore.setStatusMessage(tooltipLabel);
+        control.setToolTipText(tooltipLabel);
         control.redraw();
         searchRunning = false;
       }

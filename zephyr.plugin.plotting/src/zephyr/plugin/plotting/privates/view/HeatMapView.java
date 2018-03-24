@@ -8,10 +8,12 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
+import zephyr.plugin.core.api.internal.codeparser.codetree.ClassNode;
 import zephyr.plugin.core.api.synchronization.Clock;
 import zephyr.plugin.core.api.viewable.ContinuousFunction2D;
 import zephyr.plugin.core.api.viewable.PositionFunction2D;
 import zephyr.plugin.core.internal.helpers.ClassViewProvider;
+import zephyr.plugin.core.internal.helpers.CodeNodeToInstance;
 import zephyr.plugin.core.internal.utils.Colors;
 import zephyr.plugin.core.internal.views.helpers.ForegroundCanvasView;
 import zephyr.plugin.core.internal.views.helpers.ScreenShotAction;
@@ -19,17 +21,18 @@ import zephyr.plugin.plotting.internal.actions.EnableScaleAction;
 import zephyr.plugin.plotting.internal.actions.SynchronizeAction;
 import zephyr.plugin.plotting.internal.axes.Axes;
 import zephyr.plugin.plotting.internal.heatmap.ColorMapAction;
+import zephyr.plugin.plotting.internal.heatmap.ContinuousFunctionSampler;
 import zephyr.plugin.plotting.internal.heatmap.Function2DBufferedDrawer;
-import zephyr.plugin.plotting.internal.heatmap.FunctionSampler;
 import zephyr.plugin.plotting.internal.heatmap.MapData;
+import zephyr.plugin.plotting.internal.heatmap.MapDataUpdater;
 import zephyr.plugin.plotting.internal.mousesearch.MouseSearch;
 import zephyr.plugin.plotting.internal.mousesearch.MouseSearchable;
 import zephyr.plugin.plotting.internal.mousesearch.RequestResult;
 
-public class HeatMapView extends ForegroundCanvasView<ContinuousFunction2D> implements MouseSearchable {
+public class HeatMapView extends ForegroundCanvasView<MapDataUpdater> implements MouseSearchable {
   public static class Provider extends ClassViewProvider {
     public Provider() {
-      super(ContinuousFunction2D.class);
+      super(ContinuousFunction2D.class, MapDataUpdater.class);
     }
 
     @Override
@@ -37,6 +40,16 @@ public class HeatMapView extends ForegroundCanvasView<ContinuousFunction2D> impl
       return isSupported(instance);
     }
   }
+
+  static private final CodeNodeToInstance<MapDataUpdater> codeNodeToInstance = new CodeNodeToInstance<MapDataUpdater>() {
+    @Override
+    public MapDataUpdater toInstance(ClassNode codeNode) {
+      Object instance = codeNode.instance();
+      if (instance instanceof ContinuousFunction2D)
+        instance = new ContinuousFunctionSampler((ContinuousFunction2D) instance);
+      return (MapDataUpdater) instance;
+    }
+  };
 
   static private final int PositionSize = 4;
   private final Colors colors = new Colors();
@@ -47,7 +60,11 @@ public class HeatMapView extends ForegroundCanvasView<ContinuousFunction2D> impl
   private final SynchronizeAction synchronizeAction = new SynchronizeAction();
   private Point2D position;
   MapData data;
-  FunctionSampler sampler;
+  MapDataUpdater sampler;
+
+  public HeatMapView() {
+    super(codeNodeToInstance);
+  }
 
   @Override
   public void createPartControl(Composite parent) {
@@ -77,11 +94,11 @@ public class HeatMapView extends ForegroundCanvasView<ContinuousFunction2D> impl
   }
 
   static boolean isSupported(Object instance) {
-    return (instance instanceof ContinuousFunction2D);
+    return (instance instanceof ContinuousFunction2D || instance instanceof MapDataUpdater);
   }
 
   @Override
-  protected boolean synchronize(ContinuousFunction2D current) {
+  protected boolean synchronize(MapDataUpdater current) {
     synchronized (data) {
       if (centerAction.scaleEnabled())
         sampler.resetRange();
@@ -95,21 +112,12 @@ public class HeatMapView extends ForegroundCanvasView<ContinuousFunction2D> impl
   }
 
   @Override
-  public void onInstanceSet(Clock clock, ContinuousFunction2D function) {
+  public void onInstanceSet(Clock clock, MapDataUpdater function) {
     super.onInstanceSet(clock, function);
-    setViewName();
-    data = new MapData(200);
-    sampler = new FunctionSampler(function);
-    updateAxes(function);
-  }
-
-  private void updateAxes(ContinuousFunction2D function) {
+    sampler = function;
+    data = sampler.createNewMapData();
     axes.x.reset();
-    axes.x.update(function.minX());
-    axes.x.update(function.maxX());
     axes.y.reset();
-    axes.y.update(function.minY());
-    axes.y.update(function.maxY());
   }
 
   @Override
@@ -156,7 +164,8 @@ public class HeatMapView extends ForegroundCanvasView<ContinuousFunction2D> impl
         if (data == null)
           return null;
         synchronized (data) {
-          return String.valueOf(sampler.valueOf(data, position));
+          // return String.valueOf(sampler.valueOf(data, position));
+          return String.valueOf(position.toString());
         }
       }
 

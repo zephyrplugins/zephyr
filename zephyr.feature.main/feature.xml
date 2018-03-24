@@ -287,9 +287,17 @@ litigation.
          unpack="false"/>
 
    <plugin
-         id="zephyr.product"
+         id="zephyr.plugin.network"
          download-size="0"
          install-size="0"
-         version="0.0.0"/>
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="zephyr.plugin.tensorview"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
 
 </feature>

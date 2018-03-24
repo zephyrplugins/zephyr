@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: zephyr.plugin.tensor
+Bundle-SymbolicName: zephyr.plugin.tensorview;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: Thomas
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Require-Bundle: zephyr.plugin.core;bundle-version="1.0.0",
+ org.eclipse.jface,
+ zephyr.plugin.core.api;bundle-version="1.0.0",
+ zephyr.plugin.plotting;bundle-version="1.0.0",
+ org.eclipse.ui,
+ org.eclipse.core.runtime

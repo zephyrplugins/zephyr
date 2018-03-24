@@ -6,7 +6,6 @@ import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
-
 import zephyr.plugin.core.ZephyrCore;
 
 public class NbStepsDialog extends InputDialog {

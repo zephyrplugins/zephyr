@@ -6,14 +6,12 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
-
 import zephyr.plugin.core.ZephyrCore;
 import zephyr.plugin.core.api.internal.logfiles.LogFile;
 import zephyr.plugin.filehandling.IFileHandler;

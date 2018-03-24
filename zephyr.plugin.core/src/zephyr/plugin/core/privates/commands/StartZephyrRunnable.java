@@ -18,7 +18,7 @@ public class StartZephyrRunnable extends AbstractHandler {
     String runnableID = (String) parameters.get(ParameterRunnableID);
     if (runnableID == null)
       return null;
-    RunnableFactory runnableFactory = ZephyrCore.findRunnable(runnableID);
+    RunnableFactory runnableFactory = ZephyrCore.findRunnable(runnableID, new String[] {});
     if (runnableFactory == null) {
       System.err.println("Zephyr error: " + runnableID + " runnable id not found");
       return null;

@@ -2,15 +2,12 @@ package zephyr.plugin.core.privates.preferences;
 
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
-import org.eclipse.jface.preference.FileFieldEditor;
+import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
-
 import zephyr.plugin.core.privates.ZephyrPluginCore;
 
-public class ZephyrRoot
-    extends FieldEditorPreferencePage
-    implements IWorkbenchPreferencePage {
+public class ZephyrRoot extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
   public ZephyrRoot() {
     super(GRID);
@@ -20,10 +17,8 @@ public class ZephyrRoot
 
   @Override
   public void createFieldEditors() {
-    addField(new FileFieldEditor(PreferenceKeys.StartupCommandLineKey,
-                                 "&Startup arguments", getFieldEditorParent()));
-    addField(new BooleanFieldEditor(PreferenceKeys.OpenClockViewKey,
-                                    "&Pop up clock view", getFieldEditorParent()));
+    addField(new StringFieldEditor(PreferenceKeys.StartupCommandLineKey, "&Startup arguments", getFieldEditorParent()));
+    addField(new BooleanFieldEditor(PreferenceKeys.OpenClockViewKey, "&Pop up clock view", getFieldEditorParent()));
   }
 
   @Override

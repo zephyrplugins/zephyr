@@ -16,27 +16,35 @@ import zephyr.plugin.core.api.internal.codeparser.codetree.ClassNode;
 import zephyr.plugin.core.api.internal.codeparser.codetree.CodeTrees;
 import zephyr.plugin.core.api.internal.codeparser.interfaces.CodeNode;
 import zephyr.plugin.core.api.synchronization.Clock;
+import zephyr.plugin.core.internal.ReferenceManager;
 import zephyr.plugin.core.internal.ZephyrSync;
+import zephyr.plugin.core.internal.helpers.CodeNodeToInstance;
 import zephyr.plugin.core.internal.helpers.InstanceManager;
 import zephyr.plugin.core.internal.helpers.InstanceManager.InstanceListener;
-import zephyr.plugin.core.internal.helpers.CodeNodeToInstance;
 import zephyr.plugin.core.internal.helpers.SyncViewDropTarget;
 import zephyr.plugin.core.internal.views.DropTargetView;
 import zephyr.plugin.core.internal.views.ProvidedView;
 import zephyr.plugin.core.internal.views.ViewWithControl;
 
-public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView, InstanceListener<T>, DropTargetView,
+public abstract class ClassTypeView<T> extends ViewPart
+    implements
+    ProvidedView,
+    InstanceListener<T>,
+    DropTargetView,
     ViewWithControl {
+
   protected final Runnable uiSetLayout = new Runnable() {
     @Override
     @SuppressWarnings("synthetic-access")
     public void run() {
       Clock clock = instance.clock();
       T current = instance.current();
-      if (parent.isDisposed() || clock == null || current == null)
+      if (parent.isDisposed() || clock == null || current == null) {
         return;
-      if (!viewLock.acquire())
+      }
+      if (!viewLock.acquire()) {
         return;
+      }
       setLayout(clock, current);
       parent.layout(true, true);
       viewLock.release();
@@ -44,19 +52,23 @@ public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView,
       ZephyrSync.submitView(ClassTypeView.this, clock);
     }
   };
+
   protected final Runnable uiUnsetLayout = new Runnable() {
     @Override
     public void run() {
-      if (parent.isDisposed())
+      if (parent.isDisposed()) {
         return;
-      if (!viewLock.acquire())
+      }
+      if (!viewLock.acquire()) {
         return;
+      }
       setViewName();
       unsetLayout();
       parent.layout(true, true);
       viewLock.release();
     }
   };
+
   private final InstanceManager<T> instance;
   protected final ViewLock viewLock;
   protected Composite parent;
@@ -65,8 +77,12 @@ public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView,
   private Color backgroundColor;
 
   public ClassTypeView() {
-    instance = new InstanceManager<T>(this);
-    viewLock = new ViewLock();
+    this(null);
+  }
+
+  public ClassTypeView(CodeNodeToInstance<T> instanceAdapter) {
+    this.instance = new InstanceManager<T>(this, instanceAdapter);
+    this.viewLock = new ViewLock();
   }
 
   @Override
@@ -74,8 +90,9 @@ public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView,
     this.parent = parent;
     backgroundColor = parent.getBackground();
     new SyncViewDropTarget(this, parent);
-    if (instance.current() == null)
+    if (instance.current() == null) {
       setDefaultName();
+    }
   }
 
   @Override
@@ -110,13 +127,14 @@ public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView,
     instance.unset();
   }
 
+  @SuppressWarnings("unchecked")
   protected void setViewName() {
     CodeNode codeNode = instance.codeNode();
     if (codeNode == null) {
       setDefaultName();
       return;
     }
-    setViewName(codeNode, (T) ((ClassNode) codeNode).instance());
+    setViewName(codeNode, ((T) ((ClassNode) codeNode).instance()));
   }
 
   protected void defaultPainting(GC gc) {
@@ -136,8 +154,9 @@ public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView,
         setPartName(viewName);
         setTitleToolTip(toolTip);
         firePropertyChange(org.eclipse.ui.IWorkbenchPart.PROP_TITLE);
-        if (parent != null && !parent.isDisposed())
+        if (parent != null && !parent.isDisposed()) {
           parent.redraw();
+        }
       }
     });
   }
@@ -148,8 +167,9 @@ public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView,
 
   @Override
   final public boolean synchronize(Clock clock) {
-    if (!viewLock.acquire())
+    if (!viewLock.acquire()) {
       return false;
+    }
     T current = instance.current();
     boolean result = synchronizeIFN(clock, current);
     viewLock.release();
@@ -158,8 +178,9 @@ public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView,
   }
 
   private boolean synchronizeIFN(Clock clock, T current) {
-    if (clock == null || current == null)
+    if (clock == null || current == null) {
       return false;
+    }
     boolean result = false;
     try {
       result = synchronize(current);
@@ -175,8 +196,9 @@ public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView,
 
   @Override
   public boolean isSupported(CodeNode codeNode) {
-    if (!(codeNode instanceof ClassNode))
+    if (!(codeNode instanceof ClassNode)) {
       return false;
+    }
     return isInstanceSupported(((ClassNode) codeNode).instance());
   }
 
@@ -186,6 +208,8 @@ public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView,
   public void onInstanceSet(Clock clock, T current) {
     hasBeenSynchronized = false;
     Display.getDefault().asyncExec(uiSetLayout);
+    ReferenceManager.manager().incRef(codeNode());
+    setViewName();
   }
 
   @Override
@@ -193,6 +217,7 @@ public abstract class ClassTypeView<T> extends ViewPart implements ProvidedView,
     hasBeenSynchronized = false;
     isLayoutReady = false;
     Display.getDefault().asyncExec(uiUnsetLayout);
+    ReferenceManager.manager().decRef(codeNode());
   }
 
   public void setDefaultName() {

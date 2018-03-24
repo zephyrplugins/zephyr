@@ -1,7 +1,5 @@
 package zephyr.plugin.core.api.internal.codeparser.codetree;
 
-import java.lang.reflect.Array;
-
 import zephyr.plugin.core.api.internal.codeparser.interfaces.ParentNode;
 import zephyr.plugin.core.api.internal.monitoring.abstracts.MonitorContainerNode;
 import zephyr.plugin.core.api.internal.parsing.CollectionLabelBuilder;
@@ -11,9 +9,12 @@ import zephyr.plugin.core.api.monitoring.abstracts.Monitored;
 public abstract class PrimitiveArrayNode<T> extends AbstractCodeNode implements MonitorContainerNode,
     AbstractPrimitives {
   static class PrimitiveDoubleArrayNode extends PrimitiveArrayNode<double[]> {
+    final double[] array;
+
     protected PrimitiveDoubleArrayNode(String label, ParentNode parent, int level,
         CollectionLabelBuilder collectionLabelBuilder, double[] array) {
-      super(label, parent, level, collectionLabelBuilder, array);
+      super(label, parent, level, collectionLabelBuilder, array.length);
+      this.array = array;
     }
 
     @Override
@@ -28,9 +29,12 @@ public abstract class PrimitiveArrayNode<T> extends AbstractCodeNode implements 
   }
 
   static class PrimitiveIntegerArrayNode extends PrimitiveArrayNode<int[]> {
+    final int[] array;
+
     protected PrimitiveIntegerArrayNode(String label, ParentNode parent, int level,
         CollectionLabelBuilder collectionLabelBuilder, int[] array) {
-      super(label, parent, level, collectionLabelBuilder, array);
+      super(label, parent, level, collectionLabelBuilder, array.length);
+      this.array = array;
     }
 
     @Override
@@ -45,9 +49,12 @@ public abstract class PrimitiveArrayNode<T> extends AbstractCodeNode implements 
   }
 
   static class PrimitiveFloatArrayNode extends PrimitiveArrayNode<float[]> {
+    final float[] array;
+
     protected PrimitiveFloatArrayNode(String label, ParentNode parent, int level,
         CollectionLabelBuilder collectionLabelBuilder, float[] array) {
-      super(label, parent, level, collectionLabelBuilder, array);
+      super(label, parent, level, collectionLabelBuilder, array.length);
+      this.array = array;
     }
 
     @Override
@@ -62,13 +69,13 @@ public abstract class PrimitiveArrayNode<T> extends AbstractCodeNode implements 
   }
 
   final protected CollectionLabelBuilder collectionLabelBuilder;
-  final protected T array;
+  final protected int size;
 
   protected PrimitiveArrayNode(String label, ParentNode parent, int level,
-      CollectionLabelBuilder collectionLabelBuilder, T array) {
+      CollectionLabelBuilder collectionLabelBuilder, int size) {
     super(label, parent, level);
     this.collectionLabelBuilder = collectionLabelBuilder;
-    this.array = array;
+    this.size = size;
   }
 
   @Override
@@ -96,7 +103,7 @@ public abstract class PrimitiveArrayNode<T> extends AbstractCodeNode implements 
 
   @Override
   public int size() {
-    return Array.getLength(array);
+    return size;
   }
 
   static public PrimitiveArrayNode<?> createPrimitiveArrayNode(String label, ParentNode parent, Object array,
