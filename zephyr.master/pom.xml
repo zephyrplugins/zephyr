@@ -18,6 +18,7 @@
 		<module>../zephyr.plugin.plotting</module>
 		<module>../zephyr.plugin.tensorview</module>
 		<module>../zephyr.plugin.network</module>
+		<module>../zephyr.plugin.protobuf</module>
 		<module>../zephyr.feature.e4</module>
 		<module>../zephyr.feature.platform</module>
 		<module>../zephyr.feature.main</module>

@@ -1,0 +1,89 @@
+syntax = "proto2";
+
+package zephyr.protobuf;
+
+message Data {
+    repeated int32 dim = 1;
+    optional bool bool_value = 2;
+    optional int32 byte_value = 4;
+    optional int64 int_value = 5;
+    optional float float_value = 6;
+    optional double double_value = 7;
+    optional string string_value = 8;
+    optional bytes raw_data = 9;
+}
+
+enum Type {
+    BOOL = 0;
+    BYTE = 1;
+    INT = 2;
+    FLOAT = 3;
+    DOUBLE = 4;
+    STRING = 5;
+    RAW = 6;
+  }
+
+message NodeDescriptor {
+  required uint64 id = 1;
+  optional string name = 2;
+  optional Type type = 3;
+  repeated int32 dim = 4;
+}
+
+
+message Tree {
+  required NodeDescriptor node_descriptor = 1;
+  repeated Tree children = 2;
+}
+
+
+message Clock {
+  required uint64 id = 1;
+  optional string name = 2;
+  optional int64 time = 3;
+}
+
+message Forest {
+  required Clock clock = 1;
+  repeated Tree root = 2;
+}
+
+message GetForestRequest {
+}
+
+enum GetForestStatus {
+  FOREST_STATUS_OK = 0;
+  FOREST_STATUS_SERVER_TERMINATED = 1;
+}
+
+message GetForestResponse {
+  required GetForestStatus status = 1;
+  repeated Forest forest = 2;
+}
+
+message NodeData {
+  required uint64 node_id = 1;
+  required Data data = 2;
+}
+
+message GetDataRequest {
+  required uint64 clock_id = 1;
+  repeated uint64 node_id = 2;
+}
+
+
+enum GetDataStatus {
+  DATA_STATUS_OK = 0;
+  DATA_STATUS_SERVER_TERMINATED = 1;
+  DATA_STATUS_INVALID_SUBTREE = 2;
+  DATA_STATUS_INVALID_CLOCK_ID = 3;
+  DATA_STATUS_INVALID_NODE_ID = 4;
+}
+
+
+message GetDataResponse {
+  required GetDataStatus status = 1;
+  optional int64 time = 2;
+  optional uint64 clock_id = 3;
+  repeated NodeData data = 4;
+}

@@ -1,0 +1,6 @@
+#!/bin/bash
+
+SRC_DIR=`pwd`
+
+protoc --java_out=$SRC_DIR/src -I$SRC_DIR $SRC_DIR/zephyr.proto  
+
